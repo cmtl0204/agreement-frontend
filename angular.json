@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ignug-job-frontend": {
+    "agreement-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ignug-job-frontend",
+            "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -99,13 +99,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ignug-job-frontend:build:production"
+              "buildTarget": "agreement-frontend:build:production"
             },
             "test": {
-              "buildTarget": "ignug-job-frontend:build:test"
+              "buildTarget": "agreement-frontend:build:test"
             },
             "local": {
-              "buildTarget": "ignug-job-frontend:build:local"
+              "buildTarget": "agreement-frontend:build:local"
             }
           },
           "defaultConfiguration": "local"
@@ -113,7 +113,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ignug-job-frontend:build"
+            "buildTarget": "agreement-frontend:build"
           }
         },
         "test": {
