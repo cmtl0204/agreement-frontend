@@ -1,0 +1,322 @@
+
+<div class="grid">
+  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+    @if (coreService.isLoading) {
+        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+      }
+  
+
+    @if (!coreService.isLoading) {
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+              <app-header-form [id]="id"></app-header-form>
+            </div>
+            <div class="p-toolbar-group-right">
+              <app-form-button-action (click)="save()" (cancel)="redirectRegistration()"></app-form-button-action>
+            </div>
+          </p-toolbar>     
+
+          
+    <p-panel>
+      <!-- formulario internalInstitutions -->
+     <form  [formGroup]="internalInstitutionForm" class="p-fluid grid">
+
+        <!-- positionId -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label appLabel
+         for="positionId"
+         [label]="InternalInstitutionsFormEnum.positionId"
+         [label]="InternalInstitutionsFormEnum.positionId"
+         [required]="internalInstitutionPositionIdField"
+        ></label>
+        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+        <p-dropdown
+          id="positionId"
+          formControlName="positionId"
+          [options]="positions"
+          optionLabel="positionId"
+          placeholder="Seleccione una opcion">
+          <ng-template 
+          pTemplate="selectedItem"
+          let-selectedOption>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedOption.positionId }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.positionId }}</div>
+            </div>
+          </ng-template>
+      </p-dropdown>
+
+      <small appErrorMessage
+      [errors]="internalInstitutionPositionIdField.errors"
+      [touched]="internalInstitutionPositionIdField.touched"
+      [dirty]="internalInstitutionPositionIdField.dirty">
+</small>
+      </div>
+
+       <!-- name -->
+      <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+        <label appLabel 
+         for="name" 
+         [label]="InternalInstitutionsFormEnum.name"
+         [required]="internalInstitutionNameField"
+         ></label>
+
+         <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+        <input pInputText
+         type="text"
+         id="name"
+         formControlName="name"
+         >
+         <small appErrorMessage
+                   [errors]="internalInstitutionNameField.errors"
+                   [touched]="internalInstitutionNameField.touched"
+                   [dirty]="internalInstitutionNameField.dirty">
+            </small>
+      </div>
+      
+        <!-- unit -->
+      <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+        <label appLabel 
+         for="unit"
+         [label]="InternalInstitutionsFormEnum.unit"
+         [required]="internalInstitutionUnitField"
+         ></label>
+
+         <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+        <input pInputText
+         type="text"
+         id="unit"
+         formControlName="unit"
+         >
+         <small appErrorMessage
+                   [errors]="internalInstitutionUnitField.errors"
+                   [touched]="internalInstitutionUnitField.touched"
+                   [dirty]="internalInstitutionUnitField.dirty">
+            </small>
+      </div>
+
+       <!-- personTypeId -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label appLabel 
+         for="personTypeId"
+         [label]="InternalInstitutionsFormEnum.personTypeId"
+         [required]="internalInstitutionPersonTypeIdField"
+        ></label>
+
+        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+        <p-dropdown
+        id="personTypeId"
+        formControlName="personTypeId"
+        [options]="positions"
+        optionLabel="positionId"
+        placeholder="Seleccione una opcion">
+        <ng-template 
+        pTemplate="selectedItem"
+        let-selectedOption>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.positionId }}</div>
+          </div>
+        </ng-template>
+        <ng-template
+        let-item pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ item.positionId }}</div>
+          </div>
+        </ng-template>
+        </p-dropdown>
+
+        <small appErrorMessage
+        [errors]="internalInstitutionPersonTypeIdField.errors"
+        [touched]="internalInstitutionPersonTypeIdField.touched"
+        [dirty]="internalInstitutionPersonTypeIdField.dirty">
+ </small>
+
+      </div>
+      <p-button label="Añadir" [raised]="true"  (click)="addInternalInstitutions()" />
+     </form>
+
+     <br>
+      <!-- table -->
+     <div class="card card-background">
+      @if(internalInstitutions.controls.length > 0){ 
+       <p-table [value]="internalInstitutions.controls" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nombre</th>
+          <th>Cargo</th>
+          <th>Unidad</th>
+          <th>Entidad</th>
+          <th>Acción</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-internalInstitution let-i="rowIndex">
+        <tr>
+          <td>{{ internalInstitution.get('name')?.value }}</td>
+          <td>{{ internalInstitution.get('positionId')?.value?.positionId }}</td>
+          <td>{{ internalInstitution.get('unit')?.value }}</td>
+          <td>{{ internalInstitution.get('personTypeId')?.value?.positionId }}</td>
+          <td>
+            <p-button label="Eliminar" icon="pi pi-times" severity="danger" (click)="removeInternalInstitutions(i)" class="mr-2" />
+            <p-button label="Editar" icon="pi pi-pencil" severity="success" (click)="editInternalInstitutions(i)" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+      }
+    </div>
+     <br>
+     <hr> 
+     <br>
+
+      <!-- formulario externalInstitutions -->
+      <form [formGroup]="externalInstitutionForm " class="p-fluid grid">
+         <!-- name -->
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label appLabel
+           for="name" 
+           [label]="ExternalInstitutionsFormEnum.name" 
+           [required]="externalInstitutionNameField"
+          ></label>
+
+          <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+          <input pInputText
+           type="text"
+           id="name" 
+           formControlName="name"
+          >
+          <small appErrorMessage
+          [errors]="externalInstitutionNameField.errors"
+          [touched]="externalInstitutionNameField.touched"
+          [dirty]="externalInstitutionNameField.dirty">
+         </small>
+         </div>
+        
+         <!-- positionId -->
+        <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+          <label appLabel 
+           for="position" 
+           [label]="ExternalInstitutionsFormEnum.position"
+           [required]="externalInstitutionPositionField"
+           ></label>
+
+           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+          <input pInputText
+           type="text"
+           id="position"
+           formControlName="position"
+           >  
+           <small appErrorMessage
+           [errors]="externalInstitutionPositionField.errors"
+           [touched]="externalInstitutionPositionField.touched"
+           [dirty]="externalInstitutionPositionField.dirty">
+           </small>
+        </div>
+
+         <!-- unit -->
+        <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+          <label appLabel 
+           for="unit"
+           [label]="ExternalInstitutionsFormEnum.unit"
+           [required]="externalInstitutionUnitField"
+           ></label>
+
+           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+          <input pInputText
+           type="text"
+           id="unit"
+           formControlName="unit"
+           >
+           <small appErrorMessage
+           [errors]="externalInstitutionUnitField.errors"
+           [touched]="externalInstitutionUnitField.touched"
+           [dirty]="externalInstitutionUnitField.dirty">
+    </small>
+        </div>
+
+         <!-- personTypeId -->
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label appLabel 
+           for="personTypeId"
+           [label]="ExternalInstitutionsFormEnum.personTypeId"
+           [required]="externalInstitutionPersonTypeIdField"
+            ></label>
+
+            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+            <p-dropdown
+            id="personTypeId"
+            formControlName="personTypeId"
+            [options]="positions"
+            optionLabel="positionId"
+            placeholder="Seleccione una opcion">
+            <ng-template 
+            pTemplate="selectedItem"
+            let-selectedOption>
+              <div class="flex align-items-center gap-2">
+                <div>{{ selectedOption.positionId }}</div>
+              </div>
+            </ng-template>
+            <ng-template
+            let-item pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ item.positionId }}</div>
+              </div>
+            </ng-template>
+            </p-dropdown>
+    
+          <small appErrorMessage
+          [errors]="externalInstitutionPersonTypeIdField.errors"
+          [touched]="externalInstitutionPersonTypeIdField.touched"
+          [dirty]="externalInstitutionPersonTypeIdField.dirty">
+   </small>
+        </div>
+
+        <p-button label="Añadir" [raised]="true" (click)="addExternalInstitutions()" />
+      </form>
+      
+      <br>
+       <!-- table -->
+      <div class="card card-background">
+        @if(externalInstitutions.controls.length > 0){ 
+        <p-table [value]="externalInstitutions.controls"  responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nombre</th>
+              <th>Cargo</th>
+              <th>Unidad</th>
+              <th>Entidad</th>
+              <th>Acción</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
+            <tr>
+              <td>{{externalInstitution.get('name')?.value }}</td>
+              <td>{{ externalInstitution.get('position')?.value }}</td>
+              <td>{{ externalInstitution.get('unit')?.value}}</td>
+              <td>{{ externalInstitution.get('personTypeId')?.value?.positionId }}</td> 
+              <td>
+                <p-button label="Eliminar" icon="pi pi-times" severity="danger" (click)="removeExternalInstitutions(i)" class="mr-2"  />
+                <p-button label="Editar" icon="pi pi-pencil" severity="success" (click)=" editExternalInstitutions(i)" />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        }
+      </div>
+      <p-button label="Siguiente" (click)="save()"></p-button>
+
+    </p-panel>
+    }
+  </div>
+</div>

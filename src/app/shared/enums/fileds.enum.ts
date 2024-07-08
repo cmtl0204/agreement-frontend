@@ -42,3 +42,63 @@ export const CompanyRegistrationFormEnum2 = [{
 export enum CourseFormEnum {
   AREA = 'Área',
 }
+
+export enum FinancingsFormEnum{
+  modelId = 'Comparecientes del convenio',
+  budget = 'Presupusesto y financiamiento',
+  paymentMethod = 'Forma de pago',
+  source = 'Fuente de financiamiento',
+}
+
+export enum DocumentationFormEnum{
+  signedAgreement = 'Convenio suscrito',
+  administratorAgreement = 'Designación del administrador del convenio'
+}
+
+export enum InternalInstitutionsFormEnum{
+  name = 'Nombre entidad/institución contraparte que firma el convenio',
+  unit = 'Unidad a la que pertenece la contraparte',
+  positionId = 'Cargo del funcionario Ministerio de Turismo',
+  personTypeId = 'Entidad',
+}
+
+export enum ExternalInstitutionsFormEnum{
+  name = 'Nombre entidad/institución contraparte que firma el convenio',
+  position = 'Cargo de la contraparte',
+  unit = 'Unidad a la que pertenece la contraparte',
+  personTypeId = 'Entidad',
+}
+
+export enum AgreementFormEnum{
+  subscribedAt='Fecha suscripción de convenio',
+  startedAt ='Fecha inicio de convenio',
+  isFinishDate='¿El convenio cuenta con fecha de terminación?',
+  endedAt='Fecha de terminación del Convenio',
+  endedReason ='Razón de terminación del convenio',
+  totalTerm ='Plazo total del convenio',
+  yearTerm = 'Años del convenio', 
+  monthTerm = 'Meses de convenio',
+  dayTerm = 'Días de convenio',
+  objective='Objeto del convenio',
+  name ='Nombre del convenio',
+  internalNumber = 'Numero interno de convenio',
+  number = 'Numero de convenio',
+  agreementState = 'Estado del convenio',
+  originId = 'Origen del convenio',
+  typeId = 'Tipo del convenio',
+  isFinancing = 'Financiamiento',
+}
+
+export enum AdministratorFormEnum{
+  unitId = 'Unidad Administrativa',
+  positionId = 'Cargo del funcionario',
+  administrator='Administrador del convenio',
+}
+
+export enum AddendumEnum{
+  isAddendum='Registrar Adenda',
+  description= 'Información de la Adenda',
+  isModifiedFinishDate= '¿Se modifica fecha de terminación del convenio?',
+  document='Documento de adenda o modificatorio',
+  agreementEndedAt='Fecha de terminación'
+}

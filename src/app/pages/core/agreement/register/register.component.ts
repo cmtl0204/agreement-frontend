@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -9,11 +9,46 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class RegisterComponent {
   private readonly formBuilder = inject(FormBuilder);
   protected form: FormGroup = this.formBuilder.group({
-    name: [''],
-    age: [''],
-    institution: [null],
-    subjects: [null],
-    externalInstitutions:[null],
+    // basic-data
+    agreementState: [null],
+    name: [null],
+    internalNumber: [null],
+    number: [null],
+    originId: [null],
+    typeId: [null],
+    
+    // appearer
+    internalInstitutions: [null],
+    externalInstitutions: [null],
+    
+    // agreement-date
+    subscribedAt: [null],
+    startedAt: [null],
+    isFinishDate: [null],
+    endedAt: [null],
+    endedReason: [null],
+    yearTerm: [null],
+    monthTerm: [null],
+    dayTerm: [null],
+    objective: [null],
+    administrator: [null],
+
+    // agreement-administrator
+
+    // obligation
+    
+    // financing
+    isFinancing: [false],
+    financings: [null],
+
+    // document
+
+    // addendum
+    isAddendum: [false],
+    description: [null],
+    isModifiedFinishDate: [null],
+    document: [null],
+    agreementEndedAt: [null]
   });
 
   save(event: any) {

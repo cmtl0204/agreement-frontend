@@ -1,0 +1,136 @@
+<div class="grid w-full">
+    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+      @if (coreService.isLoading) {
+        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+      }
+  
+      @if (!coreService.isLoading) {
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form [id]="id"></app-header-form>
+          </div>
+          <div class="p-toolbar-group-right">
+            <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
+          </div>
+        </p-toolbar>
+  
+        <p-panel>
+          <form [formGroup]="form" class="p-fluid grid">
+            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                <label
+                  appLabel
+                  for="isAddendum"
+                  [label]="AddendumEnum.isAddendum"
+                  [required]="isAddendumField"></label>
+                  <p-toggleButton
+                  id="isAddendum"
+                  formControlName="isAddendum" 
+                  offLabel="Registrar" 
+                  [onLabel]="addendum"
+                  [offIcon]="PrimeIcons.CHECK_SQUARE" 
+                  [onIcon]="PrimeIcons.BAN" 
+                  styleClass="w-full"
+                   />
+                <small
+                  appErrorMessage
+                  [errors]="isAddendumField.errors"
+                  [touched]="isAddendumField.touched"
+                  [dirty]="isAddendumField.dirty">
+                </small>
+              </div>
+
+              @if (descriptionField.hasValidator(Validators.required)) {
+
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label
+                    appLabel
+                    for="description"
+                    [label]="AddendumEnum.description"
+                    [required]="descriptionField"></label>
+                    <input pInputText type="text" id="description" formControlName="description"/>
+                  <small
+                    appErrorMessage
+                    [errors]="descriptionField.errors"
+                    [touched]="descriptionField.touched"
+                    [dirty]="descriptionField.dirty">
+                  </small>
+                </div>
+  
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label
+                    appLabel
+                    for="document"
+                    [label]="AddendumEnum.document"
+                    [required]="documentField"></label>
+                    <input pInputText type="file" id="document" formControlName="document"/>
+                  <small
+                    appErrorMessage
+                    [errors]="documentField.errors"
+                    [touched]="documentField.touched"
+                    [dirty]="documentField.dirty">
+                  </small>
+                </div>
+  
+                <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel for="isModifiedFinishDate"
+                         [label]="AddendumEnum.isModifiedFinishDate"
+                         [required]="isModifiedFinishDateField"></label>
+                  <div class="flex gap-3">
+                    <div class="flex align-items-center">
+                        <p-radioButton 
+                            formControlName="isModifiedFinishDate"
+                            name="isModifiedFinishDate" 
+                            [value]="true"
+                            id="yes" />
+                            <label for="yes" class="ml-2">
+                              Si
+                            </label>
+                    </div>
+                          
+                    <div class="flex align-items-center">
+                        <p-radioButton 
+                            formControlName="isModifiedFinishDate"
+                            name="isModifiedFinishDate" 
+                            [value]="false"
+                            id="no" />
+                        <label for="no" class="ml-2">
+                            No
+                        </label>
+                    </div>
+                </div>
+                  <small
+                    appErrorMessage
+                    [errors]="isModifiedFinishDateField.errors"
+                    [touched]="isModifiedFinishDateField.touched"
+                    [dirty]="isModifiedFinishDateField.dirty">
+                  </small>
+                </div>
+                <!-- isModifiedFinishDate -->
+                @if(agreementEndedAtField.hasValidator(Validators.required)){
+                  <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label appLabel for="endedAt"
+                           [label]="AddendumEnum.agreementEndedAt"
+                           [required]="agreementEndedAtField"></label>
+                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                    <p-calendar
+                      formControlName="agreementEndedAt"
+                      [iconDisplay]="'input'"
+                      [showIcon]="true"
+                      id="agreementEndedAt" />
+                    <small
+                      appErrorMessage
+                      [errors]="agreementEndedAtField.errors"
+                      [touched]="agreementEndedAtField.touched"
+                      [dirty]="agreementEndedAtField.dirty">
+                    </small>
+                  </div>
+                }
+              }
+
+          </form>
+        <p-button label="Siguiente" (click)="save()"></p-button>
+        </p-panel>
+      }
+    </div>
+  </div>
+  
