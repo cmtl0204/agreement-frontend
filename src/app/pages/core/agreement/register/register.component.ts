@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {Component, inject} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -16,11 +16,11 @@ export class RegisterComponent {
     number: [null],
     originId: [null],
     typeId: [null],
-    
+
     // appearer
     internalInstitutions: [null],
     externalInstitutions: [null],
-    
+
     // agreement-date
     subscribedAt: [null],
     startedAt: [null],
@@ -36,7 +36,7 @@ export class RegisterComponent {
     // agreement-administrator
 
     // obligation
-    
+
     // financing
     isFinancing: [false],
     financings: [null],
@@ -59,5 +59,9 @@ export class RegisterComponent {
 
   register() {
     // this.agreementHttpServices.register(this.form.value).subscribe();
+  }
+
+  get externalInstitutionsField(): FormArray {
+    return this.form.controls['externalInstitutions'] as FormArray;
   }
 }

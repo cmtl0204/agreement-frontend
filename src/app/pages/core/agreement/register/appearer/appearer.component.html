@@ -60,7 +60,7 @@
                       dataKey="id"
                       [options]="internalPersonTypes"
                       optionValue="id"
-                      optionLabel="name" 
+                      optionLabel="name"
                       placeholder="Seleccione"
                       [filter]="false"
                     />
@@ -134,7 +134,7 @@
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             <!-- externalInstitutionsForm -->
             <p-panel>
-              <div formArrayName="externalInstitutions">
+              <div [formGroup]="appearerform">
                 <div *ngFor="let externalInstitution of externalInstitutions.controls; let i = index"
                      [formGroupName]="i" class="grid">
 
@@ -142,7 +142,7 @@
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
                            for="position"
-                           [label]="i+'. '+ExternalInstitutionsFormEnum.position">
+                           [label]="ExternalInstitutionsFormEnum.position">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <input pInputText
@@ -150,9 +150,9 @@
                            id="position"
                            formControlName="position"/>
                     <small appErrorMessage
-                           [errors]="externalInstitution.get('position')?.errors!"
-                           [touched]="externalInstitution.get('position')?.touched!"
-                           [dirty]="externalInstitution.get('position')?.dirty!">
+                           [errors]="externalInstitutionNameField?.errors!"
+                           [touched]="externalInstitutionNameField?.touched!"
+                           [dirty]="externalInstitutionNameField?.dirty!">
                     </small>
                   </div>
 
@@ -169,7 +169,7 @@
                       dataKey="id"
                       [options]="externalPersonTypes"
                       optionValue="id"
-                      optionLabel="name" 
+                      optionLabel="name"
                       placeholder="Seleccione"
                       [filter]="false"
                     />

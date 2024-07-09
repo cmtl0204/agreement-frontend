@@ -19,7 +19,9 @@ export class BasicDataComponent implements OnInit {
   protected readonly messageDialogService = inject(MessageDialogService)
 
   /** Form **/
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -45,7 +47,8 @@ export class BasicDataComponent implements OnInit {
   }
 
   save() {
-    this.formOutput.emit(this.form.value)
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
   }
 
   /** Form Builder & Validates **/

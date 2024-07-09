@@ -1,19 +1,22 @@
 <div class="grid">
-  <p-button
-    [icon]="IconButtonActionEnum.CANCEL"
-    [label]="LabelButtonActionEnum.CANCEL"
-    [loading]="coreService.isLoading"
-    [severity]="SeverityButtonActionEnum.CANCEL"
-    (click)="cancel.emit()">
-  </p-button>
+  @if (isVisibleCancelButton) {
+    <p-button
+      [icon]="iconCancelButton"
+      [label]="labelCancelButton"
+      [loading]="coreService.isLoading"
+      [severity]="severityCancelButton"
+      (click)="cancel.emit()">
+    </p-button>
 
-  <p-divider layout="vertical"></p-divider>
+    <p-divider layout="vertical"></p-divider>
+  }
 
   <p-button
-    [icon]="IconButtonActionEnum.SAVE"
-    [label]="LabelButtonActionEnum.SAVE"
+    iconPos="right"
+    [icon]="iconSubmitButton"
+    [label]="labelSubmitButton"
     [loading]="coreService.isLoading"
-    [severity]="SeverityButtonActionEnum.SAVE"
+    [severity]="severitySubmitButton"
     (click)="submit.emit()">
   </p-button>
 </div>

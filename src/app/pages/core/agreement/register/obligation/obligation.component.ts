@@ -1,12 +1,12 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { SkeletonEnum, RoutesEnum, CatalogueTypeEnum } from '@shared/enums';
-import { OnExitInterface } from '@shared/interfaces';
-import { PrimeIcons, MessageService } from 'primeng/api';
-import { firstValueFrom } from 'rxjs';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
+import {AuthService, AuthHttpService} from '@servicesApp/auth';
+import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {SkeletonEnum, RoutesEnum, CatalogueTypeEnum} from '@shared/enums';
+import {OnExitInterface} from '@shared/interfaces';
+import {PrimeIcons, MessageService} from 'primeng/api';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-obligation',
@@ -14,8 +14,9 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
-
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); 
+  @Input({required: true}) externalInstitutions: any[] = [];
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  institutions = [];
 
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
@@ -32,7 +33,7 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   newObligations: string[] = [];
 
   // @Input({required: true}) id!: string;
-  id:string = RoutesEnum.NEW
+  id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
@@ -40,9 +41,7 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor(private messageService: MessageService) {
-    this.form = this.formBuilder.group({
-      textAreas: this.formBuilder.array([], Validators.required)
-    });
+    this.buildForm();
 
     this.tableForm = this.formBuilder.group({
       elements: this.formBuilder.array([
@@ -62,7 +61,22 @@ export class ObligationComponent implements OnInit, OnExitInterface {
 
     this.newObligations = Array(this.elements.length).fill('');
   }
-  
+
+  ngOnInit(): void {
+    /** Load Foreign Keys**/
+    this.loadPersonTypes();
+    //pending
+    if (this.id !== RoutesEnum.NEW) {
+      this.findCompany(this.id);
+    }
+  }
+
+  buildForm(){
+    this.form = this.formBuilder.group({
+      obligationTypes:[],
+    });
+  }
+
   save() {
     this.formOutput.emit(this.form.value); //add
   }
@@ -72,15 +86,6 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     console.log(res);
     return res;
     // return this.messageDialogService.questionOnExit();
-  }
-
-  ngOnInit(): void {
-    /** Load Foreign Keys**/
-    this.loadPersonTypes();
-    //pending
-    if (this.id !== RoutesEnum.NEW) {
-      this.findCompany(this.id);
-    }
   }
 
   findCompany(id: string) {
@@ -213,7 +218,7 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   loadPersonTypes() {
     this.cataloguesHttpService.findByType(CatalogueTypeEnum.COMPANIES_PERSON_TYPE);
   }
-  
+
   onSubmit(): void {
     /* if (this.validateForm()) {
       this.create();

@@ -1,8 +1,8 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
 import {CatalogueModel} from '@models/core';
 import {AuthService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService } from '@servicesApp/core';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
   ExternalInstitutionsFormEnum,
@@ -33,6 +33,7 @@ export class AppearerComponent implements OnInit {
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   protected id: string = RoutesEnum.NEW
   protected form!: FormGroup;
+  protected appearerform!: FormGroup;
   private formErrors: string[] = [];
 
   /** Foreign Keys **/
@@ -48,6 +49,7 @@ export class AppearerComponent implements OnInit {
 
   constructor(private messageService: MessageService) {
     this.buildForm();
+    this.buildAppearerForm();
     this.addExternalInstitution();
     this.addInternalInstitution();
   }
@@ -68,6 +70,15 @@ export class AppearerComponent implements OnInit {
     this.form = this.formBuilder.group({
       internalInstitutions: this.formBuilder.array([]),
       externalInstitutions: this.formBuilder.array([])
+    });
+  }
+
+  buildAppearerForm() {
+    this.appearerform = this.formBuilder.group({
+      personTypeId: [null, [Validators.required]],
+      name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
+      position: [null, [Validators.required, Validators.pattern(onlyLetters())]],
+      unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
     });
   }
 
@@ -102,7 +113,7 @@ export class AppearerComponent implements OnInit {
   deleteInternalInstitution(index: number) {
     this.internalInstitutions.removeAt(index);
   }
-  
+
   validateForm(): boolean {
     this.formErrors = [];
     this.externalInstitutions.controls.forEach((control, index) => {
@@ -183,6 +194,10 @@ export class AppearerComponent implements OnInit {
 
   get externalInstitutions() {
     return this.form.get('externalInstitutions') as FormArray;
+  }
+
+  get externalInstitutionNameField(): AbstractControl {
+    return this.appearerform.controls['name'];
   }
 }
 

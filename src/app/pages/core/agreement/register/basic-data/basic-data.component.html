@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+  <div class="col-12">
     @if (coreService.isLoading) {
       <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
     }
@@ -7,10 +7,19 @@
     @if (!coreService.isLoading) {
       <p-toolbar>
         <div class="p-toolbar-group-left">
-          <app-header-form [id]="id"></app-header-form>
+          <app-header-form
+            [id]="id"
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
         </div>
         <div class="p-toolbar-group-right">
-          <app-form-button-action (submit)="onSubmit()" (click)="save()"></app-form-button-action>
+          <app-form-button-action
+            (submit)="onSubmit()"
+            labelSubmitButton="Siguiente"
+            labelCancelButton="Atrás"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="false"
+          />
         </div>
       </p-toolbar>
 
@@ -192,7 +201,6 @@
             </small>
           </div>
         </form>
-        <p-button label="Siguiente" (click)="save()"></p-button>
       </p-panel>
     }
   </div>
