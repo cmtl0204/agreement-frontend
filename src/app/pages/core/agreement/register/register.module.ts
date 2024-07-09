@@ -14,7 +14,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SharedModule } from "../../../../shared/shared.module";
 import { ToolbarModule } from "primeng/toolbar";
 import { PanelModule } from "primeng/panel";
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { AvatarModule } from 'primeng/avatar';
@@ -36,6 +36,7 @@ import { DocumentComponent } from './document/document.component';
 import { AddendumComponent } from './addendum/addendum.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import {InputTextareaModule} from "primeng/inputtextarea";
+import { TableModule } from 'primeng/table';
 
 @NgModule({
     declarations: [
@@ -56,6 +57,7 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     CommonModule,
     RegisterRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     SharedModule,
     ButtonModule,
     CardModule,
@@ -78,7 +80,8 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     StepperModule,
     TabViewModule,
     FileUploadModule,
-    InputTextareaModule
+    InputTextareaModule,
+    TableModule
   ]
 })
 export class RegisterModule { }

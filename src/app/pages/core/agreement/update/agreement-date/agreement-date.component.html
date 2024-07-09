@@ -28,6 +28,7 @@
                 formControlName="subscribedAt"
                 [iconDisplay]="'input'"
                 [showIcon]="true"
+                [minDate]="startedAtField.value"
                  />
               <small
                 appErrorMessage
@@ -115,163 +116,99 @@
               </div>
             }
             <!-- endedReason -->
-            @if(endedReasonField.hasValidator(Validators.required)){
-              <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                <label appLabel
-                for="endedReason"
-                [label]="AgreementFormEnum.endedReason"
-                [required]="endedReasonField"></label>
-                <app-form-help-field content="Explique las razones por las que termina el convenio"></app-form-help-field>
-                <textarea pInputTextarea 
-                id="endedReason"
-                formControlName="endedReason"
-                rows="2"
-                cols="30" 
-                class="col-12" 
-                >
-                </textarea>
-                <small
-                  appErrorMessage
-                  [errors]="endedReasonField.errors"
-                  [touched]="endedReasonField.touched"
-                  [dirty]="endedReasonField.dirty">
-                  
-                </small>
-              </div>
-            }
-            <!-- yearTerm -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label
-                appLabel
-                for="yearTerm"
-                [label]="AgreementFormEnum.yearTerm"
-                [required]="yearTermField"></label>
-                <p-inputNumber 
-                  id="yearTerm" 
-                  formControlName="yearTerm" 
-                  [showButtons]="true"
-                  [min]="0"
-                />
-              <small
-                appErrorMessage
-                [errors]="yearTermField.errors"
-                [touched]="yearTermField.touched"
-                [dirty]="yearTermField.dirty">
-              </small>
-            </div>
-  
-             <!-- monthTerm -->
-             <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label
-                appLabel
-                for="monthTerm"
-                [label]="AgreementFormEnum.monthTerm"
-                [required]="monthTermField"></label>
-                <p-inputNumber 
-                  id="monthTerm"
-                  formControlName="monthTerm"
-                  [showButtons]="true"
-                  [min]="0"
-                /> 
-              <small
-                appErrorMessage
-                [errors]="monthTermField.errors"
-                [touched]="monthTermField.touched"
-                [dirty]="monthTermField.dirty">
-              </small>
-            </div>
-            
-            <!-- dayTerm -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label
-                appLabel
-                for="dayTerm"
-                [label]="AgreementFormEnum.dayTerm"
-                [required]="dayTermField"></label>
-                <p-inputNumber 
-                  id="dayTerm"
-                  formControlName="dayTerm"
-                  [showButtons]="true"
-                  [min]="0"
-                  /> 
-              <small
-                appErrorMessage
-                [errors]="dayTermField.errors"
-                [touched]="dayTermField.touched"
-                [dirty]="dayTermField.dirty">
-              </small>
-              </div>
-            <!-- objective -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          @if (endedReasonField.hasValidator(Validators.required)) {
+            <div class="field col-12">
               <label appLabel
-              for="objective"
-              [label]="AgreementFormEnum.objective"
-              [required]="objectiveField"></label>
-              <app-form-help-field content="Objetivos del convenio"></app-form-help-field>
-              <input pInputText type="text" id="objective" formControlName="objective"/>
+                     for="endedReason"
+                     [label]="AgreementFormEnum.endedReason"
+                     [required]="endedReasonField"></label>
+              <app-form-help-field content="Explique las razones por las que termina el convenio"></app-form-help-field>
+              <textarea pInputTextarea
+                        id="endedReason"
+                        formControlName="endedReason"
+                        rows="10"
+                        cols="30"
+                        class="col-12"
+              >
+                </textarea>
               <small
                 appErrorMessage
-                [errors]="objectiveField.errors"
-                [touched]="objectiveField.touched"
-                [dirty]="objectiveField.dirty">
+                [errors]="endedReasonField.errors"
+                [touched]="endedReasonField.touched"
+                [dirty]="endedReasonField.dirty">
               </small>
             </div>
-  
-             <!-- administrator -->
-            <div  formGroupName="administrator" class="col-12">
-             <div class="grid">
-              <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                <label appLabel for="unitId"
-                       [label]="AdministratorFormEnum.unitId"></label>
-                <p-dropdown
-                  id="unitId"
-                  formControlName="unitId"
-                  [options]="units"
-                  optionValue="id"
-                  [filter]="true"
-                  filterBy="name"
-                  placeholder="Seleccione">
-                  <ng-template pTemplate="selectedItem" let-selectedOption>
-                    <div class="flex align-items-center gap-2">
-                      <div>{{ selectedOption.name }}</div>
-                    </div>
-                  </ng-template>
-                  <ng-template let-item pTemplate="item">
-                    <div class="flex align-items-center gap-2">
-                      <div>{{ item.name }}</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-                
-              </div>
-              
-              <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                <label appLabel for="officerPosition"
-                       [label]="AdministratorFormEnum.positionId"></label>
-                <p-dropdown
-                  id="positionId"
-                  formControlName="positionId"
-                  [options]="positions"
-                  optionValue="id"
-                  [filter]="true"
-                  filterBy="name"
-                  placeholder="Seleccione">
-                  <ng-template pTemplate="selectedItem" let-selectedOption>
-                    <div class="flex align-items-center gap-2">
-                      <div>{{ selectedOption.name }}</div>
-                    </div>
-                  </ng-template>
-                  <ng-template let-item pTemplate="item">
-                    <div class="flex align-items-center gap-2">
-                      <div>{{ item.name }}</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-                
-              </div>
+          }
+
+            <div  class="field col-12">
+              <label>Plazo total del convenio:</label>
+              <app-form-help-field [content]='["Especifique la duración del convenio en:","Años","Meses","Días"]'></app-form-help-field>
              </div>
-            </div>
-  
+             <!-- yearTerm -->
+             <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+               <label
+                 appLabel
+                 for="yearTerm"
+                 [label]="AgreementFormEnum.yearTerm"
+                 [required]="yearTermField"></label>
+               <p-inputNumber
+                 id="yearTerm"
+                 formControlName="yearTerm"
+                 [showButtons]="true"
+                 [min]="0"
+                 [useGrouping]="false"
+               />
+               <small
+                 appErrorMessage
+                 [errors]="yearTermField.errors"
+                 [touched]="yearTermField.touched"
+                 [dirty]="yearTermField.dirty">
+               </small>
+             </div>
+   
+             <!-- monthTerm -->
+             <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+               <label
+                 appLabel
+                 for="monthTerm"
+                 [label]="AgreementFormEnum.monthTerm"
+                 [required]="monthTermField"></label>
+               <p-inputNumber
+                 id="monthTerm"
+                 formControlName="monthTerm"
+                 [showButtons]="true"
+                 [min]="0"
+                 [max]="12"
+               />
+               <small
+                 appErrorMessage
+                 [errors]="monthTermField.errors"
+                 [touched]="monthTermField.touched"
+                 [dirty]="monthTermField.dirty">
+               </small>
+             </div>
+   
+             <!-- dayTerm -->
+             <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+               <label
+                 appLabel
+                 for="dayTerm"
+                 [label]="AgreementFormEnum.dayTerm"
+                 [required]="dayTermField"></label>
+               <p-inputNumber
+                 id="dayTerm"
+                 formControlName="dayTerm"
+                 [showButtons]="true"
+                 [min]="1"
+                 [max]="31"
+               />
+               <small
+                 appErrorMessage
+                 [errors]="dayTermField.errors"
+                 [touched]="dayTermField.touched"
+                 [dirty]="dayTermField.dirty">
+               </small>
+             </div>
           </form>
       <p-button label="Siguiente" (click)="save()"></p-button>
         </p-panel>

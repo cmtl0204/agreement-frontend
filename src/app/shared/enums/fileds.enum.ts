@@ -76,9 +76,9 @@ export enum AgreementFormEnum{
   endedAt='Fecha de terminación del Convenio',
   endedReason ='Razón de terminación del convenio',
   totalTerm ='Plazo total del convenio',
-  yearTerm = 'Años del convenio', 
-  monthTerm = 'Meses de convenio',
-  dayTerm = 'Días de convenio',
+  yearTerm = 'Años', 
+  monthTerm = 'Meses',
+  dayTerm = 'Días',
   objective='Objeto del convenio',
   name ='Nombre del convenio',
   internalNumber = 'Numero interno de convenio',
@@ -87,6 +87,7 @@ export enum AgreementFormEnum{
   originId = 'Origen del convenio',
   typeId = 'Tipo del convenio',
   isFinancing = 'Financiamiento',
+  specificType = 'Tipo especifico del convenio',
 }
 
 export enum AdministratorFormEnum{

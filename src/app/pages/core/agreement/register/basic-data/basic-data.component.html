@@ -19,10 +19,11 @@
 
           <!-- name -->
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-            <label appLabel
-                   for="name"
-                   [label]="AgreementFormEnum.name"
-                   [required]="nameField"></label>
+            <label
+              appLabel
+              for="name"
+              [label]="AgreementFormEnum.name"
+              [required]="nameField"></label>
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
             <input pInputText id="name" formControlName="name"/>
             <small
@@ -106,6 +107,23 @@
             </small>
           </div>
 
+          <!--objective-->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="objective"
+              [label]="AgreementFormEnum.objective"
+              [required]="objectiveField"></label>
+            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+            <input pInputText id="objective" formControlName="objective"/>
+            <small
+              appErrorMessage
+              [errors]="objectiveField.errors"
+              [touched]="objectiveField.touched"
+              [dirty]="objectiveField.dirty">
+            </small>
+          </div>
+
           <!-- type -->
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label
@@ -118,8 +136,8 @@
             <p-dropdown
               id="typeId"
               formControlName="typeId"
+              dataKey="id"
               [options]="types"
-              optionLabel="name"
               placeholder="Selecione">
               <ng-template pTemplate="selectedItem" let-selectedOption>
                 <div class="flex align-items-center gap-2">
@@ -152,8 +170,8 @@
             <p-dropdown
               id="originId"
               formControlName="originId"
+              dataKey="id"
               [options]="origins"
-              optionLabel="name"
               placeholder="Selecione">
               <ng-template pTemplate="selectedItem" let-selectedOption>
                 <div class="flex align-items-center gap-2">

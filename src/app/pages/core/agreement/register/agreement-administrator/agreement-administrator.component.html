@@ -1,1 +1,96 @@
-<p>agreement-administrator works!</p>
+<div class="grid">
+    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+      @if (coreService.isLoading) {
+        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+      }
+  
+      @if (!coreService.isLoading) {
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form [id]="id"></app-header-form>
+          </div>
+          <div class="p-toolbar-group-right">
+            <app-form-button-action (submit)="onSubmit()"></app-form-button-action>
+          </div>
+        </p-toolbar>
+  
+        <p-panel>
+          <form [formGroup]="form" class="p-fluid grid">
+
+            <div formGroupName="administrator" class="col-12">
+              <div class="grid">
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel for="unitId"
+                         [label]="AdministratorFormEnum.unitId"
+                         [required]="unitIdField"></label>
+
+                  <p-dropdown
+                    id="unitId"
+                    formControlName="unitId"
+                    dataKey="id"
+                    [options]="units"
+                    optionValue="id"
+                    placeholder="Seleccione"
+                    [filter]="true"
+                    filterBy="name">
+                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ selectedOption.name }}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-item pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ item.name }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+
+                  <small appErrorMessage
+                         [errors]="unitIdField.errors"
+                         [touched]="unitIdField.touched"
+                         [dirty]="unitIdField.dirty">
+                  </small>
+                </div>
+  
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel for="officerPosition"
+                         [label]="AdministratorFormEnum.positionId"
+                         [required]="positionIdField"></label>
+
+                  <p-dropdown
+                    id="positionId"
+                    formControlName="positionId"
+                    [options]="positions"
+                    optionValue="id"
+                    [filter]="true"
+                    filterBy="name"
+                    placeholder="Seleccione">
+                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ selectedOption.name }}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-item pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ item.name }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                  
+                  <small appErrorMessage
+                         [errors]="positionIdField.errors"
+                         [touched]="positionIdField.touched"
+                         [dirty]="positionIdField.dirty">
+                  </small>
+                </div>
+              </div>
+            </div>
+  
+          </form>
+          <p-button label="Siguiente" (click)="save()"></p-button>
+  
+        </p-panel>
+      }
+    </div>
+  </div>
+  
