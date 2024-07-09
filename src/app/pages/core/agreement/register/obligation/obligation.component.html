@@ -15,7 +15,7 @@
       </p-toolbar>
 
       <div class="p-fluid">
-        {{ institutions |json }}
+
         <p-multiSelect
           [options]="[{id:'1',code:'1',name:'Obligación MINTUR'},{id:'2',code:'2',name:'Obligación contraparte'},{id:'3',code:'3',name:'Obligación conjunta'}]"
           [(ngModel)]="institutions"
