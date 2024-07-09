@@ -35,6 +35,7 @@ import { FinancingComponent } from './financing/financing.component';
 import { DocumentComponent } from './document/document.component';
 import { AddendumComponent } from './addendum/addendum.component';
 import { FileUploadModule } from 'primeng/fileupload';
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @NgModule({
     declarations: [
@@ -51,32 +52,33 @@ import { FileUploadModule } from 'primeng/fileupload';
         DocumentComponent,
         AddendumComponent,
     ],
-    imports: [
-        CommonModule,
-        RegisterRoutingModule,
-        ReactiveFormsModule,
-        SharedModule,
-        ButtonModule,
-        CardModule,
-        CheckboxModule,
-        DividerModule,
-        InputTextModule,
-        PasswordModule,
-        RippleModule,
-        DropdownModule,
-        NgOptimizedImage,
-        MessageModule,
-        PanelModule,
-        AvatarModule,
-        ToolbarModule,
-        OverlayPanelModule,
-        InputNumberModule,
-        ToggleButtonModule,
-        CalendarModule,
-        RadioButtonModule,
-        StepperModule,
-        TabViewModule,
-        FileUploadModule
-    ]
+  imports: [
+    CommonModule,
+    RegisterRoutingModule,
+    ReactiveFormsModule,
+    SharedModule,
+    ButtonModule,
+    CardModule,
+    CheckboxModule,
+    DividerModule,
+    InputTextModule,
+    PasswordModule,
+    RippleModule,
+    DropdownModule,
+    NgOptimizedImage,
+    MessageModule,
+    PanelModule,
+    AvatarModule,
+    ToolbarModule,
+    OverlayPanelModule,
+    InputNumberModule,
+    ToggleButtonModule,
+    CalendarModule,
+    RadioButtonModule,
+    StepperModule,
+    TabViewModule,
+    FileUploadModule,
+    InputTextareaModule
+  ]
 })
 export class RegisterModule { }

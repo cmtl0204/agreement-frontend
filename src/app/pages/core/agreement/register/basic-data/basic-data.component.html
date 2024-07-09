@@ -1,119 +1,129 @@
 <div class="grid">
-    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
-      @if (coreService.isLoading) {
-        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-      }
-  
-      @if (!coreService.isLoading) {
-        <p-toolbar>
-          <div class="p-toolbar-group-left">
-            <app-header-form [id]="id"></app-header-form>
+  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+    @if (coreService.isLoading) {
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    }
+
+    @if (!coreService.isLoading) {
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form [id]="id"></app-header-form>
+        </div>
+        <div class="p-toolbar-group-right">
+          <app-form-button-action (submit)="onSubmit()" (click)="save()"></app-form-button-action>
+        </div>
+      </p-toolbar>
+
+      <p-panel>
+        <form [formGroup]="form" class="p-fluid grid">
+
+          <!-- name -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel
+                   for="name"
+                   [label]="AgreementFormEnum.name"
+                   [required]="nameField"></label>
+            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+            <input pInputText id="name" formControlName="name"/>
+            <small
+              appErrorMessage
+              [errors]="nameField.errors"
+              [touched]="nameField.touched"
+              [dirty]="nameField.dirty">
+            </small>
           </div>
-          <div class="p-toolbar-group-right">
-            <app-form-button-action (submit)="onSubmit()" (click)="save()" (cancel)="redirectRegistration()"></app-form-button-action>
+
+          <!-- internalNumber -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="internalNumber"
+              [label]="AgreementFormEnum.internalNumber"
+              [required]="internalNumberField"></label>
+            <app-form-help-field
+              [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"></app-form-help-field>
+            <p-inputNumber id="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
+            <small
+              appErrorMessage
+              [errors]="internalNumberField.errors"
+              [touched]="internalNumberField.touched"
+              [dirty]="internalNumberField.dirty">
+            </small>
           </div>
-        </p-toolbar>
-  
-        <p-panel>
-          <form [formGroup]="form" class="p-fluid grid">
-            
-            <!-- name -->
-            <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-              <label appLabel for="name"
-                     [label]="AgreementFormEnum.name"
-                     [required]="nameField"></label>
-              <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-              <input pInputText type="text" id="name" formControlName="name"/>
-              <small
-                appErrorMessage
-                [errors]="nameField.errors"
-                [touched]="nameField.touched"
-                [dirty]="nameField.dirty">
-              </small>
-            </div>
-            
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label
-                appLabel
-                for="internalNumber"
-                [label]="AgreementFormEnum.internalNumber"
-                [required]="internalNumberField"></label>
-              <app-form-help-field
-                [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"></app-form-help-field>
-              <p-inputNumber type="number" id="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
-              <small
-                appErrorMessage
-                [errors]="internalNumberField.errors"
-                [touched]="internalNumberField.touched"
-                [dirty]="internalNumberField.dirty">
-              </small>
-            </div>
-  
-            <!-- state -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label appLabel for="agreementState"
-                     [label]="AgreementFormEnum.agreementState"
-                     [required]="agreementStateField"></label>
-              <app-form-help-field
-                [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
-              <p-dropdown
-                id="agreementState"
-                formControlName="agreementState"
-                optionLabel="name"
-                [options]="stateIdOptions"
-                placeholder="Seleccione">
-                <ng-template pTemplate="selectedItem" let-selectedOption>
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ selectedOption.name}}</div>
-                  </div>
-                </ng-template>
-                <ng-template let-item pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ item.name }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-              <small appErrorMessage
-                     [errors]="agreementStateField.errors"
-                     [touched]="agreementStateField.touched"
-                     [dirty]="agreementStateField.dirty">
-              </small>
-            </div>
-  
-            <!-- number -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label
-                appLabel
-                for="number"
-                [label]="AgreementFormEnum.number"
-                [required]="numberField"></label>
-              <app-form-help-field
-                [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"></app-form-help-field>
-              <p-inputNumber type="number" id="number" [useGrouping]="false" formControlName="number"/>
-              <small
-                appErrorMessage
-                [errors]="numberField.errors"
-                [touched]="numberField.touched"
-                [dirty]="numberField.dirty">
-              </small>
-            </div>
-  
-            <!-- type -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label appLabel for="typeId"
-                     [label]="AgreementFormEnum.typeId"
-                     [required]="typeIdField"></label>
-              <app-form-help-field
-                [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
-              <p-dropdown 
+
+          <!-- state -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="agreementState"
+              [label]="AgreementFormEnum.agreementState"
+              [required]="agreementStateField"></label>
+            <app-form-help-field
+              [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
+            <p-dropdown
+              id="agreementState"
+              formControlName="agreementState"
+              dataKey="id"
+              optionValue="id"
+              [options]="states"
+              placeholder="Seleccione"
+              [filter]="true"
+              filterBy="name">
+              <ng-template pTemplate="selectedItem" let-selectedOption>
+                <div class="flex align-items-center gap-2">
+                  <div>{{ selectedOption.name }}</div>
+                </div>
+              </ng-template>
+              <ng-template let-item pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ item.name }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small
+              appErrorMessage
+              [errors]="agreementStateField.errors"
+              [touched]="agreementStateField.touched"
+              [dirty]="agreementStateField.dirty">
+            </small>
+          </div>
+
+          <!-- number -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="number"
+              [label]="AgreementFormEnum.number"
+              [required]="numberField"></label>
+            <app-form-help-field
+              [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"></app-form-help-field>
+            <p-inputNumber id="number" [useGrouping]="false" formControlName="number"/>
+            <small
+              appErrorMessage
+              [errors]="numberField.errors"
+              [touched]="numberField.touched"
+              [dirty]="numberField.dirty">
+            </small>
+          </div>
+
+          <!-- type -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="typeId"
+              [label]="AgreementFormEnum.typeId"
+              [required]="typeIdField"></label>
+            <app-form-help-field
+              [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
+            <p-dropdown
               id="typeId"
               formControlName="typeId"
-              [options]="typeIdOptions"
+              [options]="types"
               optionLabel="name"
               placeholder="Selecione">
               <ng-template pTemplate="selectedItem" let-selectedOption>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ selectedOption.name}}</div>
+                  <div>{{ selectedOption.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -121,30 +131,33 @@
                   <div>{{ item.name }}</div>
                 </div>
               </ng-template>
-              </p-dropdown>
-              <small appErrorMessage
-                     [errors]="typeIdField.errors"
-                     [touched]="typeIdField.touched"
-                     [dirty]="typeIdField.dirty">
-              </small>
-            </div>
-  
-            <!-- origin -->
-            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label appLabel for="originId"
-                     [label]="AgreementFormEnum.originId"
-                     [required]="originIdField"></label>
-              <app-form-help-field
-                [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
-              <p-dropdown 
+            </p-dropdown>
+            <small
+              appErrorMessage
+              [errors]="typeIdField.errors"
+              [touched]="typeIdField.touched"
+              [dirty]="typeIdField.dirty">
+            </small>
+          </div>
+
+          <!-- origin -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="originId"
+              [label]="AgreementFormEnum.originId"
+              [required]="originIdField"></label>
+            <app-form-help-field
+              [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
+            <p-dropdown
               id="originId"
               formControlName="originId"
-              [options]="originIdOptions"
+              [options]="origins"
               optionLabel="name"
               placeholder="Selecione">
               <ng-template pTemplate="selectedItem" let-selectedOption>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ selectedOption.name}}</div>
+                  <div>{{ selectedOption.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -152,17 +165,17 @@
                   <div>{{ item.name }}</div>
                 </div>
               </ng-template>
-              </p-dropdown>
-              <small appErrorMessage
-                [errors]="originIdField.errors"
-                [touched]="originIdField.touched"
-                [dirty]="originIdField.dirty">
-              </small>
-            </div>
-          </form>
+            </p-dropdown>
+            <small
+              appErrorMessage
+              [errors]="originIdField.errors"
+              [touched]="originIdField.touched"
+              [dirty]="originIdField.dirty">
+            </small>
+          </div>
+        </form>
         <p-button label="Siguiente" (click)="save()"></p-button>
-        </p-panel>
-      }
-    </div>
+      </p-panel>
+    }
   </div>
-  
+</div>

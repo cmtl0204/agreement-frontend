@@ -1,12 +1,12 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum } from '@shared/enums';
-import { OnExitInterface } from '@shared/interfaces';
-import { PrimeIcons } from 'primeng/api';
-import { firstValueFrom, merge } from 'rxjs';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
+import {CatalogueModel} from '@models/core';
+import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum} from '@shared/enums';
+import {OnExitInterface} from '@shared/interfaces';
+import {PrimeIcons} from 'primeng/api';
+import {firstValueFrom, merge} from 'rxjs';
 
 @Component({
   selector: 'app-agreement-date',
@@ -20,16 +20,16 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   public readonly messageDialogService = inject(MessageDialogService);
   private readonly routesService = inject(RoutesService);
-  
-  
+
+
   // Form
   // @Input({required: true}) id: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
-  id:string = RoutesEnum.NEW
+  id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
-  
+
   // Foreign keys
   units: CatalogueModel[] = [];
   positions: CatalogueModel[] = [];
@@ -42,8 +42,6 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
 
   constructor() {
     this.buildForm();
-    this.applyValidations();
-    this.setEndedReason();
   }
 
   async onExit() {
@@ -69,17 +67,37 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
-      subscribedAt: [null,Validators.required],
-      startedAt: [null, Validators.required],
-      isFinishDate: [null, Validators.required],
-      endedAt: [null],
+      subscribedAt: [null, Validators.required],
+      startedAt: [new Date(), Validators.required],
+      isFinishDate: [true, Validators.required],
+      endedAt: [new Date(), Validators.required],
       endedReason: [null],
       yearTerm: [null, Validators.required],
       monthTerm: [null, Validators.required],
       dayTerm: [null, Validators.required],
       objective: [null, Validators.required],
       administrator: this.administratorForm
-    })
+    });
+
+    this.checkValueChanges();
+  }
+
+  checkValueChanges() {
+    this.isFinishDateField.valueChanges.subscribe(value => {
+      console.log(value);
+      if (value) {
+        this.endedAtField.setValidators(Validators.required);
+        this.endedReasonField.clearValidators();
+        this.endedReasonField.reset();
+      } else {
+        this.endedReasonField.setValidators(Validators.required);
+        this.endedAtField.clearValidators();
+        this.endedAtField.reset();
+      }
+
+      this.endedReasonField.updateValueAndValidity();
+      this.endedAtField.updateValueAndValidity();
+    });
   }
 
   get administratorForm() {
@@ -88,9 +106,10 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
       positionId: [null, Validators.required],
     })
   }
-  
+
   validateForm(): boolean {
     this.formErrors = [];
+
     if (this.subscribedAtField.invalid) this.formErrors.push(AgreementFormEnum.subscribedAt);
     if (this.startedAtField.invalid) this.formErrors.push(AgreementFormEnum.startedAt);
     if (this.isFinishDateField.invalid) this.formErrors.push(AgreementFormEnum.isFinishDate);
@@ -102,7 +121,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
     if (this.unitIdField.invalid) this.formErrors.push(AdministratorFormEnum.unitId);
     if (this.positionIdField.invalid) this.formErrors.push(AdministratorFormEnum.positionId);
-    
+
     return this.form.valid && this.formErrors.length === 0;
   }
 
@@ -110,6 +129,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   loadPositions() {
     this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
   }
+
   loadUnits() {
     this.units = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
   }
@@ -117,84 +137,46 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   // FormActions
   onSubmit(): void {
     if (this.validateForm()) {
-      this.create();
+      this.save();
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
-  create(): void {
-    /*
-        TODO
-    */
-  }
-
-  applyValidations(){
-    this.isFinishDateField.valueChanges.subscribe(()=>{
-      if(this.isFinishDateField.value==true){
-        this.endedAtField.addValidators(Validators.required)
-        this.endedReasonField.reset()
-        this.endedReasonField.removeValidators(Validators.required)
-        this.endedReasonField.updateValueAndValidity()
-      }else{
-        this.endedReasonField.addValidators(Validators.required)
-        this.endedAtField.removeValidators(Validators.required)
-        this.endedAtField.reset()
-      }
-    })
-  }
-
-  setEndedReason() {
-    merge(
-      this.isFinishDateField.valueChanges,
-      this.startedAtField.valueChanges
-    ).subscribe(() => {
-      if (this.startedAtField.value && this.isFinishDateField.value == false) {
-        this.endedReasonField.setValue('Razón de terminación del convenio indefinida')
-      }
-    })
-  }
-
-  // redirects
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    // this.routesService.registration();
-  }
-
   /*getters forms*/
   get subscribedAtField(): AbstractControl {
     return this.form.controls['subscribedAt'];
   }
+
   get startedAtField(): AbstractControl {
     return this.form.controls['startedAt'];
   }
+
   get isFinishDateField(): AbstractControl {
     return this.form.controls['isFinishDate'];
   }
+
   get endedAtField(): AbstractControl {
     return this.form.controls['endedAt'];
   }
+
   get endedReasonField(): AbstractControl {
     return this.form.controls['endedReason'];
   }
+
   get objectiveField(): AbstractControl {
     return this.form.controls['objective'];
   }
+
   get yearTermField(): AbstractControl {
     return this.form.controls['yearTerm'];
   }
+
   get monthTermField(): AbstractControl {
     return this.form.controls['monthTerm'];
   }
+
   get dayTermField(): AbstractControl {
     return this.form.controls['dayTerm'];
   }
@@ -203,9 +185,11 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   get administratorFormField(): FormGroup {
     return this.form.controls['administrator'] as FormGroup;
   }
+
   get unitIdField(): AbstractControl {
     return this.administratorFormField.controls['unitId'];
   }
+
   get positionIdField(): AbstractControl {
     return this.administratorFormField.controls['positionId'];
   }

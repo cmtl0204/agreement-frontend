@@ -1,27 +1,26 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
-import { CoreService, MessageDialogService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, RoutesEnum } from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CatalogueModel} from '@models/core';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, RoutesEnum} from '@shared/enums';
+import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-basic-data',
   templateUrl: './basic-data.component.html',
   styleUrl: './basic-data.component.scss'
 })
-export class BasicDataComponent{
+export class BasicDataComponent implements OnInit {
   /** Services **/
   protected readonly formBuilder = inject(FormBuilder)
-  protected readonly coreService = inject(CoreService )
+  protected readonly coreService = inject(CoreService)
   protected readonly cataloguesHttpService = inject(CataloguesHttpService)
   protected readonly messageDialogService = inject(MessageDialogService)
 
   /** Form **/
-  // @Input({required: true}) id!: string;
-  @Output() formOutput:EventEmitter<FormGroup> = new EventEmitter()
-  id:string=RoutesEnum.NEW
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
+  id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
@@ -33,44 +32,27 @@ export class BasicDataComponent{
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
-  protected readonly PrimeIcons = PrimeIcons; //pending
+  protected readonly PrimeIcons = PrimeIcons; //review
 
   constructor() {
     this.buildForm();
   }
 
-
-  save(){
-    this.formOutput.emit(this.form.value)
+  ngOnInit(): void {
+    this.loadOrigins();
+    this.loadStates();
+    this.loadTypes();
   }
 
-  /* data */
-  stateIdOptions = [
-    { name: 'Convenio vigente', id: 1 },
-    { name: 'Convenio en proceso de cierre', id: 2 },
-    { name: 'Convenio cerrado', id: 3 }
-  ];
-
-  originIdOptions = [
-    { name: 'Nacional', id: 1 },
-    { name: 'Internacional/Extranjera', id: 2 }
-  ];
-
-  typeIdOptions = [
-    { name: 'Marco', id: 1 },
-    { name: 'Específicos', id: 2 },
-    { name: 'Articulación', id: 3 },
-    { name: 'Cooperación', id: 4 },
-    { name: 'Especial: Memorando de entendimiento', id: 5 },
-    { name: 'Especial: Carta de intención', id: 6 },
-    { name: 'Comodato o convenio de préstamo de uso', id: 7 }
-  ];
+  save() {
+    this.formOutput.emit(this.form.value)
+  }
 
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
       agreementState: [null, [Validators.required]],
-      name : [null, [Validators.required]],
+      name: [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
       originId: [null, [Validators.required]],
@@ -93,58 +75,45 @@ export class BasicDataComponent{
 
   /** Load Foreign Keys  **/
   loadStates() {
-    this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
+    // this.states = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
+    this.states = [
+      {name: 'Convenio vigente', id: '1'},
+      {name: 'Convenio en proceso de cierre', id: '2'},
+      {name: 'Convenio cerrado', id: '3'}
+    ]
   };
+
   loadOrigins() {
-    this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORGIN);
+    this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORGIN);
+    this.origins = [{name: 'Nacional', id: '1'}, {name: 'Internacional/Extranjera', id: '2'}]
   };
+
   loadTypes() {
-    this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
+    // this.types=this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
+
+    this.types = [
+      {name: 'Marco', id: '1'},
+      {name: 'Específicos', id: '2'},
+      {name: 'Articulación', id: '3'},
+      {name: 'Cooperación', id: '4'},
+      {name: 'Especial: Memorando de entendimiento', id: '5'},
+      {name: 'Especial: Carta de intención', id: '6'},
+      {name: 'Comodato o convenio de préstamo de uso', id: '7'}
+    ]
   };
 
   /** Form Actions **/
   onSubmit(): void {
     if (this.validateForm()) {
-      this.create();
-      console.log(this.form.value)
-      alert('Eniviado')
-      
-      /*
-     TODO
-     */
+      this.save();
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
-  create(): void {
-    /*
-        TODO
-    */
-  }
-
-  update(): void {
-    /*
-        TODO
-        */
-  }
-
-  /** Redirects **/
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    /* this.routesService.registration(); */
-  }
-
   /** Getters Form**/
+  //review
   get agreementStateField(): AbstractControl {
     return this.form.controls['agreementState'];
   }
