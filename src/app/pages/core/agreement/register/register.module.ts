@@ -3,18 +3,16 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
-import { Component1Component } from './component1/component1.component';
-import { Component2Component } from './component2/component2.component';
 import { ButtonModule } from "primeng/button";
 import { StepperModule } from "primeng/stepper";
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { SharedModule } from "../../../../shared/shared.module";
+import { SharedModule } from "@shared/shared.module";
 import { ToolbarModule } from "primeng/toolbar";
 import { PanelModule } from "primeng/panel";
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { AvatarModule } from 'primeng/avatar';
@@ -36,12 +34,12 @@ import { DocumentComponent } from './document/document.component';
 import { AddendumComponent } from './addendum/addendum.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {MultiSelectModule} from "primeng/multiselect";
+import {TableModule} from "primeng/table";
 
 @NgModule({
     declarations: [
         RegisterComponent,
-        Component1Component,
-        Component2Component,
         AgreementDateComponent,
         BasicDataComponent,
         AppearerComponent,
@@ -78,7 +76,10 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     StepperModule,
     TabViewModule,
     FileUploadModule,
-    InputTextareaModule
+    InputTextareaModule,
+    MultiSelectModule,
+    FormsModule,
+    TableModule
   ]
 })
 export class RegisterModule { }
