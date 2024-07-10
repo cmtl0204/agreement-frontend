@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, inject } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -8,48 +8,55 @@ import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class RegisterComponent {
   private readonly formBuilder = inject(FormBuilder);
-  protected form: FormGroup = this.formBuilder.group({
-    // basic-data
-    agreementState: [null],
-    name: [null],
-    internalNumber: [null],
-    number: [null],
-    originId: [null],
-    typeId: [null],
+  protected form!: FormGroup;
+  constructor() {
+    this.buildForm()
+  }
 
-    // appearer
-    internalInstitutions: [null],
-    externalInstitutions: [null],
+  buildForm() {
+    this.form = this.formBuilder.group({
+      // basic-data
+      agreementState: [null],
+      name: [null],
+      internalNumber: [null],
+      number: [null],
+      originId: [null],
+      typeId: [null],
 
-    // agreement-date
-    subscribedAt: [null],
-    startedAt: [null],
-    isFinishDate: [null],
-    endedAt: [null],
-    endedReason: [null],
-    yearTerm: [null],
-    monthTerm: [null],
-    dayTerm: [null],
-    objective: [null],
-    administrator: [null],
+      // appearer
+      internalInstitutions: [null],
+      externalInstitutions: [null],
 
-    // agreement-administrator
+      // agreement-date
+      subscribedAt: [null],
+      startedAt: [null],
+      isFinishDate: [null],
+      endedAt: [null],
+      endedReason: [null],
+      yearTerm: [null],
+      monthTerm: [null],
+      dayTerm: [null],
+      objective: [null],
+      administrator: [null],
 
-    // obligation
+      // agreement-administrator
 
-    // financing
-    isFinancing: [false],
-    financings: [null],
+      // obligation
 
-    // document
+      // financing
+      isFinancing: [false],
+      financings: [null],
 
-    // addendum
-    isAddendum: [false],
-    description: [null],
-    isModifiedFinishDate: [null],
-    document: [null],
-    agreementEndedAt: [null]
-  });
+      // document
+
+      // addendum
+      isAddendum: [false],
+      description: [null],
+      isModifiedFinishDate: [null],
+      document: [null],
+      agreementEndedAt: [null]
+    })
+  }
 
   save(event: any) {
     console.log('event', event);

@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'update',
     loadChildren: () => import('./update/update.module').then(m => m.UpdateModule),
+  },
+  {
+    path: 'view',
+    loadChildren: () => import('./view/view.module').then(m => m.ViewModule),
   }
 ];
 
