@@ -9,7 +9,7 @@ import { BasicDataComponent } from './basic-data/basic-data.component';
 import { DocumentComponent } from './document/document.component';
 import { FinancingComponent } from './financing/financing.component';
 import { ObligationComponent } from './obligation/obligation.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from "../../../../shared/shared.module";
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
@@ -28,10 +28,10 @@ import { PasswordModule } from 'primeng/password';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { RippleModule } from 'primeng/ripple';
 import { StepperModule } from 'primeng/stepper';
-import { TabViewModule } from 'primeng/tabview';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 @NgModule({
@@ -49,6 +49,7 @@ import { TableModule } from 'primeng/table';
     CommonModule,
     UpdateRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     SharedModule,
     ButtonModule,
     CardModule,
@@ -70,7 +71,8 @@ import { TableModule } from 'primeng/table';
     RadioButtonModule,
     StepperModule,
     FileUploadModule,
-    TableModule
+    TableModule,
+    InputTextareaModule
   ]
 })
 export class UpdateModule { }

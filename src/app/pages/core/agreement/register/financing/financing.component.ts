@@ -51,7 +51,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   /** Form **/
   // @Input({ required: true }) id!: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
-  id:string=RoutesEnum.NEW
+  protected id: string = RoutesEnum.NEW
   private formErrors: string[] = [];
   groupedInstitutions: any[] = [];
   

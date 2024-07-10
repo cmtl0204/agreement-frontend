@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -8,48 +8,55 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 })
 export class RegisterComponent {
   private readonly formBuilder = inject(FormBuilder);
-  protected form: FormGroup = this.formBuilder.group({
-    // basic-data
-    agreementState: [null],
-    name: [null],
-    internalNumber: [null],
-    number: [null],
-    originId: [null],
-    typeId: [null],
-    
-    // appearer
-    internalInstitutions: [null],
-    externalInstitutions: [null],
-    
-    // agreement-date
-    subscribedAt: [null],
-    startedAt: [null],
-    isFinishDate: [null],
-    endedAt: [null],
-    endedReason: [null],
-    yearTerm: [null],
-    monthTerm: [null],
-    dayTerm: [null],
-    objective: [null],
-    administrator: [null],
+  protected form!: FormGroup;
+  constructor() {
+    this.buildForm()
+  }
 
-    // agreement-administrator
+  buildForm() {
+    this.form = this.formBuilder.group({
+      // basic-data
+      agreementState: [null],
+      name: [null],
+      internalNumber: [null],
+      number: [null],
+      originId: [null],
+      typeId: [null],
 
-    // obligation
-    
-    // financing
-    isFinancing: [false],
-    financings: [null],
+      // appearer
+      internalInstitutions: [null],
+      externalInstitutions: [null],
 
-    // document
+      // agreement-date
+      subscribedAt: [null],
+      startedAt: [null],
+      isFinishDate: [null],
+      endedAt: [null],
+      endedReason: [null],
+      yearTerm: [null],
+      monthTerm: [null],
+      dayTerm: [null],
+      objective: [null],
+      administrator: [null],
 
-    // addendum
-    isAddendum: [false],
-    description: [null],
-    isModifiedFinishDate: [null],
-    document: [null],
-    agreementEndedAt: [null]
-  });
+      // agreement-administrator
+
+      // obligation
+
+      // financing
+      isFinancing: [false],
+      financings: [null],
+
+      // document
+
+      // addendum
+      isAddendum: [false],
+      description: [null],
+      isModifiedFinishDate: [null],
+      document: [null],
+      agreementEndedAt: [null]
+    })
+  }
 
   save(event: any) {
     console.log('event', event);
@@ -59,5 +66,9 @@ export class RegisterComponent {
 
   register() {
     // this.agreementHttpServices.register(this.form.value).subscribe();
+  }
+
+  get externalInstitutionsField(): FormArray {
+    return this.form.controls['externalInstitutions'] as FormArray;
   }
 }

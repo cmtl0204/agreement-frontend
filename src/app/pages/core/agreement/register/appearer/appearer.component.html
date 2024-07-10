@@ -27,16 +27,18 @@
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
                            for="positionId"
-                           [label]="InternalInstitutionsFormEnum.positionId">
+                           [label]="i+'. '+InternalInstitutionsFormEnum.positionId">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
                       id="positionId"
                       formControlName="positionId"
-                      placeholder="Seleccione los cargos del funcionario"
-                      [options]="officials"
+                      dataKey="id"
+                      [options]="positions"
+                      optionValue="id"
                       optionLabel="name"
-                      placeholder="Select"
+                      placeholder="Seleccione"
+                      [filter]="false"
                     />
                     <small appErrorMessage
                            [errors]="internalInstitution.get('positionId')?.errors!"
@@ -49,15 +51,18 @@
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
                            for="personTypeId"
-                           [label]="InternalInstitutionsFormEnum.personTypeId">
+                           [label]="i+'. '+InternalInstitutionsFormEnum.personTypeId">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
-                      id="personTypeId"
+                      id="internalPersonTypeId"
                       formControlName="personTypeId"
-                      [options]="officials"
+                      dataKey="id"
+                      [options]="internalPersonTypes"
+                      optionValue="id"
                       optionLabel="name"
-                      placeholder="Select"
+                      placeholder="Seleccione"
+                      [filter]="false"
                     />
                     <small appErrorMessage
                            [errors]="internalInstitution.get('personTypeId')?.errors!"
@@ -129,7 +134,7 @@
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             <!-- externalInstitutionsForm -->
             <p-panel>
-              <div formArrayName="externalInstitutions">
+              <div [formGroup]="appearerform">
                 <div *ngFor="let externalInstitution of externalInstitutions.controls; let i = index"
                      [formGroupName]="i" class="grid">
 
@@ -145,9 +150,9 @@
                            id="position"
                            formControlName="position"/>
                     <small appErrorMessage
-                           [errors]="externalInstitution.get('position')?.errors!"
-                           [touched]="externalInstitution.get('position')?.touched!"
-                           [dirty]="externalInstitution.get('position')?.dirty!">
+                           [errors]="externalInstitutionNameField?.errors!"
+                           [touched]="externalInstitutionNameField?.touched!"
+                           [dirty]="externalInstitutionNameField?.dirty!">
                     </small>
                   </div>
 
@@ -155,15 +160,18 @@
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
                            for="personTypeId"
-                           [label]="ExternalInstitutionsFormEnum.personTypeId">
+                           [label]="i+'. '+ExternalInstitutionsFormEnum.personTypeId">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
-                      id="personTypeId"
+                      id="externalPersonTypeId"
                       formControlName="personTypeId"
-                      [options]="officials"
+                      dataKey="id"
+                      [options]="externalPersonTypes"
+                      optionValue="id"
                       optionLabel="name"
-                      placeholder="Select"
+                      placeholder="Seleccione"
+                      [filter]="false"
                     />
                     <small appErrorMessage
                            [errors]="externalInstitution.get('personTypeId')?.errors!"
@@ -175,7 +183,7 @@
                   <!-- externalInstitutions/name -->
                   <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
                     <label appLabel for="name"
-                           [label]="ExternalInstitutionsFormEnum.name">
+                           [label]="i+'. '+ExternalInstitutionsFormEnum.name">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <input pInputText
@@ -192,7 +200,7 @@
                   <!-- externalInstitutions/unit -->
                   <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
                     <label appLabel for="unit"
-                           [label]="ExternalInstitutionsFormEnum.unit">
+                           [label]="i+'. '+ExternalInstitutionsFormEnum.unit">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <input pInputText

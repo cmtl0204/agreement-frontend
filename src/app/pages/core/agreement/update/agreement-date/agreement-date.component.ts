@@ -42,8 +42,6 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
 
   constructor() {
     this.buildForm();
-    this.applyValidations();
-    this.setEndedReason();
   }
 
   async onExit() {
@@ -78,8 +76,9 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
       monthTerm: [null, Validators.required],
       dayTerm: [null, Validators.required],
       objective: [null, Validators.required],
-      administrator: this.administratorForm
     })
+
+    this.checkValueChanges()
   }
 
   get administratorForm() {
@@ -130,30 +129,21 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     */
   }
 
-  applyValidations(){
-    this.isFinishDateField.valueChanges.subscribe(()=>{
-      if(this.isFinishDateField.value==true){
-        this.endedAtField.addValidators(Validators.required)
-        this.endedReasonField.reset()
-        this.endedReasonField.removeValidators(Validators.required)
-        this.endedReasonField.updateValueAndValidity()
-      }else{
-        this.endedReasonField.addValidators(Validators.required)
-        this.endedAtField.removeValidators(Validators.required)
-        this.endedAtField.reset()
+  checkValueChanges() {
+    this.isFinishDateField.valueChanges.subscribe(value => {
+      if (value) {
+        this.endedAtField.setValidators(Validators.required);
+        this.endedReasonField.clearValidators();
+        this.endedReasonField.reset();
+      } else {
+        this.endedReasonField.setValidators(Validators.required);
+        this.endedAtField.clearValidators();
+        this.endedAtField.reset();
       }
-    })
-  }
 
-  setEndedReason() {
-    merge(
-      this.isFinishDateField.valueChanges,
-      this.startedAtField.valueChanges
-    ).subscribe(() => {
-      if (this.startedAtField.value && this.isFinishDateField.value == false) {
-        this.endedReasonField.setValue('Razón de terminación del convenio indefinida')
-      }
-    })
+      this.endedReasonField.updateValueAndValidity();
+      this.endedAtField.updateValueAndValidity();
+    });
   }
 
   // redirects

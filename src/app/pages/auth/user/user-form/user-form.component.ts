@@ -1,9 +1,9 @@
 import {Component, inject, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Router} from '@angular/router';
 import {PrimeIcons} from "primeng/api";
 import {CreateUserDto, RoleModel, UpdateUserDto} from '@models/auth';
-import {CatalogueModel, UnitModel} from "@models/core";
+import {CatalogueModel} from "@models/core";
 import {RolesHttpService, UsersHttpService} from '@servicesApp/auth';
 import {
   BreadcrumbService,
@@ -46,7 +46,6 @@ export class UserFormComponent implements OnInit, OnExitInterface {
 
   protected roles: RoleModel[] = [];
   protected identificationTypes: CatalogueModel[] = [];
-  protected units: UnitModel[] = [];
 
   protected isChangePassword: FormControl = new FormControl(false);
   private saving: boolean = true;

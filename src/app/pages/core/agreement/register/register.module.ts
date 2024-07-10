@@ -4,6 +4,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
 import { Component1Component } from './component1/component1.component';
+import { Component2Component } from './component2/component2.component';
 import { ButtonModule } from "primeng/button";
 import { StepperModule } from "primeng/stepper";
 import { CalendarModule } from 'primeng/calendar';
@@ -40,6 +41,7 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     declarations: [
         RegisterComponent,
         Component1Component,
+        Component2Component,
         AgreementDateComponent,
         BasicDataComponent,
         AppearerComponent,

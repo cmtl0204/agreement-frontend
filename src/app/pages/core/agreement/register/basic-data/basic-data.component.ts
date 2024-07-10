@@ -19,7 +19,9 @@ export class BasicDataComponent implements OnInit {
   protected readonly messageDialogService = inject(MessageDialogService)
 
   /** Form **/
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -45,7 +47,8 @@ export class BasicDataComponent implements OnInit {
   }
 
   save() {
-    this.formOutput.emit(this.form.value)
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
   }
 
   /** Form Builder & Validates **/
@@ -55,8 +58,10 @@ export class BasicDataComponent implements OnInit {
       name: [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
+      objective: [null, [Validators.required]],
       originId: [null, [Validators.required]],
-      typeId: [null, [Validators.required]]
+      typeId: [null, [Validators.required]],
+      specificType: [null, [Validators.required]],
     });
   }
 
@@ -67,8 +72,10 @@ export class BasicDataComponent implements OnInit {
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
+    if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
     if (this.originIdField.invalid) this.formErrors.push(AgreementFormEnum.originId);
     if (this.typeIdField.invalid) this.formErrors.push(AgreementFormEnum.typeId);
+    if (this.specificTypeField.invalid) this.formErrors.push(AgreementFormEnum.specificType);
 
     return this.form.valid && this.formErrors.length === 0;
   }
@@ -136,6 +143,14 @@ export class BasicDataComponent implements OnInit {
 
   get typeIdField(): AbstractControl {
     return this.form.controls['typeId'];
+  }
+
+  get objectiveField(): AbstractControl {
+    return this.form.controls['objective'];
+  }
+
+  get specificTypeField(): AbstractControl {
+    return this.form.controls['specificType'];
   }
 }
 
