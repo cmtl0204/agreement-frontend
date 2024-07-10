@@ -43,23 +43,6 @@
                  [dirty]="rolesField.dirty">
           </small>
         </div>
-        <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <label appLabel for="units" [label]="UsersFormEnum.unitManagers"
-                 [required]="unitsField"></label>
-          <p-multiSelect id="units"
-                         formControlName="units"
-                         dataKey="id"
-                         [options]="units"
-                         display="chip"
-                         optionLabel="name"
-                         placeholder="Seleccione...">
-          </p-multiSelect>
-          <small appErrorMessage
-                 [errors]="unitsField.errors"
-                 [touched]="unitsField.touched"
-                 [dirty]="unitsField.dirty">
-          </small>
-        </div>
       </div>
       <div class="formgrid grid">
         <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
