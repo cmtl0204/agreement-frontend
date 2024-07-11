@@ -1,12 +1,12 @@
-import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum} from '@shared/enums';
-import {OnExitInterface} from '@shared/interfaces';
-import {PrimeIcons} from 'primeng/api';
-import {firstValueFrom, merge} from 'rxjs';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { CatalogueModel } from '@models/core';
+import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum } from '@shared/enums';
+import { OnExitInterface } from '@shared/interfaces';
+import { PrimeIcons } from 'primeng/api';
+import { firstValueFrom, merge } from 'rxjs';
 
 @Component({
   selector: 'app-agreement-date',
@@ -25,6 +25,8 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   // Form
   // @Input({required: true}) id: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -59,6 +61,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
 
   save() {
     this.formOutput.emit(this.form.value); //add
+    this.nextOutput.emit(true);
   }
 
   /** Form Builder & Validates **/
@@ -81,16 +84,28 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     this.isFinishDateField.valueChanges.subscribe(value => {
       if (value) {
         this.endedAtField.setValidators(Validators.required);
+        this.yearTermField.setValidators(Validators.required);
+        this.monthTermField.setValidators(Validators.required);
+        this.dayTermField.setValidators(Validators.required);
         this.endedReasonField.clearValidators();
         this.endedReasonField.reset();
       } else {
         this.endedReasonField.setValidators(Validators.required);
+        this.yearTermField.clearValidators();
+        this.monthTermField.clearValidators();
+        this.dayTermField.clearValidators();
         this.endedAtField.clearValidators();
         this.endedAtField.reset();
+        this.yearTermField.reset();
+        this.monthTermField.reset();
+        this.dayTermField.reset();
       }
 
       this.endedReasonField.updateValueAndValidity();
       this.endedAtField.updateValueAndValidity();
+      this.yearTermField.updateValueAndValidity();
+      this.monthTermField.updateValueAndValidity();
+      this.dayTermField.updateValueAndValidity();
     });
   }
 
