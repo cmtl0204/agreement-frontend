@@ -1,0 +1,63 @@
+<div class="grid">
+  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+    <ng-container *ngIf="coreService.isLoading; else content">
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    </ng-container>
+    <ng-template #content>
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form [id]="id"></app-header-form>
+        </div>
+        <div class="p-toolbar-group-right">
+          <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
+        </div>
+      </p-toolbar>
+
+      <p-panel>
+        <form [formGroup]="form" class="p-fluid grid">
+          <h2>Financiamiento</h2>
+          @if (financing.agreement.isFinancing) {
+
+
+          <!-- financing -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="financing" [label]="'Financiamiento'"></label>
+            <input pInputText type="text" id="financing" [value]="financing.agreement.isFinancing" readonly />
+          </div>
+
+          <!-- appearing -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="appearing" [label]="'Comparecientes del convenio'"></label>
+            <input pInputText type="text" id="appearing" [value]="financing.modelId" readonly />
+          </div>
+
+          <!-- budget_and_financing -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="budget_and_financing" [label]="'Presupuesto y Financiamiento'"></label>
+            <input pInputText type="text" id="budget_and_financing" [value]="financing.budget" readonly />
+          </div>
+
+          <!-- payment_method -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="payment_method" [label]="'Método de Pago'"></label>
+            <input pInputText type="text" id="payment_method" [value]="financing.paymentMethod" readonly />
+          </div>
+
+          <!-- financing_source -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="financing_source" [label]="'Fuente de Financiamiento'"></label>
+            <input pInputText type="text" id="financing_source" [value]="financing.source" readonly />
+          </div>
+
+          }
+          @else {
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label>No existen datos relacionados</label>
+          </div>
+          }
+
+        </form>
+      </p-panel>
+    </ng-template>
+  </div>
+</div>

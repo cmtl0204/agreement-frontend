@@ -1,0 +1,67 @@
+<div class="grid">
+  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+    <ng-container *ngIf="coreService.isLoading; else content">
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    </ng-container>
+    <ng-template #content>
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form [id]="id"></app-header-form>
+        </div>
+        <div class="p-toolbar-group-right">
+          <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
+        </div>
+      </p-toolbar>
+
+      <p-panel>
+        <form [formGroup]="form" class="p-fluid grid">
+          <h2>Obligaciones de las partes</h2>
+          <!-- tradeName -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="tradeName" [label]="'Nombre comercial'"></label>
+            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+            <input pInputText type="text" id="tradeName" [value]="obligationType.typeId" readonly />
+          </div>
+          @if (isLoading) {
+            @if (isContraparte) {
+              <h2>Campos de contraparte</h2>
+             
+              <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                <label appLabel for="counterparty" [label]="'Entidad contraparte'"></label>
+                <app-form-help-field
+                  content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
+                <input pInputText type="text" id="counterparty" [value]="institutionObligation.obligationTypeId" readonly />
+              </div>
+            } @else{
+              <h2>Campos conjuntos</h2>
+              <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                <label appLabel for="counterparty" [label]="'Entidad grupo contraparte'"></label>
+                <app-form-help-field
+                  content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
+                <input pInputText type="text" id="counterparty" [value]="institutionObligation.obligationTypeId" readonly />
+              </div>
+
+            }
+            <!-- counterparty -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="counterparty" [label]="'Contraparte'"></label>
+            <app-form-help-field
+              content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
+            <input pInputText type="text" id="counterparty" [value]="institutionObligation.obligationTypeId" readonly />
+          </div>}
+          
+
+          <!-- obligation -->
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label appLabel for="obligation" [label]="'Obligación'"></label>
+            <app-form-help-field
+              content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
+            <input pInputText type="text" id="obligation" [value]="obligation.description" readonly />
+          </div>
+
+
+        </form>
+      </p-panel>
+    </ng-template>
+  </div>
+</div>
