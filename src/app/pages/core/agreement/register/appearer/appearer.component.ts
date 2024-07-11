@@ -93,7 +93,6 @@ export class AppearerComponent implements OnInit {
       name: ['Ministerio de Turismo', [Validators.required, Validators.pattern(onlyLetters())]],
       unit: ['Unidad', [Validators.required, Validators.pattern(onlyLetters())]],
     });
-
     this.internalInstitutions.push(internalInstitutions);
   }
 
@@ -101,9 +100,9 @@ export class AppearerComponent implements OnInit {
     if (this.appearerForm.valid) {
       const externalInstitution = this.formBuilder.group({
         personTypeId: [this.appearerForm.value.personTypeId, [Validators.required]],
-        name: [this.appearerForm.value.name, [Validators.required, Validators.pattern(onlyLetters())]],
-        position: [this.appearerForm.value.position, [Validators.required, Validators.pattern(onlyLetters())]],
-        unit: [this.appearerForm.value.unit, [Validators.required, Validators.pattern(onlyLetters())]],
+        name: [this.appearerForm.value.name, [Validators.required]],
+        position: [this.appearerForm.value.position, [Validators.required]],
+        unit: [this.appearerForm.value.unit, [Validators.required]],
       });
       this.externalInstitutions.push(externalInstitution);
       this.appearerForm.reset();
@@ -116,7 +115,7 @@ export class AppearerComponent implements OnInit {
       this.externalInstitutionPersonTypeIdField.clearValidators();
       this.externalInstitutionPersonTypeIdField.reset();
     } else {
-      this.validateForm();
+      
     }
   }
 
