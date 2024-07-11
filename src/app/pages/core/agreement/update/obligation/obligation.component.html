@@ -1,108 +1,155 @@
 <div class="grid">
-    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
-      @if (coreService.isLoading) {
-        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-      }
-  
-      @if (!coreService.isLoading) {
-        <p-toolbar>
-          <div class="p-toolbar-group-left">
-            <app-header-form [id]="id"></app-header-form>
-          </div>
-          <div class="p-toolbar-group-right">
-            <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
-          </div>
-        </p-toolbar>
-  
-  <div class="p-fluid">
-    <form [formGroup]="form" (ngSubmit)="saveMinturObligations()">
-      <h2>Obligaciones MINTUR</h2>
-      <div formArrayName="textAreas">
+  <div class="col-12">
+    @if (coreService.isLoading) {
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    }
+
+    @if (!coreService.isLoading) {
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form [id]="id"></app-header-form>
+        </div>
+        <div class="p-toolbar-group-right">
+          <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
+        </div>
+      </p-toolbar>
+
+      <div class="p-fluid">
+        <p-multiSelect
+          [options]="[
+            { id: '1', code: '1', name: 'Obligación MINTUR' },
+            { id: '2', code: '2', name: 'Obligación contraparte' },
+            { id: '3', code: '3', name: 'Obligación conjunta' }
+          ]"
+          [(ngModel)]="selectedObligations"
+          name="obligations"
+          optionLabel="name"
+          placeholder="Selecciona obligaciones"
+          (onChange)="updateSelectedObligations()"
+        ></p-multiSelect>
+      
+      
+      <!-- Obligaciones MINTUR -->
+       @if (obligations.mintur) {
+      <div>
+        <h2>Obligaciones MINTUR</h2>
+        <button pButton label="Agregar Obligación" icon="pi pi-plus" (click)="openAddModal()" type="button"></button>
+        <button pButton label="Ver Obligaciones" icon="pi pi-eye" (click)="openViewModal()" type="button"></button>
+      </div>}
+      
+      <!-- Modal para agregar obligaciones -->
+      <p-dialog header="Agregar Obligación" [(visible)]="displayAddModal" [modal]="true" [style]="{ 'width': '400px' }">
+        <textarea [(ngModel)]="newMinturObligation" rows="5" cols="30" placeholder="Ingrese una nueva obligación"></textarea>
+        <br>
+        <button pButton label="Guardar" icon="pi pi-check" (click)="addObligation()" type="button"></button>
+        <button pButton label="Cancelar" icon="pi pi-times" (click)="closeAddModal()" type="button"></button>
+      </p-dialog>
+      
+      <!-- Modal para ver y eliminar obligaciones -->
+      <p-dialog header="Obligaciones Creadas" [(visible)]="displayViewModal" [modal]="true" [style]="{ 'width': '600px' }">
         <ul>
-          @for (textArea of textAreas.controls; track $index) {
+         @for (obligation of obligationMintur; track $index) {
           <li>
-            {{ textArea.value }}
-            <button pButton type="button" icon="pi pi-times" (click)="removeTextArea($index)"></button>
+            {{ obligation }}
+            <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeObligation($index)" type="button"></button>
           </li>}
         </ul>
-      </div>
-      <textarea pInputTextarea [(ngModel)]="newMinturObligation" [ngModelOptions]="{ standalone: true }" rows="3" cols="30" placeholder="Enter new obligation"></textarea>
-      <button pButton label="Add Obligation" icon="pi pi-plus" (click)="addTextArea()" type="button"></button>
-      <button pButton label="Save" icon="pi pi-check" type="submit"></button>
-    </form>
-  
-    <form [formGroup]="tableForm" (ngSubmit)="saveCounterpartObligations()">
-      <h2>Obligaciones Contraparte</h2>
-      <div formArrayName="elements">
-        <p-table [value]="elements.controls">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Nombre Entidad</th>
-              <th>Institución Contraparte</th>
-              <th>Obligaciones</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-element let-i="rowIndex">
-            <tr [formGroupName]="i">
-              <td>{{ element.get('name')?.value }}</td>
-              <td>{{ element.get('institution')?.value }}</td>
-              <td>
-                <ul>
-                  @for (obligation of getControls(i, 'obligations'); track $index) {
-                  <li>
-                    {{ obligation.value }}
-                    <button pButton type="button" icon="pi pi-times" (click)="removeObligationFromElement(i, $index)"></button>
-                  </li>}
-                </ul>
-                <textarea pInputTextarea [(ngModel)]="newObligations[i]" [ngModelOptions]="{ standalone: true }" rows="3" cols="30" placeholder="Enter new obligation"></textarea>
-                <button pButton type="button" icon="pi pi-plus" (click)="addObligationToElement(i, newObligations[i])">Add Obligation</button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-      <button pButton label="Save" icon="pi pi-check" type="submit"></button>
-    </form>
-  
-    <form [formGroup]="multiSelectForm" (ngSubmit)="saveJointObligations()">
-      <h2>Obligaciones conjuntas</h2>
-      <div formArrayName="elements">
-        <p-table [value]="multiSelectElements.controls">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Select</th>
-              <th>Nombre Entidad</th>
-              <th>Institución Contraparte</th>
-              <th>Obligaciones</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-element let-i="rowIndex">
-            <tr [formGroupName]="i">
-              <td>
-                <p-checkbox binary="true" [formControl]="element.get('selected')"></p-checkbox>
-              </td>
-              <td>{{ element.get('name')?.value }}</td>
-              <td>{{ element.get('institution')?.value }}</td>
-              <td>
-                <ul>
-                  @for (obligation of getMultiSelectControls(i, 'obligations'); track $index) {
-                  <li>
-                    {{ obligation.value }}
-                    <button pButton type="button" icon="pi pi-times" (click)="removeObligationFromMultiSelectElement(i, $index)"></button>
-                  </li>}
-                </ul>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-      @if (hasSelectedElements()) {
-      <div>
-        <textarea pInputTextarea [(ngModel)]="newObligation" [ngModelOptions]="{ standalone: true }" rows="3" cols="30" placeholder="Enter new obligation"></textarea>
-        <button pButton type="button" icon="pi pi-plus" (click)="addObligationToSelected()">Add Obligation to Selected</button>
-      </div>}
-      <button pButton label="Save" icon="pi pi-check" type="submit"></button>
-    </form>
-    <p-button label="Siguiente" (click)="save()"></p-button>
+        <button pButton label="Cerrar" icon="pi pi-times" (click)="closeViewModal()" type="button"></button>
+      </p-dialog>
+<!-- Modal para agregar obligación contraparte -->
+<p-dialog header="Agregar Obligación" [(visible)]="displayAddModalCounterpart" [modal]="true" [style]="{ 'width': '400px' }">
+  <textarea [(ngModel)]="newCounterpartObligation" rows="5" cols="30" placeholder="Ingrese una nueva obligación"></textarea>
+  <br>
+  <button pButton label="Guardar" icon="pi pi-check" (click)="addCounterpartObligation()" type="button"></button>
+  <button pButton label="Cancelar" icon="pi pi-times" (click)="closeAddModalCounterpart()" type="button"></button>
+</p-dialog>
 
-  </div>}
+<!-- Modal para ver y eliminar obligaciones contraparte -->
+<p-dialog header="Obligaciones Creadas" [(visible)]="displayViewModalCounterpart" [modal]="true" [style]="{ 'width': '600px' }">
+  <ul>
+    @for (obligation of selectedCounterpartObligations; track $index) {
+    <li>
+      {{ obligation }}
+      <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeCounterpartObligation($index)" type="button"></button>
+    </li>}
+  </ul>
+  <button pButton label="Cerrar" icon="pi pi-times" (click)="closeViewModalCounterpart()" type="button"></button>
+</p-dialog>
+        <!-- Obligaciones Contraparte -->
+         @if (obligations.counterpart) {
+        <form [formGroup]="tableForm">
+          <h2>Obligaciones Contraparte</h2>
+          <div formArrayName="{{ ExternalInstitutionsObligations.institutionsName }}">
+            <p-table [value]="externalInstitutionsObligations.controls">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Nombre Entidad</th>
+                  <th>Institución</th>
+                  <th>Obligaciones</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowIndex="rowIndex" let-element="rowData">
+                <tr [formGroupName]="rowIndex">
+                  <td>{{ element.get(ExternalInstitutionsObligations.institutionsName).value }}</td>
+                  <td>{{ element.get(ExternalInstitutionsObligations.positionName).value }}</td>
+                  <td>
+                    <ul>
+                      <ng-container *ngFor="let obligation of getControls(rowIndex, ExternalInstitutionsObligations.obligations).controls; let obligationIndex = index">
+                        <li>
+                          {{ obligation.value }}
+                          <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeObligationFromElement(rowIndex, obligationIndex)" type="button"></button>
+                        </li>
+                      </ng-container>
+                      <li>
+                        <button pButton label="Agregar Obligación" icon="pi pi-plus" (click)="openAddModalCounterpart(rowIndex)" type="button"></button>
+                        <button pButton label="Ver Obligaciones" icon="pi pi-eye" (click)="openViewModalCounterpart(rowIndex)" type="button"></button>
+                    </ul>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </form>}
+      
+        <!-- Obligaciones Conjuntas -->
+        <form [formGroup]="multiSelectForm" *ngIf="obligations.joint">
+          <h2>Obligaciones Conjuntas</h2>
+          <div formArrayName="{{ InstitutionsObligations.institutionName }}">
+            <p-table [value]="institutionsObligations.controls">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Seleccionar</th>
+                  <th>Nombre Entidad</th>
+                  <th>Institución Conjunta</th>
+                  <th>Obligaciones</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowIndex="rowIndex" let-element="rowData">
+                <tr [formGroupName]="rowIndex">
+                  <td>
+                    <p-checkbox formControlName="selected"></p-checkbox>
+                  </td>
+                  <td>{{ element.get(InstitutionsObligations.institutionName).value }}</td>
+                  <td>{{ element.get(InstitutionsObligations.positionsNames).value }}</td>
+                  <td>
+                    <ul>
+                      @for (obligation of getMultiSelectControls(rowIndex, InstitutionsObligations.institutionObligations).controls; track $index) {
+                      <ng-container *ngFor="let obligation of getMultiSelectControls(rowIndex, InstitutionsObligations.institutionObligations).controls; let obligationIndex = index">
+                        <li>
+                          {{ obligation.value }}
+                          <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeObligationFromMultiSelectElement(rowIndex, obligationIndex)" type="button"></button>
+                        </li>
+                      </ng-container>}
+                    </ul>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <textarea pInputTextarea [(ngModel)]="newObligation" [ngModelOptions]="{ standalone: true }" rows="3" cols="30" placeholder="Enter new obligation"></textarea>
+            <button pButton label="Add Obligation to Selected" icon="pi pi-plus" (click)="addObligationToSelected()" type="button" [disabled]="!hasSelectedElements()"></button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>
