@@ -1,5 +1,5 @@
 <div class="grid">
-    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+    <div class="col-12">
         @if (coreService.isLoading) {
         <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
         }
@@ -26,13 +26,32 @@
 
         <p-panel>
             <form [formGroup]="form" class="p-fluid grid">
+                
+                <!-- name -->
+                <div class="field col-4 xl:col-8">
+                    <label 
+                      appLabel 
+                      for="name" 
+                      [label]="AgreementFormEnum.name"></label>
+                    <input pInputText id="name" formControlName="name" [value]="agreement.name" readonly />
+                </div>
+
+                <!-- internal Number -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="internalNumber" 
+                      [label]="AgreementFormEnum.internalNumber"></label>
+                    <input pInputText id="internalNumber" formControlName="internalNumber" [value]="agreement.internalNumber" readonly />
+                </div>
+                
                 <!-- State -->
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label 
                       appLabel 
-                      for="state" 
+                      for="agreementState" 
                       [label]="AgreementFormEnum.agreementState"></label>
-                    <input pInputText id="state" formControlName="state" [value]="" readonly />
+                    <input pInputText id="agreementState" formControlName="agreementState" [value]="" readonly />
                 </div>
 
                 <!-- Number -->
@@ -43,42 +62,14 @@
                       [label]="AgreementFormEnum.number"></label>
                     <input pInputText id="number" formControlName="number" [value]="agreement.number" readonly />
                 </div>
-
-                <!-- internal Number -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label 
-                      appLabel 
-                      for="internalNumber" 
-                      [label]="AgreementFormEnum.internalNumber"></label>
-                    <input pInputText type="text" id="internalNumber" formControlName="internalNumber" [value]="agreement.internalNumber" readonly />
-                </div>
-
-                <!-- Name -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label 
-                      appLabel 
-                      for="name" 
-                      [label]="AgreementFormEnum.name"></label>
-                    <input pInputText type="text" id="name" formControlName="name" [value]="agreement.name" readonly />
-                </div>
-
-                <!-- Object -->
-                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label 
-                      appLabel 
-                      for="objective" 
-                      [label]="AgreementFormEnum.objective"></label>
-                    <!-- <input pInputText type="text" id="objective" formControlName="objective" [value]="" readonly /> -->
-                    <textarea pInputTextarea type="textarea" id="objective" formControlName="objective" [value]="agreement.objective" readonly></textarea>
-                </div>
-
+               
                 <!-- Origin -->
-                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label 
                       appLabel 
                       for="originId" 
                       [label]="AgreementFormEnum.originId"></label>
-                    <input pInputText type="text" id="originId" formControlName="originId" [value]="agreement.originId" readonly />
+                    <input pInputText id="originId" formControlName="originId" [value]="agreement.originId" readonly />
                 </div>
 
                 <!-- Type -->
@@ -87,7 +78,25 @@
                       appLabel 
                       for="typeId" 
                       [label]="AgreementFormEnum.typeId"></label>
-                    <input pInputText type="text" id="typeId" formControlName="typeId" [value]="agreement.typeId" readonly />
+                    <input pInputText id="typeId" formControlName="typeId" [value]="agreement.typeId" readonly />
+                </div>
+
+                <!-- Special Type -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="specialTypeId" 
+                      [label]="AgreementFormEnum.typeId"></label>
+                    <input pInputText id="specialTypeId" formControlName="specialTypeId" [value]="agreement.typeId" readonly />
+                </div>
+                
+                <!-- Object -->
+                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="objective" 
+                      [label]="AgreementFormEnum.objective"></label>
+                    <textarea pInputTextarea id="objective" formControlName="objective" [value]="agreement.objective" readonly></textarea>
                 </div>
             </form>
         </p-panel>

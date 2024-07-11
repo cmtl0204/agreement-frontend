@@ -1,8 +1,6 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import { AgreementModel } from '@models/core/agreement.model';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {AgreementFormEnum, SkeletonEnum} from '@shared/enums';
@@ -14,15 +12,13 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './basic-data.component.scss'
 })
 export class BasicDataComponent implements OnInit {
+
    /** Services **/
-   protected readonly authService = inject(AuthService);
-   private readonly authHttpService = inject(AuthHttpService);
-   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-   protected readonly coreService = inject(CoreService);
    private readonly formBuilder = inject(FormBuilder);
+   protected readonly coreService = inject(CoreService);
+   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
    public readonly messageDialogService = inject(MessageDialogService);
    private readonly routesService = inject(RoutesService);
- 
  
    /** Form **/
    @Input({ required: true }) id!: string;
@@ -55,7 +51,9 @@ export class BasicDataComponent implements OnInit {
    constructor() {
      this.buildForm();
    }
- 
+   
+   ngOnInit(): void { }
+
    async onExit() {
      const res = await firstValueFrom(this.messageDialogService.questionOnExit());
      console.log(res);
@@ -63,18 +61,10 @@ export class BasicDataComponent implements OnInit {
      // return this.messageDialogService.questionOnExit();
    }
  
-   ngOnInit(): void { }
  
    /** Form Actions **/
    onSubmit(): void {
      
-   }
- 
-   findCompany(id: string) {
-     /*
-     TODO
-     */
-     this.form.patchValue({});
    }
  
    /** Form Builder & Validates **/
@@ -82,19 +72,7 @@ export class BasicDataComponent implements OnInit {
      this.form = this.formBuilder.group({
  
      });
-   }
- 
-   create(): void {
-     /*
-         TODO
-     */
-   }
- 
-   update(): void {
-     /*
-         TODO
-         */
-   }
+   } 
  
    /** Redirects **/
    redirectRegistration() {
