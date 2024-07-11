@@ -10,7 +10,7 @@
       </div>
     </ng-template>
   </p-stepperPanel>
-  
+
   <p-stepperPanel header="Comparecientes">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
@@ -41,7 +41,7 @@
           <app-agreement-administrator class="col-12" (formOutput)="save($event);nextCallback.emit()"></app-agreement-administrator>
         </div>
       </div>
-      
+
     </ng-template>
   </p-stepperPanel>
 
@@ -53,7 +53,7 @@
           <app-obligation  class="col-12" (formOutput)="save($event)" [externalInstitutions]="externalInstitutionsField.value"></app-obligation>
         </div>
       </div>
-      
+
     </ng-template>
   </p-stepperPanel>
 
