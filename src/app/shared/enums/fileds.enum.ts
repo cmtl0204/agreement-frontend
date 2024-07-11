@@ -69,6 +69,21 @@ export enum ExternalInstitutionsFormEnum{
   personTypeId = 'Entidad',
 }
 
+export enum ObligationsMintur {
+  minturObligations = 'obligaciones Mintur'
+}
+
+export enum ExternalInstitutionsObligations {
+  institutionsName = 'nombre de las instituciones',
+  obligations = 'Obligaciones de las instituciones',
+  positionName = "positionName"
+}
+
+export enum InstitutionsObligations {
+  institutionName = 'instituciones seleccionadas',
+  institutionObligations = 'obligaciones seleccionadas',
+  positionsNames = "positionsNames"
+}
 export enum AgreementFormEnum{
   subscribedAt='Fecha suscripción de convenio',
   startedAt ='Fecha inicio de convenio',
