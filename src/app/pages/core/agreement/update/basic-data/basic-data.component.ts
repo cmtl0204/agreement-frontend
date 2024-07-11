@@ -42,9 +42,8 @@ export class BasicDataComponent implements OnInit {
   }
 
   ngOnInit(){
-    console.log('init')
-    /* this.loadStates();
-    this.loadOrigins(); */
+    this.loadStates();
+    this.loadOrigins();
     this.loadTypes();
     this.loadSpecialTypes()
 
@@ -98,20 +97,6 @@ export class BasicDataComponent implements OnInit {
 
     return this.form.valid && this.formErrors.length === 0;
   }
-
-  /* types1 = [
-    {name: 'Marco', id: '1'},
-    {name: 'Específicos', id: '2'},
-    {name: 'Especial', id: '3'},
-    {name: 'Comodato o convenio de préstamo de uso', id: '4'},
-  ] */
-
-  /* specialTypes1 = [
-    {name: 'Memorando de Entendimiento', id: '1'},
-    {name: 'Carta de Intención', id: '2'},
-    {name: 'Articulación', id: '3'},
-    {name: 'Cooperación', id: '4'},
-  ] */
 
   /** Load Foreign Keys  **/
   loadStates() {
