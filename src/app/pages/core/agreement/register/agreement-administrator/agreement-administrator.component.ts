@@ -22,6 +22,8 @@ export class AgreementAdministratorComponent {
   // Form
   // @Input({required: true}) id: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -59,6 +61,7 @@ export class AgreementAdministratorComponent {
 
   save() {
     this.formOutput.emit(this.form.value); //add
+    this.nextOutput.emit(true);
   }
 
   /** Form Builder & Validates **/
