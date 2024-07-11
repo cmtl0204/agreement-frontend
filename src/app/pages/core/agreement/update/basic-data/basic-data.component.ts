@@ -1,9 +1,9 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CatalogueModel } from '@models/core';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, RoutesEnum } from '@shared/enums';
+import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum} from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
 
 @Component({
@@ -11,11 +11,13 @@ import { PrimeIcons } from 'primeng/api';
   templateUrl: './basic-data.component.html',
   styleUrl: './basic-data.component.scss'
 })
-export class BasicDataComponent{
+export class BasicDataComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder)
   protected readonly coreService = inject(CoreService )
   protected readonly cataloguesHttpService = inject(CataloguesHttpService)
   protected readonly messageDialogService = inject(MessageDialogService)
+  protected readonly Validators = Validators;
+
 
   /** Form && Output **/
   // @Input({required: true}) id: string;
@@ -28,6 +30,7 @@ export class BasicDataComponent{
   protected states: CatalogueModel[] = [];
   protected origins: CatalogueModel[] = [];
   protected types: CatalogueModel[] = [];
+  protected specialTypes: CatalogueModel[]=[]
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
@@ -38,6 +41,13 @@ export class BasicDataComponent{
     this.buildForm();
   }
 
+  ngOnInit(){
+    this.loadStates();
+    this.loadOrigins();
+    this.loadTypes();
+    this.loadSpecialTypes()
+
+  }
 
   save(){
     this.formOutput.emit(this.form.value)
@@ -50,41 +60,78 @@ export class BasicDataComponent{
       name : [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
+      objective: [null, [Validators.required]],
       originId: [{value:null, disabled:true}, [Validators.required]],
-      typeId: [null, [Validators.required]]
+      typeId: ['', [Validators.required]],
+      specialTypeId: [null],
+
+
     });
-  }
-  
-  validateForm(): boolean {
-    this.formErrors = [];
-    if (this.agreementStateField.invalid) this.formErrors.push(this.AgreementFormEnum.agreementState);
-    if (this.nameField.invalid) this.formErrors.push(this.AgreementFormEnum.name);
-    if (this.internalNumberField.invalid) this.formErrors.push(this.AgreementFormEnum.internalNumber);
-    if (this.numberField.invalid) this.formErrors.push(this.AgreementFormEnum.number);
-    if (this.originIdField.invalid) this.formErrors.push(this.AgreementFormEnum.originId);
-    if (this.typeIdField.invalid) this.formErrors.push(this.AgreementFormEnum.typeId);
-    
-    return this.form.valid && this.formErrors.length === 0;
+    this.checkValueChanges();
   }
 
+  checkValueChanges(){
+    this.typeIdField.valueChanges.subscribe((value) => {
+      if(value.id === '3') {
+        this.specialTypeIdField.setValidators(Validators.required);
+        this.specialTypeIdField.reset();
+      }else{
+        this.specialTypeIdField.clearValidators();
+        this.specialTypeIdField.reset();
+      }
+      this.typeIdField.updateValueAndValidity();
+    })
+  }
+
+
+  validateForm(): boolean {
+    this.formErrors = [];
+    if (this.agreementStateField.invalid) this.formErrors.push(AgreementFormEnum.agreementState);
+    if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
+    if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
+    if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
+    if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
+    if (this.originIdField.invalid) this.formErrors.push(AgreementFormEnum.originId);
+    if (this.typeIdField.invalid) this.formErrors.push(AgreementFormEnum.typeId);
+    if (this.specialTypeIdField.invalid) this.formErrors.push(AgreementFormEnum.specialTypeId);
+
+    return this.form.valid && this.formErrors.length === 0;
+  }
 
   /** Load Foreign Keys  **/
   loadStates() {
     this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
   };
   loadOrigins() {
-    this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORGIN);
+    this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
   };
   loadTypes() {
-    this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
+    /* this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE); */
+    this.types = [
+      {name: 'Marco', id: '1'},
+      {name: 'Específicos', id: '2'},
+      {name: 'Especial', id: '3'},
+      {name: 'Comodato o convenio de préstamo de uso', id: '4'},
+    ]
   };
+  loadSpecialTypes(){
+    /* this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE); */
+
+    this.specialTypes = [
+      {name: 'Memorando de Entendimiento', id: '1'},
+      {name: 'Carta de Intención', id: '2'},
+      {name: 'Articulación', id: '3'},
+      {name: 'Cooperación', id: '4'},
+    ]
+  }
+
 
   /** Form Actions **/
   onSubmit(): void {
     if (this.validateForm()) {
       console.log(this.form.value)
       this.update();
-      alert('enviado')
+      alert('Send')
       /*
      TODO
      */
@@ -99,7 +146,7 @@ export class BasicDataComponent{
         TODO
         */
   }
-  
+
   /** Redirects **/
   redirectRegistration() {
     // this.messageDialogService.questionOnExit().subscribe(result => {
@@ -138,5 +185,12 @@ export class BasicDataComponent{
   get typeIdField(): AbstractControl {
     return this.form.controls['typeId'];
   }
-}
 
+  get objectiveField(): AbstractControl {
+    return this.form.controls['objective'];
+  }
+
+  get specialTypeIdField(): AbstractControl {
+    return this.form.controls['specialTypeId'];
+  }
+}

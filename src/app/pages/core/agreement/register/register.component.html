@@ -10,6 +10,7 @@
       </div>
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Comparecientes">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
@@ -18,61 +19,32 @@
           <app-appearer class="col-12" (formOutput)="save($event)">Content II</app-appearer>
         </div>
       </div>
-      <div class="flex pt-4 justify-content-between">
-        <p-button
-          label="Back"
-          icon="pi pi-arrow-left"
-          (onClick)="prevCallback.emit()"/>
-        <p-button
-          label="Next"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="nextCallback.emit()"/>
-      </div>
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Plazo del convenio">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-agreement-date class="col-12" (formOutput)="save($event)"></app-agreement-date>
+          <app-agreement-date class="col-12" (formOutput)="save($event);nextCallback.emit()"></app-agreement-date>
         </div>
-      </div>
-      <div class="flex pt-4 justify-content-between">
-        <p-button
-          label="Back"
-          icon="pi pi-arrow-left"
-          (onClick)="prevCallback.emit()"/>
-        <p-button
-          label="Next"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="nextCallback.emit()"/>
       </div>
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Administrador">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-agreement-administrator class="col-12" (formOutput)="save($event)"></app-agreement-administrator>
+          <app-agreement-administrator class="col-12" (formOutput)="save($event);nextCallback.emit()"></app-agreement-administrator>
         </div>
       </div>
-      <div class="flex pt-4 justify-content-between">
-        <p-button
-          label="Back"
-          icon="pi pi-arrow-left"
-          (onClick)="prevCallback.emit()"/>
-        <p-button
-          label="Next"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="nextCallback.emit()"/>
-      </div>
+
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Obligaciones">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
@@ -81,41 +53,21 @@
           <app-obligation  class="col-12" (formOutput)="save($event)" [externalInstitutions]="externalInstitutionsField.value"></app-obligation>
         </div>
       </div>
-      <div class="flex pt-4 justify-content-between">
-        <p-button
-          label="Back"
-          icon="pi pi-arrow-left"
-          (onClick)="prevCallback.emit()"/>
-        <p-button
-          label="Next"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="nextCallback.emit()"/>
-      </div>
+
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Financiamiento">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
           <app-financing class="col-12" (formOutput)="save($event)"></app-financing>
-
         </div>
-      </div>
-      <div class="flex pt-4 justify-content-between">
-        <p-button
-          label="Back"
-          icon="pi pi-arrow-left"
-          (onClick)="prevCallback.emit()"/>
-        <p-button
-          label="Next"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="nextCallback.emit()"/>
       </div>
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Documentación">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="flex flex-column ">
@@ -124,19 +76,9 @@
           <app-document  class="col-12" (formOutput)="save($event)"></app-document>
         </div>
       </div>
-      <div class="flex pt-4 justify-content-between">
-        <p-button
-          label="Back"
-          icon="pi pi-arrow-left"
-          (onClick)="prevCallback.emit()"/>
-        <p-button
-          label="Next"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="nextCallback.emit()"/>
-      </div>
     </ng-template>
   </p-stepperPanel>
+
   <p-stepperPanel header="Adendas">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
       <div class="flex flex-column ">
