@@ -1,0 +1,96 @@
+<div class="grid">
+    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+        @if (coreService.isLoading) {
+        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+        }
+
+        @if (!coreService.isLoading) {
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <app-header-form 
+                    [id]="id" 
+                    label="Visualización del Convenio" 
+                    [icon]="PrimeIcons.PENCIL"/>
+            </div>
+
+            <div class="p-toolbar-group-right">
+                <app-form-button-action 
+                    (submit)="onSubmit()"
+                    labelSubmitButton="Siguiente"
+                    labelCancelButton="Atrás"
+                    [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+                    [isVisibleCancelButton]="false"
+                />
+            </div>
+        </p-toolbar>
+
+        <p-panel>
+            <form [formGroup]="form" class="p-fluid grid">
+                <!-- State -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="state" 
+                      [label]="AgreementFormEnum.agreementState"></label>
+                    <input pInputText id="state" formControlName="state" [value]="" readonly />
+                </div>
+
+                <!-- Number -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="number" 
+                      [label]="AgreementFormEnum.number"></label>
+                    <input pInputText id="number" formControlName="number" [value]="agreement.number" readonly />
+                </div>
+
+                <!-- internal Number -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="internalNumber" 
+                      [label]="AgreementFormEnum.internalNumber"></label>
+                    <input pInputText type="text" id="internalNumber" formControlName="internalNumber" [value]="agreement.internalNumber" readonly />
+                </div>
+
+                <!-- Name -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="name" 
+                      [label]="AgreementFormEnum.name"></label>
+                    <input pInputText type="text" id="name" formControlName="name" [value]="agreement.name" readonly />
+                </div>
+
+                <!-- Object -->
+                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="objective" 
+                      [label]="AgreementFormEnum.objective"></label>
+                    <!-- <input pInputText type="text" id="objective" formControlName="objective" [value]="" readonly /> -->
+                    <textarea pInputTextarea type="textarea" id="objective" formControlName="objective" [value]="agreement.objective" readonly></textarea>
+                </div>
+
+                <!-- Origin -->
+                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="originId" 
+                      [label]="AgreementFormEnum.originId"></label>
+                    <input pInputText type="text" id="originId" formControlName="originId" [value]="agreement.originId" readonly />
+                </div>
+
+                <!-- Type -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label 
+                      appLabel 
+                      for="typeId" 
+                      [label]="AgreementFormEnum.typeId"></label>
+                    <input pInputText type="text" id="typeId" formControlName="typeId" [value]="agreement.typeId" readonly />
+                </div>
+            </form>
+        </p-panel>
+        }
+    </div>
+</div>
