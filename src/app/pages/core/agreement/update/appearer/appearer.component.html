@@ -1,7 +1,7 @@
 
 <div class="grid">
 
-  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+  <div class="col-12">
 
     @if (coreService.isLoading) {
         <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
@@ -11,12 +11,20 @@
     @if (!coreService.isLoading) {
         <p-toolbar>
 
-            <div class="p-toolbar-group-left">
-              <app-header-form [id]="id"></app-header-form>
-            </div>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              [id]="id"
+              label="Editar"
+              [icon]="PrimeIcons.PENCIL"/>
+          </div>
 
             <div class="p-toolbar-group-right">
-              <app-form-button-action (click)="save()" ></app-form-button-action>
+              <app-form-button-action
+                (submit)="onSubmit()"
+                labelSubmitButton="Siguiente"
+                labelCancelButton="Atrás"
+                [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              />
             </div>
 
           </p-toolbar>     
@@ -44,7 +52,7 @@
           formControlName="positionId"
           dataKey="id"
           optionValue="id"
-          [options]="positions"
+          [options]="positionId"
           placeholder="Seleccione una opcion"
           [filter]="false"
           filterBy="positionId">
@@ -136,7 +144,7 @@
         formControlName="personTypeId"
         dataKey="id"
         optionValue="id"
-        [options]="positions"
+        [options]="positionId"
         placeholder="Seleccione una opcion"
         [filter]="false"
         filterBy="positionId">
@@ -296,7 +304,7 @@
             formControlName="personTypeId"
             dataKey="id"
             optionValue="id"
-            [options]="positions"
+            [options]="positionId"
             placeholder="Seleccione una opcion"
             [filter]="false"
             filterBy="positionId">
@@ -360,7 +368,6 @@
                 <p-button label="Editar" icon="pi pi-pencil" severity="success" (click)=" editExternalInstitutions(i)" />
               </td>
             </tr>
-        <p-button label="Siguiente" (click)="save()"></p-button>
           </ng-template>
         </p-table>
         }
