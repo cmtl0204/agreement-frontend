@@ -12,10 +12,11 @@
         <div class="p-toolbar-group-right">
           <app-form-button-action
             (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
             labelSubmitButton="Siguiente"
             labelCancelButton="Atrás"
             [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-            [isVisibleCancelButton]="false"
+            [isVisibleCancelButton]="true"
           />
         </div>
       </p-toolbar>
@@ -32,13 +33,13 @@
                   <!-- internalInstitutions/positionId -->
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
-                           for="positionId"
-                           [label]="InternalInstitutionsFormEnum.positionId">
+                           for="internalPosition"
+                           [label]="InternalInstitutionsFormEnum.position">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
-                      id="positionId"
-                      formControlName="positionId"
+                      id="internalPosition"
+                      formControlName="position"
                       dataKey="id"
                       [options]="positions"
                       optionValue="id"
@@ -47,22 +48,22 @@
                       [filter]="false"
                     />
                     <small appErrorMessage
-                           [errors]="internalInstitution.get('positionId')?.errors!"
-                           [touched]="internalInstitution.get('positionId')?.touched!"
-                           [dirty]="internalInstitution.get('positionId')?.dirty!">
+                           [errors]="internalInstitution.get('position')?.errors!"
+                           [touched]="internalInstitution.get('position')?.touched!"
+                           [dirty]="internalInstitution.get('position')?.dirty!">
                     </small>
                   </div>
 
                   <!-- internalInstitutions/personTypeId -->
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
-                           for="personTypeId"
-                           [label]="InternalInstitutionsFormEnum.personTypeId">
+                           for="internalPersonType"
+                           [label]="InternalInstitutionsFormEnum.personType">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
-                      id="internalPersonTypeId"
-                      formControlName="personTypeId"
+                      id="internalPersonType"
+                      formControlName="personType"
                       dataKey="id"
                       [options]="internalPersonTypes"
                       optionValue="id"
@@ -71,9 +72,9 @@
                       [filter]="false"
                     />
                     <small appErrorMessage
-                           [errors]="internalInstitution.get('personTypeId')?.errors!"
-                           [touched]="internalInstitution.get('personTypeId')?.touched!"
-                           [dirty]="internalInstitution.get('personTypeId')?.dirty!">
+                           [errors]="internalInstitution.get('personType')?.errors!"
+                           [touched]="internalInstitution.get('personType')?.touched!"
+                           [dirty]="internalInstitution.get('personType')?.dirty!">
                     </small>
                   </div>
 
@@ -144,14 +145,14 @@
                 <!-- externalInstitutions/position -->
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel
-                         for="position"
+                         for="externalPosition"
                          [label]="ExternalInstitutionsFormEnum.position"
                          [required]="externalInstitutionPositionField">
                   </label>
                   <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                   <input pInputText
                          type="text"
-                         id="position"
+                         id="externalPosition"
                          formControlName="position"/>
                   <small
                     appErrorMessage
@@ -165,12 +166,12 @@
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel
                          for="personTypeId"
-                         [label]="ExternalInstitutionsFormEnum.personTypeId"
-                         [required]="externalInstitutionPersonTypeIdField">
+                         [label]="ExternalInstitutionsFormEnum.personType"
+                         [required]="externalInstitutionPersonTypeField">
                   </label>
                   <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                   <p-dropdown
-                    id="externalPersonTypeId"
+                    id="externalPersonType"
                     formControlName="personType"
                     dataKey="id"
                     [options]="externalPersonTypes"
@@ -180,14 +181,14 @@
                   />
                   <small
                     appErrorMessage
-                    [errors]="externalInstitutionPersonTypeIdField.errors"
-                    [touched]="externalInstitutionPersonTypeIdField.touched"
-                    [dirty]="externalInstitutionPersonTypeIdField.dirty">
+                    [errors]="externalInstitutionPersonTypeField.errors"
+                    [touched]="externalInstitutionPersonTypeField.touched"
+                    [dirty]="externalInstitutionPersonTypeField.dirty">
                   </small>
                 </div>
 
                 <!-- externalInstitutions/name -->
-                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel for="name"
                          [label]="ExternalInstitutionsFormEnum.name"
                          [required]="externalInstitutionNameField">
@@ -206,7 +207,7 @@
                 </div>
 
                 <!-- externalInstitutions/unit -->
-                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel for="unit"
                          [label]="ExternalInstitutionsFormEnum.unit"
                          [required]="externalInstitutionUnitField">
@@ -245,10 +246,8 @@
                   @for (col of externalInstitutionsColumns; track col.field) {
                     <th [pSortableColumn]="col.field">
                       {{ col.header }}
-                      <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
                   }
-
                   <th class="text-center">
                     Acciones
                   </th>
