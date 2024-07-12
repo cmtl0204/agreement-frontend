@@ -16,6 +16,7 @@
         <div class="p-toolbar-group-right">
           <app-form-button-action
             (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
             labelSubmitButton="Siguiente"
             labelCancelButton="Atrás"
             [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
