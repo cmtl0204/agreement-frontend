@@ -60,24 +60,24 @@ export class BasicDataComponent implements OnInit {
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
-      originId: [null, [Validators.required]],
-      typeId: ['', [Validators.required]],
-      specialTypeId: [null],
+      origin: [null, [Validators.required]],
+      type: ['', [Validators.required]],
+      specialType: [null],
     });
 
     this.checkValueChanges();
   }
 
   checkValueChanges(){
-    this.typeIdField.valueChanges.subscribe((value) => {
+    this.typeField.valueChanges.subscribe((value) => {
       if(value.id === '3') {
-        this.specialTypeIdField.setValidators(Validators.required);
-        this.specialTypeIdField.reset();
+        this.specialTypeField.setValidators(Validators.required);
+        this.specialTypeField.reset();
       }else{
-        this.specialTypeIdField.clearValidators();
-        this.specialTypeIdField.reset();
+        this.specialTypeField.clearValidators();
+        this.specialTypeField.reset();
       }
-      this.typeIdField.updateValueAndValidity();
+      this.typeField.updateValueAndValidity();
     })
   }
 
@@ -89,9 +89,9 @@ export class BasicDataComponent implements OnInit {
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
     if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
-    if (this.originIdField.invalid) this.formErrors.push(AgreementFormEnum.originId);
-    if (this.typeIdField.invalid) this.formErrors.push(AgreementFormEnum.typeId);
-    if (this.specialTypeIdField.invalid) this.formErrors.push(AgreementFormEnum.specialTypeId);
+    if (this.originField.invalid) this.formErrors.push(AgreementFormEnum.origin);
+    if (this.typeField.invalid) this.formErrors.push(AgreementFormEnum.type);
+    if (this.specialTypeField.invalid) this.formErrors.push(AgreementFormEnum.specialType);
 
     return this.form.valid && this.formErrors.length === 0;
   }
@@ -157,19 +157,19 @@ export class BasicDataComponent implements OnInit {
     return this.form.controls['number'];
   }
 
-  get originIdField(): AbstractControl {
-    return this.form.controls['originId'];
+  get originField(): AbstractControl {
+    return this.form.controls['origin'];
   }
 
-  get typeIdField(): AbstractControl {
-    return this.form.controls['typeId'];
+  get typeField(): AbstractControl {
+    return this.form.controls['type'];
   }
 
   get objectiveField(): AbstractControl {
     return this.form.controls['objective'];
   }
 
-  get specialTypeIdField(): AbstractControl {
-    return this.form.controls['specialTypeId'];
+  get specialTypeField(): AbstractControl {
+    return this.form.controls['specialType'];
   }
 }
