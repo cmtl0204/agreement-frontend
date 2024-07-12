@@ -28,12 +28,12 @@ export class AddendumComponent implements OnInit {
   /** Form **/
   // @Input({required: true}) id!: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   id:string= RoutesEnum.NEW
   protected form!: FormGroup;
   protected addendumForm! : FormGroup;
   private formErrors: string[] = [];
   protected Validators = Validators;
-  protected addendum = "No registrar"
   
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
@@ -66,6 +66,20 @@ export class AddendumComponent implements OnInit {
     })
   }
 
+  addAddendum(){
+    if (this.validateForm()) {
+      this.addendums.controls.push(this.formBuilder.group(this.addendumForm.value))
+      this.addendumForm.reset()
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  deleteAddendum(index:number){
+   this.addendums.removeAt(index)
+  }
+
   validateForm(): boolean {
     this.formErrors = [];
 
@@ -79,13 +93,15 @@ export class AddendumComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.validateForm()) {
-      this.create();
-      
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
+    // if (this.validateForm()) {
+    //   this.create();
+    //   this.save()
+    // } else {
+    //   this.form.markAllAsTouched();
+    //   this.messageDialogService.fieldErrors(this.formErrors);
+    // }
+    this.create();
+    this.save();
   }
 
   create(): void {
@@ -113,11 +129,9 @@ export class AddendumComponent implements OnInit {
      if (value){
 
         this.descriptionField.addValidators(Validators.required),
-        this.isModifiedFinishDateField.addValidators(Validators.required),
+        this.isModifiedFinishDateField.addValidators(Validators.required)
         this.documentField.addValidators(Validators.required)
-
      } else{
-      
         this.descriptionField.removeValidators(Validators.required),
         this.isModifiedFinishDateField.removeValidators(Validators.required),
         this.documentField.removeValidators(Validators.required),
@@ -125,7 +139,6 @@ export class AddendumComponent implements OnInit {
         this.descriptionField.reset(),
         this.isModifiedFinishDateField.reset(),
         this.documentField.reset()
-        
      }
 
      this.isModifiedFinishDateField.valueChanges.subscribe(()=>{
