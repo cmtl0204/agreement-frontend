@@ -1,5 +1,5 @@
 <div class="grid">
-    <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+    <div class="col-12">
       @if (coreService.isLoading) {
         <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
       }
@@ -7,10 +7,20 @@
       @if (!coreService.isLoading) {
         <p-toolbar>
           <div class="p-toolbar-group-left">
-            <app-header-form [id]="id"></app-header-form>
+            <app-header-form
+              [id]="id"
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
           </div>
+  
           <div class="p-toolbar-group-right">
-            <app-form-button-action (submit)="onSubmit()"></app-form-button-action>
+            <app-form-button-action
+              (submit)="onSubmit()"
+              (cancel)="prevOutput.emit(true)"
+              labelSubmitButton="Siguiente"
+              labelCancelButton="Atrás"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            />
           </div>
         </p-toolbar>
   
@@ -21,15 +31,14 @@
               <div class="grid">
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel for="unitId"
-                         [label]="AdministratorFormEnum.unitId"
-                         [required]="unitIdField"></label>
+                         [label]="AdministratorFormEnum.unit"
+                         [required]="unitField"></label>
 
                   <p-dropdown
-                    id="unitId"
-                    formControlName="unitId"
+                    id="unit"
+                    formControlName="unit"
                     dataKey="id"
                     [options]="units"
-                    optionValue="id"
                     placeholder="Seleccione"
                     [filter]="true"
                     filterBy="name">
@@ -46,22 +55,21 @@
                   </p-dropdown>
 
                   <small appErrorMessage
-                         [errors]="unitIdField.errors"
-                         [touched]="unitIdField.touched"
-                         [dirty]="unitIdField.dirty">
+                         [errors]="unitField.errors"
+                         [touched]="unitField.touched"
+                         [dirty]="unitField.dirty">
                   </small>
                 </div>
   
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel for="officerPosition"
-                         [label]="AdministratorFormEnum.positionId"
-                         [required]="positionIdField"></label>
+                         [label]="AdministratorFormEnum.position"
+                         [required]="positionField"></label>
 
                   <p-dropdown
-                    id="positionId"
-                    formControlName="positionId"
+                    id="position"
+                    formControlName="position"
                     [options]="positions"
-                    optionValue="id"
                     [filter]="true"
                     filterBy="name"
                     placeholder="Seleccione">
@@ -78,17 +86,15 @@
                   </p-dropdown>
                   
                   <small appErrorMessage
-                         [errors]="positionIdField.errors"
-                         [touched]="positionIdField.touched"
-                         [dirty]="positionIdField.dirty">
+                         [errors]="positionField.errors"
+                         [touched]="positionField.touched"
+                         [dirty]="positionField.dirty">
                   </small>
                 </div>
               </div>
             </div>
   
           </form>
-          <p-button label="Siguiente" (click)="save()"></p-button>
-  
         </p-panel>
       }
     </div>

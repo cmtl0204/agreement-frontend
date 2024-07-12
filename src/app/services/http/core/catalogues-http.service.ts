@@ -29,16 +29,15 @@ export class CataloguesHttpService {
     );
   }
 
-  findAll(page: number = 1, search: string = ''): Observable<CatalogueModel[]> {
-    const url = this.API_URL;
-    const headers = new HttpHeaders().append('pagination', 'true');
-    const params = new HttpParams().append('page', page).append('search', search);
+  findAll(): Observable<CatalogueModel[]> {
+    // const url = this.API_URL;
+    const url = './temp/catalogues.json';
 
-    return this.httpClient.get<ServerResponse>(url, {headers, params}).pipe(
+    return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        // if (response.pagination) {
-        //   this.pagination.next(response.pagination);
-        // }
+        console.log(response);
+        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
+        sessionStorage.setItem('catalogues', JSON.stringify(response));
         return response.data;
       })
     );
@@ -94,6 +93,10 @@ export class CataloguesHttpService {
   findByType(type: CatalogueTypeEnum): CatalogueModel[] {
     const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
 
-    return catalogues.filter(catalogue => catalogue.type === type);
+    if (catalogues) {
+      return catalogues.filter(catalogue => catalogue.type === type);
+    }
+
+    return [];
   }
 }

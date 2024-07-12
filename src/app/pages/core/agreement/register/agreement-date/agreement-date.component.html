@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+  <div class="col-12">
     @if (coreService.isLoading) {
       <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
     }
@@ -7,10 +7,21 @@
     @if (!coreService.isLoading) {
       <p-toolbar>
         <div class="p-toolbar-group-left">
-          <app-header-form [id]="id"></app-header-form>
+          <app-header-form
+            [id]="id"
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
         </div>
+
         <div class="p-toolbar-group-right">
-          <app-form-button-action (submit)="onSubmit()"></app-form-button-action>
+          <app-form-button-action
+            (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
+            labelSubmitButton="Siguiente"
+            labelCancelButton="Atrás"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="true"
+          />
         </div>
       </p-toolbar>
 
@@ -117,6 +128,77 @@
                 [dirty]="endedAtField.dirty">
               </small>
             </div>
+
+            <div  class="field col-12">
+              <label>Plazo total del convenio:</label>
+              <app-form-help-field [content]='["Especifique la duración del convenio en:","Años","Meses","Días"]'></app-form-help-field>
+             </div>
+             <!-- yearTerm -->
+             <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+               <label
+                 appLabel
+                 for="yearTerm"
+                 [label]="AgreementFormEnum.yearTerm"
+                 [required]="yearTermField"></label>
+               <p-inputNumber
+                 id="yearTerm"
+                 formControlName="yearTerm"
+                 [showButtons]="true"
+                 [min]="0"
+                 [useGrouping]="false"
+               />
+               <small
+                 appErrorMessage
+                 [errors]="yearTermField.errors"
+                 [touched]="yearTermField.touched"
+                 [dirty]="yearTermField.dirty">
+               </small>
+             </div>
+   
+             <!-- monthTerm -->
+             <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+               <label
+                 appLabel
+                 for="monthTerm"
+                 [label]="AgreementFormEnum.monthTerm"
+                 [required]="monthTermField"></label>
+               <p-inputNumber
+                 id="monthTerm"
+                 formControlName="monthTerm"
+                 [showButtons]="true"
+                 [min]="0"
+                 [max]="12"
+               />
+               <small
+                 appErrorMessage
+                 [errors]="monthTermField.errors"
+                 [touched]="monthTermField.touched"
+                 [dirty]="monthTermField.dirty">
+               </small>
+             </div>
+   
+             <!-- dayTerm -->
+             <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+               <label
+                 appLabel
+                 for="dayTerm"
+                 [label]="AgreementFormEnum.dayTerm"
+                 [required]="dayTermField"></label>
+               <p-inputNumber
+                 id="dayTerm"
+                 formControlName="dayTerm"
+                 [showButtons]="true"
+                 [min]="1"
+                 [max]="31"
+               />
+               <small
+                 appErrorMessage
+                 [errors]="dayTermField.errors"
+                 [touched]="dayTermField.touched"
+                 [dirty]="dayTermField.dirty">
+               </small>
+             </div>
+
           }
           <!-- endedReason -->
           @if (endedReasonField.hasValidator(Validators.required)) {
@@ -143,78 +225,7 @@
             </div>
           }
 
-          <div  class="field col-12">
-           <label>Plazo total del convenio:</label>
-           <app-form-help-field [content]='["Especifique la duración del convenio en:","Años","Meses","Días"]'></app-form-help-field>
-          </div>
-          <!-- yearTerm -->
-          <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label
-              appLabel
-              for="yearTerm"
-              [label]="AgreementFormEnum.yearTerm"
-              [required]="yearTermField"></label>
-            <p-inputNumber
-              id="yearTerm"
-              formControlName="yearTerm"
-              [showButtons]="true"
-              [min]="0"
-              [useGrouping]="false"
-            />
-            <small
-              appErrorMessage
-              [errors]="yearTermField.errors"
-              [touched]="yearTermField.touched"
-              [dirty]="yearTermField.dirty">
-            </small>
-          </div>
-
-          <!-- monthTerm -->
-          <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label
-              appLabel
-              for="monthTerm"
-              [label]="AgreementFormEnum.monthTerm"
-              [required]="monthTermField"></label>
-            <p-inputNumber
-              id="monthTerm"
-              formControlName="monthTerm"
-              [showButtons]="true"
-              [min]="0"
-              [max]="12"
-            />
-            <small
-              appErrorMessage
-              [errors]="monthTermField.errors"
-              [touched]="monthTermField.touched"
-              [dirty]="monthTermField.dirty">
-            </small>
-          </div>
-
-          <!-- dayTerm -->
-          <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label
-              appLabel
-              for="dayTerm"
-              [label]="AgreementFormEnum.dayTerm"
-              [required]="dayTermField"></label>
-            <p-inputNumber
-              id="dayTerm"
-              formControlName="dayTerm"
-              [showButtons]="true"
-              [min]="1"
-              [max]="31"
-            />
-            <small
-              appErrorMessage
-              [errors]="dayTermField.errors"
-              [touched]="dayTermField.touched"
-              [dirty]="dayTermField.dirty">
-            </small>
-          </div>
-          
         </form>
-        <p-button label="Siguiente" (click)="save()"></p-button>
 
       </p-panel>
     }

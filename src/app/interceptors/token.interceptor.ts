@@ -12,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let headers = request.headers ? request.headers : new HttpHeaders();
-    console.log('token intercept');
+
     if (this.authService.token) {
       headers = headers
         .append(
