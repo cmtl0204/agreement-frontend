@@ -11,7 +11,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log('error interceptor');
+
     return next.handle(request).pipe(
       delay(200),//review quitar solo es para que se pueda ver el efecto
       catchError(error => {
