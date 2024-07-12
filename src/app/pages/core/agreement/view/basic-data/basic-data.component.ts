@@ -1,5 +1,4 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { AgreementModel } from '@models/core/agreement.model';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -42,7 +41,10 @@ export class BasicDataComponent implements OnInit {
     dayTerm: 31,
     objective: '',
     isFinancing: false,
-    userId: ''
+    userId: '',
+    subscribedAt: new Date(),
+    startedAt: new Date(),
+    endedAt: null
   }
 
   constructor() { }
