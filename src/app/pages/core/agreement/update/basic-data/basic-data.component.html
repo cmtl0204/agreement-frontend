@@ -104,7 +104,6 @@
               id="agreementState"
               formControlName="agreementState"
               dataKey="id"
-              optionValue="id"
               [options]="states"
               placeholder="Seleccione"
               [filter]="true"
@@ -133,16 +132,16 @@
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label
               appLabel
-              for="originId"
-              [label]="AgreementFormEnum.originId"
-              [required]="originIdField"></label>
+              for="origin"
+              [label]="AgreementFormEnum.origin"
+              [required]="originField"></label>
 
             <app-form-help-field
               [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
 
             <p-dropdown
-              id="originId"
-              formControlName="originId"
+              id="origin"
+              formControlName="origin"
               dataKey="id"
               [options]="origins"
               placeholder="Selecione">
@@ -160,9 +159,9 @@
 
             <small
               appErrorMessage
-              [errors]="originIdField.errors"
-              [touched]="originIdField.touched"
-              [dirty]="originIdField.dirty">
+              [errors]="originField.errors"
+              [touched]="originField.touched"
+              [dirty]="originField.dirty">
             </small>
           </div>
 
@@ -170,16 +169,16 @@
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label
               appLabel
-              for="typeId"
-              [label]="AgreementFormEnum.typeId"
-              [required]="typeIdField"></label>
+              for="type"
+              [label]="AgreementFormEnum.type"
+              [required]="typeField"></label>
 
             <app-form-help-field
               [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
 
             <p-dropdown
-              id="typeId"
-              formControlName="typeId"
+              id="type"
+              formControlName="type"
               dataKey="id"
               [options]="types" 
               placeholder="Selecione">
@@ -197,28 +196,27 @@
 
             <small
               appErrorMessage
-              [errors]="typeIdField.errors"
-              [touched]="typeIdField.touched"
-              [dirty]="typeIdField.dirty">
+              [errors]="typeField.errors"
+              [touched]="typeField.touched"
+              [dirty]="typeField.dirty">
             </small>
           </div>
 
-
           <!-- SpecialType -->
-          @if (specialTypeIdField.hasValidator(Validators.required)) {
+          @if (specialTypeField.hasValidator(Validators.required)) {
             <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
               <label
                 appLabel
-                for="specialTypeId"
-                [label]="AgreementFormEnum.specialTypeId"
-                [required]="specialTypeIdField"></label>
+                for="specialType"
+                [label]="AgreementFormEnum.specialType"
+                [required]="specialTypeField"></label>
   
               <app-form-help-field
                 [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
   
               <p-dropdown
-                id="specialTypeId"
-                formControlName="specialTypeId"
+                id="specialType"
+                formControlName="specialType"
                 dataKey="id"
                 [options]="specialTypes"
                 placeholder="Selecione">
@@ -236,9 +234,9 @@
   
               <small
                 appErrorMessage
-                [errors]="specialTypeIdField.errors"
-                [touched]="specialTypeIdField.touched"
-                [dirty]="specialTypeIdField.dirty">
+                [errors]="specialTypeField.errors"
+                [touched]="specialTypeField.touched"
+                [dirty]="specialTypeField.dirty">
               </small>
             </div>
           }
