@@ -1,6 +1,6 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
+import {CatalogueModel, ColumnModel} from '@models/core';
 import {AuthService} from '@servicesApp/auth';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
@@ -31,10 +31,13 @@ export class AppearerComponent implements OnInit {
 
   /** Form **/
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   protected id: string = RoutesEnum.NEW
   protected form!: FormGroup;
-  protected appearerform!: FormGroup;
+  protected appearerForm!: FormGroup;
   private formErrors: string[] = [];
+  protected externalInstitutionsColumns: ColumnModel[] = [];
 
   /** Foreign Keys **/
   protected internalPersonTypes: CatalogueModel[] = [];
@@ -50,6 +53,7 @@ export class AppearerComponent implements OnInit {
   constructor(private messageService: MessageService) {
     this.buildForm();
     this.buildAppearerForm();
+    this.buildExternalInstitutionsColumns();
     this.addExternalInstitution();
     this.addInternalInstitution();
   }
@@ -62,7 +66,8 @@ export class AppearerComponent implements OnInit {
   }
 
   save() {
-    this.formOutput.emit(this.form.value); //add
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
   }
 
   /** Form Builder & Validates **/
@@ -74,35 +79,63 @@ export class AppearerComponent implements OnInit {
   }
 
   buildAppearerForm() {
-    this.appearerform = this.formBuilder.group({
-      personTypeId: [null, [Validators.required]],
+    this.appearerForm = this.formBuilder.group({
+      personType: [null, [Validators.required]],
       name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
       position: [null, [Validators.required, Validators.pattern(onlyLetters())]],
       unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
     });
+  }
+
+  buildExternalInstitutionsColumns() {
+    this.externalInstitutionsColumns = [
+      {
+        field: 'name', header: ExternalInstitutionsFormEnum.name
+      },
+      {
+        field: 'unit', header: ExternalInstitutionsFormEnum.unit
+      },
+      {
+        field: 'position', header: ExternalInstitutionsFormEnum.position
+      },
+      {
+        field: 'personType', header: ExternalInstitutionsFormEnum.personType
+      },
+    ];
   }
 
   /** add array **/
   addInternalInstitution() {
     const internalInstitutions = this.formBuilder.group({
-      positionId: [null, [Validators.required]],
-      personTypeId: [null, [Validators.required]],
+      position: [null, [Validators.required]],
+      personType: [null, [Validators.required]],
       name: ['Ministerio de Turismo', [Validators.required, Validators.pattern(onlyLetters())]],
       unit: ['Unidad', [Validators.required, Validators.pattern(onlyLetters())]],
     });
-
     this.internalInstitutions.push(internalInstitutions);
   }
 
   addExternalInstitution() {
-    const externalInstitutions = this.formBuilder.group({
-      personTypeId: [null, [Validators.required]],
-      name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
-      position: [null, [Validators.required, Validators.pattern(onlyLetters())]],
-      unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
-    });
+    if (this.appearerForm.valid) {
+      const externalInstitution = this.formBuilder.group({
+        personType: [this.appearerForm.value.personType, [Validators.required]],
+        name: [this.appearerForm.value.name, [Validators.required]],
+        position: [this.appearerForm.value.position, [Validators.required]],
+        unit: [this.appearerForm.value.unit, [Validators.required]],
+      });
+      this.externalInstitutions.push(externalInstitution);
+      this.appearerForm.reset();
+      this.externalInstitutionNameField.clearValidators();
+      this.externalInstitutionNameField.reset();
+      this.externalInstitutionUnitField.clearValidators();
+      this.externalInstitutionUnitField.reset();
+      this.externalInstitutionPositionField.clearValidators();
+      this.externalInstitutionPositionField.reset();
+      this.externalInstitutionPersonTypeField.clearValidators();
+      this.externalInstitutionPersonTypeField.reset();
+    } else {
 
-    this.externalInstitutions.push(externalInstitutions);
+    }
   }
 
   /** delete array**/
@@ -116,7 +149,7 @@ export class AppearerComponent implements OnInit {
 
   validateForm(): boolean {
     this.formErrors = [];
-    this.externalInstitutions.controls.forEach((control, index) => {
+    /* this.externalInstitutions.controls.forEach((control, index) => {
       if (control.get('name')?.invalid) {
         this.formErrors.push(`Name at index ${index} is required.`);
       }
@@ -129,22 +162,27 @@ export class AppearerComponent implements OnInit {
       if (control.get('personTypeId')?.invalid) {
         this.formErrors.push(`La entidad del instituto externo n°${index} es requerida.`);
       }
-    });
-
-    this.internalInstitutions.controls.forEach((control, index) => {
+    }); */
+    this.internalInstitutions.controls.forEach((control) => {
+      if (control.get('personType')?.invalid) {
+        this.formErrors.push(`La entidad del instituto interno`);
+      }
+      if (control.get('position')?.invalid) {
+        this.formErrors.push(`El cargo del funcionario`);
+      }
+      /** de momento no se usan**/
       if (control.get('name')?.invalid) {
-        this.formErrors.push(`El nombre de la institución contraparte n°${index} es requerida.`);
-      }
-      if (control.get('personTypeId')?.invalid) {
-        this.formErrors.push(`La entidad del instituto interno n°${index} es requerida.`);
-      }
-      if (control.get('positionId')?.invalid) {
-        this.formErrors.push(`El cargo de la contraparte n°${index} es requerida`);
+        this.formErrors.push(``);
       }
       if (control.get('unit')?.invalid) {
-        this.formErrors.push(`La unidad a la que pertenece la contraparte n°${index} es requerida.`);
+        this.formErrors.push(``);
       }
     });
+
+    if (this.externalInstitutionNameField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.name);
+    if (this.externalInstitutionUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
+    if (this.externalInstitutionPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
+    if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
 
     return this.form.valid && this.formErrors.length === 0;
   }
@@ -160,7 +198,7 @@ export class AppearerComponent implements OnInit {
   }
 
   loadExternalPersonTypes() {
-    this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE);
+    /* this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE); */
     this.externalPersonTypes = [
       {name: 'Entidad Pública', id: '1'},
       {name: 'Personas Naturales privadas', id: '2'},
@@ -188,16 +226,28 @@ export class AppearerComponent implements OnInit {
   }
 
   /** Getters Form**/
-  get internalInstitutions() {
+  get internalInstitutions(): FormArray {
     return this.form.get('internalInstitutions') as FormArray;
   }
 
-  get externalInstitutions() {
+  get externalInstitutions(): FormArray {
     return this.form.get('externalInstitutions') as FormArray;
   }
 
   get externalInstitutionNameField(): AbstractControl {
-    return this.appearerform.controls['name'];
+    return this.appearerForm.controls['name'];
+  }
+
+  get externalInstitutionUnitField(): AbstractControl {
+    return this.appearerForm.controls['unit'];
+  }
+
+  get externalInstitutionPositionField(): AbstractControl {
+    return this.appearerForm.controls['position'];
+  }
+
+  get externalInstitutionPersonTypeField(): AbstractControl {
+    return this.appearerForm.controls['personType'];
   }
 }
 

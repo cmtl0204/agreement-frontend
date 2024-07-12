@@ -32,6 +32,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import {MultiSelectModule} from "primeng/multiselect";
+import {DialogModule} from "primeng/dialog";
 
 
 @NgModule({
@@ -72,7 +74,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     StepperModule,
     FileUploadModule,
     TableModule,
-    InputTextareaModule
+    InputTextareaModule,
+    MultiSelectModule,
+    DialogModule
   ]
 })
 export class UpdateModule { }
