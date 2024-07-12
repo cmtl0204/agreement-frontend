@@ -44,7 +44,7 @@ export enum CourseFormEnum {
 }
 
 export enum FinancingsFormEnum{
-  modelId = 'Comparecientes del convenio',
+  model = 'Comparecientes del convenio',
   budget = 'Presupusesto y financiamiento',
   paymentMethod = 'Forma de pago',
   source = 'Fuente de financiamiento',
@@ -58,15 +58,15 @@ export enum DocumentationFormEnum{
 export enum InternalInstitutionsFormEnum{
   name = 'Nombre entidad/institución contraparte que firma el convenio',
   unit = 'Unidad a la que pertenece la contraparte',
-  positionId = 'Cargo del funcionario Ministerio de Turismo',
-  personTypeId = 'Entidad',
+  position = 'Cargo del funcionario Ministerio de Turismo',
+  personType = 'Entidad',
 }
 
 export enum ExternalInstitutionsFormEnum{
   name = 'Nombre entidad/institución contraparte que firma el convenio',
   position = 'Cargo de la contraparte',
   unit = 'Unidad a la que pertenece la contraparte',
-  personTypeId = 'Entidad',
+  personType = 'Entidad',
 }
 
 export enum ObligationsMintur {
@@ -99,15 +99,15 @@ export enum AgreementFormEnum{
   internalNumber = 'Numero interno de convenio',
   number = 'Numero de convenio',
   agreementState = 'Estado del convenio',
-  originId = 'Origen del convenio',
-  typeId = 'Tipo del convenio',
+  origin = 'Origen del convenio',
+  type = 'Tipo del convenio',
   isFinancing = 'Financiamiento',
-  specialTypeId = 'Tipo especifico del convenio',
+  specialType = 'Tipo especifico del convenio',
 }
 
 export enum AdministratorFormEnum{
-  unitId = 'Unidad Administrativa',
-  positionId = 'Cargo del funcionario',
+  unit = 'Unidad Administrativa',
+  position = 'Cargo del funcionario',
   administrator='Administrador del convenio',
 }
 
