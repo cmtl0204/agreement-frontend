@@ -1,67 +1,97 @@
 <div class="grid">
   <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
-    <ng-container *ngIf="coreService.isLoading; else content">
-      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    </ng-container>
-    <ng-template #content>
-      <p-toolbar>
-        <div class="p-toolbar-group-left">
-          <app-header-form [id]="id"></app-header-form>
-        </div>
-        <div class="p-toolbar-group-right">
-          <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
-        </div>
-      </p-toolbar>
-
-      <p-panel>
-        <form [formGroup]="form" class="p-fluid grid">
-          <h2>Obligaciones de las partes</h2>
-          <!-- tradeName -->
-          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-            <label appLabel for="tradeName" [label]="'Nombre comercial'"></label>
-            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-            <input pInputText type="text" id="tradeName" [value]="obligationType.typeId" readonly />
-          </div>
-          @if (isLoading) {
-            @if (isContraparte) {
-              <h2>Campos de contraparte</h2>
-             
-              <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                <label appLabel for="counterparty" [label]="'Entidad contraparte'"></label>
-                <app-form-help-field
-                  content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
-                <input pInputText type="text" id="counterparty" [value]="institutionObligation.obligationTypeId" readonly />
+    <div class="card">
+      <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 5rem"></th>
+            <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+            <th>Image</th>
+            <th pSortableColumn="price">Price <p-sortIcon field="price" /></th>
+            <th pSortableColumn="category">Category <p-sortIcon field="category" /></th>
+            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus" /></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-expanded="expanded">
+          <tr>
+            <td>
+              <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+            </td>
+            <td>{{ product.name }}</td>
+            <td><img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-4" /></td>
+            <td>{{ product.price | currency : 'USD' }}</td>
+            <td>{{ product.category }}</td>
+            <td>
+              <p-tag [value]="product.inventoryStatus" />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-product>
+          <tr>
+            <td colspan="7">
+              <div class="p-3">
+                <p-table [value]="product.orders" dataKey="id" [expandedRowKeys]="expandedOrderRows">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th pSortableColumn="id">Id <p-sortIcon field="id" /></th>
+                      <th pSortableColumn="customer">Customer <p-sortIcon field="customer" /></th>
+                      <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+                      <th pSortableColumn="amount">Amount <p-sortIcon field="amount" /></th>
+                      <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+                      <th style="width: 4rem"></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-order let-orderExpanded="expanded">
+                    <tr>
+                      <td>
+                        <p-button type="button" pRipple [pRowToggler]="order" [text]="true" [rounded]="true" [plain]="true" [icon]="orderExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                      </td>
+                      <td>{{ order.id }}</td>
+                      <td>{{ order.customer }}</td>
+                      <td>{{ order.date }}</td>
+                      <td>{{ order.amount | currency : 'USD' }}</td>
+                      <td>
+                        <p-tag [value]="order.status" />
+                      </td>
+                      <td><p-button type="button" icon="pi pi-search" /></td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="rowexpansion" let-order>
+                    <tr>
+                      <td colspan="6">
+                        <div class="p-3">
+                          <p-table [value]="order.names">
+                            <ng-template pTemplate="header">
+                              <tr>
+                                <th>Name</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-name>
+                              <tr>
+                                <td>{{ name }}</td>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                              <tr>
+                                <td colspan="1">There are no names for this order yet.</td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="6">There are no orders for this product yet.</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
               </div>
-            } @else{
-              <h2>Campos conjuntos</h2>
-              <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                <label appLabel for="counterparty" [label]="'Entidad grupo contraparte'"></label>
-                <app-form-help-field
-                  content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
-                <input pInputText type="text" id="counterparty" [value]="institutionObligation.obligationTypeId" readonly />
-              </div>
-
-            }
-            <!-- counterparty -->
-          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-            <label appLabel for="counterparty" [label]="'Contraparte'"></label>
-            <app-form-help-field
-              content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
-            <input pInputText type="text" id="counterparty" [value]="institutionObligation.obligationTypeId" readonly />
-          </div>}
-          
-
-          <!-- obligation -->
-          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-            <label appLabel for="obligation" [label]="'Obligación'"></label>
-            <app-form-help-field
-              content="Campo de texto obligatorio, mostrar si en el 'Tipo obligaciones' seleccionó cualquier de las tres opciones."></app-form-help-field>
-            <input pInputText type="text" id="obligation" [value]="obligation.description" readonly />
-          </div>
-
-
-        </form>
-      </p-panel>
-    </ng-template>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </div>
 </div>

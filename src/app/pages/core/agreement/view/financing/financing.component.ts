@@ -4,9 +4,7 @@ import { firstValueFrom } from "rxjs";
 import { OnExitInterface } from "@shared/interfaces";
 import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/core";
 import { CatalogueTypeEnum, CompanyRegistrationFormEnum, RoutesEnum, SkeletonEnum } from "@shared/enums";
-import { FinancingModel } from '@models/convenio/financing.model';
-import { AgreementModel } from '@models/convenio/agreement.model';
-import { TableModule } from 'primeng/table';
+import { AgreementModel, FinancingModel } from '@models/core';
 
 @Component({
   selector: 'app-financing',

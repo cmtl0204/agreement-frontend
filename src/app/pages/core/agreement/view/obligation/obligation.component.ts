@@ -1,113 +1,152 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { firstValueFrom } from "rxjs";
-import { PrimeIcons } from "primeng/api";
+import { Component, OnInit } from '@angular/core';
 
-import { OnExitInterface } from "@shared/interfaces";
-import { CatalogueModel } from "@models/core";
-import { AuthHttpService, AuthService } from "@servicesApp/auth";
-import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/core";
-import { CataloguesHttpService } from "@servicesHttp/core";
-import { CatalogueTypeEnum, CompanyRegistrationFormEnum, RoutesEnum, SkeletonEnum } from "@shared/enums";
-import { AgreementModel } from '@models/convenio/agreement.model';
-import { ObligationTypeModel } from '@models/convenio/obligation-type.model';
-import { ObligationModel } from '@models/convenio/obligation.model';
-import { InstitutionObligationModel } from '@models/convenio/institution-obligation.model';
+interface Order {
+  id: string;
+  productCode: string;
+  date: string;
+  amount: number;
+  quantity: number;
+  customer: string;
+  status: string;
+  names: string[];
+}
+
+interface Product {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  image: string;
+  price: number;
+  category: string;
+  quantity: number;
+  inventoryStatus: string;
+  rating: number;
+  orders: Order[];
+}
 
 @Component({
   selector: 'app-obligation',
   templateUrl: './obligation.component.html',
   styleUrls: ['./obligation.component.scss']
 })
-export class ObligationComponent implements OnInit, OnExitInterface {
-  /** Services **/
-  protected readonly coreService = inject(CoreService);
-  private readonly formBuilder = inject(FormBuilder);
+export class ObligationComponent implements OnInit {
 
-  /** Form **/
-  @Input({ required: true }) id!: string;
-  protected form!: FormGroup;
+  products: Product[] = [
+    {
+      id: "1000",
+      code: "f230fh0g3",
+      name: "Bamboo Watch",
+      description: "Product Description",
+      image: "bamboo-watch.jpg",
+      price: 65,
+      category: "Accessories",
+      quantity: 24,
+      inventoryStatus: "INSTOCK",
+      rating: 5,
+      orders: [
+        {
+          id: "1000-0",
+          productCode: "f230fh0g3",
+          date: "2020-09-13",
+          amount: 65,
+          quantity: 1,
+          customer: "David James",
+          status: "PENDING",
+          names: ["test1", "test2", "test3"]
+        },
+        {
+          id: "1000-1",
+          productCode: "f230fh0g3",
+          date: "2020-05-14",
+          amount: 130,
+          quantity: 2,
+          customer: "Leon Rodrigues",
+          status: "DELIVERED",
+          names: ["test1", "test2", "test3"]
+        },
+        {
+          id: "1000-2",
+          productCode: "f230fh0g3",
+          date: "2019-01-04",
+          amount: 65,
+          quantity: 1,
+          customer: "Juan Alejandro",
+          status: "RETURNED",
+          names: ["test1", "test2", "test3"]
+        },
+        {
+          id: "1000-3",
+          productCode: "f230fh0g3",
+          date: "2020-09-13",
+          amount: 195,
+          quantity: 3,
+          customer: "Claire Morrow",
+          status: "CANCELLED",
+          names: ["test1", "test2", "test3"]
+        }
+      ]
+    },
+    {
+      id: "1001",
+      code: "nvklal433",
+      name: "Black Watch",
+      description: "Product Description",
+      image: "black-watch.jpg",
+      price: 72,
+      category: "Accessories",
+      quantity: 61,
+      inventoryStatus: "INSTOCK",
+      rating: 4,
+      orders: [
+        {
+          id: "1001-0",
+          productCode: "nvklal433",
+          date: "2020-05-14",
+          amount: 72,
+          quantity: 1,
+          customer: "Maisha Jefferson",
+          status: "DELIVERED",
+          names: ["test1", "test2", "test3"]
+        },
+        {
+          id: "1001-1",
+          productCode: "nvklal433",
+          date: "2020-02-28",
+          amount: 144,
+          quantity: 2,
+          customer: "Octavia Murillo",
+          status: "PENDING",
+          names: ["test1", "test2", "test3"]
+        }
+      ]
+    }
+  ];
 
-  /** Enums **/
-  protected readonly SkeletonEnum = SkeletonEnum;
-  protected readonly CompanyRegistrationFormEnum = CompanyRegistrationFormEnum;
-  private readonly routesService = inject(RoutesService);
-  
-  //validation
-  isLoading:boolean=true;
-  isContraparte: boolean=true;
+  expandedRows: { [key: string]: boolean } = {};
+  expandedOrderRows: { [key: string]: boolean } = {};
 
-  
-  //datos desde modelos
-  obligationType: ObligationTypeModel = {
-    id: '1',
-    typeId: 'Contraparte'
-  };
+  constructor() { }
 
-  obligation: ObligationModel = {
-    id: '1',
-    modelId: 'model123',
-    description: 'Descripción de la obligación'
-  };
+  ngOnInit() { }
 
-  institutionObligation: InstitutionObligationModel = {
-    id: '1',
-    obligationTypeId: 'type123',
-    modelId: 'model456'
-  };
+  expandAll() {
+    this.expandedRows = this.products.reduce((acc: { [key: string]: boolean }, p: Product) => {
+      acc[p.id] = true;
+      return acc;
+    }, {});
 
-
-  constructor( public messageDialogService:MessageDialogService) {
-    this.buildForm();
+    this.expandedOrderRows = this.products.reduce((acc: { [key: string]: boolean }, p: Product) => {
+      p.orders.forEach((order: Order) => {
+        acc[order.id] = true;
+      });
+      return acc;
+    }, {});
   }
 
-  async onExit() {
-    const res = await firstValueFrom(this.messageDialogService.questionOnExit());
-    console.log(res);
-    return res;
+  collapseAll() {
+    this.expandedRows = {};
+    this.expandedOrderRows = {};
   }
 
-  ngOnInit(): void {
-    this.setFormValues();
-    //validation counter-part
-    this.isLoading='MINTUR'!== this.obligationType.typeId;
-    this.isContraparte='Contraparte' == this.obligationType.typeId;
-  }
-
-  buildForm() {
-    this.form = this.formBuilder.group({
-      tradeName: [{ value: '', disabled: true }],
-      obligation: [{ value: '', disabled: true }],
-      counterparty: [{ value: '', disabled: true }]
-    });
-  }
-
-  setFormValues() {
-    this.form.patchValue({
-      tradeName: 'Mi Empresa',
-      obligation: 'Obligación MINTUR (Ir al campo obligación)',
-      counterparty: 'Ejemplo de dato de contraparte'
-    });
-  }
-
-  onSubmit(): void {
-    // Lógica para manejar el envío del formulario
-  }
-
-  redirectRegistration() {
-    this.routesService.registration();
-  }
-
-  /** Getters para los campos del formulario **/
-  get tradeNameField(): AbstractControl {
-    return this.form.controls['tradeName'];
-  }
-
-  get obligationField(): AbstractControl {
-    return this.form.controls['obligation'];
-  }
-
-  get counterpartyField(): AbstractControl {
-    return this.form.controls['counterparty'];
-  }
 }

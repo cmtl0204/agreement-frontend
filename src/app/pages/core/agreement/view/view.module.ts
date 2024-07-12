@@ -30,6 +30,8 @@ import { SharedModule } from '@shared/shared.module';
 import { FinancingComponent } from './financing/financing.component';
 import { ObligationComponent } from './obligation/obligation.component';
 import { RegistrationRoutingModule } from 'src/app/pages/auth/registration/registration-routing.module';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -58,6 +60,8 @@ import { RegistrationRoutingModule } from 'src/app/pages/auth/registration/regis
     OverlayPanelModule,
     ViewRoutingModule,
     TableModule,
+    TagModule,
+    ToastModule,
     FormsModule,
     InputNumberModule,
     ToggleButtonModule,
@@ -65,7 +69,9 @@ import { RegistrationRoutingModule } from 'src/app/pages/auth/registration/regis
     RadioButtonModule,
     StepperModule,
     FileUploadModule,
-    InputTextareaModule
+    InputTextareaModule,
+  
+
 
 
   ]
