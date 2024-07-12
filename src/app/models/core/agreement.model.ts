@@ -1,21 +1,23 @@
-import { Time } from "@angular/common";
+import { CatalogueModel } from "@models/core";
 
 export interface AgreementModel {
-    id: string;
-    dayTerm: number;
-    endedAt?: Time;
-    endedReason: string;
-    internalNumber: number;
-    isFinancing: boolean;
-    isFinishDate: boolean;
-    monthTerm: number;
-    name: string;
-    number: string;
-    objective: string;
-    originId: string;
-    startedAt?: Time;
-    subscribedAt?: Time;
-    typeId: string;
-    userId: string;
-    yearTerm: number;
+  id: string;
+  number: string;
+  internalNumber: number;
+  name: string;
+  originId: string;
+  typeId: string;
+  subscribedAt: Date;
+  startedAt: Date;
+  isFinishDate: boolean;
+  endedAt: Date | null;
+  endedReason: string;
+  yearTerm: number;
+  monthTerm: number;
+  dayTerm: number;
+  objective: string;
+  isFinancing: boolean;
+  userId: string;
+  origin?: CatalogueModel;
+  type?: CatalogueModel;
 }

@@ -1,6 +1,5 @@
 
 <div class="grid">
-
   <div class="col-12">
 
     @if (coreService.isLoading) {
@@ -34,48 +33,47 @@
       <!-- formulario internalInstitutions -->
      <form  [formGroup]="internalInstitutionForm" class="p-fluid grid">
 
-        <!-- positionId -->
+        <!-- position -->
       <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
 
         <label
          appLabel
-         for="positionId"
-         [label]="InternalInstitutionsFormEnum.positionId"
-         [label]="InternalInstitutionsFormEnum.positionId"
-         [required]="internalInstitutionPositionIdField"
+         for="position"
+         [label]="InternalInstitutionsFormEnum.position"
+         [label]="InternalInstitutionsFormEnum.position"
+         [required]="internalInstitutionPositionField"
         ></label>
 
         <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
 
         <p-dropdown
-          id="positionId"
-          formControlName="positionId"
+          id="position"
+          formControlName="position"
           dataKey="id"
-          optionValue="id"
-          [options]="positionId"
+          [options]="position"
           placeholder="Seleccione una opcion"
           [filter]="false"
-          filterBy="positionId">
+          filterBy="name">
 
           <ng-template 
           pTemplate="selectedItem"
           let-selectedOption>
             <div class="flex align-items-center gap-2">
-              <div>{{ selectedOption.positionId }}</div>
+              <div>{{ selectedOption.name }}</div>
             </div>
           </ng-template>
           
           <ng-template let-item pTemplate="item">
             <div class="flex align-items-center gap-2">
-              <div>{{ item.positionId }}</div>
+              <div>{{ item.name}}</div>
             </div>
           </ng-template>
          </p-dropdown>
 
       <small appErrorMessage
-      [errors]="internalInstitutionPositionIdField.errors"
-      [touched]="internalInstitutionPositionIdField.touched"
-      [dirty]="internalInstitutionPositionIdField.dirty">
+      [errors]="internalInstitutionPositionField.errors"
+      [touched]="internalInstitutionPositionField.touched"
+      [dirty]="internalInstitutionPositionField.dirty">
       </small>
       </div>
 
@@ -127,48 +125,46 @@
             </small>
       </div> -->
 
-       <!-- personTypeId -->
+       <!-- personType -->
       <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
 
         <label
          appLabel 
-         for="personTypeId"
-         [label]="InternalInstitutionsFormEnum.personTypeId"
-         [required]="internalInstitutionPersonTypeIdField"
+         for="personType"
+         [label]="InternalInstitutionsFormEnum.personType"
         ></label>
 
         <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
 
         <p-dropdown
-        id="personTypeId"
-        formControlName="personTypeId"
+        id="personType"
+        formControlName="personType"
         dataKey="id"
-        optionValue="id"
-        [options]="positionId"
+        [options]="personTypes"
         placeholder="Seleccione una opcion"
         [filter]="false"
-        filterBy="positionId">
+        filterBy="name">
 
         <ng-template 
         pTemplate="selectedItem"
         let-selectedOption>
           <div class="flex align-items-center gap-2">
-            <div>{{ selectedOption.positionId }}</div>
+            <div>{{ selectedOption.name }}</div>
           </div>
         </ng-template>
 
         <ng-template
         let-item pTemplate="item">
           <div class="flex align-items-center gap-2">
-            <div>{{ item.positionId }}</div>
+            <div>{{ item.name}}</div>
           </div>
         </ng-template>
         </p-dropdown>
 
         <small appErrorMessage
-        [errors]="internalInstitutionPersonTypeIdField.errors"
-        [touched]="internalInstitutionPersonTypeIdField.touched"
-        [dirty]="internalInstitutionPersonTypeIdField.dirty">
+        [errors]="internalInstitutionPersonTypeField.errors"
+        [touched]="internalInstitutionPersonTypeField.touched"
+        [dirty]="internalInstitutionPersonTypeField.dirty">
         </small>
 
       </div>
@@ -177,7 +173,7 @@
 
      <br>
       <!-- table -->
-     <div class="card card-background">
+<!--     
       @if(internalInstitutions.controls.length > 0){ 
        <p-table [value]="internalInstitutions.controls" responsiveLayout="scroll">
       <ng-template pTemplate="header">
@@ -196,9 +192,9 @@
        
         <tr>
           <td>{{ internalInstitution.get('name')?.value }}</td>
-          <td>{{ getPositionNameById(internalInstitution.get('personTypeId')?.value) }}</td>
+          <td>{{ getPositionNameById(internalInstitution.get('personType')?.value) }}</td>
           <td>{{ internalInstitution.get('unit')?.value }}</td>
-          <td>{{ getPositionNameById(internalInstitution.get('personTypeId')?.value) }}</td>
+          <td>{{ getPositionNameById(internalInstitution.get('personType')?.value) }}</td>
           <td>
             <p-button label="Eliminar" icon="pi pi-times" severity="danger" (click)="removeInternalInstitutions(i)" class="mr-2" />
             <p-button label="Editar" icon="pi pi-pencil" severity="success" (click)="editInternalInstitutions(i)" />
@@ -207,8 +203,7 @@
 
       </ng-template>
     </p-table>
-      }
-    </div>
+      } -->
 
      <br>
      <hr> 
@@ -240,12 +235,12 @@
          </small>
          </div>
         
-         <!-- positionId -->
+         <!-- position -->
         <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
 
           <label 
            appLabel 
-           for="position" 
+           for="externalPosition" 
            [label]="ExternalInstitutionsFormEnum.position"
            [required]="externalInstitutionPositionField"
            ></label>
@@ -254,7 +249,7 @@
 
           <input
            pInputText
-           id="position"
+           id="externalPosition"
            formControlName="position">  
 
            <small appErrorMessage
@@ -287,49 +282,48 @@
 
         </div>
 
-         <!-- personTypeId -->
+         <!-- personType-->
         <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
 
           <label
            appLabel 
-           for="personTypeId"
-           [label]="ExternalInstitutionsFormEnum.personTypeId"
-           [required]="externalInstitutionPersonTypeIdField"
+           for="externalPersonType"
+           [label]="ExternalInstitutionsFormEnum.personType"
+           [required]="externalInstitutionPersonTypeField"
             ></label>
 
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
 
             <p-dropdown
-            id="personTypeId"
-            formControlName="personTypeId"
+            id="externalPersonType"
+            formControlName="personType"
             dataKey="id"
-            optionValue="id"
-            [options]="positionId"
+            [options]="personTypes"
             placeholder="Seleccione una opcion"
             [filter]="false"
-            filterBy="positionId">
+            filterBy="name">
 
             <ng-template 
             pTemplate="selectedItem"
             let-selectedOption>
               <div class="flex align-items-center gap-2">
-                <div>{{ selectedOption.positionId }}</div>
+                <div>{{ selectedOption.name }}</div>
               </div>
             </ng-template>
 
             <ng-template
             let-item pTemplate="item">
               <div class="flex align-items-center gap-2">
-                <div>{{ item.positionId }}</div>
+                <div>{{ item.name }}</div>
               </div>
             </ng-template>
 
             </p-dropdown>
     
           <small appErrorMessage
-          [errors]="externalInstitutionPersonTypeIdField.errors"
-          [touched]="externalInstitutionPersonTypeIdField.touched"
-          [dirty]="externalInstitutionPersonTypeIdField.dirty">
+          [errors]="externalInstitutionPersonTypeField.errors"
+          [touched]="externalInstitutionPersonTypeField.touched"
+          [dirty]="externalInstitutionPersonTypeField.dirty">
           </small>
           </div>
 
@@ -340,38 +334,41 @@
       <br>
 
        <!-- table -->
-      <div class="card card-background">
+      
         @if(externalInstitutions.controls.length > 0){ 
-        <p-table [value]="externalInstitutions.controls"  responsiveLayout="scroll">
+        <p-table [value]="externalInstitutions.controls" 
+        styleClass="p-datatable-gridlines"   >
 
           <ng-template pTemplate="header">
-
-            <tr>
-              <th>Nombre</th>
-              <th>Cargo</th>
-              <th>Unidad</th>
-              <th>Entidad</th>
-              <th>Acción</th>
-            </tr>
-
-          </ng-template>
-
-          <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
+         
+            @for (col of externalInstitutionsColumns; track col.field) {
+              <th [pSortableColumn]="col.field">
+                {{ col.header }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            }
             
+            <th class="text-center">
+              Acciones
+            </th>
+     
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
             <tr>
-              <td>{{externalInstitution.get('name')?.value }}</td>
-              <td>{{ externalInstitution.get('position')?.value }}</td>
-              <td>{{ externalInstitution.get('unit')?.value}}</td>
-              <td>{{ getPositionNameById(externalInstitution.get('personTypeId')?.value) }}</td>
+              <td class="text-center">{{externalInstitution.get('name')?.value }}</td>
+              <td class="text-center">{{ externalInstitution.get('unit')?.value}}</td>
+              <td class="text-center">{{ externalInstitution.get('position')?.value }}</td>
+              <td class="text-center">{{externalInstitution.get('personType')?.value.name }}</td>
               <td>
-                <p-button label="Eliminar" icon="pi pi-times" severity="danger" (click)="removeExternalInstitutions(i)" class="mr-2"  />
-                <p-button label="Editar" icon="pi pi-pencil" severity="success" (click)=" editExternalInstitutions(i)" />
+                <p-button icon="pi pi-trash" severity="danger" (click)="removeExternalInstitutions(i)" class="mr-2" />
+                <p-button icon="pi pi-pencil" severity="success" (click)="editExternalInstitutions(i)" />
               </td>
             </tr>
           </ng-template>
         </p-table>
         }
-      </div>
+      
     </p-panel>
     }
   </div>

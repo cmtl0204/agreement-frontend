@@ -1,30 +1,17 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { CatalogueModel, ColumnModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum,RoutesEnum } from '@shared/enums';
+import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
 import { OnExitInterface } from '@shared/interfaces';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeIcons } from 'primeng/api';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
-
-/** interfaces para la prueba de datos **/
-interface InternalInstitution {
-  name: string,
-}
-
-interface ExternalInstitution {
-  name: string,
-}
 
 interface FinancingOption {
   name: string;
   active: boolean;
-}
-
-interface UploadEvent {
-  originalEvent: Event;
-  files: File[];
 }
 
 @Component({
@@ -41,57 +28,52 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
   private readonly routesService = inject(RoutesService);
-  
+
   /** variables **/
   financingOptions!: FinancingOption[];
   input: number[] = [];
   uploadedFiles: any[] = [];
   protected form!: FormGroup;
-  
+  protected financingForm!: FormGroup;
+  protected financingsColumns: ColumnModel[] = [];
+
   /** Form **/
   // @Input({ required: true }) id!: string;
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
-  id:string=RoutesEnum.NEW
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
+  protected id: string = RoutesEnum.NEW
   private formErrors: string[] = [];
   groupedInstitutions: any[] = [];
-  
+
+  /** Foreign Keys **/
+  protected internalInstitutions: CatalogueModel[] = [];
+  protected externalInstitutions: CatalogueModel[] = [];
+  protected combinedInstitutions: CatalogueModel[] = [];
+
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly FinancingsFormEnum = FinancingsFormEnum;
   protected readonly DocumentationFormEnum = DocumentationFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
+  protected readonly PrimeIcons = PrimeIcons;
 
   showFinancingFields: boolean = false;
 
   constructor(private messageService: MessageService) {
+    this.loadInternalInstitutions();
+    this.loadExternalInstitutions();
+    this.combineInstitutions();
     this.buildForm();
-    this.groupInstitutions()
+    this.buildFinancingForm();
+    this.buildFinancingsColumns();
+    this.addFinancing();
 
     this.financingOptions = [
       { name: 'Si', active: true },
       { name: 'No', active: false }
     ];
 
-  }
-
-  internalInstitutions: InternalInstitution[] = [
-    { name: 'Ministro' },
-    { name: 'Viceministro' },
-  ];
-
-  externalInstitutions: ExternalInstitution[] = [
-    { name: 'Director 2' },
-    { name: 'Coordinador 2' },
-  ];
-
-  
-/** Boton para subir archivos **/
-  onUpload(event: UploadEvent) {
-    for (let file of event.files) {
-      this.uploadedFiles.push(file);
-    }
-
-    this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: '' });
   }
 
   async onExit() {
@@ -101,33 +83,72 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     // return this.messageDialogService.questionOnExit();
   }
 
-
   ngOnInit(): void {
     this.onFinancingChange();
   }
 
   save() {
-    this.formOutput.emit(this.form.value); //add
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
   }
-  
+
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
       isFinancing: [null, [Validators.required]],
       financings: this.formBuilder.array([])
     });
-    this.addFinancing();
+  }
+
+  buildFinancingForm() {
+    this.financingForm = this.formBuilder.group({
+      model: [null, [Validators.required]],
+      budget: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{2,2})?$/)]],
+      paymentMethod: [null, [Validators.required]],
+      source: [null, [Validators.required]],
+    })
+  }
+
+  buildFinancingsColumns() {
+    this.financingsColumns = [
+      {
+        field: 'model', header: FinancingsFormEnum.model
+      },
+      {
+        field: 'budget', header: FinancingsFormEnum.budget
+      },
+      {
+        field: 'paymentMethod', header: FinancingsFormEnum.paymentMethod
+      },
+      {
+        field: 'source', header: FinancingsFormEnum.source
+      },
+    ];
   }
 
   /** add array **/
   addFinancing() {
-    const financings = this.formBuilder.group({
-      modelId: [null, [Validators.required]],
-      budget: [null, [Validators.required]],
-      paymentMethod: [null, [Validators.required]],
-      source: [null, [Validators.required]],
-    });
-    this.financings.push(financings);
+    if (this.financingForm.valid) {
+      const financings = this.formBuilder.group({
+        model: [this.financingForm.value.model, [Validators.required]],
+        budget: [this.financingForm.value.budget, [Validators.required]],
+        paymentMethod: [this.financingForm.value.paymentMethod, [Validators.required]],
+        source: [this.financingForm.value.source, [Validators.required]],
+      });
+      this.financings.push(financings);
+      this.financingForm.reset();
+
+      this.modelField.clearValidators();
+      this.modelField.reset();
+      this.budgetField.clearValidators();
+      this.budgetField.reset();
+      this.paymentMethodField.clearValidators();
+      this.paymentMethodField.reset();
+      this.sourceField.clearValidators();
+      this.sourceField.reset();
+    } else {
+
+    }
   }
 
   /** delete array**/
@@ -135,100 +156,99 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     this.financings.removeAt(index);
   }
 
-  groupInstitutions(): void {
-    forkJoin({
-      internals: this.getInternalInstitutions(),
-      externals: this.getExternalInstitutions(),
-    }).subscribe(({ internals, externals }) => {
-      this.groupedInstitutions = this.combineInstitutions(internals, externals);
-    });
+  /** Edit**/
+  editFinancing(index: number) {
+    const financing = this.financings.at(index);
+
+    if (financing) {
+      this.financingForm.patchValue(financing.value);
+    }
+    this.financings.removeAt(index);
   }
 
-  combineInstitutions(internals: InternalInstitution[], externals: ExternalInstitution[]): any[] {
-    const combinedList: any[] = [];
-    
-    internals.forEach(internal => {
-      combinedList.push({
-        label: internal.name,
-        value: internal.name,
-        type: 'internal'
-      });
-    });
 
-    externals.forEach(external => {
-      combinedList.push({
-        label: external.name,
-        value: external.name,
-        type: 'external'
-      });
-    });
-
-    return combinedList;
+  loadInternalInstitutions() {
+    /* this. = this.cataloguesHttpService.findByType(CatalogueTypeEnum.); */
+    this.internalInstitutions = [
+      { name: 'Ministro' },
+      { name: 'Viceministro' },
+    ];
   }
 
-  private getInternalInstitutions(): Observable<InternalInstitution[]> {
-    // Simular una solicitud HTTP u obtener datos de alguna fuente
-    return new Observable<InternalInstitution[]>(observer => {
-      observer.next(this.internalInstitutions);
-      observer.complete();
-    });
+  loadExternalInstitutions() {
+    /* this. = this.cataloguesHttpService.findByType(CatalogueTypeEnum.); */
+    this.externalInstitutions = [
+      { name: 'Director 2' },
+      { name: 'Coordinador 2' },
+    ];
   }
 
-  private getExternalInstitutions(): Observable<ExternalInstitution[]> {
-    // Simular una solicitud HTTP u obtener datos de alguna fuente
-    return new Observable<ExternalInstitution[]>(observer => {
-      observer.next(this.externalInstitutions);
-      observer.complete();
-    });
+  combineInstitutions() {
+    this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
+    this.groupedInstitutions = this.combinedInstitutions.map(inst => ({ label: inst.name, value: inst.name }));
   }
-
 
   validateForm(): boolean {
     this.formErrors = [];
-
     if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
-    this.financings.controls.forEach((control, index) => {
-      if (control.get('modelId')?.invalid) {
-        this.formErrors.push(`Name at index ${index} is required.`);
-      }
-      if (control.get('budget')?.invalid) {
-        this.formErrors.push(`Bugdet at index ${index} is required.`);
-      }
-      if (control.get('paymentMethod')?.invalid) {
-        this.formErrors.push(`Payment Method at index ${index} is required.`);
-      }
-      if (control.get('source')?.invalid) {
-        this.formErrors.push(`Source at index ${index} is required.`);
-      }
-    });
+
+    if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+    if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+    if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+    if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
 
     return this.form.valid && this.formErrors.length === 0;
   }
 
   onSubmit(): void {
-    /* if (this.validateForm()) {
-      this.create();
+    if (this.validateForm()) {
+      this.save();
     } else {
-      this.agreementsForm.markAllAsTouched();
+      this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
-    } */
+    }
   }
 
-  redirectRegistration() {
-    /* this.routesService.registration(); */
-  }
-
-  onFinancingChange(event?: any) {
+  /* onFinancingChange(event?: any) {
     const financingValue = this.isFinancingField.value?.name || null;
     const financingsForm = this.form.get('financings');
 
     if (financingValue === 'Si') {
       this.showFinancingFields = true;
       financingsForm?.enable();
-    } else {
+    } else if(financingValue === 'No'){
       this.showFinancingFields = false;
       financingsForm?.disable();
+      this.financingForm.reset();
+      this.modelField.clearValidators();
+      this.modelField.reset();
+      this.budgetField.clearValidators();
+      this.budgetField.reset();
+      this.paymentMethodField.clearValidators();
+      this.paymentMethodField.reset();
+      this.sourceField.clearValidators();
+      this.sourceField.reset();
+      
     }
+  }*/
+
+  onFinancingChange(event?: any) {
+    this.isFinancingField.valueChanges.subscribe(value => {
+      if (value) {
+        this.showFinancingFields = true;
+      } else {
+        this.showFinancingFields = false;
+        this.financingForm.reset();
+        this.modelField.clearValidators();
+        this.modelField.reset();
+        this.budgetField.clearValidators();
+        this.budgetField.reset();
+        this.paymentMethodField.clearValidators();
+        this.paymentMethodField.reset();
+        this.sourceField.clearValidators();
+        this.sourceField.reset();
+      }
+    });
   }
 
   get financings(): FormArray {
@@ -237,5 +257,21 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   get isFinancingField(): AbstractControl {
     return this.form.controls['isFinancing'];
+  }
+
+  get modelField(): AbstractControl {
+    return this.financingForm.controls['model']
+  }
+
+  get budgetField(): AbstractControl {
+    return this.financingForm.controls['budget']
+  }
+
+  get paymentMethodField(): AbstractControl {
+    return this.financingForm.controls['paymentMethod']
+  }
+
+  get sourceField(): AbstractControl {
+    return this.financingForm.controls['source']
   }
 }
