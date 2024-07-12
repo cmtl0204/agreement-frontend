@@ -55,12 +55,12 @@ export class BasicDataComponent implements OnInit {
   /* Form Builder & Validates */
   buildForm() {
     this.form = this.formBuilder.group({
-      agreementState: [{value:null, disabled:true}, [Validators.required]],
+      agreementState: [null, [Validators.required]],
       name : [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
-      originId: [{value:null, disabled:true}, [Validators.required]],
+      originId: [null, [Validators.required]],
       typeId: ['', [Validators.required]],
       specialTypeId: [null],
 
