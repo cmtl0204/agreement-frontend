@@ -63,7 +63,7 @@ export class AuthHttpService {
     const url = `${this.API_URL}/login`;
 
     this.findCatalogues();
-    this.findLocations();
+    // this.findLocations();
 
     return this.httpClient.post<LoginResponse>(url, credentials)
       .pipe(
@@ -79,7 +79,7 @@ export class AuthHttpService {
     let catalogues = sessionStorage.getItem('catalogues');
 
     if (!catalogues || this.coreService.version !== this.coreService.newVersion) {
-      this.cataloguesHttpService.findCache().subscribe();
+      this.cataloguesHttpService.findAll().subscribe();
     }
   }
 

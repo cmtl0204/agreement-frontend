@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CatalogueModel } from '@models/core';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CoreService, MessageDialogService} from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum } from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
@@ -59,30 +59,24 @@ export class AgreementAdministratorComponent {
     // }
   }
 
-  save() {
-    this.formOutput.emit(this.form.value); //add
-    this.nextOutput.emit(true);
-  }
-
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
       administrator: this.administratorForm
     });
-
   }
 
   get administratorForm() {
     return this.formBuilder.group({
-      unitId: [null, Validators.required],
-      positionId: [null, Validators.required],
+      unit: [null, Validators.required],
+      position: [null, Validators.required],
     })
   }
 
   validateForm(): boolean {
     this.formErrors = [];
-    if (this.unitIdField.invalid) this.formErrors.push(AdministratorFormEnum.unitId);
-    if (this.positionIdField.invalid) this.formErrors.push(AdministratorFormEnum.positionId);
+    if (this.unitField.invalid) this.formErrors.push(AdministratorFormEnum.unit);
+    if (this.positionField.invalid) this.formErrors.push(AdministratorFormEnum.position);
 
     return this.form.valid && this.formErrors.length === 0;
   }
@@ -106,17 +100,22 @@ export class AgreementAdministratorComponent {
     }
   }
 
+  save() {
+    this.formOutput.emit(this.form.value); 
+    this.nextOutput.emit(true);
+  }
+
   // getters Form
   get administratorFormField(): FormGroup {
     return this.form.controls['administrator'] as FormGroup;
   }
 
-  get unitIdField(): AbstractControl {
-    return this.administratorFormField.controls['unitId'];
+  get unitField(): AbstractControl {
+    return this.administratorFormField.controls['unit'];
   }
 
-  get positionIdField(): AbstractControl {
-    return this.administratorFormField.controls['positionId'];
+  get positionField(): AbstractControl {
+    return this.administratorFormField.controls['position'];
   }
 
 }

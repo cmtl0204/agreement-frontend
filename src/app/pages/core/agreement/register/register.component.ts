@@ -37,9 +37,9 @@ export class RegisterComponent {
       monthTerm: [null],
       dayTerm: [null],
       objective: [null],
-      administrator: [null],
-
+      
       // agreement-administrator
+      administrator: [null],
 
       // obligation
 
@@ -51,10 +51,7 @@ export class RegisterComponent {
 
       // addendum
       isAddendum: [false],
-      description: [null],
-      isModifiedFinishDate: [null],
-      document: [null],
-      agreementEndedAt: [null]
+      addendums:[null]
     })
   }
 
