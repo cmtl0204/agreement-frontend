@@ -63,9 +63,8 @@ export class BasicDataComponent implements OnInit {
       originId: [null, [Validators.required]],
       typeId: ['', [Validators.required]],
       specialTypeId: [null],
-
-
     });
+
     this.checkValueChanges();
   }
 
@@ -97,19 +96,6 @@ export class BasicDataComponent implements OnInit {
     return this.form.valid && this.formErrors.length === 0;
   }
 
-  types1 = [
-    {name: 'Marco', id: '1'},
-    {name: 'Específicos', id: '2'},
-    {name: 'Especial', id: '3'},
-    {name: 'Comodato o convenio de préstamo de uso', id: '4'},
-  ]
-
-  specialTypes1 = [
-    {name: 'Memorando de Entendimiento', id: '1'},
-    {name: 'Carta de Intención', id: '2'},
-    {name: 'Articulación', id: '3'},
-    {name: 'Cooperación', id: '4'},
-  ]
 
   /* Load Foreign Keys  */
   loadStates() {
@@ -119,10 +105,23 @@ export class BasicDataComponent implements OnInit {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
   };
   loadTypes() {
-    this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
+    //this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
+    this.types = [
+      {name: 'Marco', id: '1'},
+      {name: 'Específicos', id: '2'},
+      {name: 'Especial', id: '3'},
+      {name: 'Comodato o convenio de préstamo de uso', id: '4'},
+    ]
   };
+
   loadSpecialTypes(){
-    this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE);
+    //this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE);
+    this.specialTypes = [
+      {name: 'Memorando de Entendimiento', id: '1'},
+      {name: 'Carta de Intención', id: '2'},
+      {name: 'Articulación', id: '3'},
+      {name: 'Cooperación', id: '4'},
+    ]
   }
 
 
@@ -130,7 +129,7 @@ export class BasicDataComponent implements OnInit {
   onSubmit(): void {
     if (this.validateForm()) {
       console.log(this.form.value)
-      this.update();
+      this.save();
       alert('Send')
       /*
      TODO
@@ -139,26 +138,6 @@ export class BasicDataComponent implements OnInit {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
-  }
-
-  update(): void {
-    /*
-        TODO
-        */
-  }
-
-  /* Redirects */
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    /* this.routesService.registration(); */
   }
 
   /* Getters Form*/
