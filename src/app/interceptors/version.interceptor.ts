@@ -14,7 +14,7 @@ export class VersionInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log('version intercept');
+
     return next.handle(request.clone()).pipe(
       tap((httpEvent) => {
           if (httpEvent.type === 0) {
