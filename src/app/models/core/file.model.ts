@@ -10,4 +10,12 @@ export interface FileModel {
     directory?: string;
     originalName?: string;
     type?: CatalogueModel;
+
+
+    //datos nuevos revisar la base de datos (se pusiseron en opcional)
+    modelId?: string;
+    typeId?: string;
+    path?: string;
+    size?: number;
+    enabled?: boolean;
 }

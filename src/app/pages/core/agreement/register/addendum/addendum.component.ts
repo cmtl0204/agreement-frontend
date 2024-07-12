@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -28,11 +28,12 @@ export class AddendumComponent implements OnInit {
   /** Form **/
   // @Input({required: true}) id!: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   id:string= RoutesEnum.NEW
   protected form!: FormGroup;
+  protected addendumForm! : FormGroup;
   private formErrors: string[] = [];
   protected Validators = Validators;
-  protected addendum = "No registrar"
   
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
@@ -40,8 +41,8 @@ export class AddendumComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
-    this.buildForm(), 
-    this.registerAddendum()
+    this.buildForm()
+    this.buildAddendumForm()
   }
   
   save() {
@@ -51,11 +52,32 @@ export class AddendumComponent implements OnInit {
   buildForm() {
     this.form =this.formBuilder.group({
       isAddendum: [false, Validators.required],
+      addendums: this.formBuilder.array([])
+    })
+    this.checkValueChanges()
+  }
+
+  buildAddendumForm(){
+    this.addendumForm = this.formBuilder.group({
       description: [null],
       isModifiedFinishDate: [null],
       document: [null],
       agreementEndedAt: [null]
     })
+  }
+
+  addAddendum(){
+    if (this.validateForm()) {
+      this.addendums.controls.push(this.formBuilder.group(this.addendumForm.value))
+      this.addendumForm.reset()
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  deleteAddendum(index:number){
+   this.addendums.removeAt(index)
   }
 
   validateForm(): boolean {
@@ -71,13 +93,15 @@ export class AddendumComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.validateForm()) {
-      this.create();
-      
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
+    // if (this.validateForm()) {
+    //   this.create();
+    //   this.save()
+    // } else {
+    //   this.form.markAllAsTouched();
+    //   this.messageDialogService.fieldErrors(this.formErrors);
+    // }
+    this.create();
+    this.save();
   }
 
   create(): void {
@@ -99,16 +123,15 @@ export class AddendumComponent implements OnInit {
     // this.routesService.registration();
   }
 
-  registerAddendum(){
-    this.isAddendumField.valueChanges.subscribe(() => {
-     if (this.isAddendumField.value == true){
+    checkValueChanges(){
+    this.isAddendumField.valueChanges.subscribe((value) => {
+      console.log(value)
+     if (value){
 
         this.descriptionField.addValidators(Validators.required),
-        this.isModifiedFinishDateField.addValidators(Validators.required),
+        this.isModifiedFinishDateField.addValidators(Validators.required)
         this.documentField.addValidators(Validators.required)
-
      } else{
-      
         this.descriptionField.removeValidators(Validators.required),
         this.isModifiedFinishDateField.removeValidators(Validators.required),
         this.documentField.removeValidators(Validators.required),
@@ -116,7 +139,6 @@ export class AddendumComponent implements OnInit {
         this.descriptionField.reset(),
         this.isModifiedFinishDateField.reset(),
         this.documentField.reset()
-        
      }
 
      this.isModifiedFinishDateField.valueChanges.subscribe(()=>{
@@ -139,16 +161,20 @@ export class AddendumComponent implements OnInit {
   get isAddendumField(): AbstractControl {
     return this.form.controls['isAddendum'];
   }
+  get addendums():FormArray {
+    return this.form.controls['addendums'] as FormArray;
+  }
+
   get descriptionField(): AbstractControl {
-    return this.form.controls['description'];
+    return this.addendumForm.controls['description'];
   }
   get isModifiedFinishDateField(): AbstractControl {
-    return this.form.controls['isModifiedFinishDate'];
+    return this.addendumForm.controls['isModifiedFinishDate'];
   }
   get documentField(): AbstractControl {
-    return this.form.controls['document'];
+    return this.addendumForm.controls['document'];
   }
   get agreementEndedAtField(): AbstractControl {
-    return this.form.controls['agreementEndedAt'];
+    return this.addendumForm.controls['agreementEndedAt'];
   }
 }
