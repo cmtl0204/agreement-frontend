@@ -1,6 +1,6 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
+import {CatalogueModel, ColumnModel} from '@models/core';
 import {AuthService} from '@servicesApp/auth';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
@@ -37,6 +37,7 @@ export class AppearerComponent implements OnInit {
   protected form!: FormGroup;
   protected appearerForm!: FormGroup;
   private formErrors: string[] = [];
+  protected externalInstitutionsColumns: ColumnModel[] = [];
 
   /** Foreign Keys **/
   protected internalPersonTypes: CatalogueModel[] = [];
@@ -52,6 +53,7 @@ export class AppearerComponent implements OnInit {
   constructor(private messageService: MessageService) {
     this.buildForm();
     this.buildAppearerForm();
+    this.buildExternalInstitutionsColumns();
     this.addExternalInstitution();
     this.addInternalInstitution();
   }
@@ -78,11 +80,28 @@ export class AppearerComponent implements OnInit {
 
   buildAppearerForm() {
     this.appearerForm = this.formBuilder.group({
-      personTypeId: [null, [Validators.required]],
+      personType: [null, [Validators.required]],
       name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
       position: [null, [Validators.required, Validators.pattern(onlyLetters())]],
       unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
     });
+  }
+
+  buildExternalInstitutionsColumns() {
+    this.externalInstitutionsColumns = [
+      {
+        field: 'name', header: ExternalInstitutionsFormEnum.name
+      },
+      {
+        field: 'unit', header: ExternalInstitutionsFormEnum.unit
+      },
+      {
+        field: 'position', header: ExternalInstitutionsFormEnum.position
+      },
+      {
+        field: 'personType', header: ExternalInstitutionsFormEnum.personTypeId
+      },
+    ];
   }
 
   /** add array **/
@@ -99,7 +118,7 @@ export class AppearerComponent implements OnInit {
   addExternalInstitution() {
     if (this.appearerForm.valid) {
       const externalInstitution = this.formBuilder.group({
-        personTypeId: [this.appearerForm.value.personTypeId, [Validators.required]],
+        personType: [this.appearerForm.value.personType, [Validators.required]],
         name: [this.appearerForm.value.name, [Validators.required]],
         position: [this.appearerForm.value.position, [Validators.required]],
         unit: [this.appearerForm.value.unit, [Validators.required]],
@@ -115,7 +134,7 @@ export class AppearerComponent implements OnInit {
       this.externalInstitutionPersonTypeIdField.clearValidators();
       this.externalInstitutionPersonTypeIdField.reset();
     } else {
-      
+
     }
   }
 
@@ -228,8 +247,8 @@ export class AppearerComponent implements OnInit {
   }
 
   get externalInstitutionPersonTypeIdField(): AbstractControl {
-    return this.appearerForm.controls['personTypeId'];
-  } 
+    return this.appearerForm.controls['personType'];
+  }
 }
 
 
