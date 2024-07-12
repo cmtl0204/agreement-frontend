@@ -18,7 +18,6 @@ export class BasicDataComponent implements OnInit {
   protected readonly messageDialogService = inject(MessageDialogService)
   protected readonly Validators = Validators;
 
-
   /** Form && Output **/
   // @Input({required: true}) id: string;
   @Output() formOutput:EventEmitter<FormGroup> = new EventEmitter()
@@ -49,10 +48,6 @@ export class BasicDataComponent implements OnInit {
 
   }
 
-  save(){
-    this.formOutput.emit(this.form.value)
-  }
-
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
@@ -64,9 +59,8 @@ export class BasicDataComponent implements OnInit {
       originId: [{value:null, disabled:true}, [Validators.required]],
       typeId: ['', [Validators.required]],
       specialTypeId: [null],
-
-
     });
+
     this.checkValueChanges();
   }
 
@@ -82,7 +76,6 @@ export class BasicDataComponent implements OnInit {
       this.typeIdField.updateValueAndValidity();
     })
   }
-
 
   validateForm(): boolean {
     this.formErrors = [];
@@ -102,9 +95,11 @@ export class BasicDataComponent implements OnInit {
   loadStates() {
     this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
   };
+
   loadOrigins() {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
   };
+
   loadTypes() {
     /* this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE); */
     this.types = [
@@ -114,6 +109,7 @@ export class BasicDataComponent implements OnInit {
       {name: 'Comodato o convenio de préstamo de uso', id: '4'},
     ]
   };
+
   loadSpecialTypes(){
     /* this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE); */
 
@@ -125,12 +121,11 @@ export class BasicDataComponent implements OnInit {
     ]
   }
 
-
   /** Form Actions **/
   onSubmit(): void {
     if (this.validateForm()) {
       console.log(this.form.value)
-      this.update();
+      this.save();
       alert('Send')
       /*
      TODO
@@ -141,24 +136,8 @@ export class BasicDataComponent implements OnInit {
     }
   }
 
-  update(): void {
-    /*
-        TODO
-        */
-  }
-
-  /** Redirects **/
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    /* this.routesService.registration(); */
+  save(){
+    this.formOutput.emit(this.form.value)
   }
 
   /** Getters Form**/
