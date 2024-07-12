@@ -1,22 +1,23 @@
-export interface Agreement {
-    id: string;
-    number: string;
-    internalNumber: number;
-    name: string;
-    originId: string;
-    typeId: string;
-    subscribedAt: string; // Adjust to appropriate date/time type if necessary
-    startedAt: string; // Adjust to appropriate date/time type if necessary
-    isFinishDate: boolean;
-    endedAt: string; // Adjust to appropriate date/time type if necessary
-    endedReason: string;
-    yearTerm: number;
-    monthTerm: number;
-    dayTerm: number;
-    objective: string;
-    isFinancing: boolean;
-    closeTypeId: string;
-    closedAt: string; // Adjust to appropriate date/time type if necessary
-    closeDetail: string;
-    closed: boolean;
-  }
+import { CatalogueModel } from "@models/convenio";
+
+export interface AgreementModel {
+  id: string;
+  number: string;
+  internalNumber: number;
+  name: string;
+  originId: string;
+  typeId: string;
+  subscribedAt: Date;
+  startedAt: Date;
+  isFinishDate: boolean;
+  endedAt: Date | null;
+  endedReason: string;
+  yearTerm: number;
+  monthTerm: number;
+  dayTerm: number;
+  objective: string;
+  isFinancing: boolean;
+  userId: string;
+  origin?: CatalogueModel;
+  type?: CatalogueModel;
+}

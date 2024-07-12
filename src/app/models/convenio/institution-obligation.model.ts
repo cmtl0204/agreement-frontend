@@ -1,5 +1,10 @@
-export interface InstitutionObligation {
-    id: string;
-    obligationTypeId: string;
-    modelId: string; // Note: Adjust if 'model_id' is intended to refer to another table's id
-  }
+import { ExternalInstitutionModel, InternalInstitutionModel, ObligationTypeModel } from "@models/convenio";
+
+export interface InstitutionObligationModel {
+  id: string;
+  obligationTypeId: string;
+  obligationType?: ObligationTypeModel;
+  modelId: string;
+  externalInstitution?: ExternalInstitutionModel;
+  internalInstitution?: InternalInstitutionModel;
+}

@@ -4,7 +4,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ViewRoutingModule } from './view-routing.module';
 import { ViewComponent } from './view.component';
 import { FinancingComponent } from './financing/financing.component';
-import { PartObligationComponent } from './part-obligation/part-obligation.component';
+import { ObligationComponent } from './obligation/obligation.component';
 import { RegistrationRoutingModule } from 'src/app/pages/auth/registration/registration-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -20,13 +20,13 @@ import { PanelModule } from 'primeng/panel';
 import { AvatarModule } from 'primeng/avatar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { SkeletonModule } from 'primeng/skeleton';
 import { SharedModule } from '@shared/shared.module';
+import { TableModule } from 'primeng/table';
 
 
 @NgModule({
   declarations: [
-    ViewComponent, PartObligationComponent, FinancingComponent
+    ViewComponent, ObligationComponent, FinancingComponent
   ],
   imports: [
     CommonModule,
@@ -48,6 +48,7 @@ import { SharedModule } from '@shared/shared.module';
     ToolbarModule,
     OverlayPanelModule,
     ViewRoutingModule,
+    TableModule
   ]
 })
 export class ViewModule { }

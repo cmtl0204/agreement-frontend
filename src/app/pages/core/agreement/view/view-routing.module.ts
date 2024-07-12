@@ -1,7 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ViewComponent } from './view.component';
-import { PartObligationComponent } from './part-obligation/part-obligation.component';
+import { ObligationComponent } from './obligation/obligation.component';
 import { FinancingComponent } from './financing/financing.component';
 import { ExitGuard } from '@guards/exit.guard';
 
@@ -12,8 +12,8 @@ const routes: Routes = [
   },
   {
     title: 'Obligaciones de las partes',
-    path: 'part-obligation',
-    component: PartObligationComponent,
+    path: 'obligation',
+    component: ObligationComponent,
     canDeactivate: [ExitGuard]
   },
   {

@@ -1,7 +1,10 @@
-export interface Administrator {
-    id: string;
-    unitId: string;
-    positionId: string;
-    userId: string;
-    agreementId: string;
-  }
+import {AgreementModel } from "@models/convenio";
+
+export interface AdministratorModel {
+  id: string;
+  agreementId: string;
+  agreement?: AgreementModel;
+  unitId: string;
+  positionId: string;
+  userId: string;
+}

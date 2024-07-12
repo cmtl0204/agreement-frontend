@@ -4,8 +4,7 @@ import {ProfessionalComponent} from "./professional/professional.component";
 import {CompanyComponent} from "./company/company.component";
 import {RegistrationComponent} from "./registration.component";
 import {ExitGuard} from "@guards/exit.guard";
-import { PartObligationComponent } from '../../core/agreement/view/part-obligation/part-obligation.component';
-import { FinancingComponent } from '../../core/agreement/view/financing/financing.component';
+
 
 const routes: Routes = [
   {

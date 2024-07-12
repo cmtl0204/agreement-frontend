@@ -9,17 +9,17 @@ import { AuthHttpService, AuthService } from "@servicesApp/auth";
 import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/core";
 import { CataloguesHttpService } from "@servicesHttp/core";
 import { CatalogueTypeEnum, CompanyRegistrationFormEnum, RoutesEnum, SkeletonEnum } from "@shared/enums";
-import { Agreement } from '@models/convenio/agreement.model';
-import { ObligationType } from '@models/convenio/obligation-type.model';
-import { Obligation } from '@models/convenio/obligation.model';
-import { InstitutionObligation } from '@models/convenio/institution-obligation.model';
+import { AgreementModel } from '@models/convenio/agreement.model';
+import { ObligationTypeModel } from '@models/convenio/obligation-type.model';
+import { ObligationModel } from '@models/convenio/obligation.model';
+import { InstitutionObligationModel } from '@models/convenio/institution-obligation.model';
 
 @Component({
-  selector: 'app-part-obligation',
-  templateUrl: './part-obligation.component.html',
-  styleUrls: ['./part-obligation.component.scss']
+  selector: 'app-obligation',
+  templateUrl: './obligation.component.html',
+  styleUrls: ['./obligation.component.scss']
 })
-export class PartObligationComponent implements OnInit, OnExitInterface {
+export class ObligationComponent implements OnInit, OnExitInterface {
   /** Services **/
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
@@ -39,18 +39,18 @@ export class PartObligationComponent implements OnInit, OnExitInterface {
 
   
   //datos desde modelos
-  obligationType: ObligationType = {
+  obligationType: ObligationTypeModel = {
     id: '1',
     typeId: 'Contraparte'
   };
 
-  obligation: Obligation = {
+  obligation: ObligationModel = {
     id: '1',
     modelId: 'model123',
     description: 'Descripción de la obligación'
   };
 
-  institutionObligation: InstitutionObligation = {
+  institutionObligation: InstitutionObligationModel = {
     id: '1',
     obligationTypeId: 'type123',
     modelId: 'model456'
