@@ -36,6 +36,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {MultiSelectModule} from "primeng/multiselect";
 import {TableModule} from "primeng/table";
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     declarations: [
@@ -82,7 +83,8 @@ import {TableModule} from "primeng/table";
         InputTextareaModule,
         MultiSelectModule,
         FormsModule,
-        TableModule
+        TableModule,
+        DialogModule
     ]
 })
 export class RegisterModule { }
