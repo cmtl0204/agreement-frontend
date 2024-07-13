@@ -20,14 +20,14 @@ interface Obligations {
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
-  //  @Input({required: true}) externalInstitutions: any[] = [];
+  @Input({required: true}) externalInstitutions: any[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   institutions = [];
 
   protected obligationType: CatalogueModel[]=[];
-  protected externalInstitutions: CatalogueModel[] = [];
+  //protected externalInstitutions: CatalogueModel[] = [];
   protected obligationMintur: CatalogueModel[]=[];
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);

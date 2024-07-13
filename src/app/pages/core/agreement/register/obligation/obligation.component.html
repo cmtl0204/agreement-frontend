@@ -7,11 +7,21 @@
     @if (!coreService.isLoading) {}
     <p-toolbar>
       <div class="p-toolbar-group-left">
-        <app-header-form [id]="id"></app-header-form>
+        <app-header-form
+          [id]="id"
+          label="Registro"
+          [icon]="PrimeIcons.PENCIL"/>
       </div>
+
       <div class="p-toolbar-group-right">
-        <app-form-button-action (submit)="onSubmit()" labelSubmitButton="Siguiente" labelCancelButton="Atrás"
-          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT" [isVisibleCancelButton]="false" />
+        <app-form-button-action
+          (submit)="onSubmit()"
+          (cancel)="prevOutput.emit(true)"
+          labelSubmitButton="Siguiente"
+          labelCancelButton="Atrás"
+          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+          [isVisibleCancelButton]="true"
+        />
       </div>
     </p-toolbar>
     <div class="p-fluid">
