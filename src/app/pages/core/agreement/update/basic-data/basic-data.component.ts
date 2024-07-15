@@ -45,7 +45,6 @@ export class BasicDataComponent implements OnInit {
     this.loadOrigins();
     this.loadTypes();
     this.loadSpecialTypes()
-
   }
 
   /** Form Builder & Validates **/
@@ -68,12 +67,11 @@ export class BasicDataComponent implements OnInit {
     this.typeField.valueChanges.subscribe((value) => {
       if(value.id === '3') {
         this.specialTypeField.setValidators(Validators.required);
-        this.specialTypeField.reset();
       }else{
         this.specialTypeField.clearValidators();
-        this.specialTypeField.reset();
       }
       this.typeField.updateValueAndValidity();
+      this.specialTypeField.reset();
     })
   }
 
