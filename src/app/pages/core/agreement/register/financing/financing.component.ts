@@ -122,7 +122,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   /** add array **/
   addFinancing() {
     const financings = this.formBuilder.group({
-      modelId: [null, [Validators.required]],
+      model: [null, [Validators.required]],
       budget: [null, [Validators.required]],
       paymentMethod: [null, [Validators.required]],
       source: [null, [Validators.required]],
@@ -188,7 +188,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
     if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
     this.financings.controls.forEach((control, index) => {
-      if (control.get('modelId')?.invalid) {
+      if (control.get('model')?.invalid) {
         this.formErrors.push(`Name at index ${index} is required.`);
       }
       if (control.get('budget')?.invalid) {
