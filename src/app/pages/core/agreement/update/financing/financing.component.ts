@@ -67,7 +67,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
-    this.addFinancing();
 
     this.financingOptions = [
       { name: 'Si', active: true },
@@ -128,6 +127,8 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   /** add array **/
   addFinancing() {
+    this.formErrors = [];
+
     if (this.financingForm.valid) {
       const financings = this.formBuilder.group({
         model: [this.financingForm.value.model, [Validators.required]],
@@ -147,7 +148,12 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       this.sourceField.clearValidators();
       this.sourceField.reset();
     } else {
-
+      this.financingForm.markAllAsTouched();
+      if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
@@ -190,22 +196,32 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   validateForm(): boolean {
     this.formErrors = [];
-    if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
 
-    if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
-    if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
-    if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
-    if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+    if (this.isFinancingField.invalid) {
+      this.formErrors.push(AgreementFormEnum.isFinancing);
+    }
+
+    if (this.formErrors.length === 0) {
+      if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+    }
 
     return this.form.valid && this.formErrors.length === 0;
   }
 
   onSubmit(): void {
+    
     if (this.validateForm()) {
       this.save();
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
+      if (this.form.valid) {
+        this.financingForm.markAllAsTouched();
+        this.messageDialogService.fieldErrors(this.formErrors);
+      }
     }
   }
 
