@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+  <div class="col-12">
     @if (coreService.isLoading) {
         <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
     }
@@ -10,12 +10,18 @@
             <app-header-form [id]="id"></app-header-form>
           </div>
           <div class="p-toolbar-group-right">
-            <app-form-button-action (submit)="onSubmit()" (cancel)="redirectRegistration()"></app-form-button-action>
+            <app-form-button-action
+              (submit)="onSubmit()"
+              labelSubmitButton="Siguiente"
+              labelCancelButton="Atrás"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              [isVisibleCancelButton]="true"
+            />
           </div>
         </p-toolbar>
       <p-panel >
         <form [formGroup]="form" class="p-fluid grid " (ngSubmit)="onSubmit()">
-          <!--financingOptionId -->
+          <!--financingOptionId 
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             <label appLabel 
                   for="isFinancing"
@@ -36,103 +42,141 @@
               [touched]="isFinancingField.touched"
               [dirty]="isFinancingField.dirty">
             </small>
+          </div>-->
+
+          <!-- financingOptionId -->
+          <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label appLabel for="isFinancing"
+                   [label]="AgreementFormEnum.isFinancing"
+                   [required]="isFinancingField"></label>
+            <div class="flex gap-3">
+              <div class="flex align-items-center">
+                  <p-radioButton 
+                      id="yes" 
+                      formControlName="isFinancing"
+                      name="isFinancing" 
+                      [value]="true"
+                      />
+                      <label for="yes" class="ml-2">
+                        Si
+                      </label>
+              </div>
+                    
+              <div class="flex align-items-center">
+                  <p-radioButton 
+                      id="no" 
+                      formControlName="isFinancing"
+                      name="isFinancing" 
+                      [value]="false"
+                      />
+                  <label for="no" class="ml-2">
+                      No
+                  </label>
+              </div>
           </div>
+            <small
+              appErrorMessage
+              [errors]="isFinancingField.errors"
+              [touched]="isFinancingField.touched"
+              [dirty]="isFinancingField.dirty">
+            </small>
+          </div>
+        </form>  
+
+
   
+
           <!-- financingsForm -->
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             <div *ngIf="showFinancingFields">
               <p-panel>
-                <div formArrayName="financings">
-                  <div *ngFor="let financing of financings.controls; let i = index" [formGroupName]="i" class="grid">
-                    
-                    <!-- financingsForm/modelId  -->
-                    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                <div [formGroup]="financingForm" class="p-fluid grid">
+                
+                    <!-- financingsForm/model  -->
+                    <div class="field xl:col-6 md:col-6 sm:col-12">
                       <label appLabel 
-                            for="modelId" 
-                            [label]="FinancingsFormEnum.model">
+                            for="model" 
+                            [label]="FinancingsFormEnum.model"
+                            [required]="modelField">
                       </label>
                       <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                       <p-dropdown
-                        id="modelId" 
-                        formControlName="modelId"
+                        id="model" 
+                        formControlName="model"
                         [options]="groupedInstitutions" 
                         optionLabel="label"
-                        placeholder="Select an Institution" >
-                      </p-dropdown>
-                      <small appErrorMessage
-                            [errors]="financing.get('modelId')?.errors!" 
-                            [touched]="financing.get('modelId')?.touched!"
-                            [dirty]="financing.get('modelId')?.dirty!">
+                        placeholder="Select an Institution"
+                        [filter]="false" />
+                      <small
+                        appErrorMessage
+                          [errors]="modelField.errors"
+                          [touched]="modelField.touched"
+                          [dirty]="modelField.dirty">
                       </small>
                     </div>
   
                     <!-- financingsForm/budget  -->
-                    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <div class="field xl:col-6 md:col-6 sm:col-12">
                       <label appLabel 
                             for="budget" 
-                            [label]="FinancingsFormEnum.budget">
+                            [label]="FinancingsFormEnum.budget"
+                            [required]="budgetField">
                       </label>
                       <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                      <input pInputText 
-                            type="text" 
-                            id="budget" 
-                            formControlName="budget" />
-                      <small appErrorMessage
-                            [errors]="financing.get('budget')?.errors!" 
-                            [touched]="financing.get('budget')?.touched!"
-                            [dirty]="financing.get('budget')?.dirty!">
-                      </small>
+                      <p-inputNumber 
+                        id="budget" 
+                       formControlName="budget" 
+                       mode="decimal"
+                       [minFractionDigits]="2"
+                       [maxFractionDigits]="2"
+                       placeholder="Ingrese el monto"/>
+                            <small
+                               appErrorMessage
+                                [errors]="budgetField.errors"
+                                [touched]="budgetField.touched"
+                                [dirty]="budgetField.dirty">
+                            </small>
                     </div>
   
                     <!-- financingsForm/paymentMethod  -->
-                    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <div class="field xl:col-6 md:col-6 sm:col-12">
                       <label appLabel 
                             for="paymentMethod" 
-                            [label]="FinancingsFormEnum.paymentMethod">
+                            [label]="FinancingsFormEnum.paymentMethod"
+                            [required]="paymentMethodField">
                       </label>
                       <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                       <input pInputText 
-                            type="text" 
                             id="paymentMethod" 
                             formControlName="paymentMethod" />
-                      <small appErrorMessage
-                            [errors]="financing.get('paymentMethod')?.errors!" 
-                            [touched]="financing.get('paymentMethod')?.touched!"
-                            [dirty]="financing.get('paymentMethod')?.dirty!">
-                      </small>
+                            <small
+                               appErrorMessage
+                                [errors]="paymentMethodField.errors"
+                                [touched]="paymentMethodField.touched"
+                                [dirty]="paymentMethodField.dirty">
+                            </small>
                     </div>
   
                     <!-- financingsForm/source  -->
-                    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <div class="field xl:col-6 md:col-6 sm:col-12">
                       <label appLabel 
                             for="source" 
-                            [label]="FinancingsFormEnum.source">
+                            [label]="FinancingsFormEnum.source"
+                            [required]="sourceField">
                       </label>
                       <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                       <input pInputText 
-                            type="text" 
                             id="source" 
                             formControlName="source" />
-                      <small appErrorMessage
-                            [errors]="financing.get('source')?.errors!" 
-                            [touched]="financing.get('source')?.touched!"
-                            [dirty]="financing.get('source')?.dirty!">
-                      </small>
+                            <small
+                               appErrorMessage
+                                [errors]="sourceField.errors"
+                                [touched]="sourceField.touched"
+                                [dirty]="sourceField.dirty">
+                            </small>
                     </div>
-  
-                    <!-- button delete financing -->
-                    <div class="field col-12" style="display: flex; justify-content: end;">
-                      <p-button class="custom-button-width" 
-                                label="Eliminar" 
-                                icon="pi pi-trash" 
-                                severity="danger" 
-                                (click)="deleteFinancing(i)" />
-                    </div>
-                    <p-divider type="solid" class="col-12" />
                   </div>
-                </div>
               </p-panel>
-  
               <!-- button add financing -->
               <div class="field col-12" style="display: flex; justify-content: center;">
                 <p-button class="custom-button-plus-width" 
@@ -141,53 +185,38 @@
                           severity="success" 
                           (click)="addFinancing()" />
               </div>
+              <!-- table -->
+            <p-panel class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+              <p-table
+                [value]="financings.controls"
+                styleClass="p-datatable-striped"
+                [tableStyle]="{'min-width': '50rem'}">
+                <ng-template pTemplate="header">
+                  @for (col of financingsColumns; track col.field) {
+                    <th [pSortableColumn]="col.field">
+                      {{ col.header }}
+                    </th>
+                  }
+                  <th class="text-center">
+                    Acciones
+                  </th>
+                </ng-template>
+                <ng-template pTemplate="body" let-financing let-i="rowIndex">
+                  <tr>
+                    <td>{{ financing.get('model')?.value.label }}</td>
+                    <td>{{ financing.get('budget')?.value }}</td>
+                    <td>{{ financing.get('paymentMethod')?.value }}</td>
+                    <td>{{ financing.get('source')?.value }}</td>
+                    <td>
+                      <p-button severity="danger"  icon="pi pi-trash" 
+                              (click)="deleteFinancing(i)"/>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-panel>
   
             </div>
           </div>
-        </form>
-        <p-button label="Siguiente" (click)="save()"></p-button>
-  
-        <!-- signed agreement -->
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <label appLabel for="" [label]="DocumentationFormEnum.signedAgreement"></label>
-          <p-fileUpload 
-                name="demo[]" 
-                url="https://www.primefaces.org/cdn/api/upload.php" 
-                [multiple]="true" 
-                accept="image/*" 
-                maxFileSize="1000000">
-            <ng-template pTemplate="content">
-              <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">
-                  {{ file.name }} - {{ file.size }} bytes
-                </li>
-              </ul>
-            </ng-template>
-          </p-fileUpload>
-        </div>
-  
-        <!-- agreement adiministrato designation -->
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <label appLabel 
-                for="" 
-                [label]="DocumentationFormEnum.administratorAgreement">
-          </label>
-          <p-fileUpload 
-                name="demo[]" 
-                url="https://www.primefaces.org/cdn/api/upload.php" 
-                [multiple]="true" 
-                accept="image/*" 
-                maxFileSize="1000000" >
-            <ng-template pTemplate="content">
-              <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">
-                  {{ file.name }} - {{ file.size }} bytes
-                </li>
-              </ul>
-            </ng-template>
-          </p-fileUpload>
-        </div>
-  
       </p-panel>
     }
   </div>

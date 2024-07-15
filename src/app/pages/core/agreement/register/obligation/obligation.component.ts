@@ -1,13 +1,19 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
-import {AuthService, AuthHttpService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {SkeletonEnum, RoutesEnum, CatalogueTypeEnum} from '@shared/enums';
-import {OnExitInterface} from '@shared/interfaces';
-import {PrimeIcons, MessageService} from 'primeng/api';
-import {firstValueFrom} from 'rxjs';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl } from '@angular/forms';
+import { CatalogueModel } from '@models/core';
+import { AuthService, AuthHttpService } from '@servicesApp/auth';
+import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { SkeletonEnum, RoutesEnum, CatalogueTypeEnum, ExternalInstitutionsObligations, ObligationsMintur } from '@shared/enums';
+import { OnExitInterface } from '@shared/interfaces';
+import { PrimeIcons, MessageService } from 'primeng/api';
+import { firstValueFrom } from 'rxjs';
 
+interface Obligations {
+  mintur: boolean;
+  counterpart: boolean;
+  joint: boolean;
+}
 @Component({
   selector: 'app-obligation',
   templateUrl: './obligation.component.html',
@@ -16,8 +22,13 @@ import {firstValueFrom} from 'rxjs';
 export class ObligationComponent implements OnInit, OnExitInterface {
   @Input({required: true}) externalInstitutions: any[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   institutions = [];
 
+  protected obligationType: CatalogueModel[]=[];
+  //protected externalInstitutions: CatalogueModel[] = [];
+  protected obligationMintur: CatalogueModel[]=[];
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
@@ -26,219 +37,162 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   public readonly messageDialogService = inject(MessageDialogService);
   private readonly routesService = inject(RoutesService);
 
-  tableForm: FormGroup;
-  multiSelectForm: FormGroup;
-  newMinturObligation: string = '';
-  newObligation: string = '';
-  newObligations: string[] = [];
+   
+ 
+  displayModal: boolean = false;
+  showObligationsTable: boolean = false;
+  selectedObligationTypes: any[]=[];
+ // Obligations: Obligations = {
+ //   mintur: false,
+ //   counterpart: false,
+ ///   joint: false,
+  //};
 
   // @Input({required: true}) id!: string;
   id: string = RoutesEnum.NEW
+  protected obligationForm!: FormGroup;
   protected form!: FormGroup;
+  protected formMintur!: FormGroup; 
   private formErrors: string[] = [];
 
+  protected readonly ObligationsMintur = ObligationsMintur;
+  protected readonly ExternalInstitutionsObligations = ExternalInstitutionsObligations;
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor(private messageService: MessageService) {
     this.buildForm();
-
-    this.tableForm = this.formBuilder.group({
-      elements: this.formBuilder.array([
-        this.createElementGroup('Entidad 1', 'Institución 1'),
-        this.createElementGroup('Entidad 2', 'Institución 2'),
-        this.createElementGroup('Entidad 3', 'Institución 3')
-      ])
-    });
-
-    this.multiSelectForm = this.formBuilder.group({
-      elements: this.formBuilder.array([
-        this.createMultiSelectElementGroup('Entidad 1', 'Institución 1'),
-        this.createMultiSelectElementGroup('Entidad 2', 'Institución 2'),
-        this.createMultiSelectElementGroup('Entidad 3', 'Institución 3')
-      ])
-    });
-
-    this.newObligations = Array(this.elements.length).fill('');
+    this.buildObligationForm();
   }
 
   ngOnInit(): void {
-    /** Load Foreign Keys**/
-    this.loadPersonTypes();
-    //pending
-    if (this.id !== RoutesEnum.NEW) {
-      this.findCompany(this.id);
-    }
+    /* Load Foreign Keys*/
+    this.loadExternalInstitutions();
+    this.loadObligationTypes();
+    this.loadMintur();
   }
 
-  buildForm(){
+  buildForm() {
     this.form = this.formBuilder.group({
-      obligationTypes:[],
+      obligations: this.formBuilder.array([])
+    }); 
+  }
+
+  buildObligationForm() {
+    this.obligationForm = this.formBuilder.group({
+      model: [null, [Validators.required]],
+      description: [null, [Validators.required]]
     });
   }
 
+  addObligation() {
+    const obligations = this.formBuilder.group({
+      model: [this.obligationForm.value.model, [Validators.required]],
+      description: [this.obligationForm.value.description, [Validators.required]]
+    })
+    this.obligations.push(obligations);
+    this.obligationForm.reset();
+  }
+
+  deleteObligation(index: number) {
+    this.obligations.removeAt(index);
+  }
+
+  validateForm(): boolean {
+    this.formErrors = [];
+
+    if (this.modelField.invalid) this.formErrors.push(ExternalInstitutionsObligations.positionName);
+    if (this.descriptionField.invalid) this.formErrors.push(ExternalInstitutionsObligations.obligations);
+    return this.form.valid && this.formErrors.length === 0;
+  }
+
+  openModal(institutionName: string) {
+    this.obligationForm.reset();
+    this.obligationForm.patchValue({ model: institutionName });
+    this.displayModal = true;
+  }
+
+  closeModal() {
+    this.displayModal = false;
+  }
+
+  addObligationAndCloseModal() {
+    if (this.obligationForm.valid) {
+      this.obligations.push(this.formBuilder.group(this.obligationForm.value));
+      this.closeModal();
+    }
+  }
+
+  toggleObligationsTable() {
+    this.showObligationsTable = !this.showObligationsTable;
+  }
+  
+  /* Load Foreign Keys  */
+  loadExternalInstitutions() {
+    /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
+    this.externalInstitutions = [
+      { name: 'Ministro' },
+      { name: 'Viceministro' },
+      { name: 'Presidente' }
+    ]
+  }
+
+  loadObligationTypes(){
+    this.obligationType=[
+      {name: 'obligacion mintur'},
+      {name: 'obligacion contraparte'},
+      {name:'obligacion conjunta'}
+    ]
+  }
+
+  loadMintur(){
+this.obligationMintur=[
+  {name: 'Mintur'}
+]
+  }
+
   save() {
-    this.formOutput.emit(this.form.value); //add
+    this.formOutput.emit(this.form.value);
+  }
+
+  onSubmit(): void {
+    if (this.validateForm()) {
+      this.save();
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
   }
 
   async onExit() {
     const res = await firstValueFrom(this.messageDialogService.questionOnExit());
     console.log(res);
     return res;
-    // return this.messageDialogService.questionOnExit();
   }
 
-  findCompany(id: string) {
-    /*
-    TODO
-    */
-    this.form.patchValue({});
+ 
+
+  
+
+ // updateSelectedObligations() {
+ //   this.Obligations.mintur = this.selectedObligations.some(ob => ob.code === '1');
+ //   this.Obligations.counterpart = this.selectedObligations.some(ob => ob.code === '2');
+//  }
+
+
+  get obligations(): FormArray {
+    return this.form.get('obligations') as FormArray;
   }
 
-  get textAreas() {
+  get modelField(): AbstractControl {
+    return this.obligationForm.controls['model'];
+  }
+
+  get descriptionField(): AbstractControl {
+    return this.obligationForm.controls['description'];
+  }
+
+  get textAreas(): FormArray {
     return this.form.get('textAreas') as FormArray;
   }
-
-  get elements() {
-    return this.tableForm.get('elements') as FormArray;
-  }
-
-  get multiSelectElements(): FormArray {
-    return this.multiSelectForm.get('elements') as FormArray;
-  }
-
-  createElementGroup(name: string, institution: string): FormGroup {
-    return this.formBuilder.group({
-      name: [name],
-      institution: [institution],
-      obligations: this.formBuilder.array([], Validators.required)
-    });
-  }
-
-  createMultiSelectElementGroup(name: string, institution: string): FormGroup {
-    return this.formBuilder.group({
-      selected: [false],
-      name: [name],
-      institution: [institution],
-      obligations: this.formBuilder.array([], Validators.required)
-    });
-  }
-
-  addTextArea() {
-    if (this.newMinturObligation.trim() !== '') {
-      this.textAreas.push(this.formBuilder.control(this.newMinturObligation, Validators.required));
-      this.newMinturObligation = '';
-    }
-  }
-
-  removeTextArea(index: number) {
-    this.textAreas.removeAt(index);
-  }
-
-  addObligationToElement(elementIndex: number, obligation: string) {
-    if (obligation.trim() !== '') {
-      const element = this.elements.at(elementIndex) as FormGroup;
-      const obligations = element.get('obligations') as FormArray;
-      obligations.push(this.formBuilder.control(obligation, Validators.required));
-      this.newObligations[elementIndex] = '';
-    }
-  }
-
-  removeObligationFromElement(elementIndex: number, obligationIndex: number) {
-    const element = this.elements.at(elementIndex) as FormGroup;
-    const obligations = element.get('obligations') as FormArray;
-    obligations.removeAt(obligationIndex);
-  }
-
-  addObligationToSelected() {
-    if (this.newObligation.trim() !== '') {
-      this.multiSelectElements.controls.forEach((element, index) => {
-        if ((element as FormGroup).get('selected')?.value) {
-          this.addObligationToMultiSelectElement(index, this.newObligation);
-        }
-      });
-      this.newObligation = '';
-    }
-  }
-
-  removeObligationFromMultiSelectElement(elementIndex: number, obligationIndex: number) {
-    const element = this.multiSelectElements.at(elementIndex) as FormGroup;
-    const obligations = element.get('obligations') as FormArray;
-    obligations.removeAt(obligationIndex);
-  }
-
-  addObligationToMultiSelectElement(elementIndex: number, obligation: string) {
-    const element = this.multiSelectElements.at(elementIndex) as FormGroup;
-    const obligations = element.get('obligations') as FormArray;
-    obligations.push(this.formBuilder.control(obligation, Validators.required));
-  }
-
-  saveMinturObligations() {
-    if (this.form.valid) {
-      console.log('Obligaciones MINTUR:', this.form.value.textAreas);
-    }
-  }
-
-  saveCounterpartObligations() {
-    if (this.tableForm.valid) {
-      const counterpartObligations = this.elements.controls.map(element => ({
-        name: element.get('name')?.value,
-        institution: element.get('institution')?.value,
-        obligations: element.get('obligations')?.value
-      }));
-      console.log('Obligaciones Contraparte:', counterpartObligations);
-    }
-  }
-
-  saveJointObligations() {
-    if (this.multiSelectForm.valid) {
-      const jointObligations = this.multiSelectElements.controls.map(element => ({
-        name: element.get('name')?.value,
-        institution: element.get('institution')?.value,
-        obligations: element.get('obligations')?.value
-      }));
-      console.log('Obligaciones conjuntas:', jointObligations);
-    }
-  }
-
-  hasSelectedElements(): boolean {
-    return this.multiSelectElements.controls.some(element => (element as FormGroup).get('selected')?.value === true);
-  }
-
-  getControls(elementIndex: number, columnName: string) {
-    const element = this.elements.at(elementIndex) as FormGroup;
-    return (element.get(columnName) as FormArray).controls;
-  }
-
-  getMultiSelectControls(elementIndex: number, columnName: string) {
-    const element = this.multiSelectElements.at(elementIndex) as FormGroup;
-    return (element.get(columnName) as FormArray).controls;
-  }
-
-  loadPersonTypes() {
-    this.cataloguesHttpService.findByType(CatalogueTypeEnum.COMPANIES_PERSON_TYPE);
-  }
-
-  onSubmit(): void {
-    /* if (this.validateForm()) {
-      this.create();
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    } */
-  }
-
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    this.routesService.registration();
-  }
-
 }
