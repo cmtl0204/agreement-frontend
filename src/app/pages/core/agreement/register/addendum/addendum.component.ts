@@ -68,7 +68,7 @@ export class AddendumComponent implements OnInit {
 
   addAddendum(){
     if (this.validateForm()) {
-      this.addendums.controls.push(this.formBuilder.group(this.addendumForm.value))
+      this.addendums.push(this.formBuilder.group(this.addendumForm.value))
       this.addendumForm.reset()
     } else {
       this.form.markAllAsTouched();

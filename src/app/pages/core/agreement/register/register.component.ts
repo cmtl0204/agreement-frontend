@@ -42,6 +42,7 @@ export class RegisterComponent {
       administrator: [null],
 
       // obligation
+      obligations:[null],
 
       // financing
       isFinancing: [false],
