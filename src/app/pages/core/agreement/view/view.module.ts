@@ -27,20 +27,25 @@ import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
 import {BasicDataComponent} from './basic-data/basic-data.component';
 import {SharedModule} from '@shared/shared.module';
-import {AgreementDateComponent} from "./agreement-date/agreement-date.component";
+import {AgreementDateComponent} from "./agreement-date/agreement-date.component";import { FinancingComponent } from './financing/financing.component';
+import { ObligationComponent } from './obligation/obligation.component';
+import { RegistrationRoutingModule } from 'src/app/pages/auth/registration/registration-routing.module';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
   declarations: [
     ViewComponent,
     BasicDataComponent,
-    AgreementDateComponent
+    AgreementDateComponent, ObligationComponent, FinancingComponent
   ],
   imports: [
     CommonModule,
-    ViewRoutingModule,
+    RegistrationRoutingModule,
     ReactiveFormsModule,
-    FormsModule,
     SharedModule,
+    ButtonModule,
     CardModule,
     CheckboxModule,
     DividerModule,
@@ -54,15 +59,21 @@ import {AgreementDateComponent} from "./agreement-date/agreement-date.component"
     AvatarModule,
     ToolbarModule,
     OverlayPanelModule,
+    ViewRoutingModule,
+    TableModule,
+    TagModule,
+    ToastModule,
+    FormsModule,
     InputNumberModule,
     ToggleButtonModule,
     CalendarModule,
     RadioButtonModule,
     StepperModule,
     FileUploadModule,
-    TableModule,
     InputTextareaModule,
-    ButtonModule
+  
+
+
 
   ]
 })

@@ -9,11 +9,6 @@ import { OnExitInterface } from '@shared/interfaces';
 import { MessageService, PrimeIcons } from 'primeng/api';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 
-interface FinancingOption {
-  name: string;
-  active: boolean;
-}
-
 @Component({
   selector: 'app-financing',
   templateUrl: './financing.component.html',
@@ -30,7 +25,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   private readonly routesService = inject(RoutesService);
 
   /** variables **/
-  financingOptions!: FinancingOption[];
   input: number[] = [];
   uploadedFiles: any[] = [];
   protected form!: FormGroup;
@@ -67,12 +61,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
-
-    this.financingOptions = [
-      { name: 'Si', active: true },
-      { name: 'No', active: false }
-    ];
-
   }
 
   async onExit() {
@@ -83,7 +71,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   }
 
   ngOnInit(): void {
-    this.onFinancingChange();
+    this.checkValueChanges();
   }
 
   save() {
@@ -225,47 +213,24 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     }
   }
 
-  /* onFinancingChange(event?: any) {
-    const financingValue = this.isFinancingField.value?.name || null;
-    const financingsForm = this.form.get('financings');
-
-    if (financingValue === 'Si') {
-      this.showFinancingFields = true;
-      financingsForm?.enable();
-    } else if(financingValue === 'No'){
-      this.showFinancingFields = false;
-      financingsForm?.disable();
-      this.financingForm.reset();
-      this.modelField.clearValidators();
-      this.modelField.reset();
-      this.budgetField.clearValidators();
-      this.budgetField.reset();
-      this.paymentMethodField.clearValidators();
-      this.paymentMethodField.reset();
-      this.sourceField.clearValidators();
-      this.sourceField.reset();
-      
+    checkValueChanges(event?: any) {
+      this.isFinancingField.valueChanges.subscribe(value => {
+        if (value) {
+          this.showFinancingFields = true;
+        } else {
+          this.showFinancingFields = false;
+          this.financingForm.reset();
+          this.modelField.clearValidators();
+          this.modelField.reset();
+          this.budgetField.clearValidators();
+          this.budgetField.reset();
+          this.paymentMethodField.clearValidators();
+          this.paymentMethodField.reset();
+          this.sourceField.clearValidators();
+          this.sourceField.reset();
+        }
+      });
     }
-  }*/
-
-  onFinancingChange(event?: any) {
-    this.isFinancingField.valueChanges.subscribe(value => {
-      if (value) {
-        this.showFinancingFields = true;
-      } else {
-        this.showFinancingFields = false;
-        this.financingForm.reset();
-        this.modelField.clearValidators();
-        this.modelField.reset();
-        this.budgetField.clearValidators();
-        this.budgetField.reset();
-        this.paymentMethodField.clearValidators();
-        this.paymentMethodField.reset();
-        this.sourceField.clearValidators();
-        this.sourceField.reset();
-      }
-    });
-  }
 
   get financings(): FormArray {
     return this.form.get('financings') as FormArray;

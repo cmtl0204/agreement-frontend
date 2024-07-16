@@ -1,18 +1,14 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
-import {CatalogueModel, ColumnModel} from '@models/core';
-import {AuthService, AuthHttpService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum} from '@shared/enums';
-import {OnExitInterface} from '@shared/interfaces';
-import {MessageService, PrimeIcons} from 'primeng/api';
-import {firstValueFrom, forkJoin, Observable} from 'rxjs';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { CatalogueModel, ColumnModel } from '@models/core';
+import { AuthService, AuthHttpService } from '@servicesApp/auth';
+import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
+import { OnExitInterface } from '@shared/interfaces';
+import { MessageService, PrimeIcons } from 'primeng/api';
+import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 
-interface FinancingOption {
-  name: string;
-  active: boolean;
-}
 
 @Component({
   selector: 'app-financing',
@@ -30,7 +26,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   private readonly routesService = inject(RoutesService);
 
   /** variables **/
-  financingOptions!: FinancingOption[];
   input: number[] = [];
   uploadedFiles: any[] = [];
   protected form!: FormGroup;
@@ -63,11 +58,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
-
-    this.financingOptions = [
-      {name: 'Si', active: true},
-      {name: 'No', active: false}
-    ];
   }
 
   async onExit() {
@@ -78,7 +68,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   }
 
   ngOnInit(): void {
-    this.onFinancingChange();
+    this.checkValueChanges();
     this.combineInstitutions();
   }
 
@@ -192,37 +182,21 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     }
   }
 
-  /* onFinancingChange(event?: any) {
-     const financingValue = this.isFinancingField.value?.name || null;
-     const financingsForm = this.form.get('financings');
-
-     if (financingValue === 'Si') {
-       this.showFinancingFields = true;
-       financingsForm?.enable();
-     } else if(financingValue === 'No'){
-       this.showFinancingFields = false;
-       financingsForm?.disable();
-       this.financingForm.reset();
-       this.modelField.clearValidators();
-       this.modelField.reset();
-       this.budgetField.clearValidators();
-       this.budgetField.reset();
-       this.paymentMethodField.clearValidators();
-       this.paymentMethodField.reset();
-       this.sourceField.clearValidators();
-       this.sourceField.reset();
-
-     }
-   }*/
-
-  onFinancingChange(event?: any) {
+  checkValueChanges(event?: any) {
     this.isFinancingField.valueChanges.subscribe(value => {
       if (value) {
         this.showFinancingFields = true;
       } else {
         this.showFinancingFields = false;
         this.financingForm.reset();
-        this.financingForm.clearValidators();
+        this.modelField.clearValidators();
+        this.modelField.reset();
+        this.budgetField.clearValidators();
+        this.budgetField.reset();
+        this.paymentMethodField.clearValidators();
+        this.paymentMethodField.reset();
+        this.sourceField.clearValidators();
+        this.sourceField.reset();
       }
     });
   }
