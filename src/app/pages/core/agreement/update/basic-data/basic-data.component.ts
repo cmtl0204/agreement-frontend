@@ -18,7 +18,6 @@ export class BasicDataComponent implements OnInit {
   protected readonly messageDialogService = inject(MessageDialogService)
   protected readonly Validators = Validators;
 
-
   /** Form && Output **/
   // @Input({required: true}) id: string;
   @Output() formOutput:EventEmitter<FormGroup> = new EventEmitter()
@@ -46,11 +45,6 @@ export class BasicDataComponent implements OnInit {
     this.loadOrigins();
     this.loadTypes();
     this.loadSpecialTypes()
-
-  }
-
-  save(){
-    this.formOutput.emit(this.form.value)
   }
 
   /** Form Builder & Validates **/
@@ -61,28 +55,25 @@ export class BasicDataComponent implements OnInit {
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
-      originId: [{value:null, disabled:true}, [Validators.required]],
-      typeId: ['', [Validators.required]],
-      specialTypeId: [null],
-
-
+      origin: [{value:null, disabled:true}, [Validators.required]],
+      type: ['', [Validators.required]],
+      specialType: [null],
     });
+
     this.checkValueChanges();
   }
 
   checkValueChanges(){
-    this.typeIdField.valueChanges.subscribe((value) => {
+    this.typeField.valueChanges.subscribe((value) => {
       if(value.id === '3') {
-        this.specialTypeIdField.setValidators(Validators.required);
-        this.specialTypeIdField.reset();
+        this.specialTypeField.setValidators(Validators.required);
       }else{
-        this.specialTypeIdField.clearValidators();
-        this.specialTypeIdField.reset();
+        this.specialTypeField.clearValidators();
       }
-      this.typeIdField.updateValueAndValidity();
+      this.typeField.updateValueAndValidity();
+      this.specialTypeField.reset();
     })
   }
-
 
   validateForm(): boolean {
     this.formErrors = [];
@@ -91,20 +82,22 @@ export class BasicDataComponent implements OnInit {
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
     if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
-    if (this.originIdField.invalid) this.formErrors.push(AgreementFormEnum.originId);
-    if (this.typeIdField.invalid) this.formErrors.push(AgreementFormEnum.typeId);
-    if (this.specialTypeIdField.invalid) this.formErrors.push(AgreementFormEnum.specialTypeId);
+    if (this.originField.invalid) this.formErrors.push(AgreementFormEnum.origin);
+    if (this.typeField.invalid) this.formErrors.push(AgreementFormEnum.type);
+    if (this.specialTypeField.invalid) this.formErrors.push(AgreementFormEnum.specialType);
 
     return this.form.valid && this.formErrors.length === 0;
   }
 
   /** Load Foreign Keys  **/
   loadStates() {
-    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
+    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
   };
+
   loadOrigins() {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
   };
+
   loadTypes() {
     /* this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE); */
     this.types = [
@@ -114,6 +107,7 @@ export class BasicDataComponent implements OnInit {
       {name: 'Comodato o convenio de préstamo de uso', id: '4'},
     ]
   };
+
   loadSpecialTypes(){
     /* this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE); */
 
@@ -125,12 +119,11 @@ export class BasicDataComponent implements OnInit {
     ]
   }
 
-
   /** Form Actions **/
   onSubmit(): void {
     if (this.validateForm()) {
       console.log(this.form.value)
-      this.update();
+      this.save();
       alert('Send')
       /*
      TODO
@@ -141,24 +134,8 @@ export class BasicDataComponent implements OnInit {
     }
   }
 
-  update(): void {
-    /*
-        TODO
-        */
-  }
-
-  /** Redirects **/
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    /* this.routesService.registration(); */
+  save(){
+    this.formOutput.emit(this.form.value)
   }
 
   /** Getters Form**/
@@ -178,19 +155,19 @@ export class BasicDataComponent implements OnInit {
     return this.form.controls['number'];
   }
 
-  get originIdField(): AbstractControl {
-    return this.form.controls['originId'];
+  get originField(): AbstractControl {
+    return this.form.controls['origin'];
   }
 
-  get typeIdField(): AbstractControl {
-    return this.form.controls['typeId'];
+  get typeField(): AbstractControl {
+    return this.form.controls['type'];
   }
 
   get objectiveField(): AbstractControl {
     return this.form.controls['objective'];
   }
 
-  get specialTypeIdField(): AbstractControl {
-    return this.form.controls['specialTypeId'];
+  get specialTypeField(): AbstractControl {
+    return this.form.controls['specialType'];
   }
 }

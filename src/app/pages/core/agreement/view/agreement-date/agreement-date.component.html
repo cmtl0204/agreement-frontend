@@ -1,0 +1,80 @@
+<div class="grid">
+  <div class="col-12">
+    <div [hidden]="!coreService.isLoading">
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    </div>
+
+    <div [hidden]="coreService.isLoading">
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            [id]="id"
+            label="Visualización de fechas"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
+      </p-toolbar>
+
+      <p-panel>
+        <div class="p-fluid grid">
+          <!-- subscriptionAt -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
+            <input pInputText [value]="subscribedAt | date" [readOnly]="true"/>
+          </div>
+
+          <!-- startedAt -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label appLabel [label]="AgreementFormEnum.startedAt"></label>
+            <p>{{ startedAt | date }}</p>
+          </div>
+
+          <!-- hasTerminationDate -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label appLabel [label]="AgreementFormEnum.isFinishDate"></label>
+            <div>
+              <input type="radio" name="isFinishDate" [value]="true" (change)="onFinishDateChange(true)" [checked]="isFinishDate === true">
+              <label>Sí</label>
+              <input type="radio" name="isFinishDate" [value]="false" (change)="onFinishDateChange(false)" [checked]="isFinishDate === false">
+              <label>No</label>
+            </div>
+          </div>
+
+          <!-- endedAt -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12" [hidden]="!isFinishDate">
+            <label appLabel [label]="AgreementFormEnum.endedAt"></label>
+            <p>{{ endedAt | date }}</p>
+          </div>
+
+          <!-- endedReason -->
+          <div class="field col-12" [hidden]="isFinishDate">
+            <label appLabel [label]="AgreementFormEnum.endedReason"></label>
+            <p>{{ endedReason }}</p>
+          </div>
+
+          <!-- Plazo total del convenio -->
+          <div [hidden]="!isFinishDate" class="field col-12">
+            <label>Plazo total del convenio:</label>
+          </div>
+
+          <!-- yearTerm -->
+          <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+            <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
+            <p>{{ yearTerm }}</p>
+          </div>
+
+          <!-- monthTerm -->
+          <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+            <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
+            <p>{{ monthTerm }}</p>
+          </div>
+
+          <!-- dayTerm -->
+          <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+            <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
+            <p>{{ dayTerm }}</p>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+  </div>
+</div>

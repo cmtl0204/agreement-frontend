@@ -4,7 +4,8 @@
       <div class="flex flex-column">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-basic-data class="col-12"
+          <app-basic-data
+            class="col-12"
             (formOutput)="save($event);nextCallback.emit()"/>
         </div>
       </div>
@@ -16,8 +17,9 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-appearer class="col-12" 
-          (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+          <app-appearer
+            class="col-12"
+            (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
     </ng-template>
@@ -28,8 +30,8 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-agreement-date class="col-12" 
-          (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+          <app-agreement-date class="col-12"
+                              (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
     </ng-template>
@@ -40,8 +42,9 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-agreement-administrator class="col-12" 
-          (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+          <app-agreement-administrator class="col-12"
+                                       (formOutput)="save($event);nextCallback.emit()"
+                                       (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
 
@@ -53,11 +56,13 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-obligation  class="col-12" 
-          (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()" [externalInstitutions]="externalInstitutionsField.value"/>
+          <app-obligation
+            class="col-12"
+            (formOutput)="save($event);nextCallback.emit()"
+            (prevOutput)="prevCallback.emit()"
+            [externalInstitutions]="externalInstitutionsField.value"/>
         </div>
       </div>
-
     </ng-template>
   </p-stepperPanel>
 
@@ -66,8 +71,14 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-financing class="col-12" 
-          (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+          @if (externalInstitutionsField.value && internalInstitutionsField.value) {
+            <app-financing
+              class="col-12"
+              (formOutput)="save($event);nextCallback.emit()"
+              (prevOutput)="prevCallback.emit()"
+              [externalInstitutions]="externalInstitutionsField.value"
+              [internalInstitutions]="internalInstitutionsField.value"/>
+          }
         </div>
       </div>
     </ng-template>
@@ -78,8 +89,10 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-document  class="col-12" 
-          (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+          <app-document
+            class="col-12"
+            (formOutput)="save($event);nextCallback.emit()"
+            (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
     </ng-template>
@@ -90,8 +103,8 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-addendum class="col-12" 
-          (formOutput)="save($event)" (prevOutput)="prevCallback.emit()"/>
+          <app-addendum class="col-12"
+                        (formOutput)="save($event)" (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
     </ng-template>

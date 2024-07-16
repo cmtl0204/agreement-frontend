@@ -1,10 +1,10 @@
-import { Component, NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ViewComponent } from './view.component';
-import { BasicDataComponent } from './basic-data/basic-data.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ViewComponent} from './view.component';
 import { ObligationComponent } from './obligation/obligation.component';
 import { FinancingComponent } from './financing/financing.component';
 import { ExitGuard } from '@guards/exit.guard';
+import { BasicDataComponent } from './basic-data/basic-data.component';
 
 const routes: Routes = [
   {
@@ -34,4 +34,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ViewRoutingModule { }
+export class ViewRoutingModule {
+}

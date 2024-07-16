@@ -1,0 +1,49 @@
+<div class="grid">
+  <div class="col-12">
+    @if (coreService.isLoading) {
+    <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    }
+    @if (!coreService.isLoading) {
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <app-header-form 
+                [id]="id" 
+                label="Datos de Addendum"
+                [icon]="PrimeIcons.PENCIL"/>
+        </div>
+
+        <div class="p-toolbar-group-right">
+            <app-form-button-action 
+                labelSubmitButton="Siguiente"
+                labelCancelButton="Atrás"
+                [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+                [isVisibleCancelButton]="false"
+            />
+        </div>
+    </p-toolbar>
+    <h2>Adendas</h2>
+    <p-table [value]="addendums">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Agreement ID</th>
+          <th>Is Addendum</th>
+          <th>Description</th>
+          <th>Is Modified Finish Date</th>
+          <th>Agreement Ended At</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-addendum>
+        <tr>
+          <td>{{ addendum.id }}</td>
+          <td>{{ addendum.agreementId }}</td>
+          <td>{{ addendum.isAddeddum }}</td>
+          <td>{{ addendum.description }}</td>
+          <td>{{ addendum.isModifiedFinishDate }}</td>
+          <td>{{ addendum.agreementEndedAt }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    }
+  </div>
+</div>

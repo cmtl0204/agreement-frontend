@@ -7,37 +7,47 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './update.component.scss'
 })
 export class UpdateComponent {
+  form!: FormGroup;
   private readonly formBuilder = inject(FormBuilder);
-  protected form: FormGroup = this.formBuilder.group({
-    // basic-data
-    name: [null],
-    internalNumber: [null],
-    number: [null],
-    typeId: [null],
-    
-    // appearer
-    internalInstitutions: [null],
-    externalInstitutions: [null],
-    
-    // agreement-date
-    subscribedAt: [null],
-    startedAt: [null],
-    isFinishDate: [null],
-    endedReason: [null],
-    yearTerm: [null],
-    monthTerm: [null],
-    dayTerm: [null],
-    objective: [null],
 
-    // obligation
-    
-    // financing
-    isFinancing: [null],
-    financings: [null],
+  constructor() {
+    this.buildForm()
+  }
 
-    // document
+  buildForm() {
+    this.form = this.formBuilder.group({
+      // basic-data
+      name: [null],
+      internalNumber: [null],
+      number: [null],
+      type: [null],
+      specialType: [null],
 
-  });
+      // appearer
+      internalInstitutions: [null],
+      externalInstitutions: [null],
+
+      // agreement-date
+      subscribedAt: [null],
+      startedAt: [null],
+      isFinishDate: [null],
+      endedReason: [null],
+      yearTerm: [null],
+      monthTerm: [null],
+      dayTerm: [null],
+      objective: [null],
+
+      // obligation
+      obligations:[null],
+
+      // financing
+      isFinancing: [null],
+      financings: [null],
+
+      // document
+
+    })
+  };
 
 
   save(event: any) {
