@@ -19,7 +19,6 @@ export class BasicDataComponent implements OnInit {
   private readonly routesService = inject(RoutesService);
 
   /** Form **/
-  @Input({ required: true }) id!: string;
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
