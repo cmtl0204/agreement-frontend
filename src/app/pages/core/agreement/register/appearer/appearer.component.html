@@ -235,7 +235,8 @@
               </div>
             </p-panel>
             <!-- table -->
-            <p-panel *ngIf="externalInstitutions.length > 0" class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+             @if (externalInstitutions.length > 0) {
+            <p-panel class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
               <p-table
                 [value]="externalInstitutions.controls"
                 styleClass="p-datatable-striped"
@@ -265,6 +266,7 @@
                 </ng-template>
               </p-table>
             </p-panel>
+           }
           </div>
         </form>
       </p-panel>
