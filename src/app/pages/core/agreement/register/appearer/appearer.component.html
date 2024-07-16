@@ -233,11 +233,9 @@
                           severity="success"
                           (click)="addExternalInstitution()"/>
               </div>
-              {{ externalInstitutions.value|json }}
-
             </p-panel>
             <!-- table -->
-            <p-panel class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <p-panel *ngIf="externalInstitutions.length > 0" class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
               <p-table
                 [value]="externalInstitutions.controls"
                 styleClass="p-datatable-striped"
@@ -255,9 +253,9 @@
                 <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
                   <tr>
                     <td>{{ externalInstitution.get('position')?.value }}</td>
+                    <td>{{ externalInstitution.get('personType')?.value.name }}</td>
                     <td>{{ externalInstitution.get('name')?.value }}</td>
                     <td>{{ externalInstitution.get('unit')?.value }}</td>
-                    <td>{{ externalInstitution.get('personType')?.value.name }}</td>
                     <td>
                       <button pButton type="button" icon="pi pi-trash" class="p-button p-button-danger"
                               (click)="deleteExternalInstitution(i)">
