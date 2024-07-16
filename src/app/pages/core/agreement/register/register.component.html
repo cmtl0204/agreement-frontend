@@ -17,8 +17,9 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-appearer class="col-12"
-                        (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+          <app-appearer
+            class="col-12"
+            (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
     </ng-template>
@@ -70,12 +71,14 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-financing
-            class="col-12"
-            (formOutput)="save($event);nextCallback.emit()"
-            (prevOutput)="prevCallback.emit()"
-            [externalInstitutions]="externalInstitutionsField.value"
-            [internalInstitutions]="internalInstitutionsField.value"/>
+          @if (externalInstitutionsField.value && internalInstitutionsField.value) {
+            <app-financing
+              class="col-12"
+              (formOutput)="save($event);nextCallback.emit()"
+              (prevOutput)="prevCallback.emit()"
+              [externalInstitutions]="externalInstitutionsField.value"
+              [internalInstitutions]="internalInstitutionsField.value"/>
+          }
         </div>
       </div>
     </ng-template>
