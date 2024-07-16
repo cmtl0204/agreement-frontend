@@ -3,10 +3,10 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { CatalogueModel } from '@models/core';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum } from '@shared/enums';
+import {  SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
 import { OnExitInterface } from '@shared/interfaces';
 import { PrimeIcons } from 'primeng/api';
-import { firstValueFrom, merge } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-agreement-date',
@@ -23,11 +23,9 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
 
 
   // Form
-  // @Input({required: true}) id: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
-  id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
@@ -57,11 +55,6 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     // if (this.id !== RoutesEnum.NEW) {
     //   // this.findAgreement(this.id);
     // }
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value); //add
-    this.nextOutput.emit(true);
   }
 
   /** Form Builder & Validates **/
@@ -133,6 +126,10 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
+  }
+  save() {
+    this.formOutput.emit(this.form.value); //add
+    this.nextOutput.emit(true);
   }
 
   /*getters forms*/
