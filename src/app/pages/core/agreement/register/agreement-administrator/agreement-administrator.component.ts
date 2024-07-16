@@ -20,11 +20,9 @@ export class AgreementAdministratorComponent {
   public readonly messageDialogService = inject(MessageDialogService);
 
   // Form
-  // @Input({required: true}) id: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
-  id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
