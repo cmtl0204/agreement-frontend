@@ -91,7 +91,7 @@ export class BasicDataComponent implements OnInit {
 
   /** Load Foreign Keys  **/
   loadStates() {
-    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
+    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
   };
 
   loadOrigins() {

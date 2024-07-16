@@ -7,9 +7,9 @@
     <div [hidden]="coreService.isLoading">
       <p-toolbar>
         <div class="p-toolbar-group-left">
-          <app-header-form 
-            [id]="id" 
-            label="Visualización de fechas" 
+          <app-header-form
+            [id]="id"
+            label="Visualización de fechas"
             [icon]="PrimeIcons.PENCIL"/>
         </div>
       </p-toolbar>
@@ -19,15 +19,15 @@
           <!-- subscriptionAt -->
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
-            <p>{{ subscribedAt | date }}</p>
+            <input pInputText [value]="subscribedAt | date" [readOnly]="true"/>
           </div>
-          
+
           <!-- startedAt -->
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.startedAt"></label>
             <p>{{ startedAt | date }}</p>
           </div>
-          
+
           <!-- hasTerminationDate -->
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.isFinishDate"></label>
@@ -55,7 +55,7 @@
           <div [hidden]="!isFinishDate" class="field col-12">
             <label>Plazo total del convenio:</label>
           </div>
-          
+
           <!-- yearTerm -->
           <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.yearTerm"></label>

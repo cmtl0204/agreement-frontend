@@ -1,13 +1,13 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { CatalogueModel, ColumnModel } from '@models/core';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
-import { OnExitInterface } from '@shared/interfaces';
-import { MessageService, PrimeIcons } from 'primeng/api';
-import { firstValueFrom, forkJoin, Observable } from 'rxjs';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
+import {CatalogueModel, ColumnModel} from '@models/core';
+import {AuthService, AuthHttpService} from '@servicesApp/auth';
+import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum} from '@shared/enums';
+import {OnExitInterface} from '@shared/interfaces';
+import {MessageService, PrimeIcons} from 'primeng/api';
+import {firstValueFrom, forkJoin, Observable} from 'rxjs';
 
 interface FinancingOption {
   name: string;
@@ -38,7 +38,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   protected financingsColumns: ColumnModel[] = [];
 
   /** Form **/
-  // @Input({ required: true }) id!: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
@@ -47,8 +46,8 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   groupedInstitutions: any[] = [];
 
   /** Foreign Keys **/
-  protected internalInstitutions: CatalogueModel[] = [];
-  protected externalInstitutions: CatalogueModel[] = [];
+  @Input() internalInstitutions: CatalogueModel[] = [];
+  @Input() externalInstitutions: CatalogueModel[] = [];
   protected combinedInstitutions: CatalogueModel[] = [];
 
   /** Enums **/
@@ -61,19 +60,14 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   showFinancingFields: boolean = false;
 
   constructor(private messageService: MessageService) {
-    this.loadInternalInstitutions();
-    this.loadExternalInstitutions();
-    this.combineInstitutions();
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
 
-
     this.financingOptions = [
-      { name: 'Si', active: true },
-      { name: 'No', active: false }
+      {name: 'Si', active: true},
+      {name: 'No', active: false}
     ];
-
   }
 
   async onExit() {
@@ -85,6 +79,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   ngOnInit(): void {
     this.onFinancingChange();
+    this.combineInstitutions();
   }
 
   save() {
@@ -163,25 +158,8 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     this.financings.removeAt(index);
   }
 
-  loadInternalInstitutions() {
-    /* this.internalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.); */
-    this.internalInstitutions = [
-      { name: 'Ministro' },
-      { name: 'Viceministro' },
-    ];
-  }
-
-  loadExternalInstitutions() {
-    /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.); */
-    this.externalInstitutions = [
-      { name: 'Director 2' },
-      { name: 'Coordinador 2' },
-    ];
-  }
-
   combineInstitutions() {
-    this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
-    this.groupedInstitutions = this.combinedInstitutions.map(inst => ({ label: inst.name, value: inst.name }));
+    this.groupedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
   }
 
   validateForm(): boolean {
@@ -217,7 +195,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   /* onFinancingChange(event?: any) {
      const financingValue = this.isFinancingField.value?.name || null;
      const financingsForm = this.form.get('financings');
- 
+
      if (financingValue === 'Si') {
        this.showFinancingFields = true;
        financingsForm?.enable();
@@ -233,7 +211,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
        this.paymentMethodField.reset();
        this.sourceField.clearValidators();
        this.sourceField.reset();
-       
+
      }
    }*/
 
@@ -244,14 +222,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       } else {
         this.showFinancingFields = false;
         this.financingForm.reset();
-        this.modelField.clearValidators();
-        this.modelField.reset();
-        this.budgetField.clearValidators();
-        this.budgetField.reset();
-        this.paymentMethodField.clearValidators();
-        this.paymentMethodField.reset();
-        this.sourceField.clearValidators();
-        this.sourceField.reset();
+        this.financingForm.clearValidators();
       }
     });
   }
