@@ -28,12 +28,23 @@ import {ToolbarModule} from 'primeng/toolbar';
 import {BasicDataComponent} from './basic-data/basic-data.component';
 import {SharedModule} from '@shared/shared.module';
 import {AgreementDateComponent} from "./agreement-date/agreement-date.component";
+import { ObligationComponent } from './obligation/obligation.component';
+import { FinancingComponent } from './financing/financing.component';
+import { AddendumComponent } from './addendum/addendum.component';
+import { AgreementAdministratorComponent } from './agreement-administrator/agreement-administrator.component';
+import { AppearerComponent } from './appearer/appearer.component';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   declarations: [
     ViewComponent,
     BasicDataComponent,
-    AgreementDateComponent
+    AgreementDateComponent,
+    AppearerComponent,
+    ObligationComponent,
+    FinancingComponent,
+    AddendumComponent,
+    AgreementAdministratorComponent
   ],
   imports: [
     CommonModule,
@@ -62,8 +73,8 @@ import {AgreementDateComponent} from "./agreement-date/agreement-date.component"
     FileUploadModule,
     TableModule,
     InputTextareaModule,
-    ButtonModule
-
+    ButtonModule,
+    TagModule
   ]
 })
 export class ViewModule {
