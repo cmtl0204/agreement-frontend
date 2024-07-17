@@ -33,7 +33,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { DialogModule } from 'primeng/dialog/public_api';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
