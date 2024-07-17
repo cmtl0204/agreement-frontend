@@ -4,7 +4,8 @@ import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/c
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { AddendumEnum, SkeletonEnum } from '@shared/enums';
 import { InternalInstitutionModel } from '@models/core/internal-institution.model';
-import { ExternalInstitution } from '@models/core/external-institution.model';
+import { ExternalInstitutionModel } from '@models/core/external-institution.model';
+import { AgreementModel, CatalogueModel } from '@models/core';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { PrimeIcons } from 'primeng/api';
 
@@ -33,6 +34,7 @@ export class AppearerComponent implements OnInit {
 
 
   /** Data **/
+  
   internalInstitution: InternalInstitutionModel[] = [
     {
       id: '1',
@@ -41,11 +43,10 @@ export class AppearerComponent implements OnInit {
       unit: 'Entidad Pública',
       agreementId: 'Algo',
       personTypeId: 'Algo',
-      
     },
   ];
 
-  externalInstitution: ExternalInstitution[] = [
+  externalInstitution: ExternalInstitutionModel[] = [
     {
       id: '1',
       name: 'Algo',
