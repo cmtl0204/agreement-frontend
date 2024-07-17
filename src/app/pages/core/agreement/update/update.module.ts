@@ -32,9 +32,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import {MultiSelectModule} from "primeng/multiselect";
-import {DialogModule} from "primeng/dialog";
-
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -75,6 +74,8 @@ import {DialogModule} from "primeng/dialog";
     FileUploadModule,
     TableModule,
     InputTextareaModule,
+    MultiSelectModule,
+    DialogModule,
     MultiSelectModule,
     DialogModule
   ]

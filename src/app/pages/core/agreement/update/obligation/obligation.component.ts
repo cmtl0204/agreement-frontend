@@ -20,14 +20,12 @@ interface Obligations {
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
-  @Input({required: true}) externalInstitutions: any[] = [];
+   @Input({required: true}) externalInstitutions: CatalogueModel[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
-  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
-  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   institutions = [];
 
   protected obligationType: CatalogueModel[]=[];
-  //protected externalInstitutions: CatalogueModel[] = [];
+ 
   protected obligationMintur: CatalogueModel[]=[];
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
@@ -40,13 +38,12 @@ export class ObligationComponent implements OnInit, OnExitInterface {
    
  
   displayModal: boolean = false;
+  displayObligationsModal: boolean = false;
   showObligationsTable: boolean = false;
   selectedObligationTypes: any[]=[];
- // Obligations: Obligations = {
- //   mintur: false,
- //   counterpart: false,
- ///   joint: false,
-  //};
+  selectedInstitution: any = null;
+  filteredObligations: any[] = [];
+
 
   // @Input({required: true}) id!: string;
   id: string = RoutesEnum.NEW
@@ -66,7 +63,7 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   }
 
   ngOnInit(): void {
-    /* Load Foreign Keys*/
+    /** Load Foreign Keys**/
     this.loadExternalInstitutions();
     this.loadObligationTypes();
     this.loadMintur();
@@ -110,7 +107,7 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     this.obligationForm.reset();
     this.obligationForm.patchValue({ model: institutionName });
     this.displayModal = true;
-  }
+    }
 
   closeModal() {
     this.displayModal = false;
@@ -123,8 +120,15 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     }
   }
 
-  toggleObligationsTable() {
-    this.showObligationsTable = !this.showObligationsTable;
+  toggleObligationsTable(institution: any) {
+    this.selectedInstitution = institution;
+    this.filterObligationsByInstitution();
+    this.displayObligationsModal = true;
+  }
+
+  filterObligationsByInstitution() {
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    this.filteredObligations = obligationsArray.controls.filter(obligation => obligation.value.model === this.selectedInstitution.name);
   }
   
   /* Load Foreign Keys  */
@@ -170,15 +174,14 @@ this.obligationMintur=[
     return res;
   }
 
- 
-
-  
-
- // updateSelectedObligations() {
- //   this.Obligations.mintur = this.selectedObligations.some(ob => ob.code === '1');
- //   this.Obligations.counterpart = this.selectedObligations.some(ob => ob.code === '2');
-//  }
-
+  addMinturObligation(institution: CatalogueModel, description: string) {
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    const newObligation = this.formBuilder.group({
+      model: [institution.name, Validators.required],
+      description: [description, Validators.required]
+    });
+    obligationsArray.push(newObligation);
+  }
 
   get obligations(): FormArray {
     return this.form.get('obligations') as FormArray;
@@ -192,7 +195,4 @@ this.obligationMintur=[
     return this.obligationForm.controls['description'];
   }
 
-  get textAreas(): FormArray {
-    return this.form.get('textAreas') as FormArray;
-  }
 }
