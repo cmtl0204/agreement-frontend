@@ -3,72 +3,85 @@
         @if (coreService.isLoading) {
         <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
         }
-        @if (!coreService.isLoading) {
-            <p-toolbar>
-                <div class="p-toolbar-group-left">
-                    <app-header-form 
-                        [id]="id" 
-                        label="Datos de Comparecencias"
-                        [icon]="PrimeIcons.PENCIL"/>
-                </div>
-    
-                <div class="p-toolbar-group-right">
-                    <app-form-button-action 
-                        labelSubmitButton="Siguiente"
-                        labelCancelButton="Atrás"
-                        [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-                        [isVisibleCancelButton]="false"
-                    />
-                </div>
-            </p-toolbar>
-        <!-- app.component.html -->
-        <h2>Mintur</h2>
-        <p-table [value]="internalInstitution">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Unit</th>
-                    <th>Agreement ID</th>
-                    <th>Person Type ID</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-institution>
-                <tr>
-                    <td>{{ institution.id }}</td>
-                    <td>{{ institution.name }}</td>
-                    <td>{{ institution.positionId }}</td>
-                    <td>{{ institution.unit }}</td>
-                    <td>{{ institution.agreementId }}</td>
-                    <td>{{ institution.personTypeId }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
 
+        @if (!coreService.isLoading) {
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <app-header-form
+                    label="Datos de Comparecencias"
+                    [icon]="PrimeIcons.PENCIL"/>
+            </div>
+
+            <div class="p-toolbar-group-right">
+                <app-form-button-action
+                    labelSubmitButton="Siguiente"
+                    labelCancelButton="Atrás"
+                    [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+                    [isVisibleCancelButton]="false"
+                />
+            </div>
+        </p-toolbar>
+        <!-- Mitur -->
+        <h2>Mintur</h2>
+        <p-panel>
+            <form class="p-fluid grid">
+                <!-- Primcipio -->
+                
+                <p-table [value]="internalInstitution">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Unit</th>
+                            <th>Agreement ID</th>
+                            <th>Person Type ID</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-institution>
+                        <tr>
+                            <td>{{ institution.id }}</td>
+                            <td>{{ institution.name }}</td>
+                            <td>{{ institution.positionId }}</td>
+                            <td>{{ institution.unit }}</td>
+                            <td>{{ institution.agreementId }}</td>
+                            <td>{{ institution.personTypeId }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </form>
+        </p-panel>
+        <!-- Compareciencias -->
         <h2>Comparecencias</h2>
-        <p-table [value]="externalInstitution">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Unit</th>
-                    <th>Agreement ID</th>
-                    <th>Person Type ID</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-institution>
-                <tr>
-                    <td>{{ institution.id }}</td>
-                    <td>{{ institution.name }}</td>
-                    <td>{{ institution.position }}</td>
-                    <td>{{ institution.unit }}</td>
-                    <td>{{ institution.agreementId }}</td>
-                    <td>{{ institution.personTypeId }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
+        <p-panel>
+            <form class="p-fluid grid">
+                <p-table [value]="externalInstitution">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Unit</th>
+                            <th>Agreement ID</th>
+                            <th>Person Type ID</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-institution>
+                        <tr>
+                            <td>{{ institution.id }}</td>
+                            <td>{{ institution.name }}</td>
+                            <td>{{ institution.position }}</td>
+                            <td>{{ institution.unit }}</td>
+                            <td>{{ institution.agreementId }}</td>
+                            <td>{{ institution.personTypeId }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>       
+                 <!-- Fin -->
+             
+            </form>
+        </p-panel>
+        
         }
     </div>
 </div>
