@@ -20,7 +20,8 @@ export class UpdateComponent {
       name: [null],
       internalNumber: [null],
       number: [null],
-      typeId: [null],
+      type: [null],
+      specialType: [null],
 
       // appearer
       internalInstitutions: [null],

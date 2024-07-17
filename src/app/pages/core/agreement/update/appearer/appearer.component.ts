@@ -36,9 +36,10 @@ export class AppearerComponent implements OnInit {
   protected externalInstitutionsColumns:ColumnModel[] = [];
 
   /** Foreign Keys **/
-  protected personTypes: CatalogueModel[] = [];
-  protected position: CatalogueModel[] = [];
- 
+  protected internalPersonTypes: CatalogueModel[] = [];
+  protected externalPersonTypes: CatalogueModel[] = [];
+  protected positions: CatalogueModel[] = [];
+
   /** Enums **/
   protected readonly ExternalInstitutionsFormEnum = ExternalInstitutionsFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -55,8 +56,10 @@ export class AppearerComponent implements OnInit {
 
   ngOnInit(): void {
     /** Load Foreign Keys**/
-    this.loadPersonTypes();
-   this.loadPosition();
+   this.loadPositions();
+   this.loadInternalPersonTypes();
+   this.loadExternalPersonTypes();
+   
     //pending
     if (this.id !== RoutesEnum.NEW) {
       this.findCompany(this.id);
@@ -69,22 +72,18 @@ export class AppearerComponent implements OnInit {
     */
     this.form.patchValue({});
   }
-
-  loadPersonTypes() {
-    // this.cataloguesHttpService.findByType(CatalogueTypeEnum.COMPANIES_PERSON_TYPE);
-    this.personTypes = [
-      { id: '1', name: 'Director' },
-      { id: '2',  name: 'Ministro' },
-      { id: '3', name: 'ViceMinistro' }
-    ];
+  
+ /* Load Foreign Keys  */
+  loadPositions(){
+     this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION); 
   }
 
-  loadPosition(){
-     this.position = [
-      { id: '1', name: 'Director' },
-      { id: '2',  name: 'Ministro' },
-      { id: '3', name: 'ViceMinistro' }
-    ];
+  loadInternalPersonTypes(){
+    this.internalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_PERSON_TYPE); 
+  }
+
+  loadExternalPersonTypes(){
+   this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE); 
   }
   
   /** Form Builder **/
@@ -97,11 +96,12 @@ export class AppearerComponent implements OnInit {
 
   buildInternalInstitutionsForm() {
     this.internalInstitutionForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.pattern(onlyLetters())]],
-      position: ['', Validators.required],
-      unit: ['', [Validators.required, Validators.pattern(onlyLetters())]],
-      personType: ['', [Validators.required]]
+    //   name: ['', [Validators.required, Validators.pattern(onlyLetters())]],
+    //  unit: ['', [Validators.required, Validators.pattern(onlyLetters())]],
+       position: ['', Validators.required],
+       personType: ['', [Validators.required]]
     });
+     this.internalInstitutions.push(this.internalInstitutionForm);
   }
 
   buildExternalInstitutionsForm() {
@@ -111,6 +111,7 @@ export class AppearerComponent implements OnInit {
       unit: ['', [Validators.required, Validators.pattern(onlyLetters())]],
       personType: ['', Validators.required]
     });
+   
   }
 
   buildExternalInstitutionsColumns() {
@@ -161,14 +162,16 @@ export class AppearerComponent implements OnInit {
   // }
 
   addExternalInstitutions() {
-    if (this.validateExternalInstitutionsForm()) {
+    if (this.externalInstitutionForm.valid) {
       this.externalInstitutions.push(this.formBuilder.group(this.externalInstitutionForm.value));
-      this.externalInstitutionForm.reset();
-       this.externalInstitutionNameField.markAsUntouched();
-       this.externalInstitutionUnitField.markAsUntouched();
-       this.externalInstitutionPositionField.markAsUntouched();
-       this.externalInstitutionPersonTypeField.markAsUntouched();
-     
+      this.externalInstitutionNameField.clearValidators();
+      this.externalInstitutionNameField.reset();
+      this.externalInstitutionUnitField.clearValidators();
+      this.externalInstitutionUnitField.reset();
+      this.externalInstitutionPositionField.clearValidators();
+      this.externalInstitutionPositionField.reset();
+      this.externalInstitutionPersonTypeField.clearValidators();
+      this.externalInstitutionPersonTypeField.reset();
     } else {
       this.externalInstitutionForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -183,14 +186,16 @@ export class AppearerComponent implements OnInit {
       this.save()
     } else {
       this.externalInstitutionForm.markAllAsTouched();
-      this.messageDialogService.fieldErrors("En las tablas debe haber por lo menos una fila");
+      this.validateExternalInstitutionsForm();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    
     }
   } 
   
   save() {
     this.formOutput.emit(this.form.value); 
     this.nextOutput.emit(true); 
-    console.log('save called');
+   
   }
 
   /** Remove**/

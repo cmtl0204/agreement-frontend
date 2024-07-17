@@ -25,7 +25,7 @@
           <!-- startedAt -->
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.startedAt"></label>
-            <p>{{ startedAt | date }}</p>
+            <input pInputText [value]="startedAt | date" [readOnly]="true"/>
           </div>
 
           <!-- hasTerminationDate -->
@@ -42,13 +42,13 @@
           <!-- endedAt -->
           <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12" [hidden]="!isFinishDate">
             <label appLabel [label]="AgreementFormEnum.endedAt"></label>
-            <p>{{ endedAt | date }}</p>
+            <input pInputText [value]="endedAt | date" [readOnly]="true"/>
           </div>
 
           <!-- endedReason -->
           <div class="field col-12" [hidden]="isFinishDate">
             <label appLabel [label]="AgreementFormEnum.endedReason"></label>
-            <p>{{ endedReason }}</p>
+            <input pInputText [value]="endedReason" [readOnly]="true"/>
           </div>
 
           <!-- Plazo total del convenio -->
@@ -59,19 +59,19 @@
           <!-- yearTerm -->
           <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
-            <p>{{ yearTerm }}</p>
+            <input pInputText [value]="yearTerm" [readOnly]="true"/>
           </div>
 
           <!-- monthTerm -->
           <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
-            <p>{{ monthTerm }}</p>
+            <input pInputText [value]="monthTerm" [readOnly]="true"/>
           </div>
 
           <!-- dayTerm -->
           <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
             <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
-            <p>{{ dayTerm }}</p>
+            <input pInputText [value]="dayTerm" [readOnly]="true"/>
           </div>
         </div>
       </p-panel>

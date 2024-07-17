@@ -1,12 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UpdateComponent } from './update.component';
+import { ObligationComponent } from './obligation/obligation.component';
+import { ExitGuard } from '@guards/exit.guard';
 
 const routes: Routes = [
   {
     path:'',
     component:UpdateComponent
-  }
+  },
+
+  {
+    title: 'Obligaciones de las partes',
+    path: 'part-obligation',
+    component: ObligationComponent,
+    canDeactivate: [ExitGuard]
+  },
 ];
 
 @NgModule({
@@ -14,3 +23,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class UpdateRoutingModule { }
+
+

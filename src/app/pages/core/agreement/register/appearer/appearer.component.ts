@@ -54,7 +54,6 @@ export class AppearerComponent implements OnInit {
     this.buildForm();
     this.buildAppearerForm();
     this.buildExternalInstitutionsColumns();
-    this.addExternalInstitution();
     this.addInternalInstitution();
   }
 
@@ -80,26 +79,26 @@ export class AppearerComponent implements OnInit {
 
   buildAppearerForm() {
     this.appearerForm = this.formBuilder.group({
-      personType: [null, [Validators.required]],
-      name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
-      position: [null, [Validators.required, Validators.pattern(onlyLetters())]],
-      unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
+      personType: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.pattern(onlyLetters())]],
+      position: ['', [Validators.required, Validators.pattern(onlyLetters())]],
+      unit: ['', [Validators.required, Validators.pattern(onlyLetters())]],
     });
   }
 
   buildExternalInstitutionsColumns() {
     this.externalInstitutionsColumns = [
       {
-        field: 'name', header: ExternalInstitutionsFormEnum.name
-      },
-      {
-        field: 'unit', header: ExternalInstitutionsFormEnum.unit
-      },
-      {
         field: 'position', header: ExternalInstitutionsFormEnum.position
       },
       {
         field: 'personType', header: ExternalInstitutionsFormEnum.personType
+      },
+      {
+        field: 'name', header: ExternalInstitutionsFormEnum.name
+      },
+      {
+        field: 'unit', header: ExternalInstitutionsFormEnum.unit
       },
     ];
   }
@@ -116,25 +115,30 @@ export class AppearerComponent implements OnInit {
   }
 
   addExternalInstitution() {
-    if (this.appearerForm.valid) {
+    if (this.validateForm()) {
       const externalInstitution = this.formBuilder.group({
-        personType: [this.appearerForm.value.personType, [Validators.required]],
-        name: [this.appearerForm.value.name, [Validators.required]],
-        position: [this.appearerForm.value.position, [Validators.required]],
-        unit: [this.appearerForm.value.unit, [Validators.required]],
+        personType: [this.appearerForm.value.personType],
+        name: [this.appearerForm.value.name],
+        position: [this.appearerForm.value.position],
+        unit: [this.appearerForm.value.unit],
       });
-      this.externalInstitutions.push(externalInstitution);
-      this.appearerForm.reset();
-      this.externalInstitutionNameField.clearValidators();
-      this.externalInstitutionNameField.reset();
-      this.externalInstitutionUnitField.clearValidators();
-      this.externalInstitutionUnitField.reset();
-      this.externalInstitutionPositionField.clearValidators();
-      this.externalInstitutionPositionField.reset();
-      this.externalInstitutionPersonTypeField.clearValidators();
-      this.externalInstitutionPersonTypeField.reset();
-    } else {
 
+      this.externalInstitutions.push(externalInstitution);
+
+      this.appearerForm.reset();
+      // this.externalInstitutionNameField.markAsUntouched();
+      // this.externalInstitutionNameField.markAsPristine();
+      // this.externalInstitutionNameField.updateValueAndValidity();
+      console.log(this.externalInstitutionNameField.touched);
+      console.log(this.externalInstitutionNameField.dirty);
+      console.log(this.externalInstitutionNameField);
+      // this.externalInstitutionNameField.markAsUntouched();
+      // this.externalInstitutionUnitField.markAsUntouched();
+      // this.externalInstitutionPositionField.markAsUntouched();
+      // this.externalInstitutionPersonTypeField.markAsUntouched();
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
@@ -189,39 +193,24 @@ export class AppearerComponent implements OnInit {
 
   /** Load Foreign Keys  **/
   loadInternalPersonTypes() {
-    /* this.internalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_PERSON_TYPE); */
-    this.internalPersonTypes = [
-      {name: 'Entidad Pública', id: '1'},
-      {name: 'Personas Naturales privadas', id: '2'},
-      {name: 'Personas Jurídicas privadas', id: '3'}
-    ]
+    this.internalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_PERSON_TYPE);
   }
 
   loadExternalPersonTypes() {
-    /* this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE); */
-    this.externalPersonTypes = [
-      {name: 'Entidad Pública', id: '1'},
-      {name: 'Personas Naturales privadas', id: '2'},
-      {name: 'Personas Jurídicas privadas', id: '3'}
-    ]
+    this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE);
   }
 
   loadPositions() {
-    /* this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION); */
-    this.positions = [
-      {name: 'Ministro', id: '1'},
-      {name: 'Viceministro', id: '2'},
-      {name: 'Director', id: '3'}
-    ]
+    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION);
   }
 
   /** Form Actions **/
   onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
+    if (this.externalInstitutions.length > 0) {
+      this.save()
     } else {
       this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
+      this.messageDialogService.fieldErrors('Debe agregar al menos una institución externa.')
     }
   }
 

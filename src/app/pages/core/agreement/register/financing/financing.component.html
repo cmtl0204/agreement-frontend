@@ -88,8 +88,8 @@
 
           <!-- financingsForm -->
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-            <div *ngIf="showFinancingFields">
-              <p-panel>
+            @if(showFinancingFields){
+            <div >
                 <div [formGroup]="financingForm" class="p-fluid grid">
 
                     <!-- financingsForm/model  -->
@@ -103,10 +103,20 @@
                       <p-dropdown
                         id="model"
                         formControlName="model"
+                        dataKey="id"
                         [options]="groupedInstitutions"
-                        optionLabel="label"
-                        placeholder="Select an Institution"
-                        [filter]="false" />
+                        placeholder="Select an Institution">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ selectedOption.name }}</div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-item pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ item.name }}</div>
+                          </div>
+                        </ng-template> 
+                      </p-dropdown>
                       <small
                         appErrorMessage
                           [errors]="modelField.errors"
@@ -176,7 +186,7 @@
                             </small>
                     </div>
                   </div>
-              </p-panel>
+
               <!-- button add financing -->
               <div class="field col-12" style="display: flex; justify-content: center;">
                 <p-button class="custom-button-plus-width"
@@ -216,6 +226,7 @@
             </p-panel>
 
             </div>
+          }
           </div>
       </p-panel>
     }

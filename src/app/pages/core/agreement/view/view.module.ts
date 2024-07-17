@@ -27,13 +27,16 @@ import {ToggleButtonModule} from 'primeng/togglebutton';
 import {ToolbarModule} from 'primeng/toolbar';
 import {BasicDataComponent} from './basic-data/basic-data.component';
 import {SharedModule} from '@shared/shared.module';
-import {AgreementDateComponent} from "./agreement-date/agreement-date.component";
-import { ObligationComponent } from './obligation/obligation.component';
-import { FinancingComponent } from './financing/financing.component';
 import { AddendumComponent } from './addendum/addendum.component';
 import { AgreementAdministratorComponent } from './agreement-administrator/agreement-administrator.component';
 import { AppearerComponent } from './appearer/appearer.component';
+import {AgreementDateComponent} from "./agreement-date/agreement-date.component";
+import { FinancingComponent } from './financing/financing.component';
+import { ObligationComponent } from './obligation/obligation.component';
+import { RegistrationRoutingModule } from 'src/app/pages/auth/registration/registration-routing.module';
 import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
   declarations: [
@@ -48,10 +51,10 @@ import { TagModule } from 'primeng/tag';
   ],
   imports: [
     CommonModule,
-    ViewRoutingModule,
+    RegistrationRoutingModule,
     ReactiveFormsModule,
-    FormsModule,
     SharedModule,
+    ButtonModule,
     CardModule,
     CheckboxModule,
     DividerModule,
@@ -65,13 +68,17 @@ import { TagModule } from 'primeng/tag';
     AvatarModule,
     ToolbarModule,
     OverlayPanelModule,
+    ViewRoutingModule,
+    TableModule,
+    TagModule,
+    ToastModule,
+    FormsModule,
     InputNumberModule,
     ToggleButtonModule,
     CalendarModule,
     RadioButtonModule,
     StepperModule,
     FileUploadModule,
-    TableModule,
     InputTextareaModule,
     ButtonModule,
     TagModule
