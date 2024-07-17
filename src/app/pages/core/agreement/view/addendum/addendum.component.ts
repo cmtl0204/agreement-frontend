@@ -37,10 +37,10 @@ export class AddendumComponent implements OnInit {
     {
       id: "1",
       agreementId: "1",
-      isAddeddum: true,
+      isAddendum: true,
       description: "Descripcion",
       isModifiedFinishDate: true,
-      agreementEndedAt: "2024-12-31T23:59:59Z" ,
+      agreementEndedAt:new Date("2019-01-04"),
     }
   ];
   
