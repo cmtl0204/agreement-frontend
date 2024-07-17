@@ -122,12 +122,20 @@ export class AppearerComponent implements OnInit {
         position: [this.appearerForm.value.position],
         unit: [this.appearerForm.value.unit],
       });
+
       this.externalInstitutions.push(externalInstitution);
+
       this.appearerForm.reset();
-      this.externalInstitutionNameField.markAsUntouched();
-       this.externalInstitutionUnitField.markAsUntouched();
-       this.externalInstitutionPositionField.markAsUntouched();
-       this.externalInstitutionPersonTypeField.markAsUntouched();
+      // this.externalInstitutionNameField.markAsUntouched();
+      // this.externalInstitutionNameField.markAsPristine();
+      // this.externalInstitutionNameField.updateValueAndValidity();
+      console.log(this.externalInstitutionNameField.touched);
+      console.log(this.externalInstitutionNameField.dirty);
+      console.log(this.externalInstitutionNameField);
+      // this.externalInstitutionNameField.markAsUntouched();
+      // this.externalInstitutionUnitField.markAsUntouched();
+      // this.externalInstitutionPositionField.markAsUntouched();
+      // this.externalInstitutionPersonTypeField.markAsUntouched();
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -193,12 +201,12 @@ export class AppearerComponent implements OnInit {
   }
 
   loadPositions() {
-  this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION);
+    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION);
   }
 
   /** Form Actions **/
   onSubmit(): void {
-    if (this.externalInstitutions.length > 0 ) {
+    if (this.externalInstitutions.length > 0) {
       this.save()
     } else {
       this.form.markAllAsTouched();
