@@ -26,13 +26,13 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   protected readonly CompanyRegistrationFormEnum = CompanyRegistrationFormEnum;
 
   //validation
- 
-  
- 
- 
-  
-  
-  
+
+
+
+
+
+
+
   agreements: AgreementModel[] = [
     {
       id: '1',
@@ -130,7 +130,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       userId: 'userr'
     }
   ];
-  
+
   financings: FinancingModel[] = [
     {
       id: '1',
@@ -138,7 +138,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       budget: 50000,
       paymentMethod: 'Transferencia bancaria',
       source: 'Fondo de desarrollo',
-      agreementId: this.agreements[0].id,
       agreement: this.agreements[0]
     },
     {
@@ -178,8 +177,8 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       agreement: this.agreements[4]
     }
   ];
-  
-  
+
+
 
 
 
@@ -208,7 +207,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   }
 
   setFormValues() {
-    
+
   }
 
   onSubmit(): void {

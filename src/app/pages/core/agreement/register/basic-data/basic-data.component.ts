@@ -1,6 +1,6 @@
-import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
+import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, AgreementsTypeEnum} from '@shared/enums';
@@ -21,6 +21,7 @@ export class BasicDataComponent implements OnInit {
 
   /* Form && Output */
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
+  @Input({required: true}) formInput!: AgreementModel;
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
@@ -43,7 +44,12 @@ export class BasicDataComponent implements OnInit {
     this.loadStates();
     this.loadOrigins();
     this.loadTypes();
-    this.loadSpecialTypes()
+    this.loadSpecialTypes();
+
+    console.log(this.formInput);
+    this.form.patchValue({
+      ...this.formInput
+    });
   }
 
   /* Form Builder & Validates */
@@ -71,8 +77,8 @@ export class BasicDataComponent implements OnInit {
       }
 
       this.specialTypeField.reset();
-      this.typeField.updateValueAndValidity();
-    })
+      this.specialTypeField.updateValueAndValidity();
+    });
   }
 
   validateForm(): boolean {
