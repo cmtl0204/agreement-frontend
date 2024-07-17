@@ -1,19 +1,13 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl} from '@angular/forms';
-import {AuthService, AuthHttpService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {
-  SkeletonEnum,
-  RoutesEnum,
-  CatalogueTypeEnum, 
-  ObligationsMintur,
-  ExternalInstitutionsObligations,
-  InstitutionsObligations
-} from '@shared/enums';
-import {OnExitInterface} from '@shared/interfaces';
-import {PrimeIcons, MessageService} from 'primeng/api';
-import {firstValueFrom} from 'rxjs';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl } from '@angular/forms';
+import { CatalogueModel } from '@models/core';
+import { AuthService, AuthHttpService } from '@servicesApp/auth';
+import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { SkeletonEnum, RoutesEnum, CatalogueTypeEnum, ExternalInstitutionsObligations, ObligationsMintur } from '@shared/enums';
+import { OnExitInterface } from '@shared/interfaces';
+import { PrimeIcons, MessageService } from 'primeng/api';
+import { firstValueFrom } from 'rxjs';
 
 interface Obligations {
   mintur: boolean;
@@ -26,26 +20,13 @@ interface Obligations {
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
-
-displayAddModal: boolean = false;
-displayViewModal: boolean = false;
-displayAddModalCounterpart = false;
-displayViewModalCounterpart = false;
-newMinturObligation: string = '';
-
-newCounterpartObligation = '';
-selectedRowIndex = -1;
-
-  //@Input({required: true}) externalInstitutions: any[] = [];
+  //  @Input({required: true}) externalInstitutions: any[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   institutions = [];
 
- /// protected obligationType: CatalogueModel[]=[];
-  //protected externalInstitutions: CatalogueModel[] = [];
- // protected obligationMintur: CatalogueModel[]=[];
- // protected obligationType: CatalogueModel[]=[];
- // protected externalInstitutions: CatalogueModel[] = [];
- // protected obligationMintur: CatalogueModel[]=[];
+  protected obligationType: CatalogueModel[]=[];
+  protected externalInstitutions: CatalogueModel[] = [];
+  protected obligationMintur: CatalogueModel[]=[];
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
@@ -57,13 +38,12 @@ selectedRowIndex = -1;
    
  
   displayModal: boolean = false;
+  displayObligationsModal: boolean = false;
   showObligationsTable: boolean = false;
   selectedObligationTypes: any[]=[];
- // Obligations: Obligations = {
- //   mintur: false,
- //   counterpart: false,
- ///   joint: false,
-  //};
+  selectedInstitution: any = null;
+  filteredObligations: any[] = [];
+
 
   // @Input({required: true}) id!: string;
   id: string = RoutesEnum.NEW
@@ -83,10 +63,10 @@ selectedRowIndex = -1;
   }
 
   ngOnInit(): void {
-    /* Load Foreign Keys*/
-   
-
-    
+    /** Load Foreign Keys**/
+    this.loadExternalInstitutions();
+    this.loadObligationTypes();
+    this.loadMintur();
   }
 
   buildForm() {
@@ -127,7 +107,7 @@ selectedRowIndex = -1;
     this.obligationForm.reset();
     this.obligationForm.patchValue({ model: institutionName });
     this.displayModal = true;
-  }
+    }
 
   closeModal() {
     this.displayModal = false;
@@ -140,15 +120,40 @@ selectedRowIndex = -1;
     }
   }
 
-  toggleObligationsTable() {
-    this.showObligationsTable = !this.showObligationsTable;
+  toggleObligationsTable(institution: any) {
+    this.selectedInstitution = institution;
+    this.filterObligationsByInstitution();
+    this.displayObligationsModal = true;
+  }
+
+  filterObligationsByInstitution() {
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    this.filteredObligations = obligationsArray.controls.filter(obligation => obligation.value.model === this.selectedInstitution.name);
   }
   
   /* Load Foreign Keys  */
-  
+  loadExternalInstitutions() {
+    /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
+    this.externalInstitutions = [
+      { name: 'Ministro' },
+      { name: 'Viceministro' },
+      { name: 'Presidente' }
+    ]
+  }
 
+  loadObligationTypes(){
+    this.obligationType=[
+      {name: 'obligacion mintur'},
+      {name: 'obligacion contraparte'},
+      {name:'obligacion conjunta'}
+    ]
+  }
 
-  
+  loadMintur(){
+this.obligationMintur=[
+  {name: 'Mintur'}
+]
+  }
 
   save() {
     this.formOutput.emit(this.form.value);
@@ -169,15 +174,14 @@ selectedRowIndex = -1;
     return res;
   }
 
- 
-
-  
-
- // updateSelectedObligations() {
- //   this.Obligations.mintur = this.selectedObligations.some(ob => ob.code === '1');
- //   this.Obligations.counterpart = this.selectedObligations.some(ob => ob.code === '2');
-//  }
-
+  addMinturObligation(institution: CatalogueModel, description: string) {
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    const newObligation = this.formBuilder.group({
+      model: [institution.name, Validators.required],
+      description: [description, Validators.required]
+    });
+    obligationsArray.push(newObligation);
+  }
 
   get obligations(): FormArray {
     return this.form.get('obligations') as FormArray;
@@ -191,7 +195,4 @@ selectedRowIndex = -1;
     return this.obligationForm.controls['description'];
   }
 
-  get textAreas(): FormArray {
-    return this.form.get('textAreas') as FormArray;
-  }
 }
