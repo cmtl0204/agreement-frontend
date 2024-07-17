@@ -21,11 +21,12 @@
                 />
             </div>
         </p-toolbar>
-
+        <!-- Mitur -->
+        <h2>Mintur</h2>
         <p-panel>
             <form class="p-fluid grid">
                 <!-- Primcipio -->
-                <h2>Mintur</h2>
+                
                 <p-table [value]="internalInstitution">
                     <ng-template pTemplate="header">
                         <tr>
@@ -48,8 +49,12 @@
                         </tr>
                     </ng-template>
                 </p-table>
-        
-                <h2>Comparecencias</h2>
+            </form>
+        </p-panel>
+        <!-- Compareciencias -->
+        <h2>Comparecencias</h2>
+        <p-panel>
+            <form class="p-fluid grid">
                 <p-table [value]="externalInstitution">
                     <ng-template pTemplate="header">
                         <tr>
@@ -76,6 +81,7 @@
              
             </form>
         </p-panel>
+        
         }
     </div>
 </div>

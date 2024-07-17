@@ -21,7 +21,6 @@ export class AppearerComponent implements OnInit {
 
 
   /** Form **/
-  @Input({ required: true }) id!: string;
 
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
@@ -53,7 +52,9 @@ export class AppearerComponent implements OnInit {
   ];
   constructor() { }
   ngOnInit(): void { }
+  findAgrement() {
 
+  }
   /** Form Builder & Validates **/
 
   /** Redirects **/
