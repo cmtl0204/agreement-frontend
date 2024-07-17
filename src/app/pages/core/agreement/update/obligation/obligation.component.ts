@@ -1,5 +1,5 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormArray, FormControl} from '@angular/forms';
+import {FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl} from '@angular/forms';
 import {AuthService, AuthHttpService} from '@servicesApp/auth';
 import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
@@ -27,32 +27,25 @@ interface Obligations {
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
 
-  selectedObligations: any[] = [];
-  obligations = {
-    mintur: false,
-    counterpart: false,
-    joint: false
-  };
-//Prueba MINTUR
 displayAddModal: boolean = false;
 displayViewModal: boolean = false;
 displayAddModalCounterpart = false;
 displayViewModalCounterpart = false;
 newMinturObligation: string = '';
-obligationMintur: string[] = [];
+
 newCounterpartObligation = '';
 selectedRowIndex = -1;
 
-  @Input({required: true}) externalInstitutions: any[] = [];
+  //@Input({required: true}) externalInstitutions: any[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   institutions = [];
 
-  protected obligationType: CatalogueModel[]=[];
+ /// protected obligationType: CatalogueModel[]=[];
   //protected externalInstitutions: CatalogueModel[] = [];
-  protected obligationMintur: CatalogueModel[]=[];
-  protected obligationType: CatalogueModel[]=[];
-  protected externalInstitutions: CatalogueModel[] = [];
-  protected obligationMintur: CatalogueModel[]=[];
+ // protected obligationMintur: CatalogueModel[]=[];
+ // protected obligationType: CatalogueModel[]=[];
+ // protected externalInstitutions: CatalogueModel[] = [];
+ // protected obligationMintur: CatalogueModel[]=[];
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
@@ -91,9 +84,9 @@ selectedRowIndex = -1;
 
   ngOnInit(): void {
     /* Load Foreign Keys*/
-    this.loadExternalInstitutions();
-    this.loadObligationTypes();
-    this.loadMintur();
+   
+
+    
   }
 
   buildForm() {
@@ -152,28 +145,10 @@ selectedRowIndex = -1;
   }
   
   /* Load Foreign Keys  */
-  loadExternalInstitutions() {
-    /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
-    this.externalInstitutions = [
-      { name: 'Ministro' },
-      { name: 'Viceministro' },
-      { name: 'Presidente' }
-    ]
-  }
+  
 
-  loadObligationTypes(){
-    this.obligationType=[
-      {name: 'obligacion mintur'},
-      {name: 'obligacion contraparte'},
-      {name:'obligacion conjunta'}
-    ]
-  }
 
-  loadMintur(){
-this.obligationMintur=[
-  {name: 'Mintur'}
-]
-  }
+  
 
   save() {
     this.formOutput.emit(this.form.value);
