@@ -5,6 +5,7 @@ import {CompanyComponent} from "./company/company.component";
 import {RegistrationComponent} from "./registration.component";
 import {ExitGuard} from "@guards/exit.guard";
 
+
 const routes: Routes = [
   {
     title: 'Registration',
@@ -27,6 +28,7 @@ const routes: Routes = [
     path: 'companies/:id',
     component: CompanyComponent
   },
+  
 ];
 
 @NgModule({

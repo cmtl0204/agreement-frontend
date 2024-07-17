@@ -1,10 +1,11 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
-import { CoreService, MessageDialogService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum} from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CatalogueModel} from '@models/core';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, AgreementsTypeEnum} from '@shared/enums';
+import {PrimeIcons} from 'primeng/api';
+import {considerSettingUpAutocompletion} from "@angular/cli/src/utilities/completion";
 
 @Component({
   selector: 'app-basic-data',
@@ -13,16 +14,13 @@ import { PrimeIcons } from 'primeng/api';
 })
 export class BasicDataComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder)
-  protected readonly coreService = inject(CoreService )
+  protected readonly coreService = inject(CoreService)
   protected readonly cataloguesHttpService = inject(CataloguesHttpService)
   protected readonly messageDialogService = inject(MessageDialogService)
   protected readonly Validators = Validators;
 
-
   /* Form && Output */
-  // @Input({required: true}) id: string;
-  @Output() formOutput:EventEmitter<FormGroup> = new EventEmitter()
-  protected id =''
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
@@ -30,7 +28,7 @@ export class BasicDataComponent implements OnInit {
   protected states: CatalogueModel[] = [];
   protected origins: CatalogueModel[] = [];
   protected types: CatalogueModel[] = [];
-  protected specialTypes: CatalogueModel[]=[]
+  protected specialTypes: CatalogueModel[] = []
 
   /* Enums */
   protected readonly AgreementFormEnum = AgreementFormEnum;
@@ -41,124 +39,86 @@ export class BasicDataComponent implements OnInit {
     this.buildForm();
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadStates();
     this.loadOrigins();
     this.loadTypes();
     this.loadSpecialTypes()
   }
 
-  save(){
-    this.formOutput.emit(this.form.value)
-  }
-
   /* Form Builder & Validates */
   buildForm() {
     this.form = this.formBuilder.group({
-      agreementState: [{value:null, disabled:true}, [Validators.required]],
-      name : [null, [Validators.required]],
+      agreementState: [null, [Validators.required]],
+      name: [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
-      originId: [{value:null, disabled:true}, [Validators.required]],
-      typeId: ['', [Validators.required]],
-      specialTypeId: [null],
-
-
+      origin: [null, [Validators.required]],
+      specialType: [null],
+      type: [null, [Validators.required]],
     });
+
     this.checkValueChanges();
   }
 
-  checkValueChanges(){
-    this.typeIdField.valueChanges.subscribe((value) => {
-      if(value.id === '3') {
-        this.specialTypeIdField.setValidators(Validators.required);
-        this.specialTypeIdField.reset();
-      }else{
-        this.specialTypeIdField.clearValidators();
-        this.specialTypeIdField.reset();
+  checkValueChanges() {
+    this.typeField.valueChanges.subscribe((value) => {
+      if (value.code === AgreementsTypeEnum.ESPECIAL) {
+        this.specialTypeField.setValidators(Validators.required);
+      } else {
+        this.specialTypeField.clearValidators();
       }
-      this.typeIdField.updateValueAndValidity();
+
+      this.specialTypeField.reset();
+      this.typeField.updateValueAndValidity();
     })
   }
 
-
   validateForm(): boolean {
     this.formErrors = [];
+
     if (this.agreementStateField.invalid) this.formErrors.push(AgreementFormEnum.agreementState);
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
     if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
-    if (this.originIdField.invalid) this.formErrors.push(AgreementFormEnum.originId);
-    if (this.typeIdField.invalid) this.formErrors.push(AgreementFormEnum.typeId);
-    if (this.specialTypeIdField.invalid) this.formErrors.push(AgreementFormEnum.specialTypeId);
+    if (this.originField.invalid) this.formErrors.push(AgreementFormEnum.origin);
+    if (this.typeField.invalid) this.formErrors.push(AgreementFormEnum.type);
+    if (this.specialTypeField.invalid) this.formErrors.push(AgreementFormEnum.specialType);
 
     return this.form.valid && this.formErrors.length === 0;
   }
 
-  types1 = [
-    {name: 'Marco', id: '1'},
-    {name: 'Específicos', id: '2'},
-    {name: 'Especial', id: '3'},
-    {name: 'Comodato o convenio de préstamo de uso', id: '4'},
-  ]
-
-  specialTypes1 = [
-    {name: 'Memorando de Entendimiento', id: '1'},
-    {name: 'Carta de Intención', id: '2'},
-    {name: 'Articulación', id: '3'},
-    {name: 'Cooperación', id: '4'},
-  ]
-
   /* Load Foreign Keys  */
   loadStates() {
-    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
+    this.states = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
   };
+
   loadOrigins() {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
   };
+
   loadTypes() {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
   };
-  loadSpecialTypes(){
+
+  loadSpecialTypes() {
     this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE);
   }
-
 
   /* Form Actions */
   onSubmit(): void {
     if (this.validateForm()) {
-      console.log(this.form.value)
-      this.update();
-      alert('Send')
-      /*
-     TODO
-     */
+      this.save();
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
-  update(): void {
-    /*
-        TODO
-        */
-  }
-
-  /* Redirects */
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    /* this.routesService.registration(); */
+  save() {
+    this.formOutput.emit(this.form.value)
   }
 
   /* Getters Form*/
@@ -178,19 +138,19 @@ export class BasicDataComponent implements OnInit {
     return this.form.controls['number'];
   }
 
-  get originIdField(): AbstractControl {
-    return this.form.controls['originId'];
+  get originField(): AbstractControl {
+    return this.form.controls['origin'];
   }
 
-  get typeIdField(): AbstractControl {
-    return this.form.controls['typeId'];
+  get typeField(): AbstractControl {
+    return this.form.controls['type'];
   }
 
   get objectiveField(): AbstractControl {
     return this.form.controls['objective'];
   }
 
-  get specialTypeIdField(): AbstractControl {
-    return this.form.controls['specialTypeId'];
+  get specialTypeField(): AbstractControl {
+    return this.form.controls['specialType'];
   }
 }

@@ -8,7 +8,6 @@
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <app-header-form
-            [id]="id"
             label="Registro"
             [icon]="PrimeIcons.PENCIL"/>
         </div>
@@ -16,6 +15,7 @@
         <div class="p-toolbar-group-right">
           <app-form-button-action
             (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
             labelSubmitButton="Siguiente"
             labelCancelButton="Atrás"
             [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"

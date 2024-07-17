@@ -36,6 +36,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {MultiSelectModule} from "primeng/multiselect";
 import {TableModule} from "primeng/table";
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     declarations: [
@@ -50,36 +51,40 @@ import {TableModule} from "primeng/table";
         DocumentComponent,
         AddendumComponent,
     ],
-  imports: [
-    CommonModule,
-    RegisterRoutingModule,
-    ReactiveFormsModule,
-    SharedModule,
-    ButtonModule,
-    CardModule,
-    CheckboxModule,
-    DividerModule,
-    InputTextModule,
-    PasswordModule,
-    RippleModule,
-    DropdownModule,
-    NgOptimizedImage,
-    MessageModule,
-    PanelModule,
-    AvatarModule,
-    ToolbarModule,
-    OverlayPanelModule,
-    InputNumberModule,
-    ToggleButtonModule,
-    CalendarModule,
-    RadioButtonModule,
-    StepperModule,
-    TabViewModule,
-    FileUploadModule,
-    InputTextareaModule,
-    MultiSelectModule,
-    FormsModule,
-    TableModule
-  ]
+    exports: [
+        ObligationComponent
+    ],
+    imports: [
+        CommonModule,
+        RegisterRoutingModule,
+        ReactiveFormsModule,
+        SharedModule,
+        ButtonModule,
+        CardModule,
+        CheckboxModule,
+        DividerModule,
+        InputTextModule,
+        PasswordModule,
+        RippleModule,
+        DropdownModule,
+        NgOptimizedImage,
+        MessageModule,
+        PanelModule,
+        AvatarModule,
+        ToolbarModule,
+        OverlayPanelModule,
+        InputNumberModule,
+        ToggleButtonModule,
+        CalendarModule,
+        RadioButtonModule,
+        StepperModule,
+        TabViewModule,
+        FileUploadModule,
+        InputTextareaModule,
+        MultiSelectModule,
+        FormsModule,
+        TableModule,
+        DialogModule
+    ]
 })
 export class RegisterModule { }

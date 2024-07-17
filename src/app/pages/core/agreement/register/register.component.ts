@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {Component, inject} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AgreementsService} from "@servicesApp/core";
 
 @Component({
   selector: 'app-register',
@@ -7,10 +8,12 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  private readonly agreementsService = inject(AgreementsService);
   private readonly formBuilder = inject(FormBuilder);
   protected form!: FormGroup;
+
   constructor() {
-    this.buildForm()
+    this.buildForm();
   }
 
   buildForm() {
@@ -20,8 +23,9 @@ export class RegisterComponent {
       name: [null],
       internalNumber: [null],
       number: [null],
-      originId: [null],
-      typeId: [null],
+      origin: [null],
+      type: [null],
+      specialType: [null],
 
       // appearer
       internalInstitutions: [null],
@@ -37,11 +41,12 @@ export class RegisterComponent {
       monthTerm: [null],
       dayTerm: [null],
       objective: [null],
-      administrator: [null],
 
       // agreement-administrator
+      administrator: [null],
 
       // obligation
+      obligations: [null],
 
       // financing
       isFinancing: [false],
@@ -51,17 +56,17 @@ export class RegisterComponent {
 
       // addendum
       isAddendum: [false],
-      description: [null],
-      isModifiedFinishDate: [null],
-      document: [null],
-      agreementEndedAt: [null]
-    })
+      addendums: [null]
+    });
+
+    if (sessionStorage.getItem('agreement')) {
+      this.form.patchValue(this.agreementsService.agreement);
+    }
   }
 
   save(event: any) {
-    console.log('event', event);
     this.form.patchValue(event);
-    console.log('form', this.form.value);
+    this.agreementsService.agreement = this.form.value;
   }
 
   register() {
@@ -70,5 +75,9 @@ export class RegisterComponent {
 
   get externalInstitutionsField(): FormArray {
     return this.form.controls['externalInstitutions'] as FormArray;
+  }
+
+  get internalInstitutionsField(): FormArray {
+    return this.form.controls['internalInstitutions'] as FormArray;
   }
 }

@@ -1,0 +1,103 @@
+<div class="grid">
+    <div class="col-12">
+        @if (coreService.isLoading) {
+        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+        }
+
+        @if (!coreService.isLoading) {
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <app-header-form
+                    label="Visualización del Convenio"
+                    [icon]="PrimeIcons.PENCIL"/>
+            </div>
+
+            <div class="p-toolbar-group-right">
+                <app-form-button-action
+                    labelSubmitButton="Siguiente"
+                    labelCancelButton="Atrás"
+                    [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+                    [isVisibleCancelButton]="false"
+                />
+            </div>
+        </p-toolbar>
+
+        <p-panel>
+            <form class="p-fluid grid">
+
+              <!-- Number -->
+              <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label
+                    appLabel
+                    for="number"
+                    [label]="AgreementFormEnum.number"></label>
+                  <input pInputText id="number" [value]="agreement.number" readonly />
+              </div>
+
+                <!-- Name -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label
+                      appLabel
+                      for="name"
+                      [label]="AgreementFormEnum.name"></label>
+                    <input pInputText id="name" [value]="agreement.name" readonly />
+                </div>
+
+                <!-- internal Number -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label
+                      appLabel
+                      for="internalNumber"
+                      [label]="AgreementFormEnum.internalNumber"></label>
+                    <input pInputText id="internalNumber" [value]="agreement.internalNumber" readonly />
+                </div>
+
+                <!-- State -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label
+                      appLabel
+                      for="agreementState"
+                      [label]="AgreementFormEnum.agreementState"></label>
+                    <input pInputText id="agreementState" [value]="" readonly />
+                </div>
+
+                <!-- Origin -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label
+                      appLabel
+                      for="originId"
+                      [label]="AgreementFormEnum.origin"></label>
+                    <input pInputText id="originId" [value]="agreement.origin" readonly />
+                </div>
+
+                <!-- Type -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label
+                      appLabel
+                      for="typeId"
+                      [label]="AgreementFormEnum.type"></label>
+                    <input pInputText id="typeId" [value]="agreement.type" readonly />
+                </div>
+
+                <!-- Special Type -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label
+                      appLabel
+                      for="specialTypeId"
+                      [label]="AgreementFormEnum.specialType"></label>
+                    <input pInputText id="specialTypeId" [value]="agreement.typeId" readonly />
+                </div>
+
+                <!-- Object -->
+                <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+                    <label
+                      appLabel
+                      for="objective"
+                      [label]="AgreementFormEnum.objective"></label>
+                    <textarea pInputTextarea id="objective" [value]="agreement.objective" readonly></textarea>
+                </div>
+            </form>
+        </p-panel>
+        }
+    </div>
+</div>

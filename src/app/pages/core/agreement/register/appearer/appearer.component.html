@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="col-12 xl:col-8 lg:col-8 md:col-10 sm:col-12 xl:col-offset-2 lg:col-offset-2 md:col-offset-1">
+  <div class="col-12">
     @if (coreService.isLoading) {
       <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
     }
@@ -10,7 +10,14 @@
           <app-header-form [id]="id"></app-header-form>
         </div>
         <div class="p-toolbar-group-right">
-          <app-form-button-action (submit)="onSubmit()"></app-form-button-action>
+          <app-form-button-action
+            (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
+            labelSubmitButton="Siguiente"
+            labelCancelButton="Atrás"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="true"
+          />
         </div>
       </p-toolbar>
 
@@ -26,96 +33,92 @@
                   <!-- internalInstitutions/positionId -->
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
-                           for="positionId"
-                           [label]="i+'. '+InternalInstitutionsFormEnum.positionId">
+                           for="internalPosition"
+                           [label]="InternalInstitutionsFormEnum.position">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
-                      id="positionId"
-                      formControlName="positionId"
+                      id="internalPosition"
+                      formControlName="position"
                       dataKey="id"
                       [options]="positions"
-                      optionValue="id"
-                      optionLabel="name"
                       placeholder="Seleccione"
                       [filter]="false"
                     />
                     <small appErrorMessage
-                           [errors]="internalInstitution.get('positionId')?.errors!"
-                           [touched]="internalInstitution.get('positionId')?.touched!"
-                           [dirty]="internalInstitution.get('positionId')?.dirty!">
+                           [errors]="internalInstitution.get('position')?.errors!"
+                           [touched]="internalInstitution.get('position')?.touched!"
+                           [dirty]="internalInstitution.get('position')?.dirty!">
                     </small>
                   </div>
 
                   <!-- internalInstitutions/personTypeId -->
                   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label appLabel
-                           for="personTypeId"
-                           [label]="i+'. '+InternalInstitutionsFormEnum.personTypeId">
+                           for="internalPersonType"
+                           [label]="InternalInstitutionsFormEnum.personType">
                     </label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <p-dropdown
-                      id="internalPersonTypeId"
-                      formControlName="personTypeId"
+                      id="internalPersonType"
+                      formControlName="personType"
                       dataKey="id"
                       [options]="internalPersonTypes"
-                      optionValue="id"
-                      optionLabel="name"
                       placeholder="Seleccione"
                       [filter]="false"
                     />
                     <small appErrorMessage
-                           [errors]="internalInstitution.get('personTypeId')?.errors!"
-                           [touched]="internalInstitution.get('personTypeId')?.touched!"
-                           [dirty]="internalInstitution.get('personTypeId')?.dirty!">
+                           [errors]="internalInstitution.get('personType')?.errors!"
+                           [touched]="internalInstitution.get('personType')?.touched!"
+                           [dirty]="internalInstitution.get('personType')?.dirty!">
                     </small>
                   </div>
 
                   <!-- internalInstitutions/name -->
-<!--                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">-->
-<!--                    <label appLabel-->
-<!--                           for="name"-->
-<!--                           [label]="InternalInstitutionsFormEnum.name">-->
-<!--                    </label>-->
-<!--                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>-->
-<!--                    <input pInputText-->
-<!--                           type="text"-->
-<!--                           id="name"-->
-<!--                           formControlName="name"/>-->
-<!--                    <small appErrorMessage-->
-<!--                           [errors]="internalInstitution.get('name')?.errors!"-->
-<!--                           [touched]="internalInstitution.get('name')?.touched!"-->
-<!--                           [dirty]="internalInstitution.get('name')?.dirty!">-->
-<!--                    </small>-->
-<!--                  </div>-->
+                  <!--                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">-->
+                  <!--                    <label appLabel-->
+                  <!--                           for="name"-->
+                  <!--                           [label]="InternalInstitutionsFormEnum.name">-->
+                  <!--                    </label>-->
+                  <!--                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>-->
+                  <!--                    <input pInputText-->
+                  <!--                           type="text"-->
+                  <!--                           id="name"-->
+                  <!--                           formControlName="name"/>-->
+                  <!--                    <small appErrorMessage-->
+                  <!--                           [errors]="internalInstitution.get('name')?.errors!"-->
+                  <!--                           [touched]="internalInstitution.get('name')?.touched!"-->
+                  <!--                           [dirty]="internalInstitution.get('name')?.dirty!">-->
+                  <!--                    </small>-->
+                  <!--                  </div>-->
 
                   <!-- internalInstitutions/unit -->
-<!--                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">-->
-<!--                    <label appLabel-->
-<!--                           for="unit"-->
-<!--                           [label]="InternalInstitutionsFormEnum.unit">-->
-<!--                    </label>-->
-<!--                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>-->
-<!--                    <input pInputText-->
-<!--                           type="text"-->
-<!--                           id="unit"-->
-<!--                           formControlName="unit"/>-->
-<!--                    <small appErrorMessage-->
-<!--                           [errors]="internalInstitution.get('unit')?.errors!"-->
-<!--                           [touched]="internalInstitution.get('unit')?.touched!"-->
-<!--                           [dirty]="internalInstitution.get('unit')?.dirty!">-->
-<!--                    </small>-->
-<!--                  </div>-->
+                  <!--                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">-->
+                  <!--                    <label appLabel-->
+                  <!--                           for="unit"-->
+                  <!--                           [label]="InternalInstitutionsFormEnum.unit">-->
+                  <!--                    </label>-->
+                  <!--                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>-->
+                  <!--                    <input pInputText-->
+                  <!--                           type="text"-->
+                  <!--                           id="unit"-->
+                  <!--                           formControlName="unit"/>-->
+                  <!--                    <small appErrorMessage-->
+                  <!--                           [errors]="internalInstitution.get('unit')?.errors!"-->
+                  <!--                           [touched]="internalInstitution.get('unit')?.touched!"-->
+                  <!--                           [dirty]="internalInstitution.get('unit')?.dirty!">-->
+                  <!--                    </small>-->
+                  <!--                  </div>-->
 
                   <!-- button delete internalInstitution -->
-<!--                  <div class="field col-12" style="display: flex; justify-content: end;">-->
-<!--                    <p-button class="custom-button-width"-->
-<!--                              label="Eliminar"-->
-<!--                              icon="pi pi-trash"-->
-<!--                              severity="danger"-->
-<!--                              (click)="deleteInternalInstitution(i)"/>-->
-<!--                  </div>-->
-<!--                  <p-divider type="solid" class="col-12"/>-->
+                  <!--                  <div class="field col-12" style="display: flex; justify-content: end;">-->
+                  <!--                    <p-button class="custom-button-width"-->
+                  <!--                              label="Eliminar"-->
+                  <!--                              icon="pi pi-trash"-->
+                  <!--                              severity="danger"-->
+                  <!--                              (click)="deleteInternalInstitution(i)"/>-->
+                  <!--                  </div>-->
+                  <!--                  <p-divider type="solid" class="col-12"/>-->
                 </div>
               </div>
 
@@ -123,120 +126,144 @@
           </div>
 
           <!-- button add internalInstitution -->
-<!--          <div class="field col-12" style="display: flex; justify-content: center;">-->
-<!--            <p-button class="custom-button-plus-width"-->
-<!--                      label="Añadir"-->
-<!--                      icon="pi pi-plus"-->
-<!--                      severity="success"-->
-<!--                      (click)="addInternalInstitution()"/>-->
-<!--          </div>-->
+          <!--          <div class="field col-12" style="display: flex; justify-content: center;">-->
+          <!--            <p-button class="custom-button-plus-width"-->
+          <!--                      label="Añadir"-->
+          <!--                      icon="pi pi-plus"-->
+          <!--                      severity="success"-->
+          <!--                      (click)="addInternalInstitution()"/>-->
+          <!--          </div>-->
 
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             <!-- externalInstitutionsForm -->
             <p-panel>
-              <div [formGroup]="appearerform">
-                <div *ngFor="let externalInstitution of externalInstitutions.controls; let i = index"
-                     [formGroupName]="i" class="grid">
+              <div [formGroup]="appearerForm" class="p-fluid grid">
+                <!-- externalInstitutions/position -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel
+                         for="externalPosition"
+                         [label]="ExternalInstitutionsFormEnum.position"
+                         [required]="externalInstitutionPositionField">
+                  </label>
+                  <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                  <input pInputText
+                         type="text"
+                         id="externalPosition"
+                         formControlName="position"/>
+                  <small
+                    appErrorMessage
+                    [errors]="externalInstitutionPositionField.errors"
+                    [touched]="externalInstitutionPositionField.touched"
+                    [dirty]="externalInstitutionPositionField.dirty">
+                  </small>
+                </div>
 
-                  <!-- externalInstitutions/position -->
-                  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label appLabel
-                           for="position"
-                           [label]="ExternalInstitutionsFormEnum.position">
-                    </label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <input pInputText
-                           type="text"
-                           id="position"
-                           formControlName="position"/>
-                    <small appErrorMessage
-                           [errors]="externalInstitutionNameField?.errors!"
-                           [touched]="externalInstitutionNameField?.touched!"
-                           [dirty]="externalInstitutionNameField?.dirty!">
-                    </small>
-                  </div>
+                <!-- externalInstitutions/personTypeId -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel
+                         for="personTypeId"
+                         [label]="ExternalInstitutionsFormEnum.personType"
+                         [required]="externalInstitutionPersonTypeField">
+                  </label>
+                  <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                  <p-dropdown
+                    id="externalPersonType"
+                    formControlName="personType"
+                    dataKey="id"
+                    [options]="externalPersonTypes"
+                    placeholder="Seleccione"
+                    [filter]="false"
+                  />
+                  <small
+                    appErrorMessage
+                    [errors]="externalInstitutionPersonTypeField.errors"
+                    [touched]="externalInstitutionPersonTypeField.touched"
+                    [dirty]="externalInstitutionPersonTypeField.dirty">
+                  </small>
+                </div>
 
-                  <!-- externalInstitutions/personTypeId -->
-                  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label appLabel
-                           for="personTypeId"
-                           [label]="i+'. '+ExternalInstitutionsFormEnum.personTypeId">
-                    </label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <p-dropdown
-                      id="externalPersonTypeId"
-                      formControlName="personTypeId"
-                      dataKey="id"
-                      [options]="externalPersonTypes"
-                      optionValue="id"
-                      optionLabel="name"
-                      placeholder="Seleccione"
-                      [filter]="false"
-                    />
-                    <small appErrorMessage
-                           [errors]="externalInstitution.get('personTypeId')?.errors!"
-                           [touched]="externalInstitution.get('personTypeId')?.touched!"
-                           [dirty]="externalInstitution.get('personTypeId')?.dirty!">
-                    </small>
-                  </div>
+                <!-- externalInstitutions/name -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel for="name"
+                         [label]="ExternalInstitutionsFormEnum.name"
+                         [required]="externalInstitutionNameField">
+                  </label>
+                  <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                  <input pInputText
+                         type="text"
+                         id="name"
+                         formControlName="name"/>
+                  <small
+                    appErrorMessage
+                    [errors]="externalInstitutionNameField.errors"
+                    [touched]="externalInstitutionNameField.touched"
+                    [dirty]="externalInstitutionNameField.dirty">
+                  </small>
+                </div>
 
-                  <!-- externalInstitutions/name -->
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="name"
-                           [label]="i+'. '+ExternalInstitutionsFormEnum.name">
-                    </label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <input pInputText
-                           type="text"
-                           id="name"
-                           formControlName="name"/>
-                    <small appErrorMessage
-                           [errors]="externalInstitution.get('name')?.errors!"
-                           [touched]="externalInstitution.get('name')?.touched!"
-                           [dirty]="externalInstitution.get('name')?.dirty!">
-                    </small>
-                  </div>
-
-                  <!-- externalInstitutions/unit -->
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="unit"
-                           [label]="i+'. '+ExternalInstitutionsFormEnum.unit">
-                    </label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <input pInputText
-                           type="text"
-                           id="unit"
-                           formControlName="unit"/>
-                    <small appErrorMessage
-                           [errors]="externalInstitution.get('unit')?.errors!"
-                           [touched]="externalInstitution.get('unit')?.touched!"
-                           [dirty]="externalInstitution.get('unit')?.dirty!">
-                    </small>
-                  </div>
-
-                  <!-- button delete externalInstitution -->
-                  <div class="field col-12" style="display: flex; justify-content: end;">
-                    <p-button class="custom-button-width"
-                              label="Eliminar"
-                              icon="pi pi-trash"
-                              severity="danger"
-                              (click)="deleteExternalInstitution(i)"/>
-                  </div>
-                  <p-divider type="solid" class="col-12"/>
+                <!-- externalInstitutions/unit -->
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel for="unit"
+                         [label]="ExternalInstitutionsFormEnum.unit"
+                         [required]="externalInstitutionUnitField">
+                  </label>
+                  <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                  <input pInputText
+                         type="text"
+                         id="unit"
+                         formControlName="unit"/>
+                  <small
+                    appErrorMessage
+                    [errors]="externalInstitutionUnitField.errors"
+                    [touched]="externalInstitutionUnitField.touched"
+                    [dirty]="externalInstitutionUnitField.dirty">
+                  </small>
                 </div>
               </div>
+              <!-- button add externalInstitution -->
+              <div class="field col-12" style="display: flex; justify-content: right">
+                <p-button class="custom-button-plus-width"
+                          label="Añadir"
+                          icon="pi pi-plus"
+                          severity="success"
+                          (click)="addExternalInstitution()"/>
+              </div>
             </p-panel>
-            <!-- button add externalInstitution -->
-            <div class="field col-12" style="display: flex; justify-content: center;">
-              <p-button class="custom-button-plus-width"
-                        label="Añadir"
-                        icon="pi pi-plus"
-                        severity="success"
-                        (click)="addExternalInstitution()"/>
-            </div>
+            <!-- table -->
+             @if (externalInstitutions.length > 0) {
+            <p-panel class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+              <p-table
+                [value]="externalInstitutions.controls"
+                styleClass="p-datatable-striped"
+                [tableStyle]="{'min-width': '50rem'}">
+                <ng-template pTemplate="header">
+                  @for (col of externalInstitutionsColumns; track col.field) {
+                    <th [pSortableColumn]="col.field">
+                      {{ col.header }}
+                    </th>
+                  }
+                  <th class="text-center">
+                    Acciones
+                  </th>
+                </ng-template>
+                <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
+                  <tr>
+                    <td>{{ externalInstitution.get('position')?.value }}</td>
+                    <td>{{ externalInstitution.get('personType')?.value.name }}</td>
+                    <td>{{ externalInstitution.get('name')?.value }}</td>
+                    <td>{{ externalInstitution.get('unit')?.value }}</td>
+                    <td>
+                      <button pButton type="button" icon="pi pi-trash" class="p-button p-button-danger"
+                              (click)="deleteExternalInstitution(i)">
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-panel>
+           }
           </div>
         </form>
-        <p-button label="Siguiente" (click)="save()"></p-button>
       </p-panel>
     }
   </div>
