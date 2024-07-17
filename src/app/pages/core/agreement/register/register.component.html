@@ -34,8 +34,11 @@
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-agreement-date class="col-12"
-                                (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+            <app-agreement-date 
+              class="col-12"
+              [formInput]="form.value"
+              (formOutput)="save($event);nextCallback.emit()" 
+              (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
       </ng-template>

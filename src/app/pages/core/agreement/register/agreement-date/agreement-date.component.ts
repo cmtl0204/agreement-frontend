@@ -1,9 +1,9 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
+import { AgreementModel, CatalogueModel } from '@models/core';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import {  SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
+import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
 import { OnExitInterface } from '@shared/interfaces';
 import { PrimeIcons } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
@@ -26,6 +26,8 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
+  @Input({ required: true }) formInput!: AgreementModel;
+
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
@@ -55,12 +57,14 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     // if (this.id !== RoutesEnum.NEW) {
     //   // this.findAgreement(this.id);
     // }
+    // this.form.patchValue(this.formInput)
+    this.setValueForm()
   }
 
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
-      subscribedAt: [null, Validators.required],
+      subscribedAt: [new Date(), Validators.required],
       startedAt: [new Date(), Validators.required],
       isFinishDate: [true, Validators.required],
       endedAt: [new Date(), Validators.required],
@@ -72,6 +76,26 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
 
     this.checkValueChanges();
   }
+
+  setValueForm() {
+    // this.form.patchValue(this.formInput)
+    const { endedAt, startedAt, subscribedAt, isFinishDate, ...agreement } = this.formInput
+    this.form.patchValue(agreement);
+
+    if (startedAt) {
+      this.startedAtField.setValue(new Date(startedAt))
+    }
+    if (subscribedAt) {
+      this.startedAtField.setValue(new Date(subscribedAt))
+    }
+    if (endedAt) {
+      this.endedAtField.setValue(new Date(endedAt))
+    }
+    if (isFinishDate !== null) {
+      this.isFinishDateField.setValue(isFinishDate)
+    }
+  }
+
 
   checkValueChanges() {
     this.isFinishDateField.valueChanges.subscribe(value => {
