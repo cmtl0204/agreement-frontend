@@ -4,6 +4,7 @@ import { AgreementModel, CatalogueModel } from '@models/core';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
+import { getFormattedDate } from '@shared/helpers';
 import { OnExitInterface } from '@shared/interfaces';
 import { PrimeIcons } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
@@ -54,20 +55,16 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   }
 
   ngOnInit(): void {
-    // if (this.id !== RoutesEnum.NEW) {
-    //   // this.findAgreement(this.id);
-    // }
-    // this.form.patchValue(this.formInput)
-    this.setValueForm()
+    this.patchValueForm()
   }
 
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
-      subscribedAt: [new Date(), Validators.required],
-      startedAt: [new Date(), Validators.required],
-      isFinishDate: [true, Validators.required],
-      endedAt: [new Date(), Validators.required],
+      subscribedAt: [null, Validators.required],
+      startedAt: [null, Validators.required],
+      isFinishDate: [null, Validators.required],
+      endedAt: [null, Validators.required],
       endedReason: [null],
       yearTerm: [null, Validators.required],
       monthTerm: [null, Validators.required],
@@ -77,25 +74,24 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     this.checkValueChanges();
   }
 
-  setValueForm() {
-    // this.form.patchValue(this.formInput)
-    const { endedAt, startedAt, subscribedAt, isFinishDate, ...agreement } = this.formInput
+  patchValueForm() {
+    const { endedAt, startedAt, subscribedAt,...agreement } = this.formInput
+
     this.form.patchValue(agreement);
 
     if (startedAt) {
-      this.startedAtField.setValue(new Date(startedAt))
+      this.startedAtField.setValue(getFormattedDate(startedAt))
     }
-    if (subscribedAt) {
-      this.startedAtField.setValue(new Date(subscribedAt))
-    }
-    if (endedAt) {
-      this.endedAtField.setValue(new Date(endedAt))
-    }
-    if (isFinishDate !== null) {
-      this.isFinishDateField.setValue(isFinishDate)
-    }
-  }
 
+    if (subscribedAt) {
+      this.subscribedAtField.setValue(getFormattedDate(subscribedAt))
+    }
+
+    if (endedAt) {
+      this.endedAtField.setValue(getFormattedDate(endedAt))
+    }
+
+  }
 
   checkValueChanges() {
     this.isFinishDateField.valueChanges.subscribe(value => {
@@ -106,7 +102,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
         this.dayTermField.setValidators(Validators.required);
         this.endedReasonField.clearValidators();
         this.endedReasonField.reset();
-      } else {
+      } else if(value === false) {
         this.endedReasonField.setValidators(Validators.required);
         this.yearTermField.clearValidators();
         this.monthTermField.clearValidators();

@@ -20,4 +20,5 @@ export interface AgreementModel {
   userId?: string;
   origin?: CatalogueModel;
   type?: CatalogueModel;
+  specialType?: CatalogueModel;
 }
