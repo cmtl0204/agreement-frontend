@@ -8,7 +8,6 @@
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <app-header-form
-            [id]="id"
             label="Registro"
             [icon]="PrimeIcons.PENCIL"/>
         </div>
@@ -180,7 +179,7 @@
               id="type"
               formControlName="type"
               dataKey="id"
-              [options]="types" 
+              [options]="types"
               placeholder="Selecione">
               <ng-template pTemplate="selectedItem" let-selectedOption>
                 <div class="flex align-items-center gap-2">
@@ -210,10 +209,10 @@
                 for="specialType"
                 [label]="AgreementFormEnum.specialType"
                 [required]="specialTypeField"></label>
-  
+
               <app-form-help-field
                 [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
-  
+
               <p-dropdown
                 id="specialType"
                 formControlName="specialType"
@@ -231,7 +230,7 @@
                   </div>
                 </ng-template>
               </p-dropdown>
-  
+
               <small
                 appErrorMessage
                 [errors]="specialTypeField.errors"
@@ -251,9 +250,9 @@
 
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
 
-            <textarea 
-              pInputTextarea 
-              id="objective" 
+            <textarea
+              pInputTextarea
+              id="objective"
               formControlName="objective"
               rows="10"
               cols="30"
