@@ -2,8 +2,10 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { AddendumEnum, SkeletonEnum } from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
+import { PrimeIcons,MessageService } from 'primeng/api';
 import { AddendumModel } from '@models/core/addendum.model';
+import { CatalogueModel, ColumnModel } from '@models/core';
+
 
 @Component({
   selector: 'app-addendum',
@@ -20,12 +22,41 @@ export class AddendumComponent implements OnInit {
 
 
   /** Form **/
+  protected columns: ColumnModel[] = [];
+  protected addendumColumns: ColumnModel[]=[];
+
+  /** Foreign Keys **/
+  protected addendumPersonTypes: CatalogueModel[]=[];
+  protected positions: CatalogueModel[] = [];
 
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons;
-  // validation
+  // constructor
+  constructor(private messageService: MessageService) {
+    this.buildaddendumColumns();
+
+  }
+  buildaddendumColumns() {
+    this.addendumColumns = [
+      {
+        field: 'isAddendum', header: AddendumEnum.isAddendum
+      },
+      {
+        field: 'description', header: AddendumEnum.description
+      },
+      {
+        field: 'isModifiedFinishDate', header: AddendumEnum.isModifiedFinishDate
+      },
+      {
+        field: 'document', header: AddendumEnum.document
+      },
+      {
+        field: 'agreementEndedAt', header: AddendumEnum.agreementEndedAt
+      },
+    ];
+  }
 
   addendums: AddendumModel[] = [
     {
@@ -38,7 +69,6 @@ export class AddendumComponent implements OnInit {
     }
   ];
 
-  constructor() { }
   ngOnInit(): void {
 
   }

@@ -7,81 +7,73 @@
         @if (!coreService.isLoading) {
         <p-toolbar>
             <div class="p-toolbar-group-left">
-                <app-header-form
-                    label="Datos de Comparecencias"
-                    [icon]="PrimeIcons.PENCIL"/>
-            </div>
-
-            <div class="p-toolbar-group-right">
-                <app-form-button-action
-                    labelSubmitButton="Siguiente"
-                    labelCancelButton="Atrás"
-                    [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-                    [isVisibleCancelButton]="false"
-                />
+                <app-header-form label="Datos de Comparecencias" [icon]="PrimeIcons.PENCIL" />
             </div>
         </p-toolbar>
-        <!-- Mitur -->
-        <h2>Mintur</h2>
+        <!-- Mintur -->
+        <h2>Ministerio</h2>
+
         <p-panel>
             <form class="p-fluid grid">
-                <!-- Primcipio -->
-                
-                <p-table [value]="internalInstitution">
+                <!-- Principio -->
+
+                <p-table [value]="internalInstitution" styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
                     <ng-template pTemplate="header">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Unit</th>
-                            <th>Agreement ID</th>
-                            <th>Person Type ID</th>
-                        </tr>
+                        @for (col of internalInstitutionColumns; track col.field) {
+                        <th [pSortableColumn]="col.field" style="border-right: 1px solid #ddd;">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        }
+                        <th class="text-center" style="border-right: 1px solid #ddd;">
+                            Acciones
+                        </th>
                     </ng-template>
                     <ng-template pTemplate="body" let-institution>
                         <tr>
-                            <td>{{ institution.id }}</td>
-                            <td>{{ institution.name }}</td>
-                            <td>{{ institution.positionId }}</td>
-                            <td>{{ institution.unit }}</td>
-                            <td>{{ institution.agreementId }}</td>
-                            <td>{{ institution.personTypeId }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.name }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.unit }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.positionId }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.personTypeId }}</td>
                         </tr>
                     </ng-template>
                 </p-table>
             </form>
         </p-panel>
-        <!-- Compareciencias -->
+        }
+        <!-- Divisor -->
+        <div style="height: 40px;"></div>
+        <!-- Comparecencias -->
         <h2>Comparecencias</h2>
         <p-panel>
             <form class="p-fluid grid">
-                <p-table [value]="externalInstitution">
+                <p-table [value]="externalInstitution" styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
                     <ng-template pTemplate="header">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Unit</th>
-                            <th>Agreement ID</th>
-                            <th>Person Type ID</th>
-                        </tr>
+                        @for (col of externalInstitutionsColumns; track col.field) {
+                        <th [pSortableColumn]="col.field" style="border-right: 1px solid #ddd;">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+
+                        </th>
+                        }
+                        <th class="text-center" style="border-right: 1px solid #ddd;">
+                            Acciones
+                        </th>
                     </ng-template>
                     <ng-template pTemplate="body" let-institution>
                         <tr>
-                            <td>{{ institution.id }}</td>
-                            <td>{{ institution.name }}</td>
-                            <td>{{ institution.position }}</td>
-                            <td>{{ institution.unit }}</td>
-                            <td>{{ institution.agreementId }}</td>
-                            <td>{{ institution.personTypeId }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.name }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.unit }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.position }}</td>
+                            <td style="border-right: 1px solid #ddd;">{{ institution.personTypeId }}</td>
                         </tr>
                     </ng-template>
-                </p-table>       
-                 <!-- Fin -->
-             
+                </p-table>
+                <!-- Fin -->
+
             </form>
         </p-panel>
-        
-        }
+
+
     </div>
 </div>
