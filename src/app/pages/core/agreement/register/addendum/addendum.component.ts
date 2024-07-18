@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { AgreementModel, ColumnModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -13,9 +14,6 @@ import { PrimeIcons } from 'primeng/api';
 })
 export class AddendumComponent implements OnInit {
   
-  ngOnInit(): void {
-    
-  }
   /** Services **/
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
@@ -26,14 +24,14 @@ export class AddendumComponent implements OnInit {
   private readonly routesService = inject(RoutesService);
   
   /** Form **/
-  // @Input({required: true}) id!: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  id:string= RoutesEnum.NEW
+  @Input() formInput!: any;
   protected form!: FormGroup;
   protected addendumForm! : FormGroup;
   private formErrors: string[] = [];
   protected Validators = Validators;
+  protected addendumColumns: ColumnModel[] = [];
   
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
@@ -43,15 +41,16 @@ export class AddendumComponent implements OnInit {
   constructor() {
     this.buildForm()
     this.buildAddendumForm()
+    this.buildAddendumColumns()
   }
-  
-  save() {
-    this.formOutput.emit(this.form.value); //add
+
+  ngOnInit(): void {
   }
+
 
   buildForm() {
     this.form =this.formBuilder.group({
-      isAddendum: [false, Validators.required],
+      isAddendum: [null, Validators.required],
       addendums: this.formBuilder.array([])
     })
     this.checkValueChanges()
@@ -80,6 +79,23 @@ export class AddendumComponent implements OnInit {
    this.addendums.removeAt(index)
   }
 
+  buildAddendumColumns() {
+    this.addendumColumns = [
+      {
+        field: 'Description', header: AddendumEnum.description
+      },
+      {
+        field: '', header: AddendumEnum.isModifiedFinishDate
+      },
+      {
+        field: 'position', header: AddendumEnum.agreementEndedAt
+      },
+      {
+        field: 'Documento', header: AddendumEnum.document
+      },
+    ];
+  }
+
   validateForm(): boolean {
     this.formErrors = [];
 
@@ -93,34 +109,11 @@ export class AddendumComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // if (this.validateForm()) {
-    //   this.create();
-    //   this.save()
-    // } else {
-    //   this.form.markAllAsTouched();
-    //   this.messageDialogService.fieldErrors(this.formErrors);
-    // }
-    this.create();
     this.save();
   }
 
-  create(): void {
-    /*
-        TODO
-    */
-  }
-
-  redirectRegistration() {
-    // this.messageDialogService.questionOnExit().subscribe(result => {
-    //   if (result) {
-    //     this.onLeave = true;
-    //     this.routesService.registration();
-    //   } else {
-    //     this.onLeave = false;
-    //   }
-    // });
-
-    // this.routesService.registration();
+  save() {
+    this.formOutput.emit(this.form.value); //add
   }
 
     checkValueChanges(){
@@ -155,6 +148,15 @@ export class AddendumComponent implements OnInit {
       }
      })
     })
+  }
+
+  patchValueForm(){
+    const {agreementEndedAt, ...agreement} = this.formInput
+    this.form.patchValue(agreement)
+    if(agreementEndedAt){
+      //this.agreementEndedAtField.setValue(getFormattedDate(agreementEndedAt))
+      
+    }
   }
 
   /** Getters Form**/
