@@ -52,7 +52,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 1',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '2',
@@ -71,7 +73,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 2',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '3',
@@ -90,7 +94,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 3',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '4',
@@ -109,7 +115,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 4',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '5',
@@ -128,7 +136,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 5',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     }
   ];
 
