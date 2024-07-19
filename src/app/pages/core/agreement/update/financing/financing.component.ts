@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { CatalogueModel, ColumnModel } from '@models/core';
+import { AgreementModel, CatalogueModel, ColumnModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -29,6 +29,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   uploadedFiles: any[] = [];
   protected form!: FormGroup;
   protected financingForm!: FormGroup;
+  @Input({required: true}) formInput!: AgreementModel;
   protected financingsColumns: ColumnModel[] = [];
 
   /** Form **/
@@ -72,6 +73,11 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   ngOnInit(): void {
     this.checkValueChanges();
+    
+    console.log(this.formInput);
+    this.form.patchValue({
+      ...this.formInput
+    });
   }
 
   save() {
@@ -119,10 +125,10 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
     if (this.financingForm.valid) {
       const financings = this.formBuilder.group({
-        model: [this.financingForm.value.model, [Validators.required]],
-        budget: [this.financingForm.value.budget, [Validators.required]],
-        paymentMethod: [this.financingForm.value.paymentMethod, [Validators.required]],
-        source: [this.financingForm.value.source, [Validators.required]],
+        model: [this.financingForm.value.model],
+        budget: [this.financingForm.value.budget],
+        paymentMethod: [this.financingForm.value.paymentMethod],
+        source: [this.financingForm.value.source],
       });
       this.financings.push(financings);
       this.financingForm.reset();
