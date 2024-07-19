@@ -1,6 +1,6 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
+import { AgreementModel, CatalogueModel } from '@models/core';
 import { CoreService, MessageDialogService} from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum } from '@shared/enums';
@@ -23,6 +23,7 @@ export class AgreementAdministratorComponent {
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
+  @Input({ required: true }) formInput!: AgreementModel;
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
@@ -41,20 +42,10 @@ export class AgreementAdministratorComponent {
     this.buildForm();
   }
 
-  async onExit() {
-    const res = await firstValueFrom(this.messageDialogService.questionOnExit());
-    console.log(res);
-    return res;
-    // return this.messageDialogService.questionOnExit();
-  }
-
   ngOnInit(): void {
     this.loadPositions();
     this.loadUnits();
-
-    // if (this.id !== RoutesEnum.NEW) {
-    //   // this.findAgreement(this.id);
-    // }
+    this.form.patchValue(this.formInput)
   }
 
   /** Form Builder & Validates **/

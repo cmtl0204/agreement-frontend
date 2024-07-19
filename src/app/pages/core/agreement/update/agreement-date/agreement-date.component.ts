@@ -1,8 +1,10 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { AgreementModel } from '@models/core';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum} from '@shared/enums';
+import { getFormattedDate } from '@shared/helpers';
 import { OnExitInterface } from '@shared/interfaces';
 import { PrimeIcons } from 'primeng/api';
   import { firstValueFrom} from 'rxjs';
@@ -25,6 +27,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); 
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
+  @Input({ required: true }) formInput!: AgreementModel;
   id:string = ''
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -51,6 +54,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     // if (this.id !== RoutesEnum.NEW) {
     //   // this.findAgreement(this.id);
     // }
+    this.patchValueForm()
   }
 
   /** Form Builder & Validates **/
@@ -67,6 +71,25 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     })
 
     this.checkValueChanges()
+  }
+
+  patchValueForm() {
+    const { endedAt, startedAt, subscribedAt,...agreement } = this.formInput
+
+    this.form.patchValue(agreement);
+
+    if (startedAt) {
+      this.startedAtField.setValue(getFormattedDate(startedAt))
+    }
+
+    if (subscribedAt) {
+      this.subscribedAtField.setValue(getFormattedDate(subscribedAt))
+    }
+
+    if (endedAt) {
+      this.endedAtField.setValue(getFormattedDate(endedAt))
+    }
+
   }
  
   validateForm(): boolean {

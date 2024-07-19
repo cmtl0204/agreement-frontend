@@ -22,7 +22,9 @@
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
             <app-appearer
               class="col-12"
-              (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+              [formInput]="form.value"
+              (formOutput)="save($event);nextCallback.emit()" 
+              (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
       </ng-template>
@@ -34,8 +36,11 @@
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-agreement-date class="col-12"
-                                (formOutput)="save($event);nextCallback.emit()" (prevOutput)="prevCallback.emit()"/>
+            <app-agreement-date 
+              class="col-12"
+              [formInput]="form.value"
+              (formOutput)="save($event);nextCallback.emit()" 
+              (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
       </ng-template>
@@ -47,9 +52,11 @@
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-agreement-administrator class="col-12"
-                                         (formOutput)="save($event);nextCallback.emit()"
-                                         (prevOutput)="prevCallback.emit()"/>
+            <app-agreement-administrator 
+              class="col-12"
+              [formInput]="form.value"
+              (formOutput)="save($event);nextCallback.emit()"
+              (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
 
@@ -64,6 +71,7 @@
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
             <app-obligation
               class="col-12"
+              [formInput]="form.value"
               (formOutput)="save($event);nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"
               [externalInstitutions]="externalInstitutionsField.value"/>
@@ -83,6 +91,7 @@
                 class="col-12"
                 (formOutput)="save($event);nextCallback.emit()"
                 (prevOutput)="prevCallback.emit()"
+                [formInput]="form.value"
                 [externalInstitutions]="externalInstitutionsField.value"
                 [internalInstitutions]="internalInstitutionsField.value"/>
             }
@@ -112,7 +121,8 @@
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
             <app-addendum class="col-12"
-                          (formOutput)="save($event)" (prevOutput)="prevCallback.emit()"/>
+              (formOutput)="save($event)" 
+              (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
       </ng-template>

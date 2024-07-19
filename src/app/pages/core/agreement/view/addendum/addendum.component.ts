@@ -1,12 +1,12 @@
-import { Component, inject, Input, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AddendumEnum, RoutesEnum, SkeletonEnum } from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
+import { AddendumEnum, SkeletonEnum } from '@shared/enums';
+import { PrimeIcons,MessageService } from 'primeng/api';
+import { AddendumModel } from '@models/core/addendum.model';
+import { CatalogueModel, ColumnModel } from '@models/core';
 
-import { AddendumModel } from '@models/core/addendum.model'
-import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+
 @Component({
   selector: 'app-addendum',
   templateUrl: './addendum.component.html',
@@ -14,49 +14,67 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 })
 export class AddendumComponent implements OnInit {
 
-  ngOnInit(): void {
-
-  }
   /** Services **/
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
-  private readonly formBuilder = inject(FormBuilder);
   private readonly routesService = inject(RoutesService);
+  public readonly messageDialogService = inject(MessageDialogService);
+
 
   /** Form **/
-  @Input({ required: true }) id!: string;
-  protected form!: FormGroup;
+  protected columns: ColumnModel[] = [];
+  protected addendumColumns: ColumnModel[]=[];
+
+  /** Foreign Keys **/
+  protected addendumPersonTypes: CatalogueModel[]=[];
+  protected positions: CatalogueModel[] = [];
 
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons;
-  // validation
+  // constructor
+  constructor(private messageService: MessageService) {
+    this.buildaddendumColumns();
 
-  addendums: AddendumModel[] =[
+  }
+  buildaddendumColumns() {
+    this.addendumColumns = [
+      {
+        field: 'isAddendum', header: AddendumEnum.isAddendum
+      },
+      {
+        field: 'description', header: AddendumEnum.description
+      },
+      {
+        field: 'isModifiedFinishDate', header: AddendumEnum.isModifiedFinishDate
+      },
+      {
+        field: 'document', header: AddendumEnum.document
+      },
+      {
+        field: 'agreementEndedAt', header: AddendumEnum.agreementEndedAt
+      },
+    ];
+  }
+
+  addendums: AddendumModel[] = [
     {
       id: "1",
       agreementId: "1",
-      isAddeddum: true,
+      isAddendum: true,
       description: "Descripcion",
       isModifiedFinishDate: true,
-      agreementEndedAt: "2024-12-31T23:59:59Z" ,
+      agreementEndedAt: new Date("2019-01-04"),
     }
   ];
-  
-  constructor(public messageDialogService: MessageDialogService) {
-    this.buildForm();
-  }
-  async onExit() {
-    const res = await firstValueFrom(this.messageDialogService.questionOnExit());
-    console.log(res);
-    return res;
+
+  ngOnInit(): void {
+
   }
 
-  buildForm() {
-    this.form = this.formBuilder.group({
+  findAgrement() {
 
-    })
   }
 
   /** Redirects **/

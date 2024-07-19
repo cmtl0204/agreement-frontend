@@ -1,12 +1,15 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AddendumEnum, SkeletonEnum } from '@shared/enums';
+import {
+  SkeletonEnum, 
+  ExternalInstitutionsFormEnum,
+  InternalInstitutionsFormEnum
+} from '@shared/enums';
 import { InternalInstitutionModel } from '@models/core/internal-institution.model';
-import { ExternalInstitution } from '@models/core/external-institution.model';
-import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
-import { PrimeIcons } from 'primeng/api';
+import { ExternalInstitutionModel } from '@models/core/external-institution.model';
+import { PrimeIcons,MessageService } from 'primeng/api';
+import { CatalogueModel, ColumnModel } from '@models/core';
 
 @Component({
   selector: 'app-appearer',
@@ -14,63 +17,96 @@ import { PrimeIcons } from 'primeng/api';
   styleUrls: ['./appearer.component.scss']
 })
 export class AppearerComponent implements OnInit {
-  ngOnInit(): void { }
 
   /** Services **/
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
-  private readonly formBuilder = inject(FormBuilder);
   private readonly routesService = inject(RoutesService);
+  public readonly messageDialogService = inject(MessageDialogService);
+
 
   /** Form **/
-  @Input({ required: true }) id!: string;
-  protected form!: FormGroup;
+  protected columns: ColumnModel[] = [];
+  protected externalInstitutionsColumns: ColumnModel[] = [];
+  protected internalInstitutionColumns: ColumnModel[] = [];
 
+  /** Foreign Keys **/
+  protected internalPersonTypes: CatalogueModel[] = [];
+  protected externalPersonTypes: CatalogueModel[] = [];
+  protected positions: CatalogueModel[] = [];
   /** Enums **/
-  protected readonly AddendumEnum = AddendumEnum;
+  protected readonly ExternalInstitutionsFormEnum = ExternalInstitutionsFormEnum;
+  protected readonly InternalInstitutionsFormEnum = InternalInstitutionsFormEnum;
   protected readonly PrimeIcons = PrimeIcons;
   protected readonly SkeletonEnum = SkeletonEnum;
 
+  constructor(private messageService: MessageService) {
+    this.buildExternalInstitutionsColumns();
+    this.buildInternalInstitutionsColumns();
 
-  /** Data **/
+  }
+
+  /** Data del internal**/
+  buildInternalInstitutionsColumns() {
+    this.internalInstitutionColumns = [
+      {
+        field: 'name', header: InternalInstitutionsFormEnum.name
+      },
+      {
+        field: 'unit', header: InternalInstitutionsFormEnum.unit
+      },
+      {
+        field: 'position', header: InternalInstitutionsFormEnum.position
+      },
+      {
+        field: 'personType', header: InternalInstitutionsFormEnum.personType
+      },
+    ];
+  }
+
   internalInstitution: InternalInstitutionModel[] = [
     {
       id: '1',
       name: 'Algo',
       positionId: 'Ministro',
       unit: 'Entidad Pública',
-      agreementId: 'Algo',
-      personTypeId: 'Algo',
-      
+      agreementId: '1',
+      personTypeId: '1',
     },
   ];
+  // Data del external
+  buildExternalInstitutionsColumns() {
+    this.externalInstitutionsColumns = [
+      {
+        field: 'name', header: ExternalInstitutionsFormEnum.name
+      },
+      {
+        field: 'position', header: ExternalInstitutionsFormEnum.position
+      },
+      {
+        field: 'unit', header: ExternalInstitutionsFormEnum.unit
+      },
+      {
+        field: 'personType', header: ExternalInstitutionsFormEnum.personType
+      },
+    ];
+  }
 
-  externalInstitution: ExternalInstitution[] = [
+  externalInstitution: ExternalInstitutionModel[] = [
     {
       id: '1',
-      name: 'Algo',
-      position: 'Algo',
-      unit: 'personas naturales privadas',
-      agreementId: 'Algo',
-      personTypeId: 'Algo',
+      name: 'Algo2',
+      position: 'Posicion',
+      unit: 'Entidad Pública',
+      agreementId: '1',
+      personTypeId: '1',
     },
   ];
+  ngOnInit(): void { }
+  findAgrement() {
 
-  constructor(public messageDialogService: MessageDialogService) {
-    this.buildForm();
-  }
-
-  async onExit() {
-    const res = await firstValueFrom(this.messageDialogService.questionOnExit());
-    console.log(res);
-    return res;
   }
   /** Form Builder & Validates **/
-  buildForm() {
-    this.form = this.formBuilder.group({
-
-    });
-  }
 
   /** Redirects **/
   redirectRegistration() {

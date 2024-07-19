@@ -1,6 +1,6 @@
-import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
+import {AgreementModel, CatalogueModel} from '@models/core';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, AgreementsTypeEnum} from '@shared/enums';
@@ -19,9 +19,8 @@ export class BasicDataComponent implements OnInit {
   protected readonly Validators = Validators;
 
   /** Form && Output **/
-  // @Input({required: true}) id: string;
   @Output() formOutput:EventEmitter<FormGroup> = new EventEmitter()
-  protected id =''
+  @Input({required: true}) formInput!: AgreementModel;
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
@@ -45,6 +44,8 @@ export class BasicDataComponent implements OnInit {
     this.loadOrigins();
     this.loadTypes();
     this.loadSpecialTypes()
+
+    this.form.patchValue(this.formInput);
   }
 
   /** Form Builder & Validates **/
@@ -101,7 +102,6 @@ export class BasicDataComponent implements OnInit {
 
   loadTypes() {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
-    console.log(this.types)
   };
 
   loadSpecialTypes(){
