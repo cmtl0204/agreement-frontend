@@ -5,25 +5,37 @@
     }
 
     @if (!coreService.isLoading) {
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form [id]="id"></app-header-form>
-      </div>
-      <div class="p-toolbar-group-right">
-        <app-form-button-action (submit)="onSubmit()" labelSubmitButton="Siguiente" labelCancelButton="Atrás"
-          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT" [isVisibleCancelButton]="false" />
-      </div>
-    </p-toolbar>
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <app-form-button-action
+            (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
+            labelSubmitButton="Siguiente"
+            labelCancelButton="Atrás"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="true"
+          />
+        </div>
+      </p-toolbar>
     <div class="p-fluid">
 
-      <p-multiSelect [options]="obligationType" [(ngModel)]="selectedObligationTypes" optionLabel="name"
-        placeholder="Select Cities" />
+      <p-multiSelect [options]="obligationType" [(ngModel)]="selectedObligationTypes"  optionLabel="name"
+      placeholder="Select Obligations"/>
 
         <!-- MINTUR -->
         <div *ngFor="let obligation of selectedObligationTypes">
           <ng-container [ngSwitch]="obligation.name">
             <div *ngSwitchCase="'obligacion mintur'">
               <div class="p-fluid">
+                
+                  
+                
                 <p-panel>
                   <div class="p-fluid">
                     <div class="p-field p-grid">

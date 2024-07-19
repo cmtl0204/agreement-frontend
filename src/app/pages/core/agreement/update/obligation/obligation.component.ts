@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
+import { CatalogueModel, ObligationModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -14,6 +14,7 @@ interface Obligations {
   counterpart: boolean;
   joint: boolean;
 }
+
 @Component({
   selector: 'app-obligation',
   templateUrl: './obligation.component.html',
@@ -23,6 +24,8 @@ export class ObligationComponent implements OnInit, OnExitInterface {
  @Input({required: true}) externalInstitutions: CatalogueModel[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   institutions = [];
+  @Input({required:true}) formInput!:any;
+
 
   protected obligationType: CatalogueModel[]=[];
   protected obligationMintur: CatalogueModel[]=[];
@@ -82,7 +85,15 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     });
   }
 
- 
+  patchValueForm(){
+    const {obligations}=this.formInput;
+    if(obligations){
+      obligations.forEach((value:ObligationModel)=>{
+        this.obligations.push(this.formBuilder.group(value))
+      });
+    } 
+  }
+  
   addObligation(): void {
     if (this.obligationForm.invalid) {
       return; // Si el formulario es inválido, no agregues la obligación

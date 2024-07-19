@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
+import { AgreementModel, CatalogueModel, ObligationModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -20,12 +20,14 @@ interface Obligations {
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
-  //  @Input({required: true}) externalInstitutions: any[] = [];
+  @Input({required: true}) externalInstitutions: any[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   institutions = [];
+  @Input({required:true}) formInput!:any;
 
   protected obligationType: CatalogueModel[]=[];
-  protected externalInstitutions: CatalogueModel[] = [];
   protected obligationMintur: CatalogueModel[]=[];
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
@@ -44,8 +46,6 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   selectedInstitution: any = null;
   filteredObligations: any[] = [];
 
-
-  // @Input({required: true}) id!: string;
   id: string = RoutesEnum.NEW
   protected obligationForm!: FormGroup;
   protected form!: FormGroup;
@@ -68,10 +68,12 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     this.loadObligationTypes();
     this.loadMintur();
     this.loadObligationsFromStorage();
+    this.patchValueForm()
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
+      type:this.formBuilder.array([]),
       obligations: this.formBuilder.array([])
     }); 
   }
@@ -163,6 +165,15 @@ this.obligationMintur=[
     this.formOutput.emit(this.form.value);
   }
 
+  patchValueForm(){
+    const {obligations}=this.formInput;
+    if(obligations){
+      obligations.forEach((value:ObligationModel)=>{
+        this.obligations.push(this.formBuilder.group(value))
+      });
+    } 
+  }
+
   onSubmit(): void {
     if (this.validateForm()) {
       this.save();
@@ -227,6 +238,9 @@ this.obligationMintur=[
 
   get obligations(): FormArray {
     return this.form.get('obligations') as FormArray;
+  }
+  get type(): FormArray {
+    return this.form.get('type') as FormArray;
   }
 
   get modelField(): AbstractControl {
