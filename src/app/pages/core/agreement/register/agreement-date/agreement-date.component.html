@@ -39,6 +39,7 @@
               [iconDisplay]="'input'"
               [showIcon]="true"
               [minDate]="startedAtField.value"
+              dateFormat="yy-mm-dd"
             />
             <small
               appErrorMessage
@@ -58,6 +59,7 @@
               formControlName="startedAt"
               [iconDisplay]="'input'"
               [showIcon]="true"
+              dateFormat="yy-mm-dd"
             />
             <small
               appErrorMessage
@@ -107,7 +109,7 @@
           </div>
 
           <!-- endedAt -->
-          @if (endedAtField.hasValidator(Validators.required)) {
+          @if (isFinishDateField.value) {
             <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
               <label appLabel for="endedAt"
                      [label]="AgreementFormEnum.endedAt"
@@ -119,6 +121,7 @@
                 [iconDisplay]="'input'"
                 [showIcon]="true"
                 [minDate]="startedAtField.value"
+                dateFormat="yy-mm-dd"
               />
               <small
                 appErrorMessage
@@ -200,7 +203,7 @@
 
           }
           <!-- endedReason -->
-          @if (endedReasonField.hasValidator(Validators.required)) {
+          @if (isFinishDateField.value === false) {
             <div class="field col-12">
               <label appLabel
                      for="endedReason"

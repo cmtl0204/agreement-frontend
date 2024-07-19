@@ -32,8 +32,8 @@ export class RegisterComponent {
       externalInstitutions: [null],
 
       // agreement-date
-      subscribedAt: [null],
-      startedAt: [null],
+      subscribedAt: [new Date()],
+      startedAt: [new Date()],
       isFinishDate: [null],
       endedAt: [null],
       endedReason: [null],
