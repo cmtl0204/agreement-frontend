@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { AgreementModel, ColumnModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
@@ -26,7 +26,6 @@ export class AddendumComponent implements OnInit {
   /** Form **/
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  @Input() formInput!: any;
   protected form!: FormGroup;
   protected addendumForm! : FormGroup;
   private formErrors: string[] = [];
@@ -150,14 +149,6 @@ export class AddendumComponent implements OnInit {
     })
   }
 
-  patchValueForm(){
-    const {agreementEndedAt, ...agreement} = this.formInput
-    this.form.patchValue(agreement)
-    if(agreementEndedAt){
-      //this.agreementEndedAtField.setValue(getFormattedDate(agreementEndedAt))
-      
-    }
-  }
 
   /** Getters Form**/
   get isAddendumField(): AbstractControl {
