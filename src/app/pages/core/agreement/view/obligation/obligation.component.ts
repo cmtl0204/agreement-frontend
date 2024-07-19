@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { CoreService, RoutesService } from "@servicesApp/core";
+import { CompanyRegistrationFormEnum, SkeletonEnum } from "@shared/enums";
 
 interface Order {
   id: string;
@@ -31,6 +34,21 @@ interface Product {
   styleUrls: ['./obligation.component.scss']
 })
 export class ObligationComponent implements OnInit {
+
+   /** Services **/
+   protected readonly coreService = inject(CoreService);
+   private readonly formBuilder = inject(FormBuilder);
+   private readonly routesService = inject(RoutesService);
+ 
+   /** Form **/
+   @Input() id!: string;
+   protected form!: FormGroup;
+ 
+   /** Enums **/
+   protected readonly SkeletonEnum = SkeletonEnum;
+   protected readonly CompanyRegistrationFormEnum = CompanyRegistrationFormEnum;
+ 
+   //validation
 
   products: Product[] = [
     {
@@ -149,4 +167,4 @@ export class ObligationComponent implements OnInit {
     this.expandedOrderRows = {};
   }
 
-}
+  }

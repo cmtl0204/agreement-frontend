@@ -6,6 +6,7 @@ import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/c
 import { CatalogueTypeEnum, CompanyRegistrationFormEnum, RoutesEnum, SkeletonEnum } from "@shared/enums";
 import { AgreementModel, FinancingModel } from '@models/core';
 
+import { PrimeIcons } from 'primeng/api';
 @Component({
   selector: 'app-financing',
   templateUrl: './financing.component.html',
@@ -210,13 +211,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   }
 
-  onSubmit(): void {
-    // Lógica para manejar el envío del formulario
-  }
-
-  redirectRegistration() {
-    this.routesService.registration();
-  }
+  
 
   /** Getters para los campos del formulario **/
   get financingField(): AbstractControl {
