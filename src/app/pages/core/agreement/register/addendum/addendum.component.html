@@ -8,7 +8,6 @@
         <p-toolbar>
           <div class="p-toolbar-group-left">
             <app-header-form
-              [id]="id"
               label="Registro"
               [icon]="PrimeIcons.PENCIL"/>
           </div>
@@ -164,22 +163,25 @@
               }
           </form>
         </p-panel>
-        <p-table [value]="addendums.controls" [tableStyle]="{ 'min-width': '50rem' }">
+
+        <p-table [value]="addendums.value" [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template pTemplate="header">
-              <tr>
-                  <th>Descripción</th>
-                  <th>¿Se modifica fecha de finalización?</th>
-                  <th>Fecha de finalización</th>
-                  <th>Documento</th>
-                  <th>index</th>
-              </tr>
+            @for (col of addendumColumns; track col.field) {
+              <th [pSortableColumn]="col.field">
+                {{ col.header }}
+              </th>
+            }
+            
+            <th class="text-center">
+              Acciones
+            </th>
           </ng-template>
           <ng-template pTemplate="body" let-addendum let-i="rowIndex" >
               <tr>
-                  <td>{{ addendum.value.description }}</td>
-                  <td>{{ addendum.value.isModifiedFinishDate }}</td>
-                  <td>{{ addendum.value.agreementEndedAt }}</td>
-                  <td>{{ addendum.value.document }}</td>
+                  <td>{{ addendum.description }}</td>
+                  <td>{{ addendum.isModifiedFinishDate }}</td>
+                  <td>{{ addendum.agreementEndedAt }}</td>
+                  <td>{{ addendum.document }}</td>
                   <td>
                     <button pButton type="button" [icon]="PrimeIcons.ERASER" class="p-button p-button-danger"
                     (click)="deleteAddendum(i)">
