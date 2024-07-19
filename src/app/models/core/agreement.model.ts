@@ -21,6 +21,6 @@ export interface AgreementModel {
   origin?: CatalogueModel;
   type?: CatalogueModel;
   specialType?: CatalogueModel;
-  externalInstitutions: ExternalInstitutionModel[];
-  internalInstitutions: InternalInstitutionModel[];
+  externalInstitutions?: ExternalInstitutionModel[];
+  internalInstitutions?: InternalInstitutionModel[];
 }

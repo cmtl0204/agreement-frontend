@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl } from '@angular/forms';
-import { CatalogueModel } from '@models/core';
+import { AgreementModel, CatalogueModel, ObligationModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -20,9 +20,12 @@ interface Obligations {
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit, OnExitInterface {
-  @Input({required: true}) externalInstitutions: CatalogueModel[] = [];
+  @Input({required: true}) externalInstitutions: any[] = [];
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   institutions = [];
+  @Input({required:true}) formInput!:any;
 
   protected obligationType: CatalogueModel[]=[];
   protected obligationMintur: CatalogueModel[]=[];
@@ -43,8 +46,6 @@ export class ObligationComponent implements OnInit, OnExitInterface {
   selectedInstitution: any = null;
   filteredObligations: any[] = [];
 
-
-  // @Input({required: true}) id!: string;
   id: string = RoutesEnum.NEW
   protected obligationForm!: FormGroup;
   protected form!: FormGroup;
@@ -66,10 +67,13 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     this.loadExternalInstitutions();
     this.loadObligationTypes();
     this.loadMintur();
+    this.loadObligationsFromStorage();
+    this.patchValueForm()
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
+      type:this.formBuilder.array([]),
       obligations: this.formBuilder.array([])
     }); 
   }
@@ -81,22 +85,24 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     });
   }
 
-  addObligation() {
-    const obligations = this.formBuilder.group({
-      model: [this.obligationForm.value.model, [Validators.required]],
-      description: [this.obligationForm.value.description, [Validators.required]]
-    })
-    this.obligations.push(obligations);
+ 
+  addObligation(): void {
+    if (this.obligationForm.invalid) {
+      return; // Si el formulario es inválido, no agregues la obligación
+    }
+    this.obligations.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
     this.obligationForm.reset();
+    this.closeModal();
   }
+
 
   deleteObligation(index: number) {
     this.obligations.removeAt(index);
+    this.saveObligationsToStorage();
   }
 
   validateForm(): boolean {
     this.formErrors = [];
-
     if (this.modelField.invalid) this.formErrors.push(ExternalInstitutionsObligations.positionName);
     if (this.descriptionField.invalid) this.formErrors.push(ExternalInstitutionsObligations.obligations);
     return this.form.valid && this.formErrors.length === 0;
@@ -106,17 +112,18 @@ export class ObligationComponent implements OnInit, OnExitInterface {
     this.obligationForm.reset();
     this.obligationForm.patchValue({ model: institutionName });
     this.displayModal = true;
-    }
+  }
 
   closeModal() {
     this.displayModal = false;
   }
 
   addObligationAndCloseModal() {
-    if (this.obligationForm.valid) {
-      this.obligations.push(this.formBuilder.group(this.obligationForm.value));
-      this.closeModal();
+    if (this.obligationForm.invalid) {
+      return; 
     }
+    this.obligations.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
+    this.closeModal();
   }
 
   toggleObligationsTable(institution: any) {
@@ -158,6 +165,15 @@ this.obligationMintur=[
     this.formOutput.emit(this.form.value);
   }
 
+  patchValueForm(){
+    const {obligations}=this.formInput;
+    if(obligations){
+      obligations.forEach((value:ObligationModel)=>{
+        this.obligations.push(this.formBuilder.group(value))
+      });
+    } 
+  }
+
   onSubmit(): void {
     if (this.validateForm()) {
       this.save();
@@ -173,17 +189,58 @@ this.obligationMintur=[
     return res;
   }
 
-  addMinturObligation(institution: CatalogueModel, description: string) {
+  addMinturObligation(model: any, description: string): void {
+    if (description.trim() === '') {
+      return; 
+    }
+    this.obligations.push(this.createObligation(model.name, description));
+  }
+
+  createObligation(model: string, description: string): FormGroup {
+    return this.formBuilder.group({
+      model: [model, Validators.required],
+      description: [description, Validators.required],
+    });
+  }
+
+ 
+  addObligationForInstitution(institution: CatalogueModel, description: string, save: boolean = true) {
     const obligationsArray = this.form.get('obligations') as FormArray;
     const newObligation = this.formBuilder.group({
       model: [institution.name, Validators.required],
       description: [description, Validators.required]
     });
     obligationsArray.push(newObligation);
+    if (save) {
+      this.saveObligationsToStorage();
+    }
+  }
+
+    loadObligationsFromStorage() {
+    const storedObligations = localStorage.getItem('obligations');
+    if (storedObligations) {
+      const obligationsArray = JSON.parse(storedObligations);
+      const obligationsFormArray = this.form.get('obligations') as FormArray;
+      obligationsArray.forEach((obligation: any) => {
+        const obligationGroup = this.formBuilder.group({
+          model: [obligation.model, Validators.required],
+          description: [obligation.description, Validators.required]
+        });
+        obligationsFormArray.push(obligationGroup);
+      });
+    }
+  }
+
+  saveObligationsToStorage() {
+    const obligationsArray = this.obligations.controls.map(control => control.value);
+    localStorage.setItem('obligations', JSON.stringify(obligationsArray));
   }
 
   get obligations(): FormArray {
     return this.form.get('obligations') as FormArray;
+  }
+  get type(): FormArray {
+    return this.form.get('type') as FormArray;
   }
 
   get modelField(): AbstractControl {
