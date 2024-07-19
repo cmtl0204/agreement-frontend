@@ -6,6 +6,7 @@ import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/c
 import { CatalogueTypeEnum, CompanyRegistrationFormEnum, RoutesEnum, SkeletonEnum } from "@shared/enums";
 import { AgreementModel, FinancingModel } from '@models/core';
 
+import { PrimeIcons } from 'primeng/api';
 @Component({
   selector: 'app-financing',
   templateUrl: './financing.component.html',
@@ -51,7 +52,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 1',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '2',
@@ -70,7 +73,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 2',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '3',
@@ -89,7 +94,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 3',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '4',
@@ -108,7 +115,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 4',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     },
     {
       id: '5',
@@ -127,7 +136,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       dayTerm: 0,
       objective: 'Objetivo del acuerdo 5',
       isFinancing: true,
-      userId: 'userr'
+      userId: 'userr',
+      externalInstitutions: [],
+      internalInstitutions: []
     }
   ];
 
@@ -210,13 +221,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   }
 
-  onSubmit(): void {
-    // Lógica para manejar el envío del formulario
-  }
-
-  redirectRegistration() {
-    this.routesService.registration();
-  }
+  
 
   /** Getters para los campos del formulario **/
   get financingField(): AbstractControl {
