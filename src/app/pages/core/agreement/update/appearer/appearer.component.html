@@ -42,7 +42,6 @@
          appLabel
          for="position"
          [label]="InternalInstitutionsFormEnum.position"
-         [label]="InternalInstitutionsFormEnum.position"
          [required]="internalInstitutionPositionField"
         ></label>
 
@@ -75,57 +74,9 @@
       <small appErrorMessage
       [errors]="internalInstitutionPositionField.errors"
       [touched]="internalInstitutionPositionField.touched"
-      [dirty]="internalInstitutionPositionField.dirty">
+      >
       </small>
       </div>
-
-       <!-- name -->
-      <!-- <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
-
-        <label 
-         appLabel 
-         for="name" 
-         [label]="InternalInstitutionsFormEnum.name"
-         [required]="internalInstitutionNameField"
-         ></label>
-
-         <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-
-        <input
-         pInputText
-         id="name"
-         formControlName="name">
-
-         <small appErrorMessage
-             [errors]="internalInstitutionNameField.errors"
-             [touched]="internalInstitutionNameField.touched"
-             [dirty]="internalInstitutionNameField.dirty">
-          </small>
-      </div> -->
-      
-        <!-- unit -->
-      <!-- <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
-
-        <label
-         appLabel 
-         for="unit"
-         [label]="InternalInstitutionsFormEnum.unit"
-         [required]="internalInstitutionUnitField"
-         ></label>
-
-         <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-
-        <input
-         pInputText
-         id="unit"
-         formControlName="unit"
-         >
-         <small appErrorMessage
-                   [errors]="internalInstitutionUnitField.errors"
-                   [touched]="internalInstitutionUnitField.touched"
-                   [dirty]="internalInstitutionUnitField.dirty">
-            </small>
-      </div> -->
 
        <!-- personType -->
       <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
@@ -166,46 +117,59 @@
         <small appErrorMessage
         [errors]="internalInstitutionPersonTypeField.errors"
         [touched]="internalInstitutionPersonTypeField.touched"
-        [dirty]="internalInstitutionPersonTypeField.dirty">
+        >
         </small>
 
       </div>
-      <!-- <p-button label="Añadir" [raised]="true"  (click)="addInternalInstitutions()" /> -->
-     </form>
+      @if (internalInstitutions.length < 1) {
+     <p-button label="Añadir" [raised]="true"  (click)="addInternalInstitutions()" /> 
+    }
+    </form>
 
      <br>
       <!-- table -->
-<!--     
+  
       @if(internalInstitutions.controls.length > 0){ 
-       <p-table [value]="internalInstitutions.controls" responsiveLayout="scroll">
+       <p-table
+        [value]="internalInstitutions.controls"
+       styleClass="p-datatable-striped" 
+       [tableStyle]="{'min-width': '50rem'}"
+      >
       <ng-template pTemplate="header">
-
-        <tr>
-          <th>Nombre</th>
-          <th>Cargo</th>
-          <th>Unidad</th>
-          <th>Entidad</th>
-          <th>Acción</th>
-        </tr>
-
+        @for (col of internalInstitutionsColumns; track col.field) {
+          <th [pSortableColumn]="col.field">
+            {{ col.header }}
+          </th>
+        }
+        <th class="text-center">
+          Acciones
+        </th>
       </ng-template>
 
       <ng-template pTemplate="body" let-internalInstitution let-i="rowIndex">
        
         <tr>
-          <td>{{ internalInstitution.get('name')?.value }}</td>
-          <td>{{ getPositionNameById(internalInstitution.get('personType')?.value) }}</td>
-          <td>{{ internalInstitution.get('unit')?.value }}</td>
-          <td>{{ getPositionNameById(internalInstitution.get('personType')?.value) }}</td>
-          <td>
-            <p-button label="Eliminar" icon="pi pi-times" severity="danger" (click)="removeInternalInstitutions(i)" class="mr-2" />
-            <p-button label="Editar" icon="pi pi-pencil" severity="success" (click)="editInternalInstitutions(i)" />
+          <td class="text-center">{{ internalInstitution.get('name')?.value }}</td>
+          <td class="text-center">{{ internalInstitution.get('unit')?.value}}</td>
+          <td class="text-center">{{ internalInstitution.get('position')?.value}}</td>
+          <td class="text-center">{{internalInstitution.get('personType')?.value.name}}</td>
+          <td class="text-center">
+            <div class="button-group">
+              <p-button 
+                icon="pi pi-trash" 
+                severity="danger" 
+                (click)="removeInternalInstitutions(i)" />
+              <p-button 
+                icon="pi pi-pencil" 
+                severity="success" 
+                (click)="editInternalInstitutions(i)" />
+            </div>
           </td>
         </tr>
 
       </ng-template>
     </p-table>
-      } -->
+      }
 
      <br>
      <hr> 
@@ -233,10 +197,31 @@
           <small appErrorMessage
           [errors]="externalInstitutionNameField.errors"
           [touched]="externalInstitutionNameField.touched"
-          [dirty]="externalInstitutionNameField.dirty">
+          >
          </small>
          </div>
-        
+         
+         <!-- unit -->
+        <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+          <label appLabel 
+           for="unit"
+           [label]="ExternalInstitutionsFormEnum.unit"
+           [required]="externalInstitutionUnitField"
+           ></label>
+
+           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
+          <input pInputText
+           id="unit"
+           formControlName="unit"
+           >
+           <small appErrorMessage
+           [errors]="externalInstitutionUnitField.errors"
+           [touched]="externalInstitutionUnitField.touched"
+          >
+            </small>
+
+        </div>
          <!-- position -->
         <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
 
@@ -257,32 +242,12 @@
            <small appErrorMessage
            [errors]="externalInstitutionPositionField.errors"
            [touched]="externalInstitutionPositionField.touched"
-           [dirty]="externalInstitutionPositionField.dirty">
+           >
            </small>
 
         </div>
 
-         <!-- unit -->
-        <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
-          <label appLabel 
-           for="unit"
-           [label]="ExternalInstitutionsFormEnum.unit"
-           [required]="externalInstitutionUnitField"
-           ></label>
-
-           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-
-          <input pInputText
-           id="unit"
-           formControlName="unit"
-           >
-           <small appErrorMessage
-           [errors]="externalInstitutionUnitField.errors"
-           [touched]="externalInstitutionUnitField.touched"
-           [dirty]="externalInstitutionUnitField.dirty">
-            </small>
-
-        </div>
+        
 
          <!-- personType-->
         <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
@@ -325,7 +290,7 @@
           <small appErrorMessage
           [errors]="externalInstitutionPersonTypeField.errors"
           [touched]="externalInstitutionPersonTypeField.touched"
-          [dirty]="externalInstitutionPersonTypeField.dirty">
+          >
           </small>
           </div>
 
@@ -340,8 +305,8 @@
         @if(externalInstitutions.controls.length > 0){ 
         <p-table
          [value]="externalInstitutions.controls" 
-        styleClass="p-datatable-gridlines" 
-        [tableStyle]="{'min-width': '50rem'}">
+         styleClass="p-datatable-striped" 
+         [tableStyle]="{'min-width': '50rem'}">
 
           <ng-template pTemplate="header">
          
@@ -365,9 +330,11 @@
               <td class="text-center">{{ externalInstitution.get('position')?.value }}</td>
               <td class="text-center">{{externalInstitution.get('personType')?.value.name }}</td>
               <td>
+                <div class="button-group">
                 <p-button icon="pi pi-trash" severity="danger" (click)="removeExternalInstitutions(i)" class="mr-2" />
                 <p-button icon="pi pi-pencil" severity="success" (click)="editExternalInstitutions(i)" />
-              </td>
+              </div>
+            </td>
             </tr>
           </ng-template>
         </p-table>

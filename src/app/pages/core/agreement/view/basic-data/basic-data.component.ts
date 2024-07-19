@@ -1,4 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
+import { AgreementStateModel } from '@models/core';
 import { AgreementModel } from '@models/core/agreement.model';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -27,23 +28,30 @@ export class BasicDataComponent implements OnInit {
 
   /** Model */
   protected agreement: AgreementModel = {
-    id: '',
-    number: '1200',
+    number: '2024-001',
+    name: 'Convenio de Colaboración Tecnológica',
     internalNumber: 100,
-    name: 'Convenio 01',
-    originId: 'origen',
-    typeId: 'tipo',
-    isFinishDate: false,
-    endedReason: '',
-    yearTerm: 2024,
-    monthTerm: 10,
-    dayTerm: 31,
-    objective: '',
-    isFinancing: false,
-    userId: '',
-    subscribedAt: new Date(),
-    startedAt: new Date(),
-    endedAt: null
+    origin: {
+      name: 'Universidad Nacional'
+    },
+    type: {
+      name: 'Marco, Específico, Comodato o préstamo de uso'
+    },
+    specialType: {
+      name: 'Memorando de Entendimiento'
+    },
+    objective: 'Fomentar la investigación y desarrollo tecnológico entre las instituciones participantes.'
+  }
+
+  protected agreementState: AgreementStateModel = {
+    state: {
+      name: 'Convenio vigente'
+    },
+    id: '',
+    agreementId: '',
+    registeredAt: new Date(''),
+    stateId: '',
+    userId: ''
   }
 
   constructor() { }
