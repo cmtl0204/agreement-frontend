@@ -50,7 +50,7 @@
                       appLabel
                       for="agreementState"
                       [label]="AgreementFormEnum.agreementState"></label>
-                    <input pInputText id="agreementState" [value]="" [readonly]="true" />
+                    <input pInputText id="agreementState" [value]="agreementState.state?.name" [readonly]="true" />
                 </div>
 
                 <!-- Origin -->
@@ -59,7 +59,7 @@
                       appLabel
                       for="originId"
                       [label]="AgreementFormEnum.origin"></label>
-                    <input pInputText id="originId" [value]="agreement.origin" [readonly]="true" />
+                    <input pInputText id="originId" [value]="agreement.origin?.name" [readonly]="true" />
                 </div>
 
                 <!-- Type -->
@@ -68,17 +68,19 @@
                       appLabel
                       for="typeId"
                       [label]="AgreementFormEnum.type"></label>
-                    <input pInputText id="typeId" [value]="agreement.type" [readonly]="true" />
+                    <input pInputText id="typeId" [value]="agreement.type?.name" [readonly]="true" />
                 </div>
 
                 <!-- Special Type -->
+                @if (agreement.specialType?.name;){
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                     <label
                       appLabel
                       for="specialTypeId"
                       [label]="AgreementFormEnum.specialType"></label>
-                    <input pInputText id="specialTypeId" [value]="agreement.typeId" [readonly]="true" />
+                    <input pInputText id="specialTypeId" [value]="agreement.specialType?.name" [readonly]="true" />
                 </div>
+              } 
 
                 <!-- Object -->
                 <div class="field col-12">
