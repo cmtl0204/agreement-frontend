@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { CatalogueModel } from '@models/core';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum} from '@shared/enums';
+import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, AgreementsTypeEnum} from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
 
 @Component({
@@ -45,7 +45,6 @@ export class BasicDataComponent implements OnInit {
     this.loadOrigins();
     this.loadTypes();
     this.loadSpecialTypes()
-
   }
 
   /** Form Builder & Validates **/
@@ -57,8 +56,8 @@ export class BasicDataComponent implements OnInit {
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
       origin: [{value:null, disabled:true}, [Validators.required]],
-      type: ['', [Validators.required]],
       specialType: [null],
+      type: [null, [Validators.required]],
     });
 
     this.checkValueChanges();
@@ -66,19 +65,19 @@ export class BasicDataComponent implements OnInit {
 
   checkValueChanges(){
     this.typeField.valueChanges.subscribe((value) => {
-      if(value.id === '3') {
+      if(value.code === AgreementsTypeEnum.ESPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
-        this.specialTypeField.reset();
       }else{
         this.specialTypeField.clearValidators();
-        this.specialTypeField.reset();
       }
       this.typeField.updateValueAndValidity();
+      this.specialTypeField.reset();
     })
   }
 
   validateForm(): boolean {
     this.formErrors = [];
+
     if (this.agreementStateField.invalid) this.formErrors.push(AgreementFormEnum.agreementState);
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
@@ -93,7 +92,7 @@ export class BasicDataComponent implements OnInit {
 
   /** Load Foreign Keys  **/
   loadStates() {
-    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_STATE);
+    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
   };
 
   loadOrigins() {
@@ -101,32 +100,18 @@ export class BasicDataComponent implements OnInit {
   };
 
   loadTypes() {
-    /* this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE); */
-    this.types = [
-      {name: 'Marco', id: '1'},
-      {name: 'Específicos', id: '2'},
-      {name: 'Especial', id: '3'},
-      {name: 'Comodato o convenio de préstamo de uso', id: '4'},
-    ]
+    this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
+    console.log(this.types)
   };
 
   loadSpecialTypes(){
-    /* this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE); */
-
-    this.specialTypes = [
-      {name: 'Memorando de Entendimiento', id: '1'},
-      {name: 'Carta de Intención', id: '2'},
-      {name: 'Articulación', id: '3'},
-      {name: 'Cooperación', id: '4'},
-    ]
+    this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE);
   }
 
   /** Form Actions **/
   onSubmit(): void {
     if (this.validateForm()) {
-      console.log(this.form.value)
       this.save();
-      alert('Send')
       /*
      TODO
      */

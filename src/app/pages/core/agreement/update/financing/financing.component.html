@@ -98,19 +98,29 @@
                 
                     <!-- financingsForm/model  -->
                     <div class="field xl:col-6 md:col-6 sm:col-12">
-                      <label appLabel 
-                            for="model" 
+                      <label appLabel
+                            for="model"
                             [label]="FinancingsFormEnum.model"
                             [required]="modelField">
                       </label>
                       <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                       <p-dropdown
-                        id="model" 
+                        id="model"
                         formControlName="model"
-                        [options]="groupedInstitutions" 
-                        optionLabel="label"
-                        placeholder="Select an Institution"
-                        [filter]="false" />
+                        dataKey="id"
+                        [options]="groupedInstitutions"
+                        placeholder="Select an Institution">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ selectedOption.name }}</div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-item pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ item.name }}</div>
+                          </div>
+                        </ng-template> 
+                      </p-dropdown>
                       <small
                         appErrorMessage
                           [errors]="modelField.errors"

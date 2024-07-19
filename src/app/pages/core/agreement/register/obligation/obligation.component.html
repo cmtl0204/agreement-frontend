@@ -4,24 +4,14 @@
     <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
     }
 
-    @if (!coreService.isLoading) {}
+    @if (!coreService.isLoading) {
     <p-toolbar>
       <div class="p-toolbar-group-left">
-        <app-header-form
-          [id]="id"
-          label="Registro"
-          [icon]="PrimeIcons.PENCIL"/>
+        <app-header-form [id]="id"></app-header-form>
       </div>
-
       <div class="p-toolbar-group-right">
-        <app-form-button-action
-          (submit)="onSubmit()"
-          (cancel)="prevOutput.emit(true)"
-          labelSubmitButton="Siguiente"
-          labelCancelButton="Atrás"
-          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-          [isVisibleCancelButton]="true"
-        />
+        <app-form-button-action (submit)="onSubmit()" labelSubmitButton="Siguiente" labelCancelButton="Atrás"
+          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT" [isVisibleCancelButton]="false" />
       </div>
     </p-toolbar>
     <div class="p-fluid">
@@ -29,137 +19,66 @@
       <p-multiSelect [options]="obligationType" [(ngModel)]="selectedObligationTypes" optionLabel="name"
         placeholder="Select Cities" />
 
+<div *ngFor="let obligation of selectedObligationTypes">
+  <ng-container [ngSwitch]="obligation.name">
+    <div *ngSwitchCase="'obligacion mintur'">
+      <div class="p-fluid">
+        <p-panel>
+          <p-table [value]="obligationMintur">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Entidad</th>
+                <th>Obligaciones</th>
+                <th>Acciones</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-institution let-i="rowIndex">
+              <tr>
+                <td>{{ institution.name }}</td>
+                <td>
+                  <ng-container *ngIf="obligations.controls.length > 0">
+                    <div *ngFor="let obligation of obligations.controls; let j = index">
+                      <div *ngIf="obligation.get('model')?.value === institution.name">
+                        {{ obligation.get('description')?.value }}
+                        <p-button (click)="deleteObligation(j)" label="Eliminar"></p-button>
+                      </div>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <textarea rows="3" cols="30" #obligationDescription></textarea>
+                  <p-button (click)="addMinturObligation(institution, obligationDescription.value); obligationDescription.value = ''" label="Agregar"></p-button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-panel>
 
-      <div *ngFor="let obligation of selectedObligationTypes">
-        <ng-container [ngSwitch]="obligation.name">
-          <div *ngSwitchCase="'obligacion mintur'">
-           <div class="p-fluid">
-              <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="false" header="Agregar Obligación">
-                <div [formGroup]="obligationForm">
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="model" [label]="'Entidad'"></label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <input pInputText type="text" id="model" formControlName="model" readonly />
-                    <small appErrorMessage [errors]="modelField.errors" [touched]="modelField.touched"
-                      [dirty]="modelField.dirty"></small>
-                  </div>
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="description" [label]="'Obligaciones'"></label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <textarea rows="5" cols="30" pInputTextarea id="description" formControlName="description"></textarea>
-                    <small appErrorMessage [errors]="descriptionField.errors" [touched]="descriptionField.touched"
-                      [dirty]="descriptionField.dirty"></small>
-                  </div>
-                  <p-button (click)="addObligationAndCloseModal()" label="Agregar"></p-button>
-                  <p-button (click)="closeModal()" label="Cancelar" class="p-button-secondary"></p-button>
-                </div>
-              </p-dialog>
-      
-              <p-panel>
-                <p-table [value]="obligationMintur">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th>Entidad</th>
-                      <th>Obligaciones</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-institution>
-                    <tr>
-                      <td>{{ institution.name }}</td>
-                      <td><p-button (click)="openModal(institution.name)" label="Agregar"></p-button></td>
-                      <td><p-button (click)="toggleObligationsTable()" label="Ver Obligaciones"></p-button></td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </p-panel>
-      
-              <!-- Modal para agregar obligaciones -->
-              <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="false" header="Agregar Obligación">
-                <div [formGroup]="obligationForm">
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="model" [label]="'Entidad'"></label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <input pInputText type="text" id="model" formControlName="model" readonly />
-                    <small appErrorMessage [errors]="modelField.errors" [touched]="modelField.touched"
-                      [dirty]="modelField.dirty"></small>
-                  </div>
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="description" [label]="'Obligaciones'"></label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <textarea rows="5" cols="30" pInputTextarea id="description" formControlName="description"></textarea>
-                    <small appErrorMessage [errors]="descriptionField.errors" [touched]="descriptionField.touched"
-                      [dirty]="descriptionField.dirty"></small>
-                  </div>
-                  <p-button (click)="addObligationAndCloseModal()" label="Agregar"></p-button>
-                  <p-button (click)="closeModal()" label="Cancelar" class="p-button-secondary"></p-button>
-                </div>
-              </p-dialog>
-      
-              <!-- Tabla de obligaciones -->
-              <p-panel *ngIf="showObligationsTable">
-                <p-table [value]="obligations.controls">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th>Entidad</th>
-                      <th>Obligaciones</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-obligation let-i="rowIndex">
-                    <tr>
-                      <td>{{ obligation.get('model')?.value }}</td>
-                      <td>{{ obligation.get('description')?.value }}</td>
-                      <td><p-button (click)="deleteObligation(i)" label="Eliminar"></p-button></td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </p-panel>
       
             </div>
           </div>
           <div *ngSwitchCase="'obligacion contraparte'">
             <div class="p-fluid">
-              <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="false" header="Agregar Obligación">
-                <div [formGroup]="obligationForm">
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="model" [label]="'Entidad'"></label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <input pInputText type="text" id="model" formControlName="model" readonly />
-                    <small appErrorMessage [errors]="modelField.errors" [touched]="modelField.touched"
-                      [dirty]="modelField.dirty"></small>
-                  </div>
-                  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-                    <label appLabel for="description" [label]="'Obligaciones'"></label>
-                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                    <textarea rows="5" cols="30" pInputTextarea id="description" formControlName="description"></textarea>
-                    <small appErrorMessage [errors]="descriptionField.errors" [touched]="descriptionField.touched"
-                      [dirty]="descriptionField.dirty"></small>
-                  </div>
-                  <p-button (click)="addObligationAndCloseModal()" label="Agregar"></p-button>
-                  <p-button (click)="closeModal()" label="Cancelar" class="p-button-secondary"></p-button>
-                </div>
-              </p-dialog>
-      
               <p-panel>
                 <p-table [value]="externalInstitutions">
                   <ng-template pTemplate="header">
                     <tr>
                       <th>Entidad</th>
-                      <th>Obligaciones</th>
                       <th>Acciones</th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-institution>
                     <tr>
                       <td>{{ institution.name }}</td>
-                      <td><p-button (click)="openModal(institution.name)" label="Agregar"></p-button></td>
-                      <td><p-button (click)="toggleObligationsTable()" label="Ver Obligaciones"></p-button></td>
+                      <td>
+                        <p-button (click)="openModal(institution.name)" label="Agregar"></p-button>
+                        <p-button (click)="toggleObligationsTable(institution)" label="Ver Obligaciones"></p-button>
+                      </td>
                     </tr>
                   </ng-template>
                 </p-table>
               </p-panel>
-      
+          
               <!-- Modal para agregar obligaciones -->
               <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="false" header="Agregar Obligación">
                 <div [formGroup]="obligationForm">
@@ -167,41 +86,40 @@
                     <label appLabel for="model" [label]="'Entidad'"></label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <input pInputText type="text" id="model" formControlName="model" readonly />
-                    <small appErrorMessage [errors]="modelField.errors" [touched]="modelField.touched"
-                      [dirty]="modelField.dirty"></small>
+                    <small appErrorMessage [errors]="modelField.errors" [touched]="modelField.touched" [dirty]="modelField.dirty"></small>
                   </div>
                   <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
                     <label appLabel for="description" [label]="'Obligaciones'"></label>
                     <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                     <textarea rows="5" cols="30" pInputTextarea id="description" formControlName="description"></textarea>
-                    <small appErrorMessage [errors]="descriptionField.errors" [touched]="descriptionField.touched"
-                      [dirty]="descriptionField.dirty"></small>
+                    <small appErrorMessage [errors]="descriptionField.errors" [touched]="descriptionField.touched" [dirty]="descriptionField.dirty"></small>
                   </div>
                   <p-button (click)="addObligationAndCloseModal()" label="Agregar"></p-button>
                   <p-button (click)="closeModal()" label="Cancelar" class="p-button-secondary"></p-button>
                 </div>
               </p-dialog>
-      
-              <!-- Tabla de obligaciones -->
-              <p-panel *ngIf="showObligationsTable">
-                <p-table [value]="obligations.controls">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th>Entidad</th>
-                      <th>Obligaciones</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-obligation let-i="rowIndex">
-                    <tr>
-                      <td>{{ obligation.get('model')?.value }}</td>
-                      <td>{{ obligation.get('description')?.value }}</td>
-                      <td><p-button (click)="deleteObligation(i)" label="Eliminar"></p-button></td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </p-panel>
-      
+          
+              <!-- Modal para ver obligaciones -->
+              <p-dialog [(visible)]="displayObligationsModal" [modal]="true" [closable]="true" header="Obligaciones de {{ selectedInstitution?.name }}">
+                <p-panel>
+                  <p-table [value]="filteredObligations">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>Entidad</th>
+                        <th>Obligaciones</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-obligation let-i="rowIndex">
+                      <tr>
+                        <td>{{ obligation.get('model')?.value }}</td>
+                        <td>{{ obligation.get('description')?.value }}</td>
+                        <td><p-button (click)="deleteObligation(i)" label="Eliminar"></p-button></td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </p-panel>
+              </p-dialog>
             </div>
           </div>
           <div *ngSwitchCase="'obligacion conjunta'">
@@ -210,3 +128,9 @@
           </div>
         </ng-container>
       </div>
+
+
+    
+    </div>}
+  </div>
+</div>

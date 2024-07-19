@@ -20,9 +20,11 @@
             <div class="p-toolbar-group-right">
               <app-form-button-action
                 (submit)="onSubmit()"
+                (cancel)="prevOutput.emit(true)" 
                 labelSubmitButton="Siguiente"
                 labelCancelButton="Atrás"
                 [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+                [isVisibleCancelButton]="true"
               />
             </div>
 
@@ -50,7 +52,7 @@
           id="position"
           formControlName="position"
           dataKey="id"
-          [options]="position"
+          [options]="positions"
           placeholder="Seleccione una opcion"
           [filter]="false"
           filterBy="name">
@@ -140,7 +142,7 @@
         id="personType"
         formControlName="personType"
         dataKey="id"
-        [options]="personTypes"
+        [options]="internalPersonTypes"
         placeholder="Seleccione una opcion"
         [filter]="false"
         filterBy="name">
@@ -298,7 +300,7 @@
             id="externalPersonType"
             formControlName="personType"
             dataKey="id"
-            [options]="personTypes"
+            [options]="externalPersonTypes"
             placeholder="Seleccione una opcion"
             [filter]="false"
             filterBy="name">
@@ -336,15 +338,17 @@
        <!-- table -->
       
         @if(externalInstitutions.controls.length > 0){ 
-        <p-table [value]="externalInstitutions.controls" 
-        styleClass="p-datatable-gridlines"   >
+        <p-table
+         [value]="externalInstitutions.controls" 
+        styleClass="p-datatable-gridlines" 
+        [tableStyle]="{'min-width': '50rem'}">
 
           <ng-template pTemplate="header">
          
             @for (col of externalInstitutionsColumns; track col.field) {
               <th [pSortableColumn]="col.field">
                 {{ col.header }}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
+
               </th>
             }
             
