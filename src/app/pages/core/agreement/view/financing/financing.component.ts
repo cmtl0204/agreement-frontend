@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/fo
 import { firstValueFrom } from "rxjs";
 import { OnExitInterface } from "@shared/interfaces";
 import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/core";
-import { CompanyRegistrationFormEnum,SkeletonEnum } from "@shared/enums";
+import { CompanyRegistrationFormEnum, SkeletonEnum } from "@shared/enums";
 import { AgreementModel, FinancingModel } from '@models/core';
 
 @Component({
