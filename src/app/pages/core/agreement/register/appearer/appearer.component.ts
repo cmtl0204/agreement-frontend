@@ -79,7 +79,7 @@ export class AppearerComponent implements OnInit {
       internalInstitutions.forEach((item:InternalInstitutionModel)=>{
         const internalInstitution = this.formBuilder.group({
           personType: [item.personType],
-          position: [item.positionId],
+          positionId: [item.positionId],
           name: [item.name],
           unit: [item.unit],
         });

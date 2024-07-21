@@ -6,35 +6,33 @@
     <ng-template #content>
       <p-toolbar>
         <div class="p-toolbar-group-left">
-          <app-header-form 
-          [id]="id"
-          label="Financiamiento"></app-header-form>
+          <app-header-form [id]="id" label="Financiamiento"></app-header-form>
         </div>
       </p-toolbar>
 
       <p-panel>
         <div class="p-fluid grid">
-       
 
-        <p-table [value]="financings" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}" class="col-12">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Comparecientes del convenio</th>
-              <th>Presupuesto y Financiamiento</th>
-              <th>Método de Pago</th>
-              <th>Fuente de Financiamiento</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-financing> <!----financing es una variable-->
-            <tr>
-              <td>{{financing.modelId}}</td>
-              <td>{{financing.budget}}</td>
-              <td>{{financing.paymentMethod}}</td>
-              <td>{{financing.source}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
+          <p-table [value]="financings" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}"
+            class="col-12">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Comparecientes del convenio</th>
+                <th>Presupuesto y Financiamiento</th>
+                <th>Método de Pago</th>
+                <th>Fuente de Financiamiento</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-financing> <!----financing es una variable-->
+              <tr>
+                <td>{{financing.modelId}}</td>
+                <td>{{financing.budget}}</td>
+                <td>{{financing.paymentMethod}}</td>
+                <td>{{financing.source}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </p-panel>
     </ng-template>
   </div>
