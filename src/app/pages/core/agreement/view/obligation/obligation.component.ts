@@ -37,12 +37,10 @@ export class ObligationComponent implements OnInit {
 
   /** Services **/
   protected readonly coreService = inject(CoreService);
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly routesService = inject(RoutesService);
 
   /** Form **/
   @Input() id!: string;
-  protected form!: FormGroup;
+  
 
   /** Enums **/
   protected readonly SkeletonEnum = SkeletonEnum;

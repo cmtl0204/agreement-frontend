@@ -1,4 +1,4 @@
-import {AgreementModel } from "@models/core";
+import {AgreementModel, CatalogueModel } from "@models/core";
 
 export interface AdministratorModel {
   id: string;
@@ -6,5 +6,6 @@ export interface AdministratorModel {
   agreement?: AgreementModel;
   unitId: string;
   positionId: string;
+  position: CatalogueModel;
   userId: string;
 }
