@@ -5,16 +5,14 @@ import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/c
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
 import { getFormattedDate } from '@shared/helpers';
-import { OnExitInterface } from '@shared/interfaces';
 import { PrimeIcons } from 'primeng/api';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-agreement-date',
   templateUrl: './agreement-date.component.html',
   styleUrl: './agreement-date.component.scss'
 })
-export class AgreementDateComponent implements OnInit, OnExitInterface {
+export class AgreementDateComponent implements OnInit {
   // Services
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly coreService = inject(CoreService);
@@ -34,8 +32,8 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
   protected readonly Validators = Validators;
 
   // Foreign keys
-  units: CatalogueModel[] = [];
-  positions: CatalogueModel[] = [];
+  protected units: CatalogueModel[] = [];
+  protected positions: CatalogueModel[] = [];
 
   // Enums
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -45,13 +43,6 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
 
   constructor() {
     this.buildForm();
-  }
-
-  async onExit() {
-    const res = await firstValueFrom(this.messageDialogService.questionOnExit());
-    console.log(res);
-    return res;
-    // return this.messageDialogService.questionOnExit();
   }
 
   ngOnInit(): void {
@@ -64,11 +55,11 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
       subscribedAt: [null, Validators.required],
       startedAt: [null, Validators.required],
       isFinishDate: [null, Validators.required],
-      endedAt: [null, Validators.required],
+      endedAt: [null],
       endedReason: [null],
-      yearTerm: [null, Validators.required],
-      monthTerm: [null, Validators.required],
-      dayTerm: [null, Validators.required],
+      yearTerm: [null],
+      monthTerm: [null],
+      dayTerm: [null],
     });
 
     this.checkValueChanges();
