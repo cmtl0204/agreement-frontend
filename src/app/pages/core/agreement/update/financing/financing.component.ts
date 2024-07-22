@@ -1,14 +1,13 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@models/core';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
+import { AuthService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
 import { onlyLetters } from '@shared/helpers';
-import { OnExitInterface } from '@shared/interfaces';
 import { MessageService, PrimeIcons } from 'primeng/api';
-import { firstValueFrom, forkJoin, Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-financing',
@@ -18,12 +17,10 @@ import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 export class FinancingComponent implements OnInit {
   /** Services **/
   protected readonly authService = inject(AuthService);
-  //private readonly authHttpService = inject(AuthHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
-  private readonly routesService = inject(RoutesService);
 
   /** variables **/
   protected form!: FormGroup;
@@ -50,7 +47,7 @@ export class FinancingComponent implements OnInit {
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
-  constructor(private messageService: MessageService) {
+  constructor() {
     this.loadInternalInstitutions();
     this.loadExternalInstitutions();
 

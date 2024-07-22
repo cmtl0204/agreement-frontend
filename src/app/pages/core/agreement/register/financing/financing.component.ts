@@ -1,12 +1,12 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@models/core';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
+import { AuthService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
 import { onlyLetters } from '@shared/helpers';
-import { MessageService, PrimeIcons } from 'primeng/api';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-financing',
@@ -16,12 +16,10 @@ import { MessageService, PrimeIcons } from 'primeng/api';
 export class FinancingComponent implements OnInit {
   /** Services **/
   protected readonly authService = inject(AuthService);
-  //private readonly authHttpService = inject(AuthHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
-  private readonly routesService = inject(RoutesService);
 
   /** variables **/
   protected form!: FormGroup;
@@ -49,7 +47,7 @@ export class FinancingComponent implements OnInit {
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
-  constructor(private messageService: MessageService) {
+  constructor() {
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
@@ -141,6 +139,7 @@ export class FinancingComponent implements OnInit {
 
   loadCombineInstitutions() {
     this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
+    console.log(this.combinedInstitutions)
   }
 
   validateForm(): boolean {
