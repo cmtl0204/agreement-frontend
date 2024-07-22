@@ -98,7 +98,6 @@ export class AddendumComponent implements OnInit {
   validateForm(): boolean {
     this.formErrors = [];
 
-    if (this.isAddendumField.invalid) this.formErrors.push(AddendumEnum.isAddendum);
     if (this.descriptionField.invalid) this.formErrors.push(AddendumEnum.description);
     if (this.isModifiedFinishDateField.invalid) this.formErrors.push(AddendumEnum.isModifiedFinishDate);
     if (this.documentField.invalid) this.formErrors.push(AddendumEnum.document);
@@ -108,7 +107,22 @@ export class AddendumComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.save();
+    if (this.isAddendumField.invalid){ 
+      this.formErrors.push(AddendumEnum.isAddendum);
+      this.messageDialogService.fieldErrors(this.formErrors)
+    } 
+
+    if (this.isAddendumField.valid && this.isAddendumField.value) {
+      if (this.addendums.value.length === 0) {
+        this.messageDialogService.fieldErrors('Es necesaria al menos una adenda')
+      } else {
+        this.save();
+      }
+    }
+    
+    if(this.isAddendumField.valid && this.isAddendumField.value === false){
+      this.save();
+    }
   }
 
   save() {
@@ -117,13 +131,13 @@ export class AddendumComponent implements OnInit {
 
     checkValueChanges(){
     this.isAddendumField.valueChanges.subscribe((value) => {
-      console.log(value)
      if (value){
 
         this.descriptionField.addValidators(Validators.required),
         this.isModifiedFinishDateField.addValidators(Validators.required)
         this.documentField.addValidators(Validators.required)
      } else{
+        this.addendums.clear()
         this.descriptionField.removeValidators(Validators.required),
         this.isModifiedFinishDateField.removeValidators(Validators.required),
         this.documentField.removeValidators(Validators.required),

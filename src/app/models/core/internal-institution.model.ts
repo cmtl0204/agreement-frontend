@@ -10,4 +10,5 @@ export interface InternalInstitutionModel {
   agreement?: AgreementModel;
   personTypeId: string;
   personType?: CatalogueModel;
+  position?: CatalogueModel;
 }
