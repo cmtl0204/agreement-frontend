@@ -7,7 +7,5 @@ export interface AgreementStateModel {
   registeredAt: Date;
   stateId: string;
   state?: CatalogueModel;
-  userId: string;
-  
-  
+  userId: string;  
 }

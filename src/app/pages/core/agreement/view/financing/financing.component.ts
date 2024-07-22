@@ -3,10 +3,9 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/fo
 import { firstValueFrom } from "rxjs";
 import { OnExitInterface } from "@shared/interfaces";
 import { CoreService, MessageDialogService, RoutesService } from "@servicesApp/core";
-import { CatalogueTypeEnum, CompanyRegistrationFormEnum, RoutesEnum, SkeletonEnum } from "@shared/enums";
+import { CompanyRegistrationFormEnum, SkeletonEnum } from "@shared/enums";
 import { AgreementModel, FinancingModel } from '@models/core';
 
-import { PrimeIcons } from 'primeng/api';
 @Component({
   selector: 'app-financing',
   templateUrl: './financing.component.html',
@@ -25,14 +24,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   /** Enums **/
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly CompanyRegistrationFormEnum = CompanyRegistrationFormEnum;
-
-  //validation
-
-
-
-
-
-
 
   agreements: AgreementModel[] = [
     {
@@ -189,10 +180,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
     }
   ];
 
-
-
-
-
   constructor(public messageDialogService: MessageDialogService) {
     this.buildForm();
   }
@@ -220,8 +207,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
   setFormValues() {
 
   }
-
-  
 
   /** Getters para los campos del formulario **/
   get financingField(): AbstractControl {

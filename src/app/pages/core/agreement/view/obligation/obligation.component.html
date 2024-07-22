@@ -1,22 +1,22 @@
 <div class="grid">
-  <div class="col-12 ">
-    <ng-container *ngIf="coreService.isLoading; else content">
+  <div class="col-12">
+    @if (coreService.isLoading) {
       <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    </ng-container>
-    <ng-template #content>
+    } @else {
       <p-toolbar>
         <div class="p-toolbar-group-left">
-          <app-header-form 
-          [id]="id"
-          label="Obligaciones de las partes"></app-header-form>
+          <app-header-form [id]="id" label="Obligaciones de las partes"></app-header-form>
         </div>
-        
       </p-toolbar>
-
       <p-panel>
         <div class="p-fluid grid">
-       
-          <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" class="col-12">
+          <p-table 
+            [value]="products" 
+            dataKey="id" 
+            [tableStyle]="{ 'min-width': '60rem' }" 
+            [expandedRowKeys]="expandedRows" 
+            class="col-12"
+          >
             <ng-template pTemplate="header">
               <tr>
                 <th style="width: 5rem"></th>
@@ -30,10 +30,25 @@
             <ng-template pTemplate="body" let-product let-expanded="expanded">
               <tr>
                 <td>
-                  <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                  <p-button 
+                    type="button" 
+                    pRipple 
+                    [pRowToggler]="product" 
+                    [text]="true" 
+                    [rounded]="true" 
+                    [plain]="true" 
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                  />
                 </td>
                 <td>{{ product.name }}</td>
-                <td><img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-4" /></td>
+                <td>
+                  <img 
+                    [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" 
+                    [alt]="product.name" 
+                    width="50" 
+                    class="shadow-4" 
+                  />
+                </td>
                 <td>{{ product.price | currency : 'USD' }}</td>
                 <td>{{ product.category }}</td>
                 <td>
@@ -45,7 +60,11 @@
               <tr>
                 <td colspan="7">
                   <div class="p-3">
-                    <p-table [value]="product.orders" dataKey="id" [expandedRowKeys]="expandedOrderRows">
+                    <p-table 
+                      [value]="product.orders" 
+                      dataKey="id" 
+                      [expandedRowKeys]="expandedOrderRows"
+                    >
                       <ng-template pTemplate="header">
                         <tr>
                           <th pSortableColumn="id">Id <p-sortIcon field="id" /></th>
@@ -59,7 +78,15 @@
                       <ng-template pTemplate="body" let-order let-orderExpanded="expanded">
                         <tr>
                           <td>
-                            <p-button type="button" pRipple [pRowToggler]="order" [text]="true" [rounded]="true" [plain]="true" [icon]="orderExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                            <p-button 
+                              type="button" 
+                              pRipple 
+                              [pRowToggler]="order" 
+                              [text]="true" 
+                              [rounded]="true" 
+                              [plain]="true" 
+                              [icon]="orderExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                            />
                           </td>
                           <td>{{ order.id }}</td>
                           <td>{{ order.customer }}</td>
@@ -68,7 +95,9 @@
                           <td>
                             <p-tag [value]="order.status" />
                           </td>
-                          <td><p-button type="button" icon="pi pi-search" /></td>
+                          <td>
+                            <p-button type="button" icon="pi pi-search" />
+                          </td>
                         </tr>
                       </ng-template>
                       <ng-template pTemplate="rowexpansion" let-order>
@@ -107,9 +136,8 @@
               </tr>
             </ng-template>
           </p-table>
-        
-      </div>
+        </div>
       </p-panel>
-    </ng-template>
+    }
   </div>
 </div>
