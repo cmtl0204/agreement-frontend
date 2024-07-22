@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AgreementFormEnum, RoutesEnum } from '@shared/enums';
-import { CoreService } from '@servicesApp/core'; // Importa el servicio
-import { SkeletonEnum } from '@shared/enums/skeleton.enum'; // Importa SkeletonEnum si es necesario
-import { PrimeIcons } from 'primeng/api'; // Importa PrimeIcons de PrimeNG
+import { CoreService } from '@servicesApp/core';
+import { SkeletonEnum } from '@shared/enums/skeleton.enum';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-agreement-date',
@@ -12,47 +12,32 @@ import { PrimeIcons } from 'primeng/api'; // Importa PrimeIcons de PrimeNG
 export class AgreementDateComponent implements OnInit {
   @Output() formOutput: EventEmitter<any> = new EventEmitter();
 
-  id: string = RoutesEnum.NEW;
+  public id: string = RoutesEnum.NEW;
+  public subscribedAt: Date = new Date('2023-01-01');
+  public startedAt: Date = new Date('2023-01-01');
+  public isFinishDate: boolean = true;
+  public endedAt: Date = new Date('2023-12-31');
+  public endedReason: string = 'Razón por la que termina';
+  public yearTerm: number = 1;
+  public monthTerm: number = 11;
+  public dayTerm: number = 30;
 
-  subscribedAt: Date = new Date('2023-01-01');
-  startedAt: Date = new Date('2023-01-01');
-  isFinishDate: boolean = true;
-  endedAt: Date = new Date('2023-12-31');
-  endedReason: string = 'Razón por la que termina';
-  yearTerm: number = 1;
-  monthTerm: number = 11;
-  dayTerm: number = 30;
-
-  readonly AgreementFormEnum = AgreementFormEnum;
-  readonly SkeletonEnum = SkeletonEnum;
-  readonly PrimeIcons = PrimeIcons;
+  public readonly AgreementFormEnum = AgreementFormEnum;
+  public readonly SkeletonEnum = SkeletonEnum;
+  public readonly PrimeIcons = PrimeIcons;
 
   constructor(
-    public coreService: CoreService // Cambia a público
+    public coreService: CoreService
   ) {}
 
   ngOnInit(): void {}
 
-  onFinishDateChange(value: boolean) {
+  onFinishDateChange(value: boolean): void {
     this.isFinishDate = value;
     if (value) {
       this.endedReason = '';
     } else {
       this.endedAt = new Date();
     }
-  }
-
-  onSubmit(): void {
-    const formData = {
-      subscribedAt: this.subscribedAt,
-      startedAt: this.startedAt,
-      isFinishDate: this.isFinishDate,
-      endedAt: this.endedAt,
-      endedReason: this.endedReason,
-      yearTerm: this.yearTerm,
-      monthTerm: this.monthTerm,
-      dayTerm: this.dayTerm,
-    };
-    this.formOutput.emit(formData);
   }
 }
