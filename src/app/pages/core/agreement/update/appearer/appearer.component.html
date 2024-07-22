@@ -122,7 +122,11 @@
 
       </div>
       @if (internalInstitutions.length < 1) {
-     <p-button label="Añadir" [raised]="true"  (click)="addInternalInstitutions()" /> 
+     <p-button
+      label="Añadir"  
+      icon="pi pi-plus" 
+      [raised]="true"  
+      (click)="addInternalInstitutions()" /> 
     }
     </form>
 
@@ -130,7 +134,8 @@
       <!-- table -->
   
       @if(internalInstitutions.controls.length > 0){ 
-       <p-table
+       <div  class="field col-12"> 
+        <p-table
         [value]="internalInstitutions.controls"
        styleClass="p-datatable-striped" 
        [tableStyle]="{'min-width': '50rem'}"
@@ -148,27 +153,25 @@
 
       <ng-template pTemplate="body" let-internalInstitution let-i="rowIndex">
        
-        <tr>
+        <tr>        
+          <td class="text-center">{{ internalInstitution.get('position')?.value.name}}</td>
+          <td class="text-center">{{internalInstitution.get('personType')?.value.name}}</td>
           <td class="text-center">{{ internalInstitution.get('name')?.value }}</td>
           <td class="text-center">{{ internalInstitution.get('unit')?.value}}</td>
-          <td class="text-center">{{ internalInstitution.get('position')?.value}}</td>
-          <td class="text-center">{{internalInstitution.get('personType')?.value.name}}</td>
-          <td class="text-center">
-            <div class="button-group">
-              <p-button 
-                icon="pi pi-trash" 
-                severity="danger" 
-                (click)="removeInternalInstitutions(i)" />
+  
+          <td>
+
               <p-button 
                 icon="pi pi-pencil" 
                 severity="success" 
                 (click)="editInternalInstitutions(i)" />
-            </div>
+        
           </td>
         </tr>
 
       </ng-template>
     </p-table>
+  </div>
       }
 
      <br>
@@ -177,6 +180,76 @@
 
       <!-- formulario externalInstitutions -->
       <form [formGroup]="externalInstitutionForm " class="p-fluid grid">
+          <!-- position -->
+          <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+
+            <label 
+             appLabel 
+             for="externalPosition" 
+             [label]="ExternalInstitutionsFormEnum.position"
+             [required]="externalInstitutionPositionField"
+             ></label>
+  
+             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+  
+            <input
+             pInputText
+             id="externalPosition"
+             formControlName="position">  
+  
+             <small appErrorMessage
+             [errors]="externalInstitutionPositionField.errors"
+             [touched]="externalInstitutionPositionField.touched"
+             >
+             </small>
+  
+          </div>
+  
+           <!-- personType-->
+          <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+  
+            <label
+             appLabel 
+             for="externalPersonType"
+             [label]="ExternalInstitutionsFormEnum.personType"
+             [required]="externalInstitutionPersonTypeField"
+              ></label>
+  
+              <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+  
+              <p-dropdown
+              id="externalPersonType"
+              formControlName="personType"
+              dataKey="id"
+              [options]="externalPersonTypes"
+              placeholder="Seleccione una opcion"
+              [filter]="false"
+              filterBy="name">
+  
+              <ng-template 
+              pTemplate="selectedItem"
+              let-selectedOption>
+                <div class="flex align-items-center gap-2">
+                  <div>{{ selectedOption.name }}</div>
+                </div>
+              </ng-template>
+  
+              <ng-template
+              let-item pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ item.name }}</div>
+                </div>
+              </ng-template>
+  
+              </p-dropdown>
+      
+            <small appErrorMessage
+            [errors]="externalInstitutionPersonTypeField.errors"
+            [touched]="externalInstitutionPersonTypeField.touched"
+            >
+            </small>
+            </div>
+  
          <!-- name -->
         <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
 
@@ -222,79 +295,12 @@
             </small>
 
         </div>
-         <!-- position -->
-        <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
-
-          <label 
-           appLabel 
-           for="externalPosition" 
-           [label]="ExternalInstitutionsFormEnum.position"
-           [required]="externalInstitutionPositionField"
-           ></label>
-
-           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-
-          <input
-           pInputText
-           id="externalPosition"
-           formControlName="position">  
-
-           <small appErrorMessage
-           [errors]="externalInstitutionPositionField.errors"
-           [touched]="externalInstitutionPositionField.touched"
-           >
-           </small>
-
-        </div>
-
-        
-
-         <!-- personType-->
-        <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
-
-          <label
-           appLabel 
-           for="externalPersonType"
-           [label]="ExternalInstitutionsFormEnum.personType"
-           [required]="externalInstitutionPersonTypeField"
-            ></label>
-
-            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-
-            <p-dropdown
-            id="externalPersonType"
-            formControlName="personType"
-            dataKey="id"
-            [options]="externalPersonTypes"
-            placeholder="Seleccione una opcion"
-            [filter]="false"
-            filterBy="name">
-
-            <ng-template 
-            pTemplate="selectedItem"
-            let-selectedOption>
-              <div class="flex align-items-center gap-2">
-                <div>{{ selectedOption.name }}</div>
-              </div>
-            </ng-template>
-
-            <ng-template
-            let-item pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ item.name }}</div>
-              </div>
-            </ng-template>
-
-            </p-dropdown>
-    
-          <small appErrorMessage
-          [errors]="externalInstitutionPersonTypeField.errors"
-          [touched]="externalInstitutionPersonTypeField.touched"
-          >
-          </small>
-          </div>
-
-        <p-button label="Añadir" [raised]="true" (click)="addExternalInstitutions()" />
+       
+        <p-button 
+        label="Añadir"  
+        icon="pi pi-plus" 
+        [raised]="true" 
+        (click)="addExternalInstitutions()" />
 
       </form>
       
@@ -303,7 +309,9 @@
        <!-- table -->
       
         @if(externalInstitutions.controls.length > 0){ 
+     
         <p-table
+        
          [value]="externalInstitutions.controls" 
          styleClass="p-datatable-striped" 
          [tableStyle]="{'min-width': '50rem'}">
@@ -324,20 +332,28 @@
           </ng-template>
           
           <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
-            <tr>
-              <td class="text-center">{{externalInstitution.get('name')?.value }}</td>
-              <td class="text-center">{{ externalInstitution.get('unit')?.value}}</td>
+            <tr>   
               <td class="text-center">{{ externalInstitution.get('position')?.value }}</td>
               <td class="text-center">{{externalInstitution.get('personType')?.value.name }}</td>
+              <td class="text-center">{{externalInstitution.get('name')?.value }}</td>
+              <td class="text-center">{{ externalInstitution.get('unit')?.value}}</td>
+        
               <td>
                 <div class="button-group">
-                <p-button icon="pi pi-trash" severity="danger" (click)="removeExternalInstitutions(i)" class="mr-2" />
-                <p-button icon="pi pi-pencil" severity="success" (click)="editExternalInstitutions(i)" />
+                <p-button
+                 icon="pi pi-trash" 
+                 severity="danger"
+                  (click)="removeExternalInstitutions(i)" />
+                <p-button 
+                icon="pi pi-pencil" 
+                severity="success" 
+                (click)="editExternalInstitutions(i)" />
               </div>
             </td>
             </tr>
           </ng-template>
         </p-table>
+      
         }
       
     </p-panel>

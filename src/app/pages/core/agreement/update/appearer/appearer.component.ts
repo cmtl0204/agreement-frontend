@@ -107,7 +107,7 @@ patchValueForm(){
     internalInstitutions.forEach((item:InternalInstitutionModel)=>{
       const internalInstitution = this.formBuilder.group({
         personType: [item.personType],
-        position: [item.positionId],
+        position: [item.position],
         name: [item.name],
         unit: [item.unit],
       });
@@ -126,8 +126,11 @@ patchValueForm(){
 
   buildInternalInstitutionsForm() {
     this.internalInstitutionForm = this.formBuilder.group({
-       position: ['', Validators.required],
-       personType: ['', [Validators.required]]
+      name: ['Ministerio de Turismo'],
+      unit: ['Unidad'],
+      position: ['', Validators.required],
+       personType: ['', [Validators.required]],
+    
     });
   }
 
@@ -143,12 +146,6 @@ patchValueForm(){
 
   buildInternalInstitutionsColumns(){
     this.internalInstitutionsColumns =[  
-     {
-        field: 'name', header: InternalInstitutionsFormEnum.name
-      }, 
-      {
-        field: 'unit', header: InternalInstitutionsFormEnum.unit
-      },
       {
         field: 'position', header: InternalInstitutionsFormEnum.position
       },
@@ -156,24 +153,33 @@ patchValueForm(){
       {
         field: 'personType', header: InternalInstitutionsFormEnum.personType
       },
-   
+
+      {
+        field: 'name', header: InternalInstitutionsFormEnum.name
+      }, 
+
+      {
+        field: 'unit', header: InternalInstitutionsFormEnum.unit
+      },
+      
     ]
   }
 
   buildExternalInstitutionsColumns() {
     this.externalInstitutionsColumns = [
       {
-        field: 'name', header: ExternalInstitutionsFormEnum.name
-      },
-      {
-        field: 'unit', header: ExternalInstitutionsFormEnum.unit
-      },
-      {
         field: 'position', header: ExternalInstitutionsFormEnum.position
       },
       {
         field: 'personType', header: ExternalInstitutionsFormEnum.personType
       },
+      {
+        field: 'name', header: ExternalInstitutionsFormEnum.name
+      },
+      {
+        field: 'unit', header: ExternalInstitutionsFormEnum.unit
+      },
+      
     ];
   }
   /**  Validates **/
