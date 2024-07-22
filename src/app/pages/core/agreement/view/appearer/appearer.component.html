@@ -12,7 +12,7 @@
         </p-toolbar>
         <!-- Mintur -->
         <h2>Ministerio</h2>
-
+        <div style="height: 50px;"></div>
         <p-panel>
             <form class="p-fluid grid">
                 <!-- Principio -->
@@ -25,16 +25,13 @@
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
                         }
-                        <th class="text-center" style="border-right: 1px solid #ddd;">
-                            Acciones
-                        </th>
                     </ng-template>
                     <ng-template pTemplate="body" let-institution>
                         <tr>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.name }}</td>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.unit }}</td>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.positionId }}</td>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.personTypeId }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.name }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.unit }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.positionId }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.personTypeId }}</td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -44,7 +41,10 @@
         <!-- Divisor -->
         <div style="height: 40px;"></div>
         <!-- Comparecencias -->
+
         <h2>Comparecencias</h2>
+        <div style="height: 50px;"></div>
+
         <p-panel>
             <form class="p-fluid grid">
                 <p-table [value]="externalInstitution" styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
@@ -56,16 +56,13 @@
 
                         </th>
                         }
-                        <th class="text-center" style="border-right: 1px solid #ddd;">
-                            Acciones
-                        </th>
                     </ng-template>
                     <ng-template pTemplate="body" let-institution>
                         <tr>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.name }}</td>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.unit }}</td>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.position }}</td>
-                            <td style="border-right: 1px solid #ddd;">{{ institution.personTypeId }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.name }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.unit }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.position }}</td>
+                            <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ institution.personTypeId }}</td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -77,3 +74,4 @@
 
     </div>
 </div>
+<div style="height: 90px;"></div>
