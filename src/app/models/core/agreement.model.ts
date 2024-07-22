@@ -1,4 +1,4 @@
-import { CatalogueModel, ExternalInstitutionModel, InternalInstitutionModel } from "@models/core";
+import { CatalogueModel, ExternalInstitutionModel, FinancingModel, InternalInstitutionModel } from "@models/core";
 
 export interface AgreementModel {
   id?: string;
@@ -23,4 +23,5 @@ export interface AgreementModel {
   specialType?: CatalogueModel;
   externalInstitutions?: ExternalInstitutionModel[];
   internalInstitutions?: InternalInstitutionModel[];
+  financings?: FinancingModel[];
 }
