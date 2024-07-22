@@ -34,9 +34,9 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
 
   agreements: AgreementModel[] = [
-    {
-      id: '1',
-      number: 'A001',
+ /* {
+     id: '1',
+    number: 'A001',
       internalNumber: 123,
       name: 'Acuerdo de financiamiento 1',
       originId: 'origin123',
@@ -175,7 +175,7 @@ export class FinancingComponent implements OnInit, OnExitInterface {
       source: 'Fondo internacional',
       agreementId: this.agreements[4].id,
       agreement: this.agreements[4]
-    }
+    }*/
   ];
 
 
