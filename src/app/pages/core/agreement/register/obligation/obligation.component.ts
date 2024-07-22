@@ -163,6 +163,7 @@ this.obligationMintur=[
 
   save() {
     this.formOutput.emit(this.form.value);
+    console.log(this.form.value)
   }
 
   patchValueForm(){
