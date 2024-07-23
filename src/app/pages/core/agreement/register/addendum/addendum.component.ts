@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray } from '@angular/forms';
-import { AgreementModel, ColumnModel } from '@models/core';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { ColumnModel } from '@models/core';
+import { AuthService} from '@servicesApp/auth';
+import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AddendumEnum, RoutesEnum, SkeletonEnum } from '@shared/enums';
+import { AddendumEnum, SkeletonEnum } from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
 
 @Component({
@@ -16,12 +16,10 @@ export class AddendumComponent implements OnInit {
   
   /** Services **/
   protected readonly authService = inject(AuthService);
-  private readonly authHttpService = inject(AuthHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
-  private readonly routesService = inject(RoutesService);
   
   /** Form **/
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
@@ -162,7 +160,6 @@ export class AddendumComponent implements OnInit {
      })
     })
   }
-
 
   /** Getters Form**/
   get isAddendumField(): AbstractControl {
