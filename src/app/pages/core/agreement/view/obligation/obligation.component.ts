@@ -42,7 +42,6 @@ export class ObligationComponent implements OnInit {
 
 
   /** Enums **/
-  protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly CompanyRegistrationFormEnum = CompanyRegistrationFormEnum;
 
   //validation
