@@ -2,11 +2,11 @@ import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@models/core';
 import { AuthService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
 import { onlyLetters } from '@shared/helpers';
-import { MessageService, PrimeIcons } from 'primeng/api';
+import { PrimeIcons } from 'primeng/api';
 
 
 @Component({
@@ -119,14 +119,18 @@ export class FinancingComponent implements OnInit {
         source: [this.financingForm.value.source],
       });
       this.financings.push(financings);
-      this.modelField.clearValidators();
-      this.modelField.reset();
-      this.budgetField.clearValidators();
-      this.budgetField.reset();
-      this.paymentMethodField.clearValidators();
-      this.paymentMethodField.reset();
-      this.sourceField.clearValidators();
-      this.sourceField.reset();
+
+      this.financingForm.reset();
+
+      this.modelField.markAsUntouched();
+      this.modelField.markAsPristine();
+      this.budgetField.markAsUntouched();
+      this.budgetField.markAsPristine();
+      this.paymentMethodField.markAsUntouched();
+      this.paymentMethodField.markAsPristine();
+      this.sourceField.markAsUntouched();
+      this.sourceField.markAsPristine();
+
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -156,9 +160,7 @@ export class FinancingComponent implements OnInit {
   validateForm(): boolean {
     this.formErrors = [];
 
-    if (this.isFinancingField.invalid) {
-      this.formErrors.push(AgreementFormEnum.isFinancing);
-    }
+    if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
 
     if (this.formErrors.length === 0) {
       if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
@@ -171,7 +173,7 @@ export class FinancingComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.isFinancingField.value === false) {
+    if (!this.isFinancingField.value) {
       if (this.financings.length > 0) {
         this.financings.clear();
       }
@@ -201,7 +203,7 @@ export class FinancingComponent implements OnInit {
         this.budgetField.setValidators(Validators.required);
         this.paymentMethodField.setValidators(Validators.required);
         this.sourceField.setValidators(Validators.required);
-      } else if (value === false) {
+      } else if (!value) {
         this.financingForm.reset();
         this.modelField.clearValidators();
         this.budgetField.clearValidators();
