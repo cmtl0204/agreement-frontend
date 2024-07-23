@@ -1,24 +1,18 @@
-<div class="grid">
-  <div class="col-12">
-    @if (coreService.isLoading) {
-    <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    }
+<!-- <div class="grid">
+  <p-panel class="col-12">
+    <ng-template pTemplate="header">
+      <h3>Datos del Addendum</h3>
+    </ng-template>
+  </p-panel>
+</div>
 
-    @if (!coreService.isLoading) {
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form label="Datos del Addendum" [icon]="PrimeIcons.PENCIL" />
-      </div>
-    </p-toolbar>
-    <h2>Adendas</h2>
-    <div style="height: 50px;"></div>
-    <p-panel>
-      <form class="p-fluid grid">
-        
-        <p-table [value]="addendums">
+    @if (agreement.addendums) {
+      <ng-template pTemplate="content">
+
+        <p-table [value]="agreement.addendums">
           <ng-template pTemplate="header">
             @for (col of addendumColumns; track col.field) {
-              <th [pSortableColumn]="col.field" style="border-right: 1px solid #ddd;">
+              <th [pSortableColumn]="col.field">
                   {{ col.header }}
                   <p-sortIcon [field]="col.field"></p-sortIcon>
               </th>
@@ -26,16 +20,14 @@
           </ng-template>
           <ng-template pTemplate="body" let-addendum>
             <tr>
-              <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ addendum.isAddendum }}</td>
-              <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ addendum.description }}</td>
-              <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ addendum.isModifiedFinishDate }}</td>
-              <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ addendum.description }}</td>
-              <td style="border-right: 1px solid #ddd; padding: '0.5rem'">{{ addendum.agreementEndedAt }}</td>
+              <td>{{ item.isAddendum }}</td>
+              <td>{{ item.description }}</td>
+              <td>{{ item.isModifiedFinishDate }}</td>
+              <td>{{ item.document }}</td>
+              <td>{{ item.agreementEndedAt }}</td>
             </tr>
           </ng-template>
         </p-table>
-      </form>
-    </p-panel>
+      </ng-template>
     }
-  </div>
-</div>
+ -->
