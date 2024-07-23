@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {CoreService} from "@servicesApp/core";
+import {CompanyRegistrationFormEnum, SkeletonEnum} from "@shared/enums";
 
 interface Order {
   id: string;
@@ -31,6 +33,19 @@ interface Product {
   styleUrls: ['./obligation.component.scss']
 })
 export class ObligationComponent implements OnInit {
+
+  /** Services **/
+  protected readonly coreService = inject(CoreService);
+
+  /** Form **/
+  @Input() id!: string;
+
+
+  /** Enums **/
+  protected readonly SkeletonEnum = SkeletonEnum;
+  protected readonly CompanyRegistrationFormEnum = CompanyRegistrationFormEnum;
+
+  //validation
 
   products: Product[] = [
     {
@@ -126,9 +141,11 @@ export class ObligationComponent implements OnInit {
   expandedRows: { [key: string]: boolean } = {};
   expandedOrderRows: { [key: string]: boolean } = {};
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   expandAll() {
     this.expandedRows = this.products.reduce((acc: { [key: string]: boolean }, p: Product) => {

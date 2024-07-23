@@ -5,24 +5,40 @@
     }
 
     @if (!coreService.isLoading) {
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form [id]="id"></app-header-form>
-      </div>
-      <div class="p-toolbar-group-right">
-        <app-form-button-action (submit)="onSubmit()" labelSubmitButton="Siguiente" labelCancelButton="Atrás"
-          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT" [isVisibleCancelButton]="false" />
-      </div>
-    </p-toolbar>
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <app-form-button-action
+            (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
+            labelSubmitButton="Siguiente"
+            labelCancelButton="Atrás"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="true"
+          />
+        </div>
+      </p-toolbar>
     <div class="p-fluid">
 
-      <p-multiSelect [options]="obligationType" [(ngModel)]="selectedObligationTypes" optionLabel="name"
-        placeholder="Select Cities" />
-
+      <p-multiSelect 
+      [options]="obligationType" 
+      [(ngModel)]="selectedObligationTypes"  
+      optionLabel="name"
+      (ngModelChange)="onObligationTypesChange($event)"
+      placeholder="Select Obligations">
+    </p-multiSelect>
+    
         <!-- MINTUR -->
-        <div *ngFor="let obligation of selectedObligationTypes">
+         @for (obligation of selectedObligationTypes; track $index) {
+        <div>
           <ng-container [ngSwitch]="obligation.name">
             <div *ngSwitchCase="'obligacion mintur'">
+              <h1>Obligaciones Mintur</h1>
               <div class="p-fluid">
                 <p-panel>
                   <div class="p-fluid">
@@ -54,18 +70,21 @@
                       <tr>
                         <td><strong>{{ institution.name }}</strong></td>
                         <td>
-                          <ng-container *ngIf="obligations.controls.length > 0">
+                          @if (obligations.controls.length> 0) {
+                          <ng-container>
                             <table style="width: 100%;">
-                              <tr *ngFor="let obligation of obligations.controls; let j = index">
-                                <ng-container *ngIf="obligation.get('model')?.value === institution.name">
+                              @for (obligation of obligations.controls; track $index) {
+                              <tr>
+                                @if (obligation.get('model')?.value === institution.name) {
+                                <ng-container>
                                   <td style="width: 80%;">{{ obligation.get('description')?.value }}</td>
                                   <td style="width: 20%;">
-                                    <p-button (click)="deleteObligation(j)" icon="pi pi-trash" severity="danger"></p-button>
+                                    <p-button (click)="deleteObligation($index)" icon="pi pi-trash" severity="danger"></p-button>
                                   </td>
-                                </ng-container>
-                              </tr>
+                                </ng-container>}
+                              </tr>}
                             </table>
-                          </ng-container>
+                          </ng-container>}
                         </td>
                       </tr>
                     </ng-template>
@@ -76,6 +95,7 @@
 
             <!-- OBLIGACION CONTRAPARTE -->
             <div *ngSwitchCase="'obligacion contraparte'">
+              <h1>Obligaciones Contraparte</h1>
               <div class="p-fluid">
                 <p-panel>
                   <p-table [value]="externalInstitutions">
@@ -90,18 +110,21 @@
                       <tr>
                         <td>{{ institution.name }}</td>
                         <td>
+                          @if (obligations.controls.length > 0) {
                           <ng-container *ngIf="obligations.controls.length > 0">
                             <table style="width: 100%;">
-                              <tr *ngFor="let obligation of obligations.controls; let j = index">
-                                <ng-container *ngIf="obligation.get('model')?.value === institution.name">
+                              @for (obligation of obligations.controls; track $index) {
+                              <tr>
+                                @if (obligation.get('model')?.value === institution.name) {
+                                <ng-container>
                                   <td style="width: 80%;">{{ obligation.get('description')?.value }}</td>
                                   <td style="width: 20%;">
-                                    <p-button (click)="deleteObligation(j)" icon="pi pi-trash" severity="danger"></p-button>
+                                    <p-button (click)="deleteObligation($index)" icon="pi pi-trash" severity="danger"></p-button>
                                   </td>
-                                </ng-container>
-                              </tr>
+                                </ng-container>}
+                              </tr>}
                             </table>
-                          </ng-container>
+                          </ng-container>}
                         </td>                        
                         <td>
                           <p-button (click)="openModal(institution.name)" label="Agregar" severity="success" icon="pi pi-plus"></p-button>
@@ -112,7 +135,7 @@
                 </p-panel>
               </div>
             </div>
-            
+            <!-- Modal para agregar obligaciones contrapartes -->
             <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="false" header="Agregar Obligación" [style]="{width: '50vw'}">
               <form [formGroup]="obligationForm" (ngSubmit)="addObligationAndCloseModal()">
                 <div class="p-fluid">
@@ -144,7 +167,7 @@
               <p>Graph or content for Obligation Conjunta</p>
             </div>
           </ng-container>
-        </div>
+        </div>}
       </div> 
     }
   </div>

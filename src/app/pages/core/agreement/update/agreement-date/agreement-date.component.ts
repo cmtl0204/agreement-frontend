@@ -1,34 +1,28 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AgreementModel } from '@models/core';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
+import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
 import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum} from '@shared/enums';
 import { getFormattedDate } from '@shared/helpers';
-import { OnExitInterface } from '@shared/interfaces';
 import { PrimeIcons } from 'primeng/api';
-  import { firstValueFrom} from 'rxjs';
-
 @Component({
   selector: 'app-agreement-date',
   templateUrl: './agreement-date.component.html',
   styleUrl: './agreement-date.component.scss'
 })
-export class AgreementDateComponent implements OnInit, OnExitInterface {
+export class AgreementDateComponent implements OnInit {
   // Services
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly coreService = inject(CoreService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   public readonly messageDialogService = inject(MessageDialogService);
-  private readonly routesService = inject(RoutesService);
   
   // Form
-  // @Input({required: true}) id: string;
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); 
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   @Input({ required: true }) formInput!: AgreementModel;
-  id:string = ''
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
@@ -43,17 +37,7 @@ export class AgreementDateComponent implements OnInit, OnExitInterface {
     this.buildForm();
   }
 
-  async onExit() {
-    const res = await firstValueFrom(this.messageDialogService.questionOnExit());
-    console.log(res);
-    return res;
-    // return this.messageDialogService.questionOnExit();
-  }
-
   ngOnInit(): void {
-    // if (this.id !== RoutesEnum.NEW) {
-    //   // this.findAgreement(this.id);
-    // }
     this.patchValueForm()
   }
 

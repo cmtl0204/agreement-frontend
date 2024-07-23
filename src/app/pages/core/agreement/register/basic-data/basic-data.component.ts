@@ -5,7 +5,6 @@ import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, AgreementsTypeEnum} from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
-import {considerSettingUpAutocompletion} from "@angular/cli/src/utilities/completion";
 
 @Component({
   selector: 'app-basic-data',
@@ -46,10 +45,7 @@ export class BasicDataComponent implements OnInit {
     this.loadTypes();
     this.loadSpecialTypes();
 
-    console.log(this.formInput);
-    this.form.patchValue({
-      ...this.formInput
-    });
+    this.form.patchValue(this.formInput);
   }
 
   /* Form Builder & Validates */
@@ -70,7 +66,7 @@ export class BasicDataComponent implements OnInit {
 
   checkValueChanges() {
     this.typeField.valueChanges.subscribe((value) => {
-      if (value.code === AgreementsTypeEnum.ESPECIAL) {
+      if (value && value.code === AgreementsTypeEnum.ESPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       } else {
         this.specialTypeField.clearValidators();

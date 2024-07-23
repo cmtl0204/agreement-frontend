@@ -33,9 +33,6 @@ export class ErrorMessageDirective {
   setErrorMessage() {
     let text = '';
 
-    console.log('this._touched',this._touched)
-    console.log('this._dirty',this._dirty)
-
     if ((this._touched || this._dirty) && this._errors) {
       if (this._errors['required']) {
         text = this.fieldRequired;

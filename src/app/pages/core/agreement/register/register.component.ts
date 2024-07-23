@@ -59,7 +59,7 @@ export class RegisterComponent {
       addendums: [null]
     });
 
-    if (sessionStorage.getItem('agreement')) {
+    if (this.agreementsService.agreement) {
       this.form.patchValue(this.agreementsService.agreement);
     }
   }

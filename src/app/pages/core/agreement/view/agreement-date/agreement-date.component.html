@@ -1,80 +1,83 @@
 <div class="grid">
   <div class="col-12">
-    <div [hidden]="!coreService.isLoading">
-      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    </div>
-
-    <div [hidden]="coreService.isLoading">
-      <p-toolbar>
-        <div class="p-toolbar-group-left">
-          <app-header-form
-            [id]="id"
-            label="Visualización de fechas"
-            [icon]="PrimeIcons.PENCIL"/>
+    <p-panel>
+      <div class="p-fluid grid">
+        <!-- subscriptionAt -->
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
+          <input pInputText [value]="agreement.subscribedAt | date" [readOnly]="true"/>
         </div>
-      </p-toolbar>
 
-      <p-panel>
-        <div class="p-fluid grid">
-          <!-- subscriptionAt -->
-          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
-            <input pInputText [value]="subscribedAt | date" [readOnly]="true"/>
-          </div>
+        <!-- startedAt -->
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.startedAt"></label>
+          <input pInputText [value]="startedAt | date" [readOnly]="true"/>
+        </div>
 
-          <!-- startedAt -->
-          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.startedAt"></label>
-            <input pInputText [value]="startedAt | date" [readOnly]="true"/>
-          </div>
-
-          <!-- hasTerminationDate -->
-          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.isFinishDate"></label>
-            <div>
-              <input type="radio" name="isFinishDate" [value]="true" (change)="onFinishDateChange(true)" [checked]="isFinishDate === true">
-              <label>Sí</label>
-              <input type="radio" name="isFinishDate" [value]="false" (change)="onFinishDateChange(false)" [checked]="isFinishDate === false">
-              <label>No</label>
-            </div>
-          </div>
-
-          <!-- endedAt -->
-          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12" [hidden]="!isFinishDate">
-            <label appLabel [label]="AgreementFormEnum.endedAt"></label>
-            <input pInputText [value]="endedAt | date" [readOnly]="true"/>
-          </div>
-
-          <!-- endedReason -->
-          <div class="field col-12" [hidden]="isFinishDate">
-            <label appLabel [label]="AgreementFormEnum.endedReason"></label>
-            <input pInputText [value]="endedReason" [readOnly]="true"/>
-          </div>
-
-          <!-- Plazo total del convenio -->
-          <div [hidden]="!isFinishDate" class="field col-12">
-            <label>Plazo total del convenio:</label>
-          </div>
-
-          <!-- yearTerm -->
-          <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
-            <input pInputText [value]="yearTerm" [readOnly]="true"/>
-          </div>
-
-          <!-- monthTerm -->
-          <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
-            <input pInputText [value]="monthTerm" [readOnly]="true"/>
-          </div>
-
-          <!-- dayTerm -->
-          <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
-            <input pInputText [value]="dayTerm" [readOnly]="true"/>
+        <!-- hasTerminationDate -->
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.isFinishDate"></label>
+          <div>
+            <input
+              disabled
+              type="radio"
+              name="isFinishDate"
+              [value]="true"
+              (change)="onFinishDateChange(true)"
+              [checked]="isFinishDate === true"
+            /> <!--cambiar a false si es NO-->
+            <label>Sí</label>
+            <input
+              disabled
+              type="radio"
+              name="isFinishDate"
+              [value]="false"
+              (change)="onFinishDateChange(false)"
+              [checked]="isFinishDate === false"
+            />
+            <label>No</label>
           </div>
         </div>
-      </p-panel>
-    </div>
+
+        <!-- endedAt -->
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12" [hidden]="!isFinishDate">
+          <!--quitar el signo ! cuando sea no-->
+          <label appLabel [label]="AgreementFormEnum.endedAt"></label>
+          <input pInputText [value]="endedAt | date" [readOnly]="false"/>
+        </div>
+
+        <!-- endedReason -->
+        <div class="field col-12" [hidden]="isFinishDate">       <!--poner el signo ! cuando sea no-->
+          <label appLabel [label]="AgreementFormEnum.endedReason"></label>
+          <input pInputText [value]="endedReason" [readOnly]="true"/>
+        </div>
+
+        <!-- Plazo total del convenio -->
+        <div [hidden]="!isFinishDate" class="field col-12"> <!--quitar el signo ! cuando sea no-->
+          <label>Plazo total del convenio:</label>
+        </div>
+
+        <!-- yearTerm -->
+        <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <!--quitar el signo ! cuando sea no-->
+          <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
+          <input pInputText [value]="yearTerm" [readOnly]="true"/>
+        </div>
+
+        <!-- monthTerm -->
+        <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <!--quitar el signo ! cuando sea no-->
+          <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
+          <input pInputText [value]="monthTerm" [readOnly]="true"/>
+        </div>
+
+        <!-- dayTerm -->
+        <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <!--quitar el signo ! cuando sea no-->
+          <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
+          <input pInputText [value]="dayTerm" [readOnly]="true"/>
+        </div>
+      </div>
+    </p-panel>
   </div>
 </div>

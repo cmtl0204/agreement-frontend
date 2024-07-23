@@ -75,6 +75,7 @@ export enum IconButtonActionEnum {
 
 export enum SeverityButtonActionEnum {
   CREATE = 'success',
+  ADD = 'success',
   CANCEL = 'warning',
   RETURN = 'warning',
   SAVE = 'primary',
