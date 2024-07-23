@@ -4,7 +4,14 @@ import { AgreementModel, CatalogueModel, ColumnModel, ExternalInstitutionModel, 
 import {AuthService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { CatalogueTypeEnum, ExternalInstitutionsFormEnum, InternalInstitutionsFormEnum, RoutesEnum, SkeletonEnum } from '@shared/enums';
+import {
+  CatalogueTypeEnum,
+  ExternalInstitutionsFormEnum,
+  InternalInstitutionsFormEnum,
+  RoutesEnum,
+  SeverityButtonActionEnum,
+  SkeletonEnum
+} from '@shared/enums';
 import {onlyLetters} from "@shared/helpers";
 import { PrimeIcons } from 'primeng/api';
 
@@ -61,14 +68,14 @@ export class AppearerComponent implements OnInit {
    this.loadPositions();
    this.loadInternalPersonTypes();
    this.loadExternalPersonTypes();
-   
+
   this.patchValueForm();
     //pending
     if (this.id !== RoutesEnum.NEW) {
       this.findCompany(this.id);
     };
 
-  
+
   }
 
   findCompany(id: string) {
@@ -77,18 +84,18 @@ export class AppearerComponent implements OnInit {
     */
     this.form.patchValue({});
   }
-  
+
  /* Load Foreign Keys  */
   loadPositions(){
-     this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION); 
+     this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION);
   }
 
   loadInternalPersonTypes(){
-    this.internalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_PERSON_TYPE); 
+    this.internalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_PERSON_TYPE);
   }
 
   loadExternalPersonTypes(){
-   this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE); 
+   this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE);
   }
 
 patchValueForm(){
@@ -115,7 +122,7 @@ patchValueForm(){
     });
   }
 }
- 
+
   /** Form Builder **/
   buildForm() {
     this.form = this.formBuilder.group({
@@ -130,7 +137,7 @@ patchValueForm(){
       unit: ['Unidad'],
       position: ['', Validators.required],
        personType: ['', [Validators.required]],
-    
+
     });
   }
 
@@ -141,27 +148,27 @@ patchValueForm(){
       unit: ['', [Validators.required, Validators.pattern(onlyLetters())]],
       personType: ['', Validators.required]
     });
-   
+
   }
 
   buildInternalInstitutionsColumns(){
-    this.internalInstitutionsColumns =[  
+    this.internalInstitutionsColumns =[
       {
         field: 'position', header: InternalInstitutionsFormEnum.position
       },
-     
+
       {
         field: 'personType', header: InternalInstitutionsFormEnum.personType
       },
 
       {
         field: 'name', header: InternalInstitutionsFormEnum.name
-      }, 
+      },
 
       {
         field: 'unit', header: InternalInstitutionsFormEnum.unit
       },
-      
+
     ]
   }
 
@@ -179,7 +186,7 @@ patchValueForm(){
       {
         field: 'unit', header: ExternalInstitutionsFormEnum.unit
       },
-      
+
     ];
   }
   /**  Validates **/
@@ -216,14 +223,14 @@ patchValueForm(){
     if (this.validateExternalInstitutionsForm()) {
       this.externalInstitutions.push(this.formBuilder.group(this.externalInstitutionForm.value));
       this.externalInstitutionForm.reset();
-   
+
     } else {
       this.externalInstitutionForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
- 
+
 
   /** Form Actions **/
   onSubmit(): void {
@@ -240,17 +247,17 @@ patchValueForm(){
         this.messageDialogService.fieldErrors('Debe completar el formulario al menos una vez');
     }
 }
-  
+
   save() {
-    this.formOutput.emit(this.form.value); 
-    this.nextOutput.emit(true); 
-   
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
+
   }
 
   /** Remove**/
   removeExternalInstitutions(index: number) {
     this.externalInstitutions.removeAt(index);
-   
+
   }
 
   removeInternalInstitutions(index: number) {
@@ -264,8 +271,8 @@ patchValueForm(){
     if (externalInstitution) {
       this.externalInstitutionForm.patchValue(externalInstitution.value);
     }
+
     this.externalInstitutions.removeAt(index);
-   
   }
 
   editInternalInstitutions(index: number) {
@@ -276,7 +283,7 @@ patchValueForm(){
     }
     this.internalInstitutions.removeAt(index);
   }
- 
+
 
 
   /** Getters Form**/
@@ -312,4 +319,6 @@ patchValueForm(){
   get internalInstitutionPersonTypeField(): AbstractControl {
     return this.internalInstitutionForm.controls['personType'];
   }
+
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
 }

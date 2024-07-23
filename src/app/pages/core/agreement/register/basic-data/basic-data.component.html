@@ -107,9 +107,9 @@
               placeholder="Seleccione"
               [filter]="true"
               filterBy="name">
-              <ng-template pTemplate="selectedItem" let-selectedOption>
+              <ng-template pTemplate="selectedItem" let-item>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ selectedOption.name }}</div>
+                  <div>{{ item.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -144,9 +144,9 @@
               dataKey="id"
               [options]="origins"
               placeholder="Selecione">
-              <ng-template pTemplate="selectedItem" let-selectedOption>
+              <ng-template pTemplate="selectedItem" let-item>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ selectedOption.name }}</div>
+                  <div>{{ item.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -181,9 +181,9 @@
               dataKey="id"
               [options]="types"
               placeholder="Selecione">
-              <ng-template pTemplate="selectedItem" let-selectedOption>
+              <ng-template pTemplate="selectedItem" let-item>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ selectedOption.name }}</div>
+                  <div>{{ item.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -220,9 +220,9 @@
                 dataKey="id"
                 [options]="specialTypes"
                 placeholder="Selecione">
-                <ng-template pTemplate="selectedItem" let-selectedOption>
+                <ng-template pTemplate="selectedItem" let-item>
                   <div class="flex align-items-center gap-2">
-                    <div>{{ selectedOption.name }}</div>
+                    <div>{{ item.name }}</div>
                   </div>
                 </ng-template>
                 <ng-template let-item pTemplate="item">

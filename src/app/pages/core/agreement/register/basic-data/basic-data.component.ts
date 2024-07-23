@@ -45,7 +45,7 @@ export class BasicDataComponent implements OnInit {
     this.loadTypes();
     this.loadSpecialTypes();
 
-    this.formInput
+    this.form.patchValue(this.formInput);
   }
 
   /* Form Builder & Validates */
@@ -66,7 +66,7 @@ export class BasicDataComponent implements OnInit {
 
   checkValueChanges() {
     this.typeField.valueChanges.subscribe((value) => {
-      if (value.code === AgreementsTypeEnum.ESPECIAL) {
+      if (value && value.code === AgreementsTypeEnum.ESPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       } else {
         this.specialTypeField.clearValidators();

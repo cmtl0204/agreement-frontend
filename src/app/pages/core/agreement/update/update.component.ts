@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-update',
@@ -11,7 +11,9 @@ export class UpdateComponent {
   private readonly formBuilder = inject(FormBuilder);
 
   constructor() {
-    this.buildForm()
+    this.buildForm();
+
+    this.findAgreement();
   }
 
   buildForm() {
@@ -21,6 +23,7 @@ export class UpdateComponent {
       internalNumber: [null],
       number: [null],
       type: [null],
+      origin: [null],
       specialType: [null],
 
       // appearer
@@ -30,6 +33,7 @@ export class UpdateComponent {
       // agreement-date
       subscribedAt: [null],
       startedAt: [null],
+      endedAt:[null],
       isFinishDate: [null],
       endedReason: [null],
       yearTerm: [null],
@@ -45,10 +49,17 @@ export class UpdateComponent {
       financings: [null],
 
       // document
-
-    })
+    });
   };
 
+  findAgreement() {
+    // this.agreementsHttpService.findOne('').subscribe(agreement => {
+    //   this.form.patchValue(agreement);
+    // });
+
+    //temp
+    this.form.patchValue(JSON.parse(String(sessionStorage.getItem('agreement'))));
+  }
 
   save(event: any) {
     console.log('event', event);
@@ -56,4 +67,11 @@ export class UpdateComponent {
     console.log('form', this.form.value);
   }
 
+  get externalInstitutionsField(): FormArray {
+    return this.form.controls['externalInstitutions'] as FormArray;
+  }
+
+  get internalInstitutionsField(): FormArray {
+    return this.form.controls['internalInstitutions'] as FormArray;
+  }
 }

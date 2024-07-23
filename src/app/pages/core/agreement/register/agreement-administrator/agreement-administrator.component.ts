@@ -1,11 +1,10 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AgreementModel, CatalogueModel } from '@models/core';
-import { CoreService, MessageDialogService} from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { RoutesEnum, SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum } from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
-import { firstValueFrom } from 'rxjs';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AgreementModel, CatalogueModel} from '@models/core';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum} from '@shared/enums';
+import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-agreement-administrator',
@@ -23,7 +22,7 @@ export class AgreementAdministratorComponent {
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
-  @Input({ required: true }) formInput!: AgreementModel;
+  @Input({required: true}) formInput!: AgreementModel;
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
@@ -72,7 +71,8 @@ export class AgreementAdministratorComponent {
 
   /** Load Foreign Keys  **/
   loadPositions() {
-    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
+    // this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
+    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
   }
 
   loadUnits() {
@@ -90,7 +90,7 @@ export class AgreementAdministratorComponent {
   }
 
   save() {
-    this.formOutput.emit(this.form.value); 
+    this.formOutput.emit(this.form.value);
     this.nextOutput.emit(true);
   }
 
