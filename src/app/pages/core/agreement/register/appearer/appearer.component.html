@@ -94,16 +94,16 @@
                       [dirty]="internalInstitutionPersonTypeField.dirty">
                     </small>
                   </div>
-                </div>
+              </div>
 
                 <!-- button add internalInstitution -->
                 @if (internalInstitutionsField.length < 1) {
                 <div class="field col-12" style="display: flex; justify-content: right">
-                  <p-button class="custom-button-plus-width"
-                            label="Añadir"
-                            icon="pi pi-plus"
-                            severity="success"
-                            (click)="addInternalInstitution()"/>
+                  <p-button 
+                    label="Añadir"
+                    [icon]="PrimeIcons.PLUS"
+                    [severity]="SeverityButtonActionEnum.ADD"
+                    (click)="addInternalInstitution()"/>
                 </div>
                 }
                 
@@ -131,9 +131,11 @@
                       <td>{{ internalInstitution.get('name')?.value }}</td>
                       <td>{{ internalInstitution.get('unit')?.value }}</td>
                       <td>
-                        <button pButton type="button" icon="pi pi-trash" class="p-button p-button-danger"
-                        (click)="deleteInternalInstitution(i)">
-                      </button>
+                        <button pButton 
+                          [icon]="PrimeIcons.TRASH"
+                          [severity]="SeverityButtonActionEnum.DELETE" 
+                          (click)="deleteInternalInstitution(i)">
+                        </button>
                     </td>
                   </tr>
                   </ng-template>
@@ -241,11 +243,11 @@
               </div>
               <!-- button add externalInstitution -->
               <div class="field col-12" style="display: flex; justify-content: right">
-                <p-button class="custom-button-plus-width"
-                          label="Añadir"
-                          icon="pi pi-plus"
-                          severity="success"
-                          (click)="addExternalInstitution()"/>
+                <p-button 
+                  label="Añadir"
+                  [icon]="PrimeIcons.PLUS"
+                  [severity]="SeverityButtonActionEnum.ADD"
+                  (click)="addExternalInstitution()"/>
               </div>
 
               <!-- table external-->
@@ -272,8 +274,10 @@
                       <td>{{ externalInstitution.get('name')?.value }}</td>
                       <td>{{ externalInstitution.get('unit')?.value }}</td>
                       <td>
-                        <button pButton type="button" icon="pi pi-trash" class="p-button p-button-danger"
-                        (click)="deleteExternalInstitution(i)">
+                        <button pButton 
+                          [icon]="PrimeIcons.TRASH"
+                          [severity]="SeverityButtonActionEnum.DELETE" 
+                          (click)="deleteExternalInstitution(i)">
                       </button>
                     </td>
                   </tr>
