@@ -5,13 +5,13 @@
         <!-- subscriptionAt -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
-          <input pInputText [value]="agreement.subscribedAt | date" [readOnly]="true"/>
+          <input pInputText [value]="agreement?.subscribedAt | date" [readOnly]="true"/>
         </div>
 
         <!-- startedAt -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel [label]="AgreementFormEnum.startedAt"></label>
-          <input pInputText [value]="startedAt | date" [readOnly]="true"/>
+          <input pInputText [value]="agreement?.startedAt | date" [readOnly]="true"/>
         </div>
 
         <!-- hasTerminationDate -->
@@ -19,16 +19,14 @@
           <label appLabel [label]="AgreementFormEnum.isFinishDate"></label>
           <div>
             <input
-              disabled
               type="radio"
               name="isFinishDate"
               [value]="true"
               (change)="onFinishDateChange(true)"
               [checked]="isFinishDate === true"
-            /> <!--cambiar a false si es NO-->
+            />
             <label>Sí</label>
             <input
-              disabled
               type="radio"
               name="isFinishDate"
               [value]="false"
@@ -40,42 +38,38 @@
         </div>
 
         <!-- endedAt -->
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12" [hidden]="!isFinishDate">
-          <!--quitar el signo ! cuando sea no-->
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12" *ngIf="isFinishDate">
           <label appLabel [label]="AgreementFormEnum.endedAt"></label>
-          <input pInputText [value]="endedAt | date" [readOnly]="false"/>
+          <input pInputText [value]="agreement?.endedAt | date" [readOnly]="true"/>
         </div>
 
         <!-- endedReason -->
-        <div class="field col-12" [hidden]="isFinishDate">       <!--poner el signo ! cuando sea no-->
+        <div class="field col-12" *ngIf="!isFinishDate">
           <label appLabel [label]="AgreementFormEnum.endedReason"></label>
-          <input pInputText [value]="endedReason" [readOnly]="true"/>
+          <input pInputText [value]="agreement?.endedReason" [readOnly]="true"/>
         </div>
 
         <!-- Plazo total del convenio -->
-        <div [hidden]="!isFinishDate" class="field col-12"> <!--quitar el signo ! cuando sea no-->
+        <div class="field col-12" *ngIf="isFinishDate">
           <label>Plazo total del convenio:</label>
         </div>
 
         <!-- yearTerm -->
-        <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-          <!--quitar el signo ! cuando sea no-->
+        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12" *ngIf="isFinishDate">
           <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
-          <input pInputText [value]="yearTerm" [readOnly]="true"/>
+          <input pInputText [value]="agreement?.yearTerm" [readOnly]="true"/>
         </div>
 
         <!-- monthTerm -->
-        <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-          <!--quitar el signo ! cuando sea no-->
+        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12" *ngIf="isFinishDate">
           <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
-          <input pInputText [value]="monthTerm" [readOnly]="true"/>
+          <input pInputText [value]="agreement?.monthTerm" [readOnly]="true"/>
         </div>
 
         <!-- dayTerm -->
-        <div [hidden]="!isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-          <!--quitar el signo ! cuando sea no-->
+        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12" *ngIf="isFinishDate">
           <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
-          <input pInputText [value]="dayTerm" [readOnly]="true"/>
+          <input pInputText [value]="agreement?.dayTerm" [readOnly]="true"/>
         </div>
       </div>
     </p-panel>
