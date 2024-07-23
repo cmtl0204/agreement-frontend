@@ -1,9 +1,8 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {AgreementFormEnum, RoutesEnum} from '@shared/enums';
-import {CoreService} from '@servicesApp/core';
-import {SkeletonEnum} from '@shared/enums/skeleton.enum';
-import {PrimeIcons} from 'primeng/api';
-import {AgreementModel} from "@models/core";
+import { Component, OnInit, Input } from '@angular/core';
+import { AgreementFormEnum, RoutesEnum } from '@shared/enums';
+import { CoreService } from '@servicesApp/core';
+import { PrimeIcons } from 'primeng/api';
+import { AgreementModel } from "@models/core";
 
 @Component({
   selector: 'app-agreement-date',
@@ -12,34 +11,22 @@ import {AgreementModel} from "@models/core";
 })
 export class AgreementDateComponent implements OnInit {
   @Input({required: true}) agreement!: AgreementModel;
-  public id: string = RoutesEnum.NEW;
-  public subscribedAt: Date = new Date('2023-01-01');
-  public startedAt: Date = new Date('2023-01-01');
-  public isFinishDate: boolean = true;
-  public endedAt: Date = new Date('2023-12-31');
-  public endedReason: string = 'Razón por la que termina';
-  public yearTerm: number = 1;
-  public monthTerm: number = 11;
-  public dayTerm: number = 30;
+  protected id: string = RoutesEnum.NEW;
+  protected isFinishDate: boolean = true;
 
-  public readonly AgreementFormEnum = AgreementFormEnum;
-  public readonly SkeletonEnum = SkeletonEnum;
-  public readonly PrimeIcons = PrimeIcons;
+  protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly PrimeIcons = PrimeIcons;
 
-  constructor(
-    public coreService: CoreService
-  ) {
-  }
+  constructor(protected coreService: CoreService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  onFinishDateChange(value: boolean): void {
+  protected onFinishDateChange(value: boolean): void {
     this.isFinishDate = value;
     if (value) {
-      this.endedReason = '';
+      this.agreement.endedReason = '';
     } else {
-      this.endedAt = new Date();
+      this.agreement.endedAt = new Date();
     }
   }
 }
