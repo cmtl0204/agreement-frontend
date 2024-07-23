@@ -1,12 +1,12 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@models/core';
-import { AuthService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
-import { onlyLetters } from '@shared/helpers';
-import { PrimeIcons } from 'primeng/api';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
+import {AgreementModel, CatalogueModel, ColumnModel, FinancingModel} from '@models/core';
+import {AuthService} from '@servicesApp/auth';
+import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum} from '@shared/enums';
+import {onlyLetters} from '@shared/helpers';
+import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-financing',
@@ -24,7 +24,7 @@ export class FinancingComponent implements OnInit {
   /** variables **/
   protected form!: FormGroup;
   protected financingForm!: FormGroup;
-  @Input({ required: true }) formInput!: AgreementModel;
+  @Input({required: true}) formInput!: AgreementModel;
   protected financingsColumns: ColumnModel[] = [];
 
   /** Form **/
@@ -65,7 +65,8 @@ export class FinancingComponent implements OnInit {
   }
 
   patchValueForm() {
-    const { financings } = this.formInput;
+    const {financings} = this.formInput;
+
     if (financings) {
       financings.forEach((value: FinancingModel) => {
         this.financings.push(this.formBuilder.group(value))
@@ -79,7 +80,7 @@ export class FinancingComponent implements OnInit {
       isFinancing: [null, [Validators.required]],
       financings: this.formBuilder.array([])
     });
-   
+
   }
 
   buildFinancingForm() {
@@ -145,9 +146,7 @@ export class FinancingComponent implements OnInit {
   validateForm(): boolean {
     this.formErrors = [];
 
-    if (this.isFinancingField.invalid) {
-      this.formErrors.push(AgreementFormEnum.isFinancing);
-    }
+    if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
 
     if (this.formErrors.length === 0) {
       if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
@@ -160,7 +159,7 @@ export class FinancingComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.isFinancingField.value === false) {
+    if (!this.isFinancingField.value) {
       if (this.financings.length > 0) {
         this.financings.clear();
       }

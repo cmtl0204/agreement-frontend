@@ -1,8 +1,15 @@
-import { CatalogueModel, ExternalInstitutionModel, FinancingModel, InternalInstitutionModel } from "@models/core";
+import {
+  AdministratorModel,
+  CatalogueModel,
+  ExternalInstitutionModel,
+  FinancingModel,
+  InternalInstitutionModel
+} from "@models/core";
 
 export interface AgreementModel {
   id?: string;
   number?: string;
+  administrator?: AdministratorModel;
   internalNumber?: number;
   name?: string;
   originId?: string;

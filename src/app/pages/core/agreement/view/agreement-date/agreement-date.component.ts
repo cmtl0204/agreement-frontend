@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AgreementFormEnum, RoutesEnum } from '@shared/enums';
-import { CoreService } from '@servicesApp/core';
-import { SkeletonEnum } from '@shared/enums/skeleton.enum';
-import { PrimeIcons } from 'primeng/api';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {AgreementFormEnum, RoutesEnum} from '@shared/enums';
+import {CoreService} from '@servicesApp/core';
+import {SkeletonEnum} from '@shared/enums/skeleton.enum';
+import {PrimeIcons} from 'primeng/api';
+import {AgreementModel} from "@models/core";
 
 @Component({
   selector: 'app-agreement-date',
@@ -10,8 +11,7 @@ import { PrimeIcons } from 'primeng/api';
   styleUrls: ['./agreement-date.component.scss']
 })
 export class AgreementDateComponent implements OnInit {
-  @Output() formOutput: EventEmitter<any> = new EventEmitter();
-
+  @Input({required: true}) agreement!: AgreementModel;
   public id: string = RoutesEnum.NEW;
   public subscribedAt: Date = new Date('2023-01-01');
   public startedAt: Date = new Date('2023-01-01');
@@ -28,9 +28,11 @@ export class AgreementDateComponent implements OnInit {
 
   constructor(
     public coreService: CoreService
-  ) {}
+  ) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   onFinishDateChange(value: boolean): void {
     this.isFinishDate = value;

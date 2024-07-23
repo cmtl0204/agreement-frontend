@@ -48,9 +48,6 @@ export class FinancingComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
-    this.loadInternalInstitutions();
-    this.loadExternalInstitutions();
-
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
@@ -58,7 +55,6 @@ export class FinancingComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCombineInstitutions();
-    this.form.patchValue(this.formInput);
     this.patchValueForm();
   }
 
@@ -68,7 +64,10 @@ export class FinancingComponent implements OnInit {
   }
 
   patchValueForm() {
+    this.form.patchValue(this.formInput);
+
     const { financings } = this.formInput;
+
     if (financings) {
       financings.forEach((value: FinancingModel) => {
         this.financings.push(this.formBuilder.group(value))
@@ -149,20 +148,6 @@ export class FinancingComponent implements OnInit {
     this.financings.removeAt(index);
   }
 
-
-  loadInternalInstitutions() {
-    this.internalInstitutions = [
-      { name: 'Ministro' },
-      { name: 'Viceministro' },
-    ];
-  }
-
-  loadExternalInstitutions() {
-    this.externalInstitutions = [
-      { name: 'Director 2' },
-      { name: 'Coordinador 2' },
-    ];
-  }
 
   loadCombineInstitutions() {
     this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
