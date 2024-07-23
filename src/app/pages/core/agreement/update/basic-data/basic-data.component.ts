@@ -66,12 +66,12 @@ export class BasicDataComponent implements OnInit {
 
   checkValueChanges(){
     this.typeField.valueChanges.subscribe((value) => {
-      if(value.code === AgreementsTypeEnum.ESPECIAL) {
+      if(value && value.code === AgreementsTypeEnum.ESPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       }else{
         this.specialTypeField.clearValidators();
       }
-      this.typeField.updateValueAndValidity();
+      this.specialTypeField.updateValueAndValidity();
       this.specialTypeField.reset();
     })
   }
