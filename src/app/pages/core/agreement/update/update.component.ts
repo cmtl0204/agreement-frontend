@@ -33,6 +33,7 @@ export class UpdateComponent {
       // agreement-date
       subscribedAt: [null],
       startedAt: [null],
+      endedAt:[null],
       isFinishDate: [null],
       endedReason: [null],
       yearTerm: [null],
