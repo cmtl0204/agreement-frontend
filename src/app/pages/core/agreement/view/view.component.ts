@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {AgreementModel} from "@models/core";
+import {AgreementModel, AgreementStateModel} from "@models/core";
 import {AgreementsHttpService} from "@servicesHttp/core";
 import {SkeletonEnum} from "@shared/enums";
 import {CoreService} from "@servicesApp/core";
@@ -16,6 +16,7 @@ export class ViewComponent {
 
   /** Form **/
   protected agreement!: AgreementModel;
+  protected agreementState!: AgreementStateModel;
 
   /** Enums **/
   protected readonly SkeletonEnum = SkeletonEnum;
