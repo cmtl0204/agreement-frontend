@@ -35,7 +35,7 @@
         <form [formGroup]="internalInstitutionForm" class="p-fluid grid">
 
           <!-- position -->
-          <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-12 sm:col-12">
 
             <label
               appLabel
@@ -53,7 +53,8 @@
               [options]="positions"
               placeholder="Seleccione una opcion"
               [filter]="false"
-              filterBy="name">
+              filterBy="name"
+              class="flex-grow-1">
 
               <ng-template
                 pTemplate="selectedItem"
@@ -78,7 +79,7 @@
           </div>
 
           <!-- personType -->
-          <div class="field col-12 xl:col-6 lg:col-12 md:col-12 sm:col-12">
+          <div class="field col-12 xl:col-5 lg:col-5 md:col-12 sm:col-12">
 
             <label
               appLabel
@@ -95,7 +96,8 @@
               [options]="internalPersonTypes"
               placeholder="Seleccione una opcion"
               [filter]="false"
-              filterBy="name">
+              filterBy="name"
+              class="flex-grow-1">
 
               <ng-template
                 pTemplate="selectedItem"
@@ -121,11 +123,14 @@
 
           </div>
           @if (internalInstitutions.length < 1) {
+            <div class="ml-2" style="display: flex; align-items: center;">
             <p-button
               label="Añadir"
-              icon="pi pi-plus"
+              [icon]="PrimeIcons.PLUS"
               [raised]="true"
-              (click)="addInternalInstitutions()"/>
+              [severity]="SeverityButtonActionEnum.ADD"
+              (click)="addInternalInstitutions()"
+              class="button-adjustment"/></div>
           }
         </form>
 
@@ -133,7 +138,7 @@
         <!-- table -->
 
         @if (internalInstitutions.controls.length > 0) {
-          <div class="field col-12">
+          <p-card class="field col-12">
             <p-table
               [value]="internalInstitutions.controls"
               styleClass="p-datatable-striped"
@@ -161,8 +166,8 @@
                   <td>
 
                     <p-button
-                      icon="pi pi-pencil"
-                      severity="success"
+                      [icon]="PrimeIcons.PENCIL"
+                      [severity]="SeverityButtonActionEnum.RETURN"
                       (click)="editInternalInstitutions(i)"/>
 
                   </td>
@@ -170,7 +175,7 @@
 
               </ng-template>
             </p-table>
-          </div>
+          </p-card>
         }
 
         <br>
@@ -294,13 +299,14 @@
             </small>
 
           </div>
-
+          <div class="field col-12" style="display: flex; justify-content: right">
           <p-button
             label="Añadir"
-            icon="pi pi-plus"
+            [icon]="PrimeIcons.PLUS"
+            [severity]="SeverityButtonActionEnum.ADD"
             [raised]="true"
             (click)="addExternalInstitutions()"/>
-
+           </div>
         </form>
 
         <br>
@@ -308,9 +314,9 @@
         <!-- table -->
 
         @if (externalInstitutions.controls.length > 0) {
-
+          <p-card class="field col-12">
           <p-table
-
+  
             [value]="externalInstitutions.controls"
             styleClass="p-datatable-striped"
             [tableStyle]="{'min-width': '50rem'}">
@@ -345,14 +351,14 @@
                       (click)="removeExternalInstitutions(i)"/>
                     <p-button
                       [icon]="PrimeIcons.PENCIL"
-                      [severity]="SeverityButtonActionEnum.ADD"
+                      [severity]="SeverityButtonActionEnum.RETURN"
                       (click)="editExternalInstitutions(i)"/>
                   </div>
                 </td>
               </tr>
             </ng-template>
           </p-table>
-
+        </p-card>
         }
 
       </p-panel>
