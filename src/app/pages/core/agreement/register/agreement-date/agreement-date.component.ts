@@ -17,9 +17,7 @@ export class AgreementDateComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly coreService = inject(CoreService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  public readonly messageDialogService = inject(MessageDialogService);
-  private readonly routesService = inject(RoutesService);
-
+  protected readonly messageDialogService = inject(MessageDialogService);
 
   // Form
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
@@ -31,14 +29,9 @@ export class AgreementDateComponent implements OnInit {
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
 
-  // Foreign keys
-  protected units: CatalogueModel[] = [];
-  protected positions: CatalogueModel[] = [];
-
   // Enums
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
-  protected readonly AdministratorFormEnum = AdministratorFormEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
@@ -46,7 +39,7 @@ export class AgreementDateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.patchValueForm()
+    this.patchValueForm();
   }
 
   /** Form Builder & Validates **/
@@ -66,7 +59,7 @@ export class AgreementDateComponent implements OnInit {
   }
 
   patchValueForm() {
-    const { endedAt, startedAt, subscribedAt,...agreement } = this.formInput
+    const { endedAt, startedAt, subscribedAt,...agreement } = this.formInput;
 
     this.form.patchValue(agreement);
 
@@ -81,7 +74,6 @@ export class AgreementDateComponent implements OnInit {
     if (endedAt) {
       this.endedAtField.setValue(getFormattedDate(endedAt))
     }
-
   }
 
   checkValueChanges() {
@@ -113,7 +105,6 @@ export class AgreementDateComponent implements OnInit {
     });
   }
 
-
   validateForm(): boolean {
     this.formErrors = [];
 
@@ -130,7 +121,7 @@ export class AgreementDateComponent implements OnInit {
   }
 
   // FormActions
-  onSubmit(): void {
+  onSubmit() {
     if (this.validateForm()) {
       this.save();
     } else {
@@ -138,8 +129,9 @@ export class AgreementDateComponent implements OnInit {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
+
   save() {
-    this.formOutput.emit(this.form.value); //add
+    this.formOutput.emit(this.form.value);
     this.nextOutput.emit(true);
   }
 
@@ -175,5 +167,4 @@ export class AgreementDateComponent implements OnInit {
   get dayTermField(): AbstractControl {
     return this.form.controls['dayTerm'];
   }
-
 }

@@ -1,6 +1,5 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { AgreementStateModel } from '@models/core';
-import { AgreementModel } from '@models/core/agreement.model';
+import { Component, Input } from '@angular/core';
+import { AgreementModel } from '@models/core';
 import { AgreementFormEnum } from '@shared/enums';
 
 @Component({
@@ -9,12 +8,9 @@ import { AgreementFormEnum } from '@shared/enums';
   styleUrl: './basic-data.component.scss'
 })
 export class BasicDataComponent {
-
   /** Form **/
   @Input({required: true}) agreement!: AgreementModel;
-  @Input({required: true}) agreementState!: AgreementStateModel;
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
-
 }

@@ -20,6 +20,7 @@
           />
         </div>
       </p-toolbar>
+
       <p-panel>
         <form [formGroup]="form" class="p-fluid grid " (ngSubmit)="onSubmit()">
 
@@ -78,15 +79,21 @@
                 <p-dropdown
                   id="combinedInstitution"
                   formControlName="model"
-                  dataKey="personType"
                   [options]="combinedInstitutions"
                   placeholder="Seleccione"
                   [filter]="false">
                   <ng-template pTemplate="selectedItem" let-selectedItem>
                     <div class="flex align-items-center gap-2">
-                      <div>{{ selectedItem.name }} - {{ selectedItem.position }}</div>
+                      <div>{{ selectedItem.name }} -
+                        @if (selectedItem.position?.name) {
+                          <span>{{ selectedItem.position?.name }}</span>
+                        } @else {
+                          {{ selectedItem.position }}
+                        }
+                      </div>
                     </div>
                   </ng-template>
+
                   <ng-template let-item pTemplate="item">
                     <div class="flex align-items-center gap-2">
                       <div>{{ item.name }} -
@@ -177,6 +184,7 @@
                         severity="success"
                         (click)="addFinancing()"/>
             </div>
+
             <!-- table -->
             @if (financings.length > 0) {
               <p-panel class="field col-12">
@@ -184,6 +192,7 @@
                   [value]="financings.controls"
                   styleClass="p-datatable-striped"
                   [tableStyle]="{'min-width': '50rem'}">
+
                   <ng-template pTemplate="header">
                     @for (col of financingsColumns; track col.field) {
                       <th [pSortableColumn]="col.field">
@@ -194,6 +203,7 @@
                       Acciones
                     </th>
                   </ng-template>
+
                   <ng-template pTemplate="body" let-financing let-i="rowIndex">
                     <tr>
                       <td>{{ financing.get('model')?.value.name }}</td>
@@ -208,7 +218,6 @@
                 </p-table>
               </p-panel>
             }
-
           }
         </div>
       </p-panel>

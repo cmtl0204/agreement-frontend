@@ -1,11 +1,17 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl } from '@angular/forms';
-import { CatalogueModel, ObligationModel } from '@models/core';
-import { AuthService, AuthHttpService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { SkeletonEnum, RoutesEnum, ExternalInstitutionsObligations, ObligationsMintur, SeverityButtonActionEnum } from '@shared/enums';
-import { PrimeIcons, MessageService } from 'primeng/api';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl} from '@angular/forms';
+import {CatalogueModel, ObligationModel} from '@models/core';
+import {AuthService, AuthHttpService} from '@servicesApp/auth';
+import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {
+  SkeletonEnum,
+  RoutesEnum,
+  ExternalInstitutionsObligations,
+  ObligationsMintur,
+  SeverityButtonActionEnum
+} from '@shared/enums';
+import {PrimeIcons, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-obligation',
@@ -18,7 +24,7 @@ export class ObligationComponent implements OnInit {
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   institutions = [];
-  @Input({ required: true }) formInput!: any;
+  @Input({required: true}) formInput!: any;
 
   protected obligationType: CatalogueModel[] = [];
   protected obligationMintur: CatalogueModel[] = [];
@@ -37,6 +43,7 @@ export class ObligationComponent implements OnInit {
 
   id: string = RoutesEnum.NEW
   protected obligationForm!: FormGroup;
+  protected obligationTypeForm!: FormGroup;
   protected form!: FormGroup;
   protected formMintur!: FormGroup;
   private formErrors: string[] = [];
@@ -49,44 +56,66 @@ export class ObligationComponent implements OnInit {
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
-  constructor(private messageService: MessageService) {
+  constructor() {
     this.buildForm();
+    this.buildObligationTypeForm();
     this.buildObligationForm();
+    this.buildInstitutionalObligationForm();
   }
 
   ngOnInit(): void {
     /* Load Foreign Keys*/
     this.loadObligationTypes();
     this.loadMintur();
-    this.patchValueForm();
+    // this.patchValueForm();
     this.loadObligationInstitutions();
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      obligationTypes: this.formBuilder.array([]),
-      obligations: this.formBuilder.array([])
+      obligationTypes: this.formBuilder.array([this.obligationTypeForm])
+    });
+  }
+
+  buildObligationTypeForm() {
+    this.obligationTypeForm = this.formBuilder.group({
+      obligations: [this.formBuilder.array([]), [Validators.required]],
+      institutionalObligations: [this.formBuilder.array([]), [Validators.required]],
     });
   }
 
   buildObligationForm() {
     this.obligationForm = this.formBuilder.group({
+      description: [null, [Validators.required]],
       model: [null, [Validators.required]],
-      description: [null, [Validators.required]]
+    });
+  }
+
+  buildInstitutionalObligationForm() {
+    this.obligationForm = this.formBuilder.group({
+      model: [null, [Validators.required]],
+      obligationType: [null, [Validators.required]],
     });
   }
 
   addObligation(): void {
-    if (this.obligationForm.invalid) {
-      return; // Si el formulario es inválido, no agregues la obligación
+    if (this.obligationForm.valid) {
+      const obligation = this.formBuilder.group({
+        model: [this.obligationForm.value.model, [Validators.required]],
+        description: [this.obligationForm.value.description, [Validators.required]],
+      });
+
+      this.obligationsField.push(obligation);
+      this.obligationForm.reset();
+      this.closeModal();
+    }else{
+      this.obligationForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
-    this.obligations.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
-    this.obligationForm.reset();
-    this.closeModal();
   }
 
   deleteObligation(index: number) {
-    this.obligations.removeAt(index);
+    this.obligationsField.removeAt(index);
   }
 
   validateForm(): boolean {
@@ -98,7 +127,7 @@ export class ObligationComponent implements OnInit {
 
   openModal(institutionName: string) {
     this.obligationForm.reset();
-    this.obligationForm.patchValue({ model: institutionName });
+    this.obligationForm.patchValue({model: institutionName});
     this.displayModal = true;
   }
 
@@ -110,27 +139,27 @@ export class ObligationComponent implements OnInit {
     if (this.obligationForm.invalid) {
       return;
     }
-    this.obligations.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
+    this.obligationsField.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
     this.closeModal();
   }
 
   /* Load Foreign Keys  */
   loadExternalInstitutions() {
     /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
-   
+
   }
 
   loadObligationTypes() {
     this.obligationType = [
-      { name: 'obligacion mintur' },
-      { name: 'obligacion contraparte' },
-      { name: 'obligacion conjunta' }
+      {name: 'obligacion mintur'},
+      {name: 'obligacion contraparte'},
+      {name: 'obligacion conjunta'}
     ]
   }
 
   loadMintur() {
     this.obligationMintur = [
-      { name: 'Mintur' }
+      {name: 'Mintur'}
     ]
   }
 
@@ -144,10 +173,10 @@ export class ObligationComponent implements OnInit {
   }
 
   patchValueForm() {
-    const { obligations } = this.formInput;
+    const {obligations} = this.formInput;
     if (obligations) {
       obligations.forEach((value: ObligationModel) => {
-        this.obligations.push(this.formBuilder.group(value))
+        this.obligationsField.push(this.formBuilder.group(value))
       });
     }
   }
@@ -165,7 +194,7 @@ export class ObligationComponent implements OnInit {
     if (description.trim() === '') {
       return;
     }
-    this.obligations.push(this.createObligation(model.name, description));
+    this.obligationsField.push(this.createObligation(model.name, description));
   }
 
   createObligation(model: string, description: string): FormGroup {
@@ -192,8 +221,8 @@ export class ObligationComponent implements OnInit {
     obligationsArray.push(newObligation);
   }
 
-  get obligations(): FormArray {
-    return this.form.get('obligations') as FormArray;
+  get obligationsField(): FormArray {
+    return this.obligationTypeForm.get('obligations') as FormArray;
   }
 
   get type(): FormArray {

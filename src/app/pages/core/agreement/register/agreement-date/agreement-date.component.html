@@ -26,13 +26,14 @@
 
       <p-panel>
         <form [formGroup]="form" class="p-fluid grid">
-
           <!-- subscriptionAt -->
           <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel for="subscribedAt"
                    [label]="AgreementFormEnum.subscribedAt"
                    [required]="subscribedAtField"></label>
+
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
             <p-calendar
               id="subscribedAt"
               formControlName="subscribedAt"
@@ -41,6 +42,7 @@
               [minDate]="startedAtField.value"
               dateFormat="yy-mm-dd"
             />
+
             <small
               appErrorMessage
               [errors]="subscribedAtField.errors"
@@ -48,12 +50,15 @@
               [dirty]="subscribedAtField.dirty">
             </small>
           </div>
+
           <!-- startedAt -->
           <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel for="startedAt"
                    [label]="AgreementFormEnum.startedAt"
                    [required]="startedAtField"></label>
+
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
             <p-calendar
               id="startedAt"
               formControlName="startedAt"
@@ -61,6 +66,7 @@
               [showIcon]="true"
               dateFormat="yy-mm-dd"
             />
+
             <small
               appErrorMessage
               [errors]="startedAtField.errors"
@@ -68,6 +74,7 @@
               [dirty]="startedAtField.dirty">
             </small>
           </div>
+
           <!-- hasTerminationDate -->
           <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label
@@ -78,12 +85,12 @@
             <div class="flex gap-3">
               <div class="flex align-items-center">
                 <p-radioButton
-                  id="yes"
+                  id="isFinishDate"
                   formControlName="isFinishDate"
                   name="isFinishDate"
                   [value]="true"
                 />
-                <label for="yes" class="ml-2">
+                <label for="isFinishDate" class="ml-2">
                   Si
                 </label>
               </div>
@@ -95,6 +102,7 @@
                   name="isFinishDate"
                   [value]="false"
                 />
+
                 <label for="no" class="ml-2">
                   No
                 </label>
@@ -156,7 +164,7 @@
                  [dirty]="yearTermField.dirty">
                </small>
              </div>
-   
+
              <!-- monthTerm -->
              <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
                <label
@@ -178,7 +186,7 @@
                  [dirty]="monthTermField.dirty">
                </small>
              </div>
-   
+
              <!-- dayTerm -->
              <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
                <label
@@ -202,6 +210,7 @@
              </div>
 
           }
+
           <!-- endedReason -->
           @if (isFinishDateField.value === false) {
             <div class="field col-12">
@@ -227,9 +236,7 @@
               </small>
             </div>
           }
-
         </form>
-
       </p-panel>
     }
   </div>

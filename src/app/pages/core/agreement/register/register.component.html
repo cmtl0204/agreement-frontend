@@ -8,7 +8,9 @@
             <app-basic-data
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event);nextCallback.emit()"/>
+              (formOutput)="save($event)"
+              (nextOutput)="nextCallback.emit()"
+            />
           </div>
         </div>
       </ng-template>
@@ -23,7 +25,8 @@
             <app-appearer
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event);nextCallback.emit()" 
+              (formOutput)="save($event)"
+              (nextOutput)="nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
@@ -36,10 +39,11 @@
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-agreement-date 
+            <app-agreement-date
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event);nextCallback.emit()" 
+              (formOutput)="save($event)"
+              (nextOutput)="nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
@@ -52,14 +56,14 @@
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-agreement-administrator 
+            <app-agreement-administrator
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event);nextCallback.emit()"
+              (formOutput)="save($event)"
+              (nextOutput)="nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
-
       </ng-template>
     </p-stepperPanel>
 
@@ -72,7 +76,8 @@
             <app-obligation
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event);nextCallback.emit()"
+              (formOutput)="save($event)"
+              (nextOutput)="nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"
               [externalInstitutions]="externalInstitutionsField.value"/>
           </div>
@@ -90,8 +95,9 @@
               <app-financing
                 class="col-12"
                 (formOutput)="save($event);nextCallback.emit()"
-                (prevOutput)="prevCallback.emit()"
                 [formInput]="form.value"
+                (nextOutput)="nextCallback.emit()"
+                (prevOutput)="prevCallback.emit()"
                 [externalInstitutions]="externalInstitutionsField.value"
                 [internalInstitutions]="internalInstitutionsField.value"/>
             }
@@ -108,7 +114,8 @@
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
             <app-document
               class="col-12"
-              (formOutput)="save($event);nextCallback.emit()"
+              (formOutput)="save($event)"
+              (nextOutput)="nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>
@@ -120,8 +127,9 @@
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-addendum class="col-12"
-              (formOutput)="save($event)" 
+            <app-addendum
+              class="col-12"
+              (formOutput)="save($event)"
               (prevOutput)="prevCallback.emit()"/>
           </div>
         </div>

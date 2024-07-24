@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
@@ -11,7 +11,7 @@ import {PrimeIcons} from 'primeng/api';
   templateUrl: './agreement-administrator.component.html',
   styleUrl: './agreement-administrator.component.scss'
 })
-export class AgreementAdministratorComponent {
+export class AgreementAdministratorComponent implements OnInit {
 
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly coreService = inject(CoreService);
@@ -44,7 +44,7 @@ export class AgreementAdministratorComponent {
   ngOnInit(): void {
     this.loadPositions();
     this.loadUnits();
-    this.form.patchValue(this.formInput)
+    this.patchValueForm();
   }
 
   /** Form Builder & Validates **/
@@ -52,6 +52,10 @@ export class AgreementAdministratorComponent {
     this.form = this.formBuilder.group({
       administrator: this.administratorForm
     });
+  }
+
+  patchValueForm() {
+    this.form.patchValue(this.formInput);
   }
 
   get administratorForm() {
@@ -72,7 +76,7 @@ export class AgreementAdministratorComponent {
   /** Load Foreign Keys  **/
   loadPositions() {
     // this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
-    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
+    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);//review
   }
 
   loadUnits() {
@@ -106,5 +110,4 @@ export class AgreementAdministratorComponent {
   get positionField(): AbstractControl {
     return this.administratorFormField.controls['position'];
   }
-
 }

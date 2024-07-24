@@ -94,11 +94,11 @@
                       [dirty]="internalInstitutionPersonTypeField.dirty">
                     </small>
                   </div>
-                  
+
                   <!-- button add internalInstitution -->
                   @if (internalInstitutionsField.length < 1) {
                     <div class="ml-2" style="display: flex; align-items: center;">
-                      <p-button 
+                      <p-button
                       label="Añadir"
                       [icon]="PrimeIcons.PLUS"
                       [severity]="SeverityButtonActionEnum.ADD"
@@ -130,9 +130,9 @@
                       <td>{{ internalInstitution.get('name')?.value }}</td>
                       <td>{{ internalInstitution.get('unit')?.value }}</td>
                       <td>
-                        <button pButton 
+                        <button pButton
                           [icon]="PrimeIcons.TRASH"
-                          [severity]="SeverityButtonActionEnum.DELETE" 
+                          [severity]="SeverityButtonActionEnum.DELETE"
                           (click)="deleteInternalInstitution(i)">
                         </button>
                     </td>
@@ -171,7 +171,7 @@
                 <!-- externalInstitutions/personTypeId -->
                 <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
                   <label appLabel
-                         for="personTypeId"
+                         for="externalPersonType"
                          [label]="ExternalInstitutionsFormEnum.personType"
                          [required]="externalInstitutionPersonTypeField">
                   </label>
@@ -242,7 +242,7 @@
               </div>
               <!-- button add externalInstitution -->
               <div class="field col-12" style="display: flex; justify-content: right">
-                <p-button 
+                <p-button
                   label="Añadir"
                   [icon]="PrimeIcons.PLUS"
                   [severity]="SeverityButtonActionEnum.ADD"
@@ -273,9 +273,9 @@
                       <td>{{ externalInstitution.get('name')?.value }}</td>
                       <td>{{ externalInstitution.get('unit')?.value }}</td>
                       <td>
-                        <button pButton 
+                        <button pButton
                           [icon]="PrimeIcons.TRASH"
-                          [severity]="SeverityButtonActionEnum.DELETE" 
+                          [severity]="SeverityButtonActionEnum.DELETE"
                           (click)="deleteExternalInstitution(i)">
                       </button>
                     </td>

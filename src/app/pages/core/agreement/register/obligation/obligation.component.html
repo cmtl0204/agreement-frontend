@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col-12">
     @if (coreService.isLoading) {
-    <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
     }
 
     @if (!coreService.isLoading) {
@@ -23,152 +23,170 @@
           />
         </div>
       </p-toolbar>
-    <div class="p-fluid">
+      <div class="p-fluid">
 
-      <p-multiSelect 
-      [options]="obligationType" 
-      [(ngModel)]="selectedObligationTypes"  
-      optionLabel="name"
-      (ngModelChange)="onObligationTypesChange($event)"
-      placeholder="Select Obligations">
-    </p-multiSelect>
-    
+        <p-multiSelect
+          [options]="obligationType"
+          [(ngModel)]="selectedObligationTypes"
+          optionLabel="name"
+          (ngModelChange)="onObligationTypesChange($event)"
+          placeholder="Select Obligations">
+        </p-multiSelect>
         <!-- MINTUR -->
-         @for (obligation of selectedObligationTypes; track $index) {
-        <div>
-          <ng-container [ngSwitch]="obligation.name">
-            <div *ngSwitchCase="'obligacion mintur'">
-              <h1>Obligaciones Mintur</h1>
-              <div class="p-fluid">
-                <p-panel>
-                  <div class="p-fluid">
-                    <div class="p-field p-grid">
-                      <div class="p-col-12 p-md-10">
-                        <label for="obligationDescription" class="p-col-12 p-md-2"><strong>Descripción</strong></label>
-                        <textarea id="obligationDescription" rows="3" cols="30" #obligationDescription pInputTextarea></textarea>
-                      </div>
-                      <div class="p-col-12 p-md-2" style="display: flex; align-items: center;">
-                        <p-button 
-                        (click)="addMinturObligation(obligationMintur[0], obligationDescription.value); obligationDescription.value = ''" 
-                        label="Agregar" 
-                        [icon]="PrimeIcons.PLUS" 
-                        [severity]="SeverityButtonActionEnum.CREATE"
-                        [disabled]="!obligationDescription.value"></p-button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  
-                  <p-table [value]="obligationMintur">
-                    <ng-template pTemplate="header">
-                      <tr>
-                        <th>Entidad</th>
-                        <th>Obligaciones</th>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-institution let-i="rowIndex">
-                      <tr>
-                        <td><strong>{{ institution.name }}</strong></td>
-                        <td>
-                          @if (obligations.controls.length> 0) {
-                          <ng-container>
-                            <table style="width: 100%;">
-                              @for (obligation of obligations.controls; track $index) {
-                              <tr>
-                                @if (obligation.get('model')?.value === institution.name) {
-                                <ng-container>
-                                  <td style="width: 80%;">{{ obligation.get('description')?.value }}</td>
-                                  <td style="width: 20%;">
-                                    <p-button (click)="deleteObligation($index)" [icon]="PrimeIcons.TRASH" [severity]="SeverityButtonActionEnum.DELETE"></p-button>
-                                  </td>
-                                </ng-container>}
-                              </tr>}
-                            </table>
-                          </ng-container>}
-                        </td>
-                      </tr>
-                    </ng-template>
-                  </p-table>
-                </p-panel>
-              </div>
-            </div>
-
-            <!-- OBLIGACION CONTRAPARTE -->
-            <div *ngSwitchCase="'obligacion contraparte'">
-              <h1>Obligaciones Contraparte</h1>
-              <div class="p-fluid">
-                <p-panel>
-                  <p-table [value]="obligationInstitutions">
-                    <ng-template pTemplate="header">
-                      <tr>
-                        <th>Entidad</th>
-                        <th>Obligaciones</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-institution let-i="rowIndex">
-                      <tr>
-                        <td>{{ institution.name }}</td>
-                        <td>
-                          @if (obligations.controls.length > 0) {
-                          <ng-container>
-                            <table style="width: 100%;">
-                              @for (obligation of obligations.controls; track $index) {
-                              <tr>
-                                @if (obligation.get('model')?.value === institution.name) {
-                                <ng-container>
-                                  <td style="width: 80%;">{{ obligation.get('description')?.value }}</td>
-                                  <td style="width: 20%;">
-                                    <p-button (click)="deleteObligation($index)" [icon]="PrimeIcons.TRASH" [severity]="SeverityButtonActionEnum.DELETE"></p-button>
-                                  </td>
-                                </ng-container>}
-                              </tr>}
-                            </table>
-                          </ng-container>}
-                        </td>                        
-                        <td>
-                          <p-button (click)="openModal(institution.name)" label="Agregar" [severity]="SeverityButtonActionEnum.CREATE" [icon]="PrimeIcons.PLUS"></p-button>
-                        </td>
-                      </tr>
-                    </ng-template>
-                  </p-table>
-                </p-panel>
-              </div>
-            </div>
-            <!-- Modal para agregar obligaciones contrapartes -->
-            <p-dialog [(visible)]="displayModal" [modal]="true" [closable]="false" header="Agregar Obligación" [style]="{width: '50vw'}">
-              <form [formGroup]="obligationForm" (ngSubmit)="addObligationAndCloseModal()">
+        @for (obligation of selectedObligationTypes; track $index) {
+          <div>
+            <ng-container [ngSwitch]="obligation.name">
+              <div *ngSwitchCase="'obligacion mintur'">
+                <h1>Obligaciones Mintur</h1>
                 <div class="p-fluid">
-                  <div class="p-field">
-                    <label for="model"><strong>Entidad</strong></label>
-                    <input id="model" formControlName="model" type="text" pInputText readonly>
-                  </div>
-                  <div class="p-field">
-                    <label for="description"><strong>Obligaciones</strong></label>
-                    <textarea id="description" formControlName="description" rows="5" pInputTextarea></textarea>
-                  </div>
-                </div>
-                <p-footer>
-                  <div class="col-12">
-                    <div class="col-6">
-                      <p-button label="Cancelar" [icon]="PrimeIcons.TIMES" (click)="closeModal()" [severity]="SeverityButtonActionEnum.CANCEL"></p-button>
+                  <p-panel>
+                    <div class="p-fluid">
+                      <div class="p-field p-grid">
+                        <div class="p-col-12 p-md-10">
+                          <label for="obligationDescription"
+                                 class="p-col-12 p-md-2"><strong>Descripción</strong></label>
+                          <textarea id="obligationDescription" rows="3" cols="30" #obligationDescription
+                                    pInputTextarea></textarea>
+                        </div>
+                        <div class="p-col-12 p-md-2" style="display: flex; align-items: center;">
+                          <p-button
+                            (click)="addMinturObligation(obligationMintur[0], obligationDescription.value); obligationDescription.value = ''"
+                            label="Agregar"
+                            [icon]="PrimeIcons.PLUS"
+                            [severity]="SeverityButtonActionEnum.CREATE"
+                            [disabled]="!obligationDescription.value"></p-button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-6">
-                      <p-button label="Agregar" [icon]="PrimeIcons.CHECK" type="submit" [severity]="SeverityButtonActionEnum.CREATE" [disabled]="obligationForm.invalid"></p-button>
-                    </div>
-                  </div>
-                </p-footer>
-              </form>
-            </p-dialog>
-            
 
-            <div *ngSwitchCase="'obligacion conjunta'">
-              <!-- Content for obligacion conjunta -->
-              <p>Graph or content for Obligation Conjunta</p>
-            </div>
-          </ng-container>
-        </div>}
-      </div> 
+                    <p-table [value]="obligationMintur">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Entidad</th>
+                          <th>Obligaciones</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-institution let-i="rowIndex">
+                        <tr>
+                          <td><strong>{{ institution.name }}</strong></td>
+                          <td>
+                            @if (obligationsField.controls.length > 0) {
+                              <ng-container>
+                                <table style="width: 100%;">
+                                  @for (obligation of obligationsField.controls; track $index) {
+                                    <tr>
+                                      @if (obligation.get('model')?.value === institution.name) {
+                                        <ng-container>
+                                          <td style="width: 80%;">{{ obligation.get('description')?.value }}</td>
+                                          <td style="width: 20%;">
+                                            <p-button (click)="deleteObligation($index)" [icon]="PrimeIcons.TRASH"
+                                                      [severity]="SeverityButtonActionEnum.DELETE"></p-button>
+                                          </td>
+                                        </ng-container>
+                                      }
+                                    </tr>
+                                  }
+                                </table>
+                              </ng-container>
+                            }
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </p-panel>
+                </div>
+              </div>
+
+              <!-- OBLIGACION CONTRAPARTE -->
+              <div *ngSwitchCase="'obligacion contraparte'">
+                <h1>Obligaciones Contraparte</h1>
+                <div class="p-fluid">
+                  <p-panel>
+                    <p-table [value]="obligationInstitutions">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Entidad</th>
+                          <th>Obligaciones</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-institution let-i="rowIndex">
+                        <tr>
+                          <td>{{ institution.name }}</td>
+                          <td>
+                            @if (obligationsField.controls.length > 0) {
+                              <ng-container>
+                                <table style="width: 100%;">
+                                  @for (obligation of obligationsField.controls; track $index) {
+                                    <tr>
+                                      @if (obligation.get('model')?.value === institution.name) {
+                                        <ng-container>
+                                          <td style="width: 80%;">{{ obligation.get('description')?.value }}</td>
+                                          <td style="width: 20%;">
+                                            <p-button (click)="deleteObligation($index)" [icon]="PrimeIcons.TRASH"
+                                                      [severity]="SeverityButtonActionEnum.DELETE"></p-button>
+                                          </td>
+                                        </ng-container>
+                                      }
+                                    </tr>
+                                  }
+                                </table>
+                              </ng-container>
+                            }
+                          </td>
+                          <td>
+                            <p-button (click)="openModal(institution.name)" label="Agregar"
+                                      [severity]="SeverityButtonActionEnum.CREATE" [icon]="PrimeIcons.PLUS"></p-button>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </p-panel>
+                </div>
+              </div>
+              <!-- Modal para agregar obligaciones contrapartes -->
+              <p-dialog
+                [(visible)]="displayModal"
+                header="Agregar Obligación"
+                [modal]="true"
+                [closable]="false"
+                [style]="{width: '50vw'}">
+                <form [formGroup]="obligationForm" (ngSubmit)="addObligation()">
+                  <div class="p-fluid">
+                    <div class="p-field">
+                      <label for="model"><strong>Entidad</strong></label>
+                      <input id="model" formControlName="model" type="text" pInputText readonly>
+                    </div>
+                    <div class="p-field">
+                      <label for="description"><strong>Obligaciones</strong></label>
+                      <textarea id="description" formControlName="description" rows="5" pInputTextarea></textarea>
+                    </div>
+                  </div>
+                  <p-footer>
+                    <div class="col-12">
+                      <div class="col-6">
+                        <p-button label="Cancelar" [icon]="PrimeIcons.TIMES" (click)="closeModal()"
+                                  [severity]="SeverityButtonActionEnum.CANCEL"></p-button>
+                      </div>
+                      <div class="col-6">
+                        <p-button label="Agregar" [icon]="PrimeIcons.CHECK" type="submit"
+                                  [severity]="SeverityButtonActionEnum.CREATE"
+                                  [disabled]="obligationForm.invalid"></p-button>
+                      </div>
+                    </div>
+                  </p-footer>
+                </form>
+              </p-dialog>
+
+              <div *ngSwitchCase="'obligacion conjunta'">
+                <!-- Content for obligacion conjunta -->
+                <p>Graph or content for Obligation Conjunta</p>
+              </div>
+            </ng-container>
+          </div>
+        }
+      </div>
     }
   </div>
 </div>
+{{ obligationsField.value }}

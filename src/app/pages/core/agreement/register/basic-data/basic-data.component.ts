@@ -12,15 +12,18 @@ import {PrimeIcons} from 'primeng/api';
   styleUrl: './basic-data.component.scss'
 })
 export class BasicDataComponent implements OnInit {
+  /* Services */
   protected readonly formBuilder = inject(FormBuilder)
   protected readonly coreService = inject(CoreService)
   protected readonly cataloguesHttpService = inject(CataloguesHttpService)
   protected readonly messageDialogService = inject(MessageDialogService)
   protected readonly Validators = Validators;
 
-  /* Form && Output */
+  /* Form */
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
+
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
@@ -51,7 +54,7 @@ export class BasicDataComponent implements OnInit {
   /* Form Builder & Validates */
   buildForm() {
     this.form = this.formBuilder.group({
-      agreementState: [null, [Validators.required]],
+      agreementState: [this.agreementStateForm, [Validators.required]],
       name: [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
@@ -74,6 +77,12 @@ export class BasicDataComponent implements OnInit {
 
       this.specialTypeField.reset();
       this.specialTypeField.updateValueAndValidity();
+    });
+  }
+
+  get agreementStateForm() {
+    return this.formBuilder.group({
+      state: [null, Validators.required],
     });
   }
 
@@ -120,7 +129,8 @@ export class BasicDataComponent implements OnInit {
   }
 
   save() {
-    this.formOutput.emit(this.form.value)
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
   }
 
   /* Getters Form*/
