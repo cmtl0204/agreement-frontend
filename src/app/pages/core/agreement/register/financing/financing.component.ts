@@ -118,19 +118,10 @@ export class FinancingComponent implements OnInit {
         paymentMethod: [this.financingForm.value.paymentMethod],
         source: [this.financingForm.value.source],
       });
+
       this.financings.push(financings);
-
       this.financingForm.reset();
-
-      this.modelField.markAsUntouched();
-      this.modelField.markAsPristine();
-      this.budgetField.markAsUntouched();
-      this.budgetField.markAsPristine();
-      this.paymentMethodField.markAsUntouched();
-      this.paymentMethodField.markAsPristine();
-      this.sourceField.markAsUntouched();
-      this.sourceField.markAsPristine();
-
+      
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -158,31 +149,32 @@ export class FinancingComponent implements OnInit {
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
     }
-
-    return this.form.valid && this.formErrors.length === 0;
-  }
-
-  onSubmit(): void {
     if (!this.isFinancingField.value) {
       if (this.financings.length > 0) {
         this.financings.clear();
       }
       this.save();
+      this.formErrors = [];
     } else {
       if (this.financings.length > 0) {
         this.save();
-      } else {
-        if (this.validateForm()) {
-          this.messageDialogService.fieldErrors(['Debe añadir']);
-        } else {
-          this.form.markAllAsTouched();
-          this.messageDialogService.fieldErrors(this.formErrors);
-          if (this.form.valid) {
-            this.financingForm.markAllAsTouched();
-            this.messageDialogService.fieldErrors(this.formErrors);
-          }
-        }
+        this.formErrors = [];
       }
+    }
+    return this.form.valid && this.formErrors.length === 0;
+  }
+
+  onSubmit(): void {
+    if (this.validateForm()) {
+      if (this.financings.length === 0 && this.isFinancingField.value) {
+        this.messageDialogService.fieldErrors(['Debe añadir']);
+      } else {
+        this.save();
+      }
+    } else {
+      this.form.markAllAsTouched();
+      this.financingForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
