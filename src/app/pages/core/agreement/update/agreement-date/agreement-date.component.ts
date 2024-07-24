@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { AgreementModel } from '@models/core';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum} from '@shared/enums';
+import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
 import { getFormattedDate } from '@shared/helpers';
 import { PrimeIcons } from 'primeng/api';
 @Component({
@@ -17,20 +17,20 @@ export class AgreementDateComponent implements OnInit {
   protected readonly coreService = inject(CoreService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   public readonly messageDialogService = inject(MessageDialogService);
-  
+
   // Form
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); 
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   @Input({ required: true }) formInput!: AgreementModel;
+
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
-  
+
   // Enums
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
-  protected readonly AdministratorFormEnum = AdministratorFormEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
@@ -38,16 +38,16 @@ export class AgreementDateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.patchValueForm()
+    this.patchValueForm();
   }
 
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
-      subscribedAt: [null,Validators.required],
-      startedAt: [null, Validators.required],
-      isFinishDate: [null, Validators.required],
-      endedAt: [{value:null, disabled:true}, Validators.required],
+      subscribedAt: [{ value: null, disabled: true }, Validators.required],
+      startedAt: [{ value: null, disabled: true }, Validators.required],
+      isFinishDate: [{ value: null, disabled: true }, Validators.required],
+      endedAt: [{ value: null, disabled: true }, Validators.required],
       endedReason: [null],
       yearTerm: [null, Validators.required],
       monthTerm: [null, Validators.required],
@@ -58,7 +58,7 @@ export class AgreementDateComponent implements OnInit {
   }
 
   patchValueForm() {
-    const { endedAt, startedAt, subscribedAt,...agreement } = this.formInput
+    const { endedAt, startedAt, subscribedAt, ...agreement } = this.formInput
 
     this.form.patchValue(agreement);
 
@@ -73,37 +73,8 @@ export class AgreementDateComponent implements OnInit {
     if (endedAt) {
       this.endedAtField.setValue(getFormattedDate(endedAt))
     }
-
-  }
- 
-  validateForm(): boolean {
-    this.formErrors = [];
-    if (this.subscribedAtField.invalid) this.formErrors.push(AgreementFormEnum.subscribedAt);
-    if (this.startedAtField.invalid) this.formErrors.push(AgreementFormEnum.startedAt);
-    if (this.isFinishDateField.invalid) this.formErrors.push(AgreementFormEnum.isFinishDate);
-    if (this.endedAtField.invalid) this.formErrors.push(AgreementFormEnum.endedAt);
-    if (this.endedReasonField.invalid) this.formErrors.push(AgreementFormEnum.endedReason);
-    if (this.yearTermField.invalid) this.formErrors.push(AgreementFormEnum.yearTerm);
-    if (this.monthTermField.invalid) this.formErrors.push(AgreementFormEnum.monthTerm);
-    if (this.dayTermField.invalid) this.formErrors.push(AgreementFormEnum.dayTerm);
-    return this.form.valid && this.formErrors.length === 0;
   }
 
-  // FormActions
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value); 
-    this.nextOutput.emit(true);
-  }
-  
   checkValueChanges() {
     this.isFinishDateField.valueChanges.subscribe(value => {
       if (value) {
@@ -131,6 +102,36 @@ export class AgreementDateComponent implements OnInit {
       this.monthTermField.updateValueAndValidity();
       this.dayTermField.updateValueAndValidity();
     });
+  }
+
+  validateForm(): boolean {
+    this.formErrors = [];
+
+    if (this.subscribedAtField.invalid) this.formErrors.push(AgreementFormEnum.subscribedAt);
+    if (this.startedAtField.invalid) this.formErrors.push(AgreementFormEnum.startedAt);
+    if (this.isFinishDateField.invalid) this.formErrors.push(AgreementFormEnum.isFinishDate);
+    if (this.endedAtField.invalid) this.formErrors.push(AgreementFormEnum.endedAt);
+    if (this.endedReasonField.invalid) this.formErrors.push(AgreementFormEnum.endedReason);
+    if (this.yearTermField.invalid) this.formErrors.push(AgreementFormEnum.yearTerm);
+    if (this.monthTermField.invalid) this.formErrors.push(AgreementFormEnum.monthTerm);
+    if (this.dayTermField.invalid) this.formErrors.push(AgreementFormEnum.dayTerm);
+
+    return this.form.valid && this.formErrors.length === 0;
+  }
+
+  // FormActions
+  onSubmit(): void {
+    if (this.validateForm()) {
+      this.save();
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  save() {
+    this.formOutput.emit(this.form.value);
+    this.nextOutput.emit(true);
   }
 
   /*getters forms*/
