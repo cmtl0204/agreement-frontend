@@ -54,7 +54,7 @@ export class BasicDataComponent implements OnInit {
   /* Form Builder & Validates */
   buildForm() {
     this.form = this.formBuilder.group({
-      agreementState: [this.agreementStateForm, [Validators.required]],
+      agreementState: this.agreementStateForm,
       name: [null, [Validators.required]],
       internalNumber: [null, [Validators.required]],
       number: [null, [Validators.required]],
@@ -65,6 +65,12 @@ export class BasicDataComponent implements OnInit {
     });
 
     this.checkValueChanges();
+  }
+
+  get agreementStateForm() {
+    return this.formBuilder.group({
+      state: [null, Validators.required],
+    });
   }
 
   checkValueChanges() {
@@ -80,16 +86,11 @@ export class BasicDataComponent implements OnInit {
     });
   }
 
-  get agreementStateForm() {
-    return this.formBuilder.group({
-      state: [null, Validators.required],
-    });
-  }
 
   validateForm(): boolean {
     this.formErrors = [];
 
-    if (this.agreementStateField.invalid) this.formErrors.push(AgreementFormEnum.agreementState);
+    if (this.stateField.invalid) this.formErrors.push(AgreementFormEnum.agreementState);
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
@@ -134,8 +135,12 @@ export class BasicDataComponent implements OnInit {
   }
 
   /* Getters Form*/
-  get agreementStateField(): AbstractControl {
-    return this.form.controls['agreementState'];
+  get agreementStateFormField(): FormGroup {
+    return this.form.controls['agreementState'] as FormGroup;
+  }
+
+  get stateField():  AbstractControl {
+    return this.agreementStateForm.controls['state'];
   }
 
   get nameField(): AbstractControl {
