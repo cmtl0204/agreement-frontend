@@ -39,7 +39,7 @@
 
             <label
               appLabel
-              for="position"
+              for="internalPosition"
               [label]="InternalInstitutionsFormEnum.position"
               [required]="internalInstitutionPositionField"
             ></label>
@@ -47,14 +47,14 @@
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
 
             <p-dropdown
-              id="position"
+              id="internalPosition"
               formControlName="position"
               dataKey="id"
               [options]="positions"
               placeholder="Seleccione una opcion"
               [filter]="false"
               filterBy="name"
-              class="flex-grow-1">
+              >
 
               <ng-template
                 pTemplate="selectedItem"
@@ -74,7 +74,7 @@
             <small appErrorMessage
                    [errors]="internalInstitutionPositionField.errors"
                    [touched]="internalInstitutionPositionField.touched"
-            >
+                   [dirty]="internalInstitutionPositionField.dirty">
             </small>
           </div>
 
@@ -83,14 +83,14 @@
 
             <label
               appLabel
-              for="personType"
+              for="internalPersonType"
               [label]="InternalInstitutionsFormEnum.personType"
             ></label>
 
             <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
 
             <p-dropdown
-              id="personType"
+              id="internalPersonType"
               formControlName="personType"
               dataKey="id"
               [options]="internalPersonTypes"
@@ -118,7 +118,7 @@
             <small appErrorMessage
                    [errors]="internalInstitutionPersonTypeField.errors"
                    [touched]="internalInstitutionPersonTypeField.touched"
-            >
+                   [dirty]="internalInstitutionPersonTypeField.dirty">
             </small>
 
           </div>
@@ -127,7 +127,6 @@
             <p-button
               label="Añadir"
               [icon]="PrimeIcons.PLUS"
-              [raised]="true"
               [severity]="SeverityButtonActionEnum.ADD"
               (click)="addInternalInstitutions()"
               class="button-adjustment"/></div>
@@ -204,6 +203,7 @@
             <small appErrorMessage
                    [errors]="externalInstitutionPositionField.errors"
                    [touched]="externalInstitutionPositionField.touched"
+                   [dirty]="externalInstitutionPositionField.dirty"
             >
             </small>
 
@@ -250,7 +250,7 @@
             <small appErrorMessage
                    [errors]="externalInstitutionPersonTypeField.errors"
                    [touched]="externalInstitutionPersonTypeField.touched"
-            >
+                   [dirty]="externalInstitutionPersonTypeField.dirty"  >
             </small>
           </div>
 
@@ -274,7 +274,7 @@
             <small appErrorMessage
                    [errors]="externalInstitutionNameField.errors"
                    [touched]="externalInstitutionNameField.touched"
-            >
+                   [dirty]="externalInstitutionNameField.dirty" >
             </small>
           </div>
 
@@ -295,7 +295,7 @@
             <small appErrorMessage
                    [errors]="externalInstitutionUnitField.errors"
                    [touched]="externalInstitutionUnitField.touched"
-            >
+                   [dirty]="externalInstitutionUnitField.dirty" >
             </small>
 
           </div>
@@ -304,7 +304,6 @@
             label="Añadir"
             [icon]="PrimeIcons.PLUS"
             [severity]="SeverityButtonActionEnum.ADD"
-            [raised]="true"
             (click)="addExternalInstitutions()"/>
            </div>
         </form>
