@@ -7,8 +7,11 @@
     @if (!coreService.isLoading) {
       <p-toolbar>
         <div class="p-toolbar-group-left">
-          <app-header-form [id]="id"></app-header-form>
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
         </div>
+        
         <div class="p-toolbar-group-right">
           <app-form-button-action
             (submit)="onSubmit()"
