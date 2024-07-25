@@ -3,7 +3,13 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import {AgreementModel, CatalogueModel} from '@models/core';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, SkeletonEnum, CatalogueTypeEnum, AgreementsTypeEnum} from '@shared/enums';
+import {
+  AgreementFormEnum,
+  SkeletonEnum,
+  CatalogueTypeEnum,
+  AgreementsTypeEnum,
+  AgreementStateEnum
+} from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
 
 @Component({
@@ -34,6 +40,7 @@ export class BasicDataComponent implements OnInit {
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly AgreementStateFormEnum = AgreementStateEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons; //pending
 
@@ -87,7 +94,7 @@ export class BasicDataComponent implements OnInit {
   validateForm(): boolean {
     this.formErrors = [];
 
-    if (this.stateField.invalid) this.formErrors.push(AgreementFormEnum.agreementState);
+    if (this.stateField.invalid) this.formErrors.push(AgreementStateEnum.state);
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
@@ -169,4 +176,6 @@ export class BasicDataComponent implements OnInit {
   get specialTypeField(): AbstractControl {
     return this.form.controls['specialType'];
   }
+
+  protected readonly AgreementStateEnum = AgreementStateEnum;
 }
