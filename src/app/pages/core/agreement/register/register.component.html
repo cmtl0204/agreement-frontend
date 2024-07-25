@@ -1,70 +1,58 @@
 @if (form.value) {
   <p-stepper orientation="horizontal" [linear]="false">
-    <p-stepperPanel header="Datos básicos">
+    <p-stepperPanel header="Convenio">
       <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
-        <div class="flex flex-column">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+          <p-toolbar>
+            <div class="p-toolbar-group-left">
+              <app-header-form
+                label="Registro"
+                [icon]="PrimeIcons.PENCIL"/>
+            </div>
+
+            <div class="p-toolbar-group-right">
+              <app-form-button-action
+                (submit)="onSubmit()"
+                labelSubmitButton="Siguiente"
+                [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+                [isVisibleCancelButton]="false"
+              />
+            </div>
+          </p-toolbar>
+
+          <p-panel header="Datos Básicos">
             <app-basic-data
               class="col-12"
               [formInput]="form.value"
+              (formErrorsOutput)="basicDataErrors=$event"
               (formOutput)="save($event)"
               (nextOutput)="nextCallback.emit()"
             />
-          </div>
-        </div>
-      </ng-template>
-    </p-stepperPanel>
+          </p-panel>
 
-    <p-stepperPanel header="Comparecientes">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-                   let-index="index">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-appearer
-              class="col-12"
-              [formInput]="form.value"
-              (formOutput)="save($event)"
-              (nextOutput)="nextCallback.emit()"
-              (prevOutput)="prevCallback.emit()"/>
-          </div>
-        </div>
-      </ng-template>
-    </p-stepperPanel>
-
-    <p-stepperPanel header="Plazo del convenio">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-                   let-index="index">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+          <p-panel header="Fechas del Convenio">
             <app-agreement-date
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event)"
-              (nextOutput)="nextCallback.emit()"
-              (prevOutput)="prevCallback.emit()"/>
-          </div>
-        </div>
-      </ng-template>
-    </p-stepperPanel>
+              (formErrorsOutput)="agreementDateErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
 
-    <p-stepperPanel header="Administrador">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-                   let-index="index">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+          <p-panel header="Administrador del Convenio">
             <app-agreement-administrator
               class="col-12"
               [formInput]="form.value"
-              (formOutput)="save($event)"
-              (nextOutput)="nextCallback.emit()"
-              (prevOutput)="prevCallback.emit()"/>
-          </div>
-        </div>
-      </ng-template>
+              (formErrorsOutput)="agreementAdministratorErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
+
+          <p-panel header="Comparecientes">
+            <app-appearer
+              class="col-12"
+              [formInput]="form.value"
+              (formErrorsOutput)="appearerErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
+        </ng-template>
     </p-stepperPanel>
 
     <p-stepperPanel header="Obligaciones">

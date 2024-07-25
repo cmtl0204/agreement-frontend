@@ -1,6 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AgreementsService} from "@servicesApp/core";
+import {AgreementsService, MessageDialogService} from "@servicesApp/core";
+import {PrimeIcons} from "primeng/api";
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,16 @@ import {AgreementsService} from "@servicesApp/core";
 export class RegisterComponent {
   private readonly agreementsService = inject(AgreementsService);
   private readonly formBuilder = inject(FormBuilder);
+  protected readonly messageDialogService = inject(MessageDialogService);
+
   protected form!: FormGroup;
+  protected formErrors: string[] = [];
+  protected basicDataErrors: string[] = [];
+  protected agreementDateErrors: string[] = [];
+  protected agreementAdministratorErrors: string[] = [];
+  protected appearerErrors: string[] = [];
+
+  protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
     this.buildForm();
@@ -73,11 +83,34 @@ export class RegisterComponent {
     // this.agreementHttpServices.register(this.form.value).subscribe();
   }
 
+  get validateForms(): boolean {
+    this.formErrors = [];
+
+    if (this.basicDataErrors.length > 0) this.formErrors = this.formErrors.concat(this.basicDataErrors);
+
+    if (this.agreementDateErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementDateErrors);
+
+    if (this.agreementAdministratorErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
+
+    if (this.appearerErrors.length > 0) this.formErrors = this.formErrors.concat(this.appearerErrors);
+
+    return this.formErrors.length === 0;
+  }
+
   get externalInstitutionsField(): FormArray {
     return this.form.controls['externalInstitutions'] as FormArray;
   }
 
   get internalInstitutionsField(): FormArray {
     return this.form.controls['internalInstitutions'] as FormArray;
+  }
+
+  onSubmit() {
+
+    if (this.validateForms) {
+
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
   }
 }

@@ -99,7 +99,7 @@ export class AppearerComponent implements OnInit {
   }
 
 patchValueForm(){
-  const{externalInstitutions, internalInstitutions, ...agreement}= this.formInput;
+  const{externalInstitutions, internalInstitutions}= this.formInput;
   if (externalInstitutions){
     externalInstitutions.forEach((item:ExternalInstitutionModel)=>{
     const externalInstitution = this.formBuilder.group({
@@ -133,20 +133,21 @@ patchValueForm(){
 
   buildInternalInstitutionsForm() {
     this.internalInstitutionForm = this.formBuilder.group({
+      position: ['', Validators.required],
+      personType: ['', [Validators.required]], 
       name: ['Ministerio de Turismo'],
       unit: ['Unidad'],
-      position: ['', Validators.required],
-       personType: ['', [Validators.required]],
+    
 
     });
   }
 
   buildExternalInstitutionsForm() {
     this.externalInstitutionForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.pattern(onlyLetters())]],
       position: ['', [Validators.required, Validators.pattern(onlyLetters())]],
+      personType: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern(onlyLetters())]],
       unit: ['', [Validators.required, Validators.pattern(onlyLetters())]],
-      personType: ['', Validators.required]
     });
 
   }
@@ -209,7 +210,7 @@ patchValueForm(){
 
   /**  Add **/
    addInternalInstitutions() {
- if (this.validateInternalInstitutionsForm()) {
+  if (this.validateInternalInstitutionsForm()) {
     this.internalInstitutions.push(this.formBuilder.group(this.internalInstitutionForm.value));
      this.internalInstitutionForm.reset();
 
@@ -240,11 +241,13 @@ patchValueForm(){
 
         if (this.externalInstitutions.length === 0) {
             this.externalInstitutionForm.markAllAsTouched();
+            this.messageDialogService.fieldErrors('Debe agregar al menos una institución externa.')
         }
         if (this.internalInstitutions.length === 0) {
             this.internalInstitutionForm.markAllAsTouched();
+            this.messageDialogService.fieldErrors('Debe agregar al menos una institución interna.')
         }
-        this.messageDialogService.fieldErrors('Debe completar el formulario al menos una vez');
+       
     }
 }
 

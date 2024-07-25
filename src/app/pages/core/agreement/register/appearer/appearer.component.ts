@@ -37,6 +37,7 @@ export class AppearerComponent implements OnInit {
 
   /** Form **/
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
@@ -75,10 +76,22 @@ export class AppearerComponent implements OnInit {
     this.loadPositions();
 
     this.patchValueForm();
+    this.validateForm();
+  }
+
+  /** Form Builder & Validates **/
+  buildForm() {
+    this.form = this.formBuilder.group({
+      internalInstitutions: this.formBuilder.array([], Validators.required),
+      externalInstitutions: this.formBuilder.array([], Validators.required),
+    });
+
+    this.checkValueChanges();
   }
 
   patchValueForm() {
     const {internalInstitutions, externalInstitutions} = this.formInput;
+
     if (internalInstitutions) {
       internalInstitutions.forEach((item: InternalInstitutionModel) => {
         const internalInstitution = this.formBuilder.group({
@@ -87,9 +100,11 @@ export class AppearerComponent implements OnInit {
           name: [item.name],
           unit: [item.unit],
         });
+
         this.internalInstitutionsField.push(internalInstitution);
       });
     }
+
     if (externalInstitutions) {
       externalInstitutions.forEach((item: ExternalInstitutionModel) => {
         const externalInstitution = this.formBuilder.group({
@@ -98,17 +113,27 @@ export class AppearerComponent implements OnInit {
           name: [item.name],
           unit: [item.unit],
         });
+
         this.externalInstitutionsField.push(externalInstitution);
       });
     }
   }
 
-  /** Form Builder & Validates **/
-  buildForm() {
-    this.form = this.formBuilder.group({
-      internalInstitutions: this.formBuilder.array([]),
-      externalInstitutions: this.formBuilder.array([]),
+  checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
     });
+  }
+
+  validateForm() {
+    this.formErrors = [];
+
+    if (this.internalInstitutionsField.invalid) this.formErrors.push('Mintur');//review
+
+    if (this.internalInstitutionsField.invalid) this.formErrors.push('Contraparte');//review
+
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   buildInternalInstitutionForm() {

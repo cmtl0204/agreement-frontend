@@ -25,6 +25,7 @@
 
       <p-panel>
         <form [formGroup]="form" class="p-fluid grid">
+            <div class="grid">
 
           <!-- number -->
           <div class="field col-8 xl:col-4">
@@ -89,27 +90,27 @@
           </div>
 
           <!-- state -->
-          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <div formGroupName="agreementState" class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label
               appLabel
-              for="agreementState"
-              [label]="AgreementFormEnum.agreementState"
-              [required]="agreementStateField"></label>
+              for="state"
+              [label]="AgreementStateEnum.state"
+              [required]="stateField"></label>
 
             <app-form-help-field
               [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
 
             <p-dropdown
-              id="agreementState"
-              formControlName="agreementState"
+              id="state"
+              formControlName="state"
               dataKey="id"
               [options]="states"
               placeholder="Seleccione"
               [filter]="true"
               filterBy="name">
-              <ng-template pTemplate="selectedItem" let-item>
+              <ng-template pTemplate="selectedItem" let-selectedItem>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ item.name }}</div>
+                  <div>{{ selectedItem.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -121,9 +122,9 @@
 
             <small
               appErrorMessage
-              [errors]="agreementStateField.errors"
-              [touched]="agreementStateField.touched"
-              [dirty]="agreementStateField.dirty">
+              [errors]="stateField.errors"
+              [touched]="stateField.touched"
+              [dirty]="stateField.dirty">
             </small>
           </div>
 
@@ -144,9 +145,9 @@
               dataKey="id"
               [options]="origins"
               placeholder="Selecione">
-              <ng-template pTemplate="selectedItem" let-item>
+              <ng-template pTemplate="selectedItem" let-selectedItem>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ item.name }}</div>
+                  <div>{{ selectedItem.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -181,9 +182,9 @@
               dataKey="id"
               [options]="types"
               placeholder="Selecione">
-              <ng-template pTemplate="selectedItem" let-item>
+              <ng-template pTemplate="selectedItem" let-selectedItem>
                 <div class="flex align-items-center gap-2">
-                  <div>{{ item.name }}</div>
+                  <div>{{ selectedItem.name }}</div>
                 </div>
               </ng-template>
               <ng-template let-item pTemplate="item">
@@ -264,6 +265,7 @@
               [touched]="objectiveField.touched"
               [dirty]="objectiveField.dirty">
             </small>
+          </div>
           </div>
         </form>
       </p-panel>

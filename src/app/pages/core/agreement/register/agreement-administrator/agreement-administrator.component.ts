@@ -19,7 +19,8 @@ export class AgreementAdministratorComponent implements OnInit {
   public readonly messageDialogService = inject(MessageDialogService);
 
   // Form
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   @Input({required: true}) formInput!: AgreementModel;
@@ -45,6 +46,7 @@ export class AgreementAdministratorComponent implements OnInit {
     this.loadPositions();
     this.loadUnits();
     this.patchValueForm();
+    this.validateForm();
   }
 
   /** Form Builder & Validates **/
@@ -52,10 +54,19 @@ export class AgreementAdministratorComponent implements OnInit {
     this.form = this.formBuilder.group({
       administrator: this.administratorForm
     });
+
+    this.checkValueChanges();
   }
 
   patchValueForm() {
     this.form.patchValue(this.formInput);
+  }
+
+  checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
+    });
   }
 
   get administratorForm() {
@@ -65,12 +76,13 @@ export class AgreementAdministratorComponent implements OnInit {
     })
   }
 
-  validateForm(): boolean {
+  validateForm() {
     this.formErrors = [];
+
     if (this.unitField.invalid) this.formErrors.push(AdministratorFormEnum.unit);
     if (this.positionField.invalid) this.formErrors.push(AdministratorFormEnum.position);
 
-    return this.form.valid && this.formErrors.length === 0;
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   /** Load Foreign Keys  **/
@@ -81,21 +93,6 @@ export class AgreementAdministratorComponent implements OnInit {
 
   loadUnits() {
     this.units = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
-  }
-
-  // FormActions
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
   }
 
   // getters Form
