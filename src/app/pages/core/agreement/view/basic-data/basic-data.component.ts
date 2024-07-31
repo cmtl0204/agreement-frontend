@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AgreementModel } from '@models/core';
-import { AgreementFormEnum } from '@shared/enums';
+import {AgreementFormEnum, AgreementStateEnum} from '@shared/enums';
 
 @Component({
   selector: 'app-basic-data',
@@ -13,4 +13,5 @@ export class BasicDataComponent {
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly AgreementStateEnum = AgreementStateEnum;
 }
