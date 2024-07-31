@@ -98,7 +98,7 @@
               <h1>Obligaciones Contraparte</h1>
               <div class="p-fluid">
                 <p-panel>
-                  <p-table [value]="externalInstitutions">
+                  <p-table [value]="obligationInstitutions">
                     <ng-template pTemplate="header">
                       <tr>
                         <th>Entidad</th>
@@ -111,7 +111,7 @@
                         <td>{{ institution.name }}</td>
                         <td>
                           @if (obligations.controls.length > 0) {
-                          <ng-container *ngIf="obligations.controls.length > 0">
+                          <ng-container>
                             <table style="width: 100%;">
                               @for (obligation of obligations.controls; track $index) {
                               <tr>

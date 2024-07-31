@@ -13,7 +13,7 @@ import { PrimeIcons, MessageService } from 'primeng/api';
   styleUrl: './obligation.component.scss'
 })
 export class ObligationComponent implements OnInit {
-  @Input({ required: true }) externalInstitutions: any[] = [];
+
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
@@ -40,7 +40,9 @@ export class ObligationComponent implements OnInit {
   protected form!: FormGroup;
   protected formMintur!: FormGroup;
   private formErrors: string[] = [];
-
+  @Input() internalInstitutions: CatalogueModel[] = [];
+  @Input() externalInstitutions: CatalogueModel[] = [];
+  protected obligationInstitutions: CatalogueModel[] = [];
   protected readonly ObligationsMintur = ObligationsMintur;
   protected readonly ExternalInstitutionsObligations = ExternalInstitutionsObligations;
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -53,10 +55,10 @@ export class ObligationComponent implements OnInit {
 
   ngOnInit(): void {
     /* Load Foreign Keys*/
-    this.loadExternalInstitutions();
     this.loadObligationTypes();
     this.loadMintur();
-    this.patchValueForm()
+    this.patchValueForm();
+    this.loadObligationInstitutions();
   }
 
   buildForm() {
@@ -114,11 +116,7 @@ export class ObligationComponent implements OnInit {
   /* Load Foreign Keys  */
   loadExternalInstitutions() {
     /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
-    this.externalInstitutions = [
-      { name: 'Ministro' },
-      { name: 'Viceministro' },
-      { name: 'Presidente' }
-    ]
+   
   }
 
   loadObligationTypes() {
@@ -133,6 +131,10 @@ export class ObligationComponent implements OnInit {
     this.obligationMintur = [
       { name: 'Mintur' }
     ]
+  }
+
+  loadObligationInstitutions() {
+    this.obligationInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
   }
 
   save() {
