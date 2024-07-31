@@ -1,8 +1,5 @@
 <div class="grid">
   <div class="col-12">
-    @if (coreService.isLoading) {
-      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    } @else {
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <app-header-form [id]="id" label="Obligaciones de las partes"></app-header-form>
@@ -138,6 +135,5 @@
           </p-table>
         </div>
       </p-panel>
-    }
   </div>
 </div>

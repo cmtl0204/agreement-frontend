@@ -1,8 +1,5 @@
 <div class="grid">
   <div class="col-12">
-    @if (coreService.isLoading) {
-      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    } @else {
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <app-header-form [id]="id" label="Financiamiento"></app-header-form>
@@ -25,17 +22,16 @@
                 <th>Fuente de Financiamiento</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-financing>
+            <ng-template pTemplate="body" let-item>
               <tr>
-                <td>{{ financing.modelId }}</td>
-                <td>{{ financing.budget }}</td>
-                <td>{{ financing.paymentMethod }}</td>
-                <td>{{ financing.source }}</td>
+                <td>{{ item.modelId }}</td>
+                <td>{{ item.budget }}</td>
+                <td>{{ item.paymentMethod }}</td>
+                <td>{{ item.source }}</td>
               </tr>
             </ng-template>
           </p-table>
         </div>
       </p-panel>
-    }
   </div>
 </div>

@@ -10,7 +10,8 @@ export class ErrorMessageDirective {
   private _errors: ValidationErrors | null = null;
   private _dirty: boolean = false;
   private _touched: boolean = false;
-  private _nativeElement: HTMLInputElement;
+
+  private _nativeElement: HTMLDivElement;
 
   constructor() {
     this._nativeElement = this.elementRef.nativeElement;
@@ -23,6 +24,7 @@ export class ErrorMessageDirective {
 
   @Input() set dirty(value: boolean) {
     this._dirty = value;
+    this.setErrorMessage();
   };
 
   @Input() set errors(value: ValidationErrors | null) {
@@ -86,7 +88,7 @@ export class ErrorMessageDirective {
         text = this.fieldDateMin(this._errors);
       }
 
-      this.renderer.addClass(this._nativeElement, 'p-error');
+      this.renderer.addClass(this.elementRef.nativeElement, 'p-error');
     }
 
     this._nativeElement.innerText = text;

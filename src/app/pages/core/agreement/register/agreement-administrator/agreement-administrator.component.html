@@ -1,101 +1,79 @@
-<div class="grid">
-    <div class="col-12">
-      @if (coreService.isLoading) {
-        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-      }
-  
-      @if (!coreService.isLoading) {
-        <p-toolbar>
-          <div class="p-toolbar-group-left">
-            <app-header-form
-              label="Registro"
-              [icon]="PrimeIcons.PENCIL"/>
-          </div>
-  
-          <div class="p-toolbar-group-right">
-            <app-form-button-action
-              (submit)="onSubmit()"
-              (cancel)="prevOutput.emit(true)"
-              labelSubmitButton="Siguiente"
-              labelCancelButton="Atrás"
-              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-            />
-          </div>
-        </p-toolbar>
-  
-        <p-panel>
-          <form [formGroup]="form" class="p-fluid grid">
+<form [formGroup]="form" class="p-fluid grid">
+  <div formGroupName="administrator" class="col-12">
+    <div class="grid">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="unit"
+          [label]="AdministratorFormEnum.unit"
+          [required]="unitField"></label>
 
-            <div formGroupName="administrator" class="col-12">
-              <div class="grid">
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                  <label appLabel for="unitId"
-                         [label]="AdministratorFormEnum.unit"
-                         [required]="unitField"></label>
+        <p-dropdown
+          id="unit"
+          formControlName="unit"
+          dataKey="id"
+          [options]="units"
+          placeholder="Seleccione"
+          [filter]="true"
+          filterBy="name">
 
-                  <p-dropdown
-                    id="unit"
-                    formControlName="unit"
-                    dataKey="id"
-                    [options]="units"
-                    placeholder="Seleccione"
-                    [filter]="true"
-                    filterBy="name">
-                    <ng-template pTemplate="selectedItem" let-selectedOption>
-                      <div class="flex align-items-center gap-2">
-                        <div>{{ selectedOption.name }}</div>
-                      </div>
-                    </ng-template>
-                    <ng-template let-item pTemplate="item">
-                      <div class="flex align-items-center gap-2">
-                        <div>{{ item.name }}</div>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-
-                  <small appErrorMessage
-                         [errors]="unitField.errors"
-                         [touched]="unitField.touched"
-                         [dirty]="unitField.dirty">
-                  </small>
-                </div>
-  
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                  <label appLabel for="officerPosition"
-                         [label]="AdministratorFormEnum.position"
-                         [required]="positionField"></label>
-
-                  <p-dropdown
-                    id="position"
-                    formControlName="position"
-                    [options]="positions"
-                    [filter]="true"
-                    filterBy="name"
-                    placeholder="Seleccione">
-                    <ng-template pTemplate="selectedItem" let-selectedOption>
-                      <div class="flex align-items-center gap-2">
-                        <div>{{ selectedOption.name }}</div>
-                      </div>
-                    </ng-template>
-                    <ng-template let-item pTemplate="item">
-                      <div class="flex align-items-center gap-2">
-                        <div>{{ item.name }}</div>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-                  
-                  <small appErrorMessage
-                         [errors]="positionField.errors"
-                         [touched]="positionField.touched"
-                         [dirty]="positionField.dirty">
-                  </small>
-                </div>
-              </div>
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
             </div>
-  
-          </form>
-        </p-panel>
-      }
+          </ng-template>
+
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <small
+          appErrorMessage
+          [errors]="unitField.errors"
+          [touched]="unitField.touched"
+          [dirty]="unitField.dirty">
+        </small>
+      </div>
+
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="position"
+          [label]="AdministratorFormEnum.position"
+          [required]="positionField"></label>
+
+        <p-dropdown
+          id="position"
+          formControlName="position"
+          dataKey="id"
+          [options]="positions"
+          [filter]="true"
+          filterBy="name"
+          placeholder="Seleccione">
+
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <small
+          appErrorMessage
+          [errors]="positionField.errors"
+          [touched]="positionField.touched"
+          [dirty]="positionField.dirty">
+        </small>
+      </div>
     </div>
   </div>
-  
+</form>

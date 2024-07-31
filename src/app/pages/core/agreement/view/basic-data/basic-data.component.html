@@ -1,105 +1,95 @@
 <div class="grid">
-    <div class="col-12">
-        @if (coreService.isLoading) {
-        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-        }
+  <div class="col-12">
+    <p-panel>
+      <ng-template pTemplate="header">
+        <h3>Datos Básicos</h3>
+      </ng-template>
 
-        @if (!coreService.isLoading) {
-        <p-toolbar>
-            <div class="p-toolbar-group-left">
-                <app-header-form
-                    label="Visualización del Convenio"
-                    [icon]="PrimeIcons.PENCIL"/>
+      <ng-template pTemplate="content">
+        <form class="p-fluid grid">
+          <!-- Number -->
+          <div class="field col-8 xl:col-4">
+            <label
+              appLabel
+              for="number"
+              [label]="AgreementFormEnum.number"></label>
+            <input pInputText id="number" [value]="agreement.number" [readonly]="true"/>
+          </div>
+
+          <!-- Name -->
+          <div class="field col-4 xl:col-8">
+            <label
+              appLabel
+              for="name"
+              [label]="AgreementFormEnum.name"></label>
+            <input pInputText id="name" [value]="agreement.name" [readonly]="true"/>
+          </div>
+
+          <!-- internal Number -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="internalNumber"
+              [label]="AgreementFormEnum.internalNumber"></label>
+            <input pInputText id="internalNumber" [value]="agreement.internalNumber" [readonly]="true"/>
+          </div>
+
+          <!-- State -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="agreementState"
+              [label]="AgreementStateEnum.state"></label>
+            <input pInputText id="agreementState" [value]="agreement.agreementState?.state?.name" [readonly]="true"/>
+          </div>
+
+          <!-- Origin -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="originId"
+              [label]="AgreementFormEnum.origin"></label>
+            <input pInputText id="originId" [value]="agreement.origin?.name" [readonly]="true"/>
+          </div>
+
+          <!-- Type -->
+          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label
+              appLabel
+              for="typeId"
+              [label]="AgreementFormEnum.type"></label>
+            <input pInputText id="typeId" [value]="agreement.type?.name" [readonly]="true"/>
+          </div>
+
+          <!-- Special Type -->
+          @if (agreement.specialType?.name; ) {
+            <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+              <label
+                appLabel
+                for="specialTypeId"
+                [label]="AgreementFormEnum.specialType"></label>
+              <input pInputText id="specialTypeId" [value]="agreement.specialType?.name" [readonly]="true"/>
             </div>
-            
-        </p-toolbar>
+          }
 
-        <p-panel>
-            <form class="p-fluid grid">
-
-              <!-- Number -->
-              <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                  <label
-                    appLabel
-                    for="number"
-                    [label]="AgreementFormEnum.number"></label>
-                  <input pInputText id="number" [value]="agreement.number" [readonly]="true" />
-              </div>
-
-                <!-- Name -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label
-                      appLabel
-                      for="name"
-                      [label]="AgreementFormEnum.name"></label>
-                    <input pInputText id="name" [value]="agreement.name" [readonly]="true" />
-                </div>
-
-                <!-- internal Number -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label
-                      appLabel
-                      for="internalNumber"
-                      [label]="AgreementFormEnum.internalNumber"></label>
-                    <input pInputText id="internalNumber" [value]="agreement.internalNumber" [readonly]="true" />
-                </div>
-
-                <!-- State -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label
-                      appLabel
-                      for="agreementState"
-                      [label]="AgreementFormEnum.agreementState"></label>
-                    <input pInputText id="agreementState" [value]="agreementState.state?.name" [readonly]="true" />
-                </div>
-
-                <!-- Origin -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label
-                      appLabel
-                      for="originId"
-                      [label]="AgreementFormEnum.origin"></label>
-                    <input pInputText id="originId" [value]="agreement.origin?.name" [readonly]="true" />
-                </div>
-
-                <!-- Type -->
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label
-                      appLabel
-                      for="typeId"
-                      [label]="AgreementFormEnum.type"></label>
-                    <input pInputText id="typeId" [value]="agreement.type?.name" [readonly]="true" />
-                </div>
-
-                <!-- Special Type -->
-                @if (agreement.specialType?.name;){
-                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                    <label
-                      appLabel
-                      for="specialTypeId"
-                      [label]="AgreementFormEnum.specialType"></label>
-                    <input pInputText id="specialTypeId" [value]="agreement.specialType?.name" [readonly]="true" />
-                </div>
-              } 
-
-                <!-- Object -->
-                <div class="field col-12">
-                    <label
-                      appLabel
-                      for="objective"
-                      [label]="AgreementFormEnum.objective">
-                    </label>
-                    <textarea 
-                      rows="10"
-                      cols="30"
-                      pInputTextarea 
-                      id="objective" 
-                      [value]="agreement.objective" 
-                      [readonly]="true">
-                    </textarea>
-                </div>
-            </form>
-        </p-panel>
-        }
-    </div>
+          <!-- Object -->
+          <div class="field col-12">
+            <label
+              appLabel
+              for="objective"
+              [label]="AgreementFormEnum.objective">
+            </label>
+            <textarea
+              rows="10"
+              cols="30"
+              pInputTextarea
+              id="objective"
+              [value]="agreement.objective"
+              [readonly]="true">
+          </textarea>
+          </div>
+        </form>
+      </ng-template>
+    </p-panel>
+  </div>
 </div>

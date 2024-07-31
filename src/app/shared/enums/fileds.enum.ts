@@ -84,6 +84,7 @@ export enum InstitutionsObligations {
   institutionObligations = 'obligaciones seleccionadas',
   positionsNames = "positionsNames"
 }
+
 export enum AgreementFormEnum{
   subscribedAt='Fecha suscripción de convenio',
   startedAt ='Fecha inicio de convenio',
@@ -98,11 +99,14 @@ export enum AgreementFormEnum{
   name ='Nombre del convenio',
   internalNumber = 'Numero interno de convenio',
   number = 'Numero de convenio',
-  agreementState = 'Estado del convenio',
   origin = 'Origen del convenio',
   type = 'Tipo del convenio',
   isFinancing = 'Financiamiento',
   specialType = 'Tipo especifico del convenio',
+}
+
+export enum AgreementStateEnum{
+  state='Estado del convenio',
 }
 
 export enum AdministratorFormEnum{

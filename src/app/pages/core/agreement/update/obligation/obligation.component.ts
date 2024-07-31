@@ -4,7 +4,7 @@ import { CatalogueModel, ObligationModel } from '@models/core';
 import { AuthService, AuthHttpService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { SkeletonEnum, RoutesEnum, ExternalInstitutionsObligations, ObligationsMintur } from '@shared/enums';
+import { SkeletonEnum, RoutesEnum, ExternalInstitutionsObligations, ObligationsMintur, SeverityButtonActionEnum } from '@shared/enums';
 import { PrimeIcons, MessageService } from 'primeng/api';
 
 @Component({
@@ -46,6 +46,7 @@ export class ObligationComponent implements OnInit {
   protected readonly ObligationsMintur = ObligationsMintur;
   protected readonly ExternalInstitutionsObligations = ExternalInstitutionsObligations;
   protected readonly SkeletonEnum = SkeletonEnum;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor(private messageService: MessageService) {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
@@ -11,7 +11,7 @@ import {PrimeIcons} from 'primeng/api';
   templateUrl: './agreement-administrator.component.html',
   styleUrl: './agreement-administrator.component.scss'
 })
-export class AgreementAdministratorComponent {
+export class AgreementAdministratorComponent implements OnInit {
 
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly coreService = inject(CoreService);
@@ -19,7 +19,8 @@ export class AgreementAdministratorComponent {
   public readonly messageDialogService = inject(MessageDialogService);
 
   // Form
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   @Input({required: true}) formInput!: AgreementModel;
@@ -44,13 +45,27 @@ export class AgreementAdministratorComponent {
   ngOnInit(): void {
     this.loadPositions();
     this.loadUnits();
-    this.form.patchValue(this.formInput)
+    this.patchValueForm();
+    this.validateForm();
   }
 
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
       administrator: this.administratorForm
+    });
+
+    this.checkValueChanges();
+  }
+
+  patchValueForm() {
+    this.form.patchValue(this.formInput);
+  }
+
+  checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
     });
   }
 
@@ -61,37 +76,23 @@ export class AgreementAdministratorComponent {
     })
   }
 
-  validateForm(): boolean {
+  validateForm() {
     this.formErrors = [];
+
     if (this.unitField.invalid) this.formErrors.push(AdministratorFormEnum.unit);
     if (this.positionField.invalid) this.formErrors.push(AdministratorFormEnum.position);
 
-    return this.form.valid && this.formErrors.length === 0;
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   /** Load Foreign Keys  **/
   loadPositions() {
     // this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
-    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
+    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);//review
   }
 
   loadUnits() {
     this.units = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
-  }
-
-  // FormActions
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
   }
 
   // getters Form
@@ -106,5 +107,4 @@ export class AgreementAdministratorComponent {
   get positionField(): AbstractControl {
     return this.administratorFormField.controls['position'];
   }
-
 }

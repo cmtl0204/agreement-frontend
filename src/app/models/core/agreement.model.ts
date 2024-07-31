@@ -1,5 +1,5 @@
 import {
-  AdministratorModel,
+  AdministratorModel, AgreementStateModel,
   CatalogueModel,
   ExternalInstitutionModel,
   FinancingModel,
@@ -10,6 +10,7 @@ export interface AgreementModel {
   id?: string;
   number?: string;
   administrator?: AdministratorModel;
+  agreementState?: AgreementStateModel;
   internalNumber?: number;
   name?: string;
   originId?: string;

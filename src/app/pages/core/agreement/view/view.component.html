@@ -1,13 +1,13 @@
 @if (!coreService.isLoading) {
-<!--  <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>-->
+  <!--  <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>-->
 }
 
 @if (true) {
-  <app-basic-data></app-basic-data>
- <!-- <app-agreement-date></app-agreement-date>-->
- <!-- <app-agreement-administrator></app-agreement-administrator>-->
+  <app-basic-data [agreement]="agreement"></app-basic-data>
+ <!-- <app-agreement-date [agreement]="agreement"></app-agreement-date>-->
+ <!-- <app-agreement-administrator [agreement]="agreement"></app-agreement-administrator>-->
   <app-appearer [agreement]="agreement"></app-appearer>
   <app-obligation></app-obligation>
-  <app-financing></app-financing>
-  <app-addendum></app-addendum>
+  <app-financing [agreement]="agreement"></app-financing>
+  <app-addendum [agreement]="agreement"></app-addendum>
 }

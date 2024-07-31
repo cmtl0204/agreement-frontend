@@ -1,12 +1,12 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
-import {AgreementModel, CatalogueModel, ColumnModel, FinancingModel} from '@models/core';
-import {AuthService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum} from '@shared/enums';
-import {onlyLetters} from '@shared/helpers';
-import {PrimeIcons} from 'primeng/api';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@models/core';
+import { AuthService } from '@servicesApp/auth';
+import { CoreService, MessageDialogService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
+import { onlyLetters } from '@shared/helpers';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-financing',
@@ -24,7 +24,7 @@ export class FinancingComponent implements OnInit {
   /** variables **/
   protected form!: FormGroup;
   protected financingForm!: FormGroup;
-  @Input({required: true}) formInput!: AgreementModel;
+  @Input({ required: true }) formInput!: AgreementModel;
   protected financingsColumns: ColumnModel[] = [];
 
   /** Form **/
@@ -65,7 +65,7 @@ export class FinancingComponent implements OnInit {
   }
 
   patchValueForm() {
-    const {financings} = this.formInput;
+    const { financings } = this.formInput;
 
     if (financings) {
       financings.forEach((value: FinancingModel) => {
@@ -118,15 +118,10 @@ export class FinancingComponent implements OnInit {
         paymentMethod: [this.financingForm.value.paymentMethod],
         source: [this.financingForm.value.source],
       });
+
       this.financings.push(financings);
-      this.modelField.clearValidators();
-      this.modelField.reset();
-      this.budgetField.clearValidators();
-      this.budgetField.reset();
-      this.paymentMethodField.clearValidators();
-      this.paymentMethodField.reset();
-      this.sourceField.clearValidators();
-      this.sourceField.reset();
+      this.financingForm.reset();
+      
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -154,31 +149,32 @@ export class FinancingComponent implements OnInit {
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
     }
-
-    return this.form.valid && this.formErrors.length === 0;
-  }
-
-  onSubmit(): void {
     if (!this.isFinancingField.value) {
       if (this.financings.length > 0) {
         this.financings.clear();
       }
       this.save();
+      this.formErrors = [];
     } else {
       if (this.financings.length > 0) {
         this.save();
-      } else {
-        if (this.validateForm()) {
-          this.messageDialogService.fieldErrors(['Debe añadir']);
-        } else {
-          this.form.markAllAsTouched();
-          this.messageDialogService.fieldErrors(this.formErrors);
-          if (this.form.valid) {
-            this.financingForm.markAllAsTouched();
-            this.messageDialogService.fieldErrors(this.formErrors);
-          }
-        }
+        this.formErrors = [];
       }
+    }
+    return this.form.valid && this.formErrors.length === 0;
+  }
+
+  onSubmit(): void {
+    if (this.validateForm()) {
+      if (this.financings.length === 0 && this.isFinancingField.value) {
+        this.messageDialogService.fieldErrors(['Debe añadir']);
+      } else {
+        this.save();
+      }
+    } else {
+      this.form.markAllAsTouched();
+      this.financingForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
@@ -189,7 +185,7 @@ export class FinancingComponent implements OnInit {
         this.budgetField.setValidators(Validators.required);
         this.paymentMethodField.setValidators(Validators.required);
         this.sourceField.setValidators(Validators.required);
-      } else if (value === false) {
+      } else if (!value) {
         this.financingForm.reset();
         this.modelField.clearValidators();
         this.budgetField.clearValidators();
