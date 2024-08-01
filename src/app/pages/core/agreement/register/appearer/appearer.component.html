@@ -123,23 +123,22 @@
   <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
     <p-panel header="Contraparte">
       <form [formGroup]="externalInstitutionForm" class="p-fluid grid">
-        <!-- externalInstitutions/position -->
+        <!-- externalInstitutions/name -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <label appLabel
-                 for="externalPosition"
-                 [label]="ExternalInstitutionsFormEnum.position"
-                 [required]="externalInstitutionPositionField">
+          <label appLabel for="name"
+                 [label]="ExternalInstitutionsFormEnum.name"
+                 [required]="externalInstitutionNameField">
           </label>
           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
           <input pInputText
                  type="text"
-                 id="externalPosition"
-                 formControlName="position"/>
+                 id="name"
+                 formControlName="name"/>
           <small
             appErrorMessage
-            [errors]="externalInstitutionPositionField.errors"
-            [touched]="externalInstitutionPositionField.touched"
-            [dirty]="externalInstitutionPositionField.dirty">
+            [errors]="externalInstitutionNameField.errors"
+            [touched]="externalInstitutionNameField.touched"
+            [dirty]="externalInstitutionNameField.dirty">
           </small>
         </div>
 
@@ -176,44 +175,50 @@
             [dirty]="externalInstitutionPersonTypeField.dirty">
           </small>
         </div>
-
-        <!-- externalInstitutions/name -->
+        
+        <form [formGroup]="externalInstitutionDetailForm" class="p-fluid grid">
+        <!-- externalInstitutions/position -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <label appLabel for="name"
-                 [label]="ExternalInstitutionsFormEnum.name"
-                 [required]="externalInstitutionNameField">
+            <label appLabel
+            for="externalPosition"
+            [label]="ExternalInstitutionsFormEnum.position"
+            [required]="externalInstitutionDetailPositionField">
           </label>
           <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
           <input pInputText
-                 type="text"
-                 id="name"
-                 formControlName="name"/>
+          type="text"
+          id="externalPosition"
+          formControlName="position"/>
           <small
-            appErrorMessage
-            [errors]="externalInstitutionNameField.errors"
-            [touched]="externalInstitutionNameField.touched"
-            [dirty]="externalInstitutionNameField.dirty">
-          </small>
+          appErrorMessage
+          [errors]="externalInstitutionDetailPositionField.errors"
+          [touched]="externalInstitutionDetailPositionField.touched"
+          [dirty]="externalInstitutionDetailPositionField.dirty">
+        </small>
         </div>
-
+      
         <!-- externalInstitutions/unit -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel for="unit"
-                 [label]="ExternalInstitutionsFormEnum.unit"
-                 [required]="externalInstitutionUnitField">
-          </label>
-          <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-          <input pInputText
-                 type="text"
-                 id="unit"
-                 formControlName="unit"/>
-          <small
-            appErrorMessage
-            [errors]="externalInstitutionUnitField.errors"
-            [touched]="externalInstitutionUnitField.touched"
-            [dirty]="externalInstitutionUnitField.dirty">
-          </small>
+          [label]="ExternalInstitutionsFormEnum.unit"
+          [required]="externalInstitutionDetailUnitField">
+        </label>
+        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+        <input pInputText
+        type="text"
+        id="unit"
+        formControlName="unit"/>
+        <small
+        appErrorMessage
+        [errors]="externalInstitutionDetailUnitField.errors"
+        [touched]="externalInstitutionDetailUnitField.touched"
+        [dirty]="externalInstitutionDetailUnitField.dirty">
+      </small>
         </div>
+        {{this.externalInstitutionForm.value |json}}
+        <br>
+        {{this.externalInstitutionDetailForm.value |json}}
+        </form>
       </form>
       <!-- button add externalInstitution -->
       <div class="field col-12" style="display: flex; justify-content: right">
@@ -223,6 +228,53 @@
           [severity]="SeverityButtonActionEnum.ADD"
           (click)="addExternalInstitution()"/>
       </div>
+
+        <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
+          <form [formGroup]="externalInstitutionDetailForm" class="p-fluid grid">
+          <div class="flex align-items-center gap-3 mb-3">
+            <label appLabel for="name"
+                  [label]="ExternalInstitutionsFormEnum.name"
+                  [required]="externalInstitutionNameField">
+            </label>
+            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+            <input pInputText
+                    type="text"
+                    id="name"
+                    formControlName="name"/>
+          </div>
+          <div class="flex align-items-center gap-3 mb-5">
+            <label appLabel
+            for="externalPersonType"
+            [label]="ExternalInstitutionsFormEnum.personType"
+            [required]="externalInstitutionPersonTypeField">
+            </label>
+            <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+            <p-dropdown
+              id="externalPersonType"
+              formControlName="personType"
+              dataKey="id"
+              [options]="externalPersonTypes"
+              placeholder="Seleccione"
+              [filter]="false">
+              <ng-template pTemplate="selectedItem" let-selectedOption>
+                <div class="flex align-items-center gap-2">
+                  <div>{{ selectedOption.name }}</div>
+                </div>
+              </ng-template>
+              <ng-template let-item pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ item.name }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            
+              </div>
+              <div class="flex justify-content-end gap-2">
+                  <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+                  <p-button label="Save" (onClick)="visible = false" />
+              </div>
+            </form>
+      </p-dialog>
 
       <!-- table external-->
       @if (externalInstitutionsField.length > 0) {
@@ -242,15 +294,20 @@
             </ng-template>
             <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
               <tr>
-                <td>{{ externalInstitution.get('position')?.value }}</td>
+                <td></td>
                 <td>{{ externalInstitution.get('personType')?.value.name }}</td>
                 <td>{{ externalInstitution.get('name')?.value }}</td>
-                <td>{{ externalInstitution.get('unit')?.value }}</td>
+                <td></td>
                 <td>
                   <button pButton
                           [icon]="PrimeIcons.TRASH"
                           [severity]="SeverityButtonActionEnum.DELETE"
                           (click)="deleteExternalInstitution(i)">
+                  </button>
+                  <button pButton
+                          [icon]="PrimeIcons.PLUS"
+                          [severity]="SeverityButtonActionEnum.SAVE"
+                          (click)="showDialog()">
                   </button>
                 </td>
               </tr>
