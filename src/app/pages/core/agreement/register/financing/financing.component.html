@@ -14,7 +14,6 @@
 
         <div class="p-toolbar-group-right">
           <app-form-button-action
-            (submit)="onSubmit()"
             labelSubmitButton="Siguiente"
             labelCancelButton="Atrás"
             [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
@@ -24,7 +23,7 @@
       </p-toolbar>
 
       <p-panel>
-        <form [formGroup]="form" class="p-fluid grid " (ngSubmit)="onSubmit()">
+        <form [formGroup]="form" class="p-fluid grid " >
 
           <!-- financingOptionId -->
           <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
@@ -75,12 +74,12 @@
                 <label appLabel
                        for="combinedInstitution"
                        [label]="FinancingsFormEnum.model"
-                       [required]="modelField">
+                       [required]="institutionNameField">
                 </label>
                 <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
                 <p-dropdown
                   id="combinedInstitution"
-                  formControlName="model"
+                  formControlName="institutionName"
                   [options]="combinedInstitutions"
                   placeholder="Seleccione"
                   optionValue="name"
@@ -111,9 +110,9 @@
                 </p-dropdown>
                 <small
                   appErrorMessage
-                  [errors]="modelField.errors"
-                  [touched]="modelField.touched"
-                  [dirty]="modelField.dirty">
+                  [errors]="institutionNameField.errors"
+                  [touched]="institutionNameField.touched"
+                  [dirty]="institutionNameField.dirty">
                 </small>
               </div>
 
@@ -189,10 +188,10 @@
             </div>
 
             <!-- table -->
-            @if (financings.length > 0) {
+            @if (financingsField.length > 0) {
               <p-panel class="field col-12">
                 <p-table
-                  [value]="financings.controls"
+                  [value]="financingsField.controls"
                   styleClass="p-datatable-striped"
                   [tableStyle]="{'min-width': '50rem'}">
 
@@ -209,7 +208,7 @@
 
                   <ng-template pTemplate="body" let-financing let-i="rowIndex">
                     <tr>
-                      <td>{{ financing.get('model')?.value.name }}</td>
+                      <td>{{ financing.get('institutionName')?.value }}</td>
                       <td>{{ financing.get('budget')?.value }}</td>
                       <td>{{ financing.get('paymentMethod')?.value }}</td>
                       <td>{{ financing.get('source')?.value }}</td>

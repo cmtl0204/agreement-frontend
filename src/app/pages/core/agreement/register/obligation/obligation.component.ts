@@ -1,117 +1,109 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl} from '@angular/forms';
-import {CatalogueModel, ObligationModel} from '@models/core';
-import {AuthService, AuthHttpService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {
-  SkeletonEnum,
-  RoutesEnum,
-  ExternalInstitutionsObligations,
-  ObligationsMintur,
-  SeverityButtonActionEnum
-} from '@shared/enums';
-import {PrimeIcons, MessageService} from 'primeng/api';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { CatalogueModel } from '@models/core';
+import { AuthService } from '@servicesApp/auth';
+import { CoreService, MessageDialogService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { SkeletonEnum, RoutesEnum, ExternalInstitutionsObligations, ObligationsMintur, SeverityButtonActionEnum } from '@shared/enums';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-obligation',
   templateUrl: './obligation.component.html',
-  styleUrl: './obligation.component.scss'
+  styleUrls: ['./obligation.component.scss']
 })
 export class ObligationComponent implements OnInit {
-
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  institutions = [];
-  @Input({required: true}) formInput!: any;
-
-  protected obligationType: CatalogueModel[] = [];
-  protected obligationMintur: CatalogueModel[] = [];
-  protected readonly authService = inject(AuthService);
-  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  protected readonly coreService = inject(CoreService);
-  private readonly formBuilder = inject(FormBuilder);
-  public readonly messageDialogService = inject(MessageDialogService);
-
-  displayModal: boolean = false;
-  displayObligationsModal: boolean = false;
-  showObligationsTable: boolean = false;
-  selectedObligationTypes: any[] = [];
-  selectedInstitution: any = null;
-  filteredObligations: any[] = [];
-
-  id: string = RoutesEnum.NEW
-  protected obligationForm!: FormGroup;
-  protected obligationTypeForm!: FormGroup;
-  protected form!: FormGroup;
-  protected formMintur!: FormGroup;
-  private formErrors: string[] = [];
   @Input() internalInstitutions: CatalogueModel[] = [];
   @Input() externalInstitutions: CatalogueModel[] = [];
-  protected obligationInstitutions: CatalogueModel[] = [];
-  protected readonly ObligationsMintur = ObligationsMintur;
-  protected readonly ExternalInstitutionsObligations = ExternalInstitutionsObligations;
+  @Input() formInput!: any;
+  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly coreService = inject(CoreService);
+  protected obligationType: CatalogueModel[] = [];
+  protected institutions: CatalogueModel[] = [];
+  selectedObligationType: string = '';
+  selectedInstitutions: any[] = [];
+  description: string = '';
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
+  form!: FormGroup;
 
-  constructor() {
+  constructor(
+    private fb: FormBuilder,
+    private messageDialogService: MessageDialogService
+  ) {
     this.buildForm();
-    this.buildObligationTypeForm();
-    this.buildObligationForm();
-    this.buildInstitutionalObligationForm();
   }
 
   ngOnInit(): void {
-    /* Load Foreign Keys*/
     this.loadObligationTypes();
-    this.loadMintur();
-    // this.patchValueForm();
-    this.loadObligationInstitutions();;
-    this.loadObligationInstitutions();
+    this.loadInstitutions();
+    this.patchValueForm();
   }
 
   buildForm() {
-    this.form = this.formBuilder.group({
-      obligationTypes: this.formBuilder.array([this.obligationTypeForm])
+    this.form = this.fb.group({
+      obligations: this.fb.array([])
     });
   }
 
-  buildObligationTypeForm() {
-    this.obligationTypeForm = this.formBuilder.group({
-      obligations: [this.formBuilder.array([]), [Validators.required]],
-      institutionalObligations: [this.formBuilder.array([]), [Validators.required]],
-    });
+  get obligationsField(): FormArray {
+    return this.form.get('obligations') as FormArray;
   }
 
-  buildObligationForm() {
-    this.obligationForm = this.formBuilder.group({
-      description: [null, [Validators.required]],
-      model: [null, [Validators.required]],
-    });
+  loadObligationTypes() {
+    this.obligationType = [
+      { name: 'obligacion mintur' },
+      { name: 'obligacion contraparte' },
+      { name: 'obligacion conjunta' }
+    ];
   }
 
-  buildInstitutionalObligationForm() {
-    this.obligationForm = this.formBuilder.group({
-      model: [null, [Validators.required]],
-      obligationType: [null, [Validators.required]],
-    });
+  loadInstitutions() {
+    this.institutions = this.internalInstitutions.concat(this.externalInstitutions);
   }
 
-  addObligation(): void {
-    if (this.obligationForm.valid) {
-      const obligation = this.formBuilder.group({
-        model: [this.obligationForm.value.model, [Validators.required]],
-        description: [this.obligationForm.value.description, [Validators.required]],
+  onObligationTypeChange(selectedObligation: string) {
+    this.selectedObligationType = selectedObligation;
+    if (this.selectedObligationType === 'obligacion mintur') {
+      this.selectedInstitutions = [{ name: 'Ministerio de Turismo', value: 'Mintur' }];
+    } else {
+      this.selectedInstitutions = [];
+    }
+  }
+
+  onInstitutionsChange(selectedInstitutions: any[]) {
+    this.selectedInstitutions = selectedInstitutions;
+  }
+
+  addObligation() {
+    if (this.selectedObligationType === 'obligacion mintur') {
+      const obligation = this.fb.group({
+        institutionName: ['Ministerio de Turismo', Validators.required],
+        obligationType: [this.selectedObligationType, Validators.required],
+        description: [this.description, Validators.required],
+        type: [this.selectedObligationType, Validators.required]
       });
-
       this.obligationsField.push(obligation);
-      this.obligationForm.reset();
-      this.closeModal();
-    }else{
-      this.obligationForm.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
+      this.description = '';
+    } else {
+      if (this.selectedInstitutions.length && this.selectedObligationType && this.description.trim()) {
+        this.selectedInstitutions.forEach(institution => {
+          const obligation = this.fb.group({
+            institutionName: [institution.name || 'Unknown', Validators.required],
+            obligationType: [this.selectedObligationType, Validators.required],
+            description: [this.description, Validators.required],
+            type: [this.selectedObligationType, Validators.required]
+          });
+          this.obligationsField.push(obligation);
+        });
+        this.description = '';
+      } else {
+        this.messageDialogService.fieldErrors(['Debe seleccionar al menos una institución y un tipo de obligación, y proporcionar una descripción.']);
+      }
     }
   }
 
@@ -119,122 +111,30 @@ export class ObligationComponent implements OnInit {
     this.obligationsField.removeAt(index);
   }
 
-  validateForm(): boolean {
-    this.formErrors = [];
-    if (this.modelField.invalid) this.formErrors.push(ExternalInstitutionsObligations.positionName);
-    if (this.descriptionField.invalid) this.formErrors.push(ExternalInstitutionsObligations.obligations);
-    return this.form.valid && this.formErrors.length === 0;
-  }
-
-  openModal(institutionName: string) {
-    this.obligationForm.reset();
-    this.obligationForm.patchValue({model: institutionName});
-    this.displayModal = true;
-  }
-
-  closeModal() {
-    this.displayModal = false;
-  }
-
-  addObligationAndCloseModal() {
-    if (this.obligationForm.invalid) {
-      return;
+  onSubmit() {
+    if (this.form.valid) {
+      this.formOutput.emit(this.form.value);
+      this.nextOutput.emit(true);  
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(['Debe completar todos los campos obligatorios.']);
     }
-    this.obligationsField.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
-    this.closeModal();
-  }
-
-  /* Load Foreign Keys  */
-  loadExternalInstitutions() {
-    /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
-
-  }
-
-  loadObligationTypes() {
-    this.obligationType = [
-      {name: 'obligacion mintur'},
-      {name: 'obligacion contraparte'},
-      {name: 'obligacion conjunta'}
-    ]
-  }
-
-  loadMintur() {
-    this.obligationMintur = [
-      {name: 'Mintur'}
-    ]
-  }
-
-  loadObligationInstitutions() {
-    this.obligationInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value);
-    console.log(this.form.value)
   }
 
   patchValueForm() {
-    const {obligations} = this.formInput;
+    const { obligations } = this.formInput;
     if (obligations) {
-      obligations.forEach((value: ObligationModel) => {
-        this.obligationsField.push(this.formBuilder.group(value))
+      obligations.forEach((value: any) => {
+        this.obligationsField.push(this.fb.group(value));
       });
     }
   }
 
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
+  isContraparteOrConjuntaSelected(): boolean {
+    return this.selectedObligationType === 'obligacion contraparte' || this.selectedObligationType === 'obligacion conjunta';
   }
 
-  addMinturObligation(model: any, description: string): void {
-    if (description.trim() === '') {
-      return;
-    }
-    this.obligationsField.push(this.createObligation(model.name, description));
-  }
-
-  createObligation(model: string, description: string): FormGroup {
-    return this.formBuilder.group({
-      model: [model, Validators.required],
-      description: [description, Validators.required],
-    });
-  }
-
-  onObligationTypesChange(selectedObligations: any[]) {
-    const obligationTypesArray = this.form.get('obligationTypes') as FormArray;
-    obligationTypesArray.clear();
-    selectedObligations.forEach(obligation => {
-      obligationTypesArray.push(new FormControl(obligation));
-    });
-  }
-
-  addObligationForInstitution(institution: CatalogueModel, description: string, save: boolean = true) {
-    const obligationsArray = this.form.get('obligations') as FormArray;
-    const newObligation = this.formBuilder.group({
-      model: [institution.name, Validators.required],
-      description: [description, Validators.required]
-    });
-    obligationsArray.push(newObligation);
-  }
-
-  get obligationsField(): FormArray {
-    return this.obligationTypeForm.get('obligations') as FormArray;
-  }
-
-  get type(): FormArray {
-    return this.form.get('type') as FormArray;
-  }
-
-  get modelField(): AbstractControl {
-    return this.obligationForm.controls['model'];
-  }
-
-  get descriptionField(): AbstractControl {
-    return this.obligationForm.controls['description'];
+  get filteredObligations() {
+    return this.obligationsField.controls.filter(control => control.get('type')?.value === this.selectedObligationType);
   }
 }
