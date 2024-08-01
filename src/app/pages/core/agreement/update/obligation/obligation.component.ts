@@ -1,17 +1,11 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
-import {AuthService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
-import {
-  SkeletonEnum,
-  RoutesEnum,
-  ExternalInstitutionsObligations,
-  ObligationsMintur,
-  SeverityButtonActionEnum
-} from '@shared/enums';
-import {PrimeIcons} from 'primeng/api';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { CatalogueModel } from '@models/core';
+import { AuthService } from '@servicesApp/auth';
+import { CoreService, MessageDialogService } from '@servicesApp/core';
+import { CataloguesHttpService } from '@servicesHttp/core';
+import { SkeletonEnum, RoutesEnum, ExternalInstitutionsObligations, ObligationsMintur, SeverityButtonActionEnum } from '@shared/enums';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-obligation',
@@ -29,7 +23,7 @@ export class ObligationComponent implements OnInit {
   protected readonly coreService = inject(CoreService);
   protected obligationType: CatalogueModel[] = [];
   protected institutions: CatalogueModel[] = [];
-  selectedObligationTypes: any[] = [];
+  selectedObligationType: string = '';
   selectedInstitutions: any[] = [];
   description: string = '';
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -39,7 +33,6 @@ export class ObligationComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-   
     private messageDialogService: MessageDialogService
   ) {
     this.buildForm();
@@ -63,9 +56,9 @@ export class ObligationComponent implements OnInit {
 
   loadObligationTypes() {
     this.obligationType = [
-      {name: 'obligacion mintur'},
-      {name: 'obligacion contraparte'},
-      {name: 'obligacion conjunta'}
+      { name: 'obligacion mintur' },
+      { name: 'obligacion contraparte' },
+      { name: 'obligacion conjunta' }
     ];
   }
 
@@ -73,8 +66,13 @@ export class ObligationComponent implements OnInit {
     this.institutions = this.internalInstitutions.concat(this.externalInstitutions);
   }
 
-  onObligationTypesChange(selectedObligations: any[]) {
-    this.selectedObligationTypes = selectedObligations;
+  onObligationTypeChange(selectedObligation: string) {
+    this.selectedObligationType = selectedObligation;
+    if (this.selectedObligationType === 'obligacion mintur') {
+      this.selectedInstitutions = [{ name: 'Ministerio de Turismo', value: 'Mintur' }];
+    } else {
+      this.selectedInstitutions = [];
+    }
   }
 
   onInstitutionsChange(selectedInstitutions: any[]) {
@@ -82,20 +80,30 @@ export class ObligationComponent implements OnInit {
   }
 
   addObligation() {
-    if (this.selectedInstitutions.length && this.selectedObligationTypes.length && this.description.trim()) {
-      this.selectedInstitutions.forEach(institution => {
-        this.selectedObligationTypes.forEach(obligationType => {
+    if (this.selectedObligationType === 'obligacion mintur') {
+      const obligation = this.fb.group({
+        institutionName: ['Ministerio de Turismo', Validators.required],
+        obligationType: [this.selectedObligationType, Validators.required],
+        description: [this.description, Validators.required],
+        type: [this.selectedObligationType, Validators.required]
+      });
+      this.obligationsField.push(obligation);
+      this.description = '';
+    } else {
+      if (this.selectedInstitutions.length && this.selectedObligationType && this.description.trim()) {
+        this.selectedInstitutions.forEach(institution => {
           const obligation = this.fb.group({
-            institutionName: [institution.name, Validators.required],
-            obligationType: [obligationType.name, Validators.required],
-            description: [this.description, Validators.required]
+            institutionName: [institution.name || 'Unknown', Validators.required],
+            obligationType: [this.selectedObligationType, Validators.required],
+            description: [this.description, Validators.required],
+            type: [this.selectedObligationType, Validators.required]
           });
           this.obligationsField.push(obligation);
         });
-      });
-      this.description = '';
-    } else {
-      this.messageDialogService.fieldErrors(['Debe seleccionar al menos una institución y un tipo de obligación, y proporcionar una descripción.']);
+        this.description = '';
+      } else {
+        this.messageDialogService.fieldErrors(['Debe seleccionar al menos una institución y un tipo de obligación, y proporcionar una descripción.']);
+      }
     }
   }
 
@@ -106,6 +114,7 @@ export class ObligationComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.formOutput.emit(this.form.value);
+      this.nextOutput.emit(true);  
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(['Debe completar todos los campos obligatorios.']);
@@ -113,11 +122,19 @@ export class ObligationComponent implements OnInit {
   }
 
   patchValueForm() {
-    const {obligations} = this.formInput;
+    const { obligations } = this.formInput;
     if (obligations) {
       obligations.forEach((value: any) => {
         this.obligationsField.push(this.fb.group(value));
       });
     }
+  }
+
+  isContraparteOrConjuntaSelected(): boolean {
+    return this.selectedObligationType === 'obligacion contraparte' || this.selectedObligationType === 'obligacion conjunta';
+  }
+
+  get filteredObligations() {
+    return this.obligationsField.controls.filter(control => control.get('type')?.value === this.selectedObligationType);
   }
 }

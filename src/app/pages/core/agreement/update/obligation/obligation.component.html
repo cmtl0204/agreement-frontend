@@ -24,14 +24,19 @@
         </div>
       </p-toolbar>
       <div class="p-fluid">
-        <p-multiSelect
-          [options]="obligationType"
-          [(ngModel)]="selectedObligationTypes"
-          optionLabel="name"
-          placeholder="Select Obligations"
-          (ngModelChange)="onObligationTypesChange($event)">
-        </p-multiSelect>
-        
+        @for (type of obligationType; track $index) {
+        <div>
+          <p-radioButton
+            name="obligationType"
+            [value]="type.name || ''"
+            [(ngModel)]="selectedObligationType"
+            (onClick)="onObligationTypeChange(type.name || '')"
+            label="{{ type.name || 'Unknown' }}"
+          ></p-radioButton>
+        </div>
+      }
+      
+        @if (isContraparteOrConjuntaSelected()) {
         <p-multiSelect
           [options]="institutions"
           [(ngModel)]="selectedInstitutions"
@@ -39,8 +44,9 @@
           placeholder="Select Institutions"
           (ngModelChange)="onInstitutionsChange($event)">
         </p-multiSelect>
+      }
 
-        <p-table [value]="obligationsField.controls" dataKey="id">
+        <p-table [value]="filteredObligations" dataKey="id">
           <ng-template pTemplate="header">
             <tr>
               <th>Entidad</th>
@@ -51,9 +57,9 @@
           </ng-template>
           <ng-template pTemplate="body" let-obligation let-rowIndex="rowIndex">
             <tr>
-              <td>{{ obligation.get('institutionName').value }}</td>
-              <td>{{ obligation.get('obligationType').value }}</td>
-              <td>{{ obligation.get('description').value }}</td>
+              <td>{{ obligation.get('institutionName')?.value }}</td>
+              <td>{{ obligation.get('obligationType')?.value }}</td>
+              <td>{{ obligation.get('description')?.value }}</td>
               <td>
                 <p-button icon="pi pi-trash" class="p-button-danger" (click)="deleteObligation(rowIndex)"></p-button>
               </td>
