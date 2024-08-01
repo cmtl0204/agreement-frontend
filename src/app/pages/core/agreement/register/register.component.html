@@ -82,7 +82,7 @@
             @if (externalInstitutionsField.value && internalInstitutionsField.value) {
               <app-financing
                 class="col-12"
-                (formOutput)="save($event);nextCallback.emit()"
+                (formOutput)="save($event)"
                 [formInput]="form.value"
                 (nextOutput)="nextCallback.emit()"
                 (prevOutput)="prevCallback.emit()"
