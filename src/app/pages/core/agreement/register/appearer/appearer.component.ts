@@ -36,7 +36,7 @@ export class AppearerComponent implements OnInit {
   public readonly messageDialogService = inject(MessageDialogService);
 
   /** Form **/
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
@@ -44,11 +44,16 @@ export class AppearerComponent implements OnInit {
 
   protected id: string = RoutesEnum.NEW
   protected form!: FormGroup;
+  protected agreement!: AgreementModel;
   protected internalInstitutionForm!: FormGroup;
   protected externalInstitutionForm!: FormGroup;
-  private formErrors: string[] = [];
+  protected internalInstitutionDetailForm!: FormGroup;
+  protected externalInstitutionDetailForm!: FormGroup;
   protected externalInstitutionsColumns: ColumnModel[] = [];
   protected internalInstitutionsColumns: ColumnModel[] = [];
+  private formErrors: string[] = [];
+  protected isVisibleExternalInstitutionDetailForm: boolean = false;
+  protected index: number = -1;
 
   /** Foreign Keys **/
   protected internalPersonTypes: CatalogueModel[] = [];
@@ -64,8 +69,10 @@ export class AppearerComponent implements OnInit {
 
   constructor() {
     this.buildForm();
-    this.buildInternalInstitutionForm();
     this.buildExternalInstitutionForm();
+    this.buildInternalInstitutionForm();
+    this.buildExternalInstitutionDetailForm();
+    this.buildInternalInstitutionDetailForm();
     this.buildExternalInstitutionsColumns();
     this.buildInternalInstitutionsColumns();
   }
@@ -90,38 +97,23 @@ export class AppearerComponent implements OnInit {
   }
 
   patchValueForm() {
-    const {internalInstitutions, externalInstitutions} = this.formInput;
+    console.log(this.formInput);
+    this.agreement = this.formInput;
+    this.agreement.externalInstitutions = this.agreement.externalInstitutions || [];
+    this.agreement.externalInstitutions.forEach(inst => {
+      inst.externalInstitutionDetails = inst.externalInstitutionDetails || [];
+    });
+    this.agreement.internalInstitutions = this.agreement.internalInstitutions || [];
+  this.agreement.internalInstitutions.forEach(inst => {
+    inst.internalInstitutionDetails = inst.internalInstitutionDetails || [];
+  });
 
-    if (internalInstitutions) {
-      internalInstitutions.forEach((item: InternalInstitutionModel) => {
-        const internalInstitution = this.formBuilder.group({
-          personType: [item.personType],
-          position: [item.position],
-          name: [item.name],
-          unit: [item.unit],
-        });
-
-        this.internalInstitutionsField.push(internalInstitution);
-      });
-    }
-
-    if (externalInstitutions) {
-      externalInstitutions.forEach((item: ExternalInstitutionModel) => {
-        const externalInstitution = this.formBuilder.group({
-          personType: [item.personType],
-          position: [item.position],
-          name: [item.name],
-          unit: [item.unit],
-        });
-
-        this.externalInstitutionsField.push(externalInstitution);
-      });
-    }
+    this.form.patchValue(this.formInput);
   }
 
   checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
-      this.formOutput.emit(value);
+      this.formOutput.emit(this.agreement);
       this.validateForm();
     });
   }
@@ -138,18 +130,28 @@ export class AppearerComponent implements OnInit {
 
   buildInternalInstitutionForm() {
     this.internalInstitutionForm = this.formBuilder.group({
-      position: [null, [Validators.required]],
-      personType: [null, [Validators.required]],
       name: ['Ministerio de Turismo'],
+      personType: [null, [Validators.required]],
+    });
+  }
+
+  buildInternalInstitutionDetailForm() {
+    this.internalInstitutionDetailForm = this.formBuilder.group({
+      position: [null, [Validators.required]],
       unit: ['Unidad'],
     });
   }
 
   buildExternalInstitutionForm() {
     this.externalInstitutionForm = this.formBuilder.group({
-      position: [null, [Validators.required]],
       personType: [null, [Validators.required]],
       name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
+    });
+  }
+
+  buildExternalInstitutionDetailForm() {
+    this.externalInstitutionDetailForm = this.formBuilder.group({
+      position: [null, [Validators.required]],
       unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
     });
   }
@@ -190,32 +192,52 @@ export class AppearerComponent implements OnInit {
 
   /** add array **/
   addInternalInstitution() {
-    if (this.validateInternalInstitutionsForm()) {
-      const internalInstitutions = this.formBuilder.group({
-        position: [this.internalInstitutionForm.value.position],
-        personType: [this.internalInstitutionForm.value.personType],
-        name: ['Ministerio de Turismo'],
-        unit: ['Unidad'],
-      });
-
-      this.internalInstitutionsField.push(internalInstitutions);
+    if (this.validateInternalInstitutionForm()) {
+      if (this.agreement.internalInstitutions) {
+        this.agreement.internalInstitutions.push(this.internalInstitutionForm.value);
+      } else {
+        this.agreement.internalInstitutions = [this.internalInstitutionForm.value];
+      }
+      this.form.patchValue(this.agreement);
+  
+      this.index = this.agreement.internalInstitutions.length - 1;
+      this.addInternalInstitutionDetail();
+  
       this.internalInstitutionForm.reset();
     } else {
       this.internalInstitutionForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
+  
+  addInternalInstitutionDetail() {
+    if (this.validateInternalInstitutionDetailForm()) {
+      if (this.agreement?.internalInstitutions) {
+        if (this.agreement?.internalInstitutions[this.index].internalInstitutionDetails) {
+          this.agreement.internalInstitutions[this.index].internalInstitutionDetails.push(this.internalInstitutionDetailForm.value);
+        } else {
+          this.agreement.internalInstitutions[this.index].internalInstitutionDetails = [this.internalInstitutionDetailForm.value];
+        }
+      }
+  
+      this.form.patchValue(this.agreement);
+      this.internalInstitutionDetailForm.reset();
+    } else {
+      this.internalInstitutionDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
 
   addExternalInstitution() {
-    if (this.validateExternalInstitutionsForm()) {
-      const externalInstitution = this.formBuilder.group({
-        personType: [this.externalInstitutionForm.value.personType],
-        name: [this.externalInstitutionForm.value.name],
-        position: [this.externalInstitutionForm.value.position],
-        unit: [this.externalInstitutionForm.value.unit],
-      });
+    if (this.validateExternalInstitutionForm()) {
+      if (this.agreement.externalInstitutions) {
+        this.agreement.externalInstitutions.push(this.externalInstitutionForm.value);
+      } else {
+        this.agreement.externalInstitutions = [this.externalInstitutionForm.value];
+      }
 
-      this.externalInstitutionsField.push(externalInstitution);
+      this.form.patchValue(this.agreement);
+
       this.externalInstitutionForm.reset();
     } else {
       this.externalInstitutionForm.markAllAsTouched();
@@ -223,33 +245,98 @@ export class AppearerComponent implements OnInit {
     }
   }
 
+  addExternalInstitutionDetail() {
+    if (this.validateExternalInstitutionDetailForm()) {
+      if (this.agreement?.externalInstitutions) {
+        if (this.agreement?.externalInstitutions[this.index].externalInstitutionDetails) {
+          this.agreement.externalInstitutions[this.index].externalInstitutionDetails.push(this.externalInstitutionDetailForm.value);
+        } else {
+          this.agreement.externalInstitutions[this.index].externalInstitutionDetails = [this.externalInstitutionDetailForm.value];
+        }
+      }
+
+      this.form.patchValue(this.agreement);
+      console.log(this.agreement);
+      console.log(this.form.value);
+
+      this.isVisibleExternalInstitutionDetailForm = false;
+      this.externalInstitutionDetailForm.reset();
+    } else {
+      this.externalInstitutionDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  showExternalInstitutionDetailModal(index: number) {
+    this.isVisibleExternalInstitutionDetailForm = true;
+    this.index = index;
+  }
+
   /** delete array**/
   deleteExternalInstitution(index: number) {
-    this.externalInstitutionsField.removeAt(index);
+    (this.form.get('externalInstitutions') as FormArray).removeAt(index);
+    if (this.agreement.externalInstitutions) {
+      this.agreement.externalInstitutions.splice(index, 1);
+    }
+    this.form.patchValue(this.agreement);
+  }
+
+  deleteInternalInstitutionDetail(institution: InternalInstitutionModel, detail: any) {
+    const index = institution.internalInstitutionDetails.indexOf(detail);
+    if (index !== -1) {
+      institution.internalInstitutionDetails.splice(index, 1);
+      this.form.patchValue(this.agreement);
+    }
   }
 
   deleteInternalInstitution(index: number) {
-    this.internalInstitutionsField.removeAt(index);
+    (this.form.get('internalInstitutions') as FormArray).removeAt(index);
+    if (this.agreement.internalInstitutions) {
+      this.agreement.internalInstitutions.splice(index, 1);
+    }
+    this.form.patchValue(this.agreement);
   }
 
-  validateExternalInstitutionsForm(): boolean {
+  deleteExternalInstitutionDetail(institution: ExternalInstitutionModel, detail: any) {
+    const index = institution.externalInstitutionDetails.indexOf(detail);
+    if (index !== -1) {
+      institution.externalInstitutionDetails.splice(index, 1);
+      this.form.patchValue(this.agreement);
+    }
+  }
+  
+  validateExternalInstitutionForm(): boolean {
     this.formErrors = [];
-
+    
     if (this.externalInstitutionNameField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.name);
-    if (this.externalInstitutionUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
-    if (this.externalInstitutionPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
     if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
-
+    
     return this.externalInstitutionForm.valid && this.formErrors.length === 0;
   }
-
-  validateInternalInstitutionsForm() {
+  
+  validateExternalInstitutionDetailForm(): boolean {
     this.formErrors = [];
 
-    if (this.internalInstitutionPositionField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.position);
+    if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
+    if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
+
+    return this.externalInstitutionDetailForm.valid && this.formErrors.length === 0;
+  }
+
+  validateInternalInstitutionForm() {
+    this.formErrors = [];
+
     if (this.internalInstitutionPersonTypeField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.personType);
 
     return this.internalInstitutionForm.valid && this.formErrors.length === 0;
+  }
+
+  validateInternalInstitutionDetailForm() {
+    this.formErrors = [];
+
+    if (this.internalInstitutionDetailPositionField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.position);
+
+    return this.internalInstitutionDetailForm.valid && this.formErrors.length === 0;
   }
 
   /** Load Foreign Keys  **/
@@ -294,30 +381,31 @@ export class AppearerComponent implements OnInit {
   get externalInstitutionsField(): FormArray {
     return this.form.get('externalInstitutions') as FormArray;
   }
-
-  get internalInstitutionPositionField(): AbstractControl {
-    return this.internalInstitutionForm.controls['position'];
-  }
-
+  
   get internalInstitutionPersonTypeField(): AbstractControl {
     return this.internalInstitutionForm.controls['personType'];
+  }
+
+  get internalInstitutionDetailPositionField(): AbstractControl {
+    return this.internalInstitutionDetailForm.controls['position'];
   }
 
   get externalInstitutionNameField(): AbstractControl {
     return this.externalInstitutionForm.controls['name'];
   }
-
-  get externalInstitutionUnitField(): AbstractControl {
-    return this.externalInstitutionForm.controls['unit'];
-  }
-
-  get externalInstitutionPositionField(): AbstractControl {
-    return this.externalInstitutionForm.controls['position'];
-  }
-
+  
   get externalInstitutionPersonTypeField(): AbstractControl {
     return this.externalInstitutionForm.controls['personType'];
   }
+
+  get externalInstitutionDetailUnitField(): AbstractControl {
+    return this.externalInstitutionDetailForm.controls['unit'];
+  }
+
+  get externalInstitutionDetailPositionField(): AbstractControl {
+    return this.externalInstitutionDetailForm.controls['position'];
+  }
+
 }
 
 
