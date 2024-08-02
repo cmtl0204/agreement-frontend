@@ -309,7 +309,6 @@
       </p-dialog>
 
       <!-- table external-->
-<<<<<<< HEAD
       @if (agreement.externalInstitutions && agreement.externalInstitutions.length > 0){
         <p-table 
             [value]="agreement.externalInstitutions"
@@ -358,29 +357,6 @@
                 <td>{{institution.personType.name}}</td>
                 <td>{{detail.position}}</td>
                 <td>{{detail.unit}}</td>
-=======
-      @if (externalInstitutionsField.length > 0) {
-        <p-card class="field col-12">
-          <p-table
-            [value]="externalInstitutionsField.controls"
-            styleClass="p-datatable-striped">
-            <ng-template pTemplate="header">
-              @for (col of externalInstitutionsColumns; track col.field) {
-                <th [pSortableColumn]="col.field">
-                  {{ col.header }}
-                </th>
-              }
-              <th class="text-center">
-                Acciones
-              </th>
-            </ng-template>
-            <ng-template pTemplate="body" let-externalInstitution let-i="rowIndex">
-              <tr>
-                <td></td>
-                <td>{{ externalInstitution.get('personType')?.value.name }}</td>
-                <td>{{ externalInstitution.get('name')?.value }}</td>
-                <td></td>
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
                 <td>
                   <button pButton
                           [icon]="PrimeIcons.TRASH"
