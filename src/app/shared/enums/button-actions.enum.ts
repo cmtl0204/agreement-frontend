@@ -28,6 +28,7 @@ export enum LabelButtonActionEnum {
   RETURN = 'Regresar',
   SAVE = 'Guardar',
   UPDATE = 'Editar',
+  VIEW = 'VISUALIZAR',
   DELETE = 'Eliminar',
   DOWNLOADS = 'Descargas',
   SUSPEND = 'Suspender',

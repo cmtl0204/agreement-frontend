@@ -57,8 +57,11 @@ export class AgreementsHttpService {
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 
-    return this.httpClient.get<ServerResponse>(url).pipe(
-      map(response => response.data)
+    return this.httpClient.get(url).pipe(
+      map(response =>{ 
+        console.log(response)
+        return response
+  })
     );
   }
 
