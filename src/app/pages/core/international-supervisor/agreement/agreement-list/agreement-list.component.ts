@@ -15,6 +15,12 @@ import { debounceTime } from 'rxjs';
 })
 export class AgreementListComponent {
 
+  // Services
+  protected readonly coreService = inject(CoreService);
+  private readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly router = inject(Router);
+  private readonly breadcrumbService = inject(BreadcrumbService);
+
   protected readonly PrimeIcons = PrimeIcons;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
@@ -34,12 +40,7 @@ export class AgreementListComponent {
   protected selectedItem!: AgreementModel;
   protected items: AgreementModel[] = [];
 
-  constructor(
-    protected readonly coreService: CoreService,
-    private readonly breadcrumbService: BreadcrumbService,
-    private readonly router: Router,
-    private readonly agreementsHttpService: AgreementsHttpService,
-  ) {
+  constructor() {
     this.breadcrumbService.setItems([{ label: BreadcrumbEnum.AGREEMENTS }]);
 
     // this.paginator = this.coreService.paginator;
