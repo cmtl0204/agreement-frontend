@@ -35,7 +35,6 @@ export class FinancingComponent implements OnInit {
   protected id: string = RoutesEnum.NEW
   private formErrors: string[] = [];
 
-
   /** Foreign Keys **/
   @Input() internalInstitutions: CatalogueModel[] = [];
   @Input() externalInstitutions: CatalogueModel[] = [];
@@ -119,7 +118,7 @@ export class FinancingComponent implements OnInit {
 
       this.financingsField.push(financings);
       this.financingForm.reset();
-      
+
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -159,17 +158,17 @@ export class FinancingComponent implements OnInit {
     }
 
     this.formErrorsOutput.emit(this.formErrors);
-    
+
   }
 
   validateFinancings(): boolean {
     this.formErrors = [];
-    
+
       if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
       if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
-    
+
     return this.form.valid && this.formErrors.length === 0;
   }
 

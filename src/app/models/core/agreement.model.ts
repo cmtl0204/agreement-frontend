@@ -3,7 +3,7 @@ import {
   CatalogueModel,
   ExternalInstitutionModel,
   FinancingModel,
-  InternalInstitutionModel
+  InternalInstitutionModel, ObligationModel
 } from "@models/core";
 
 export interface AgreementModel {
@@ -32,4 +32,5 @@ export interface AgreementModel {
   externalInstitutions?: ExternalInstitutionModel[];
   internalInstitutions?: InternalInstitutionModel[];
   financings?: FinancingModel[];
+  obligations?: ObligationModel[];
 }

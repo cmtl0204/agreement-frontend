@@ -88,7 +88,7 @@ export class AgreementListComponent {
     return [
       {
         id: IdButtonActionEnum.UPDATE,
-        label: LabelButtonActionEnum.UPDATE,
+        label: LabelButtonActionEnum.VIEW,
         icon: IconButtonActionEnum.UPDATE,
         command: () => {
           if (this.selectedItem?.id) this.redirectViewAgreement(this.selectedItem.id);
@@ -136,8 +136,10 @@ export class AgreementListComponent {
   redirectEditForm(id: string) {
     this.router.navigate(['/core/international-supervisor/agreements', id]);
   }
+
   redirectViewAgreement(id: string) {
-    this.router.navigate(['/core/international-supervisor/agreements', id]);
+    // this.router.navigate(['/core/agreements/view', id]);
+    this.router.navigate(['/core/agreements/view']); //review
   }
 
   remove(id: string) {
