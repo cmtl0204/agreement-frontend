@@ -12,7 +12,7 @@ import {CatalogueTypeEnum} from "@shared/enums";
   providedIn: 'root'
 })
 export class AgreementsHttpService {
-  private readonly API_URL = `${environment.API_URL}/catalogues`;
+  private readonly API_URL = `${environment.API_URL}/agreements`;
   private readonly httpClient = inject(HttpClient);
   private readonly messageService = inject(MessageService);
 
@@ -42,12 +42,26 @@ export class AgreementsHttpService {
       })
     );
   }
+  findAllAgreements(): Observable<AgreementModel[]> {
+    const url = this.API_URL;
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        console.log(response);
+        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
+        // sessionStorage.setItem('catalogues', JSON.stringify(response));
+        return response.data;
+      })
+    );
+  }
 
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 
-    return this.httpClient.get<ServerResponse>(url).pipe(
-      map(response => response.data)
+    return this.httpClient.get(url).pipe(
+      map(response =>{ 
+        console.log(response)
+        return response
+  })
     );
   }
 

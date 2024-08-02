@@ -104,8 +104,6 @@ patchValueForm(){
     externalInstitutions.forEach((item:ExternalInstitutionModel)=>{
     const externalInstitution = this.formBuilder.group({
       name:[item.name],
-      position: [item.position],
-      unit: [item.unit],
       personType:[item.personType]
     });
     this.externalInstitutions.push(externalInstitution)
@@ -114,9 +112,7 @@ patchValueForm(){
     internalInstitutions.forEach((item:InternalInstitutionModel)=>{
       const internalInstitution = this.formBuilder.group({
         personType: [item.personType],
-        position: [item.position],
         name: [item.name],
-        unit: [item.unit],
       });
       this.internalInstitutions.push(internalInstitution);
     });
@@ -134,10 +130,10 @@ patchValueForm(){
   buildInternalInstitutionsForm() {
     this.internalInstitutionForm = this.formBuilder.group({
       position: ['', Validators.required],
-      personType: ['', [Validators.required]], 
+      personType: ['', [Validators.required]],
       name: ['Ministerio de Turismo'],
       unit: ['Unidad'],
-    
+
 
     });
   }
@@ -247,7 +243,7 @@ patchValueForm(){
             this.internalInstitutionForm.markAllAsTouched();
             this.messageDialogService.fieldErrors('Debe agregar al menos una institución interna.')
         }
-       
+
     }
 }
 

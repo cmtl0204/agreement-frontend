@@ -99,6 +99,7 @@ export class AppearerComponent implements OnInit {
   patchValueForm() {
     console.log(this.formInput);
     this.agreement = this.formInput;
+<<<<<<< HEAD
     this.agreement.externalInstitutions = this.agreement.externalInstitutions || [];
     this.agreement.externalInstitutions.forEach(inst => {
       inst.externalInstitutionDetails = inst.externalInstitutionDetails || [];
@@ -108,6 +109,8 @@ export class AppearerComponent implements OnInit {
     inst.internalInstitutionDetails = inst.internalInstitutionDetails || [];
   });
 
+=======
+>>>>>>> main
     this.form.patchValue(this.formInput);
   }
 
@@ -132,6 +135,7 @@ export class AppearerComponent implements OnInit {
     this.internalInstitutionForm = this.formBuilder.group({
       name: ['Ministerio de Turismo'],
       personType: [null, [Validators.required]],
+<<<<<<< HEAD
     });
   }
 
@@ -139,6 +143,8 @@ export class AppearerComponent implements OnInit {
     this.internalInstitutionDetailForm = this.formBuilder.group({
       position: [null, [Validators.required]],
       unit: ['Unidad'],
+=======
+>>>>>>> main
     });
   }
 
@@ -153,6 +159,13 @@ export class AppearerComponent implements OnInit {
     this.externalInstitutionDetailForm = this.formBuilder.group({
       position: [null, [Validators.required]],
       unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
+    });
+  }
+
+  buildInternalInstitutionDetailForm() {
+    this.internalInstitutionDetailForm = this.formBuilder.group({
+      position: [null, [Validators.required]],
+      unit: ['Unidad'],
     });
   }
 
@@ -227,6 +240,7 @@ export class AppearerComponent implements OnInit {
 
   /** add array **/
   addInternalInstitution() {
+<<<<<<< HEAD
     if (this.validateInternalInstitutionForm()) {
       if (this.agreement.internalInstitutions) {
         this.agreement.internalInstitutions.push(this.internalInstitutionForm.value);
@@ -239,6 +253,16 @@ export class AppearerComponent implements OnInit {
       this.addInternalInstitutionDetail();
   
       this.internalInstitutionForm.reset();
+=======
+    if (this.validateInternalInstitutionsForm()) {
+      this.agreement.internalInstitutions = [this.internalInstitutionForm.value];
+
+      if (this.agreement?.internalInstitutions) {
+        this.agreement.internalInstitutions[0].internalInstitutionDetails = [this.internalInstitutionDetailForm.value];
+      }
+
+      this.form.patchValue(this.agreement);
+>>>>>>> main
     } else {
       this.internalInstitutionForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -265,6 +289,10 @@ export class AppearerComponent implements OnInit {
 
   addExternalInstitution() {
     if (this.validateExternalInstitutionForm()) {
+<<<<<<< HEAD
+=======
+      console.log(this.agreement.externalInstitutions);
+>>>>>>> main
       if (this.agreement.externalInstitutions) {
         this.agreement.externalInstitutions.push(this.externalInstitutionForm.value);
       } else {
@@ -330,6 +358,33 @@ export class AppearerComponent implements OnInit {
     this.index = index;
   }
 
+  addExternalInstitutionDetail() {
+    if (true) {
+      if (this.agreement?.externalInstitutions) {
+        if (this.agreement?.externalInstitutions[this.index].externalInstitutionDetails) {
+          this.agreement.externalInstitutions[this.index].externalInstitutionDetails.push(this.externalInstitutionDetailForm.value);
+        } else {
+          this.agreement.externalInstitutions[this.index].externalInstitutionDetails = [this.externalInstitutionDetailForm.value];
+        }
+      }
+
+      this.form.patchValue(this.agreement);
+      console.log(this.agreement);
+      console.log(this.form.value);
+
+      this.isVisibleExternalInstitutionDetailForm = false;
+      this.externalInstitutionDetailForm.reset();
+    } else {
+      this.externalInstitutionDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  showExternalInstitutionDetailModal(index: number) {
+    this.isVisibleExternalInstitutionDetailForm = true;
+    this.index = index;
+  }
+
   /** delete array**/
   deleteExternalInstitution(index: number) {
     (this.form.get('externalInstitutions') as FormArray).removeAt(index);
@@ -360,6 +415,7 @@ export class AppearerComponent implements OnInit {
     this.form.patchValue(this.agreement);
   }
 
+<<<<<<< HEAD
   deleteExternalInstitutionDetail(institution: ExternalInstitutionModel, detail: any) {
     const index = institution.externalInstitutionDetails.indexOf(detail);
     if (index !== -1) {
@@ -368,10 +424,17 @@ export class AppearerComponent implements OnInit {
     }
   }
   
+=======
+>>>>>>> main
   validateExternalInstitutionForm(): boolean {
     this.formErrors = [];
     
     if (this.externalInstitutionNameField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.name);
+<<<<<<< HEAD
+=======
+    // if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
+    // if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
+>>>>>>> main
     if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
     
     return this.externalInstitutionForm.valid && this.formErrors.length === 0;
@@ -389,6 +452,10 @@ export class AppearerComponent implements OnInit {
   validateInternalInstitutionForm() {
     this.formErrors = [];
 
+<<<<<<< HEAD
+=======
+    if (this.internalInstitutionDetailPositionField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.position);
+>>>>>>> main
     if (this.internalInstitutionPersonTypeField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.personType);
 
     return this.internalInstitutionForm.valid && this.formErrors.length === 0;
@@ -444,7 +511,15 @@ export class AppearerComponent implements OnInit {
   get externalInstitutionsField(): FormArray {
     return this.form.get('externalInstitutions') as FormArray;
   }
+<<<<<<< HEAD
   
+=======
+
+  get internalInstitutionDetailPositionField(): AbstractControl {
+    return this.internalInstitutionDetailForm.controls['position'];
+  }
+
+>>>>>>> main
   get internalInstitutionPersonTypeField(): AbstractControl {
     return this.internalInstitutionForm.controls['personType'];
   }
@@ -456,7 +531,19 @@ export class AppearerComponent implements OnInit {
   get externalInstitutionNameField(): AbstractControl {
     return this.externalInstitutionForm.controls['name'];
   }
+<<<<<<< HEAD
   
+=======
+
+  get externalInstitutionDetailUnitField(): AbstractControl {
+    return this.externalInstitutionDetailForm.controls['unit'];
+  }
+
+  get externalInstitutionDetailPositionField(): AbstractControl {
+    return this.externalInstitutionDetailForm.controls['position'];
+  }
+
+>>>>>>> main
   get externalInstitutionPersonTypeField(): AbstractControl {
     return this.externalInstitutionForm.controls['personType'];
   }

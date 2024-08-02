@@ -29,11 +29,11 @@ export class FinancingComponent implements OnInit {
 
   /** Form **/
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   protected id: string = RoutesEnum.NEW
   private formErrors: string[] = [];
-
 
   /** Foreign Keys **/
   @Input() internalInstitutions: CatalogueModel[] = [];
@@ -59,17 +59,13 @@ export class FinancingComponent implements OnInit {
     this.patchValueForm();
   }
 
-  save() {
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
-  }
 
   patchValueForm() {
     const { financings } = this.formInput;
 
     if (financings) {
       financings.forEach((value: FinancingModel) => {
-        this.financings.push(this.formBuilder.group(value))
+        this.financingsField.push(this.formBuilder.group(value))
       });
     }
   }
@@ -81,11 +77,12 @@ export class FinancingComponent implements OnInit {
       financings: this.formBuilder.array([])
     });
 
+    this.checkValueChanges();
   }
 
   buildFinancingForm() {
     this.financingForm = this.formBuilder.group({
-      model: [null, [Validators.required]],
+      institutionName: [null, [Validators.required]],
       budget: [null, [Validators.required, Validators.pattern(/^\d+(\.\d{2,2})?$/)]],
       paymentMethod: [null, [Validators.required, Validators.pattern(onlyLetters())]],
       source: [null, [Validators.required, Validators.pattern(onlyLetters())]],
@@ -95,7 +92,7 @@ export class FinancingComponent implements OnInit {
   buildFinancingsColumns() {
     this.financingsColumns = [
       {
-        field: 'model', header: FinancingsFormEnum.model
+        field: 'institutionName', header: FinancingsFormEnum.model
       },
       {
         field: 'budget', header: FinancingsFormEnum.budget
@@ -111,17 +108,17 @@ export class FinancingComponent implements OnInit {
 
   /** add array **/
   addFinancing() {
-    if (this.validateForm()) {
+    if (this.validateFinancings()) {
       const financings = this.formBuilder.group({
-        model: [this.financingForm.value.model],
+        institutionName: [this.financingForm.value.institutionName],
         budget: [this.financingForm.value.budget],
         paymentMethod: [this.financingForm.value.paymentMethod],
         source: [this.financingForm.value.source],
       });
 
-      this.financings.push(financings);
+      this.financingsField.push(financings);
       this.financingForm.reset();
-      
+
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -130,7 +127,7 @@ export class FinancingComponent implements OnInit {
 
   /** delete array**/
   deleteFinancing(index: number) {
-    this.financings.removeAt(index);
+    this.financingsField.removeAt(index);
   }
 
   loadCombineInstitutions() {
@@ -138,68 +135,70 @@ export class FinancingComponent implements OnInit {
     console.log(this.combinedInstitutions)
   }
 
-  validateForm(): boolean {
+  validateForm() {
     this.formErrors = [];
 
     if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
 
     if (this.formErrors.length === 0) {
-      if (this.modelField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
       if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
     }
     if (!this.isFinancingField.value) {
-      if (this.financings.length > 0) {
-        this.financings.clear();
+      if (this.financingsField.length > 0) {
+        this.financingsField.clear();
       }
-      this.save();
       this.formErrors = [];
     } else {
-      if (this.financings.length > 0) {
-        this.save();
+      if (this.financingsField.length > 0) {
         this.formErrors = [];
       }
     }
+
+    this.formErrorsOutput.emit(this.formErrors);
+
+  }
+
+  validateFinancings(): boolean {
+    this.formErrors = [];
+
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+
     return this.form.valid && this.formErrors.length === 0;
   }
 
-  onSubmit(): void {
-    if (this.validateForm()) {
-      if (this.financings.length === 0 && this.isFinancingField.value) {
-        this.messageDialogService.fieldErrors(['Debe añadir']);
-      } else {
-        this.save();
-      }
-    } else {
-      this.form.markAllAsTouched();
-      this.financingForm.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
   checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
+    });
+
     this.isFinancingField.valueChanges.subscribe(value => {
       if (value) {
-        this.modelField.setValidators(Validators.required);
+        this.institutionNameField.setValidators(Validators.required);
         this.budgetField.setValidators(Validators.required);
         this.paymentMethodField.setValidators(Validators.required);
         this.sourceField.setValidators(Validators.required);
       } else if (!value) {
         this.financingForm.reset();
-        this.modelField.clearValidators();
+        this.institutionNameField.clearValidators();
         this.budgetField.clearValidators();
         this.paymentMethodField.clearValidators();
         this.sourceField.clearValidators();
       }
-      this.modelField.updateValueAndValidity();
+      this.institutionNameField.updateValueAndValidity();
       this.budgetField.updateValueAndValidity();
       this.paymentMethodField.updateValueAndValidity();
       this.sourceField.updateValueAndValidity();
     });
   }
 
-  get financings(): FormArray {
+  get financingsField(): FormArray {
     return this.form.get('financings') as FormArray;
   }
 
@@ -207,8 +206,8 @@ export class FinancingComponent implements OnInit {
     return this.form.controls['isFinancing'];
   }
 
-  get modelField(): AbstractControl {
-    return this.financingForm.controls['model']
+  get institutionNameField(): AbstractControl {
+    return this.financingForm.controls['institutionName']
   }
 
   get budgetField(): AbstractControl {

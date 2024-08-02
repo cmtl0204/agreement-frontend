@@ -1,239 +1,172 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormArray, AbstractControl, Form, FormControl} from '@angular/forms';
-import {CatalogueModel, ObligationModel} from '@models/core';
-import {AuthService, AuthHttpService} from '@servicesApp/auth';
-import {CoreService, MessageDialogService, RoutesService} from '@servicesApp/core';
+import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl} from '@angular/forms';
+import {AgreementModel, CatalogueModel, ExternalInstitutionModel, InternalInstitutionModel} from '@models/core';
+import {AuthService} from '@servicesApp/auth';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
   SkeletonEnum,
   RoutesEnum,
   ExternalInstitutionsObligations,
   ObligationsMintur,
-  SeverityButtonActionEnum
+  SeverityButtonActionEnum,
+  CatalogueTypeEnum, IconButtonActionEnum, ExternalInstitutionsFormEnum
 } from '@shared/enums';
-import {PrimeIcons, MessageService} from 'primeng/api';
+import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-obligation',
   templateUrl: './obligation.component.html',
-  styleUrl: './obligation.component.scss'
+  styleUrls: ['./obligation.component.scss']
 })
 export class ObligationComponent implements OnInit {
-
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
-  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
-  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  institutions = [];
-  @Input({required: true}) formInput!: any;
-
-  protected obligationType: CatalogueModel[] = [];
-  protected obligationMintur: CatalogueModel[] = [];
-  protected readonly authService = inject(AuthService);
-  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
 
-  displayModal: boolean = false;
-  displayObligationsModal: boolean = false;
-  showObligationsTable: boolean = false;
-  selectedObligationTypes: any[] = [];
-  selectedInstitution: any = null;
-  filteredObligations: any[] = [];
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
+  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
+  @Input({required: true}) formInput!: AgreementModel;
 
-  id: string = RoutesEnum.NEW
-  protected obligationForm!: FormGroup;
-  protected obligationTypeForm!: FormGroup;
-  protected form!: FormGroup;
-  protected formMintur!: FormGroup;
-  private formErrors: string[] = [];
-  @Input() internalInstitutions: CatalogueModel[] = [];
-  @Input() externalInstitutions: CatalogueModel[] = [];
-  protected obligationInstitutions: CatalogueModel[] = [];
-  protected readonly ObligationsMintur = ObligationsMintur;
-  protected readonly ExternalInstitutionsObligations = ExternalInstitutionsObligations;
+  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly coreService = inject(CoreService);
+  protected obligationTypes: CatalogueModel[] = [];
+  protected institutions: any[] = [];
+
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
+  protected form!: FormGroup;
+  protected obligationForm!: FormGroup;
+  protected obligationDetailForm!: FormGroup;
+  protected agreement!: AgreementModel;
+  protected index: number = -1;
+  protected isVisibleObligationDetailForm: boolean = false;
 
   constructor() {
     this.buildForm();
-    this.buildObligationTypeForm();
     this.buildObligationForm();
-    this.buildInstitutionalObligationForm();
+    this.buildObligationDetailForm();
   }
 
   ngOnInit(): void {
-    /* Load Foreign Keys*/
     this.loadObligationTypes();
-    this.loadMintur();
-    // this.patchValueForm();
-    this.loadObligationInstitutions();
+    this.loadInstitutions();
+    this.patchValueForm();
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      obligationTypes: this.formBuilder.array([this.obligationTypeForm])
+      obligations: this.formBuilder.array([])
     });
-  }
 
-  buildObligationTypeForm() {
-    this.obligationTypeForm = this.formBuilder.group({
-      obligations: [this.formBuilder.array([]), [Validators.required]],
-      institutionalObligations: [this.formBuilder.array([]), [Validators.required]],
-    });
+    this.checkValueChanges();
   }
 
   buildObligationForm() {
     this.obligationForm = this.formBuilder.group({
+      institutionName: [null, [Validators.required]],
+      type: [null, [Validators.required]],
+    });
+  }
+
+  buildObligationDetailForm() {
+    this.obligationDetailForm = this.formBuilder.group({
       description: [null, [Validators.required]],
-      model: [null, [Validators.required]],
     });
-  }
-
-  buildInstitutionalObligationForm() {
-    this.obligationForm = this.formBuilder.group({
-      model: [null, [Validators.required]],
-      obligationType: [null, [Validators.required]],
-    });
-  }
-
-  addObligation(): void {
-    if (this.obligationForm.valid) {
-      const obligation = this.formBuilder.group({
-        model: [this.obligationForm.value.model, [Validators.required]],
-        description: [this.obligationForm.value.description, [Validators.required]],
-      });
-
-      this.obligationsField.push(obligation);
-      this.obligationForm.reset();
-      this.closeModal();
-    }else{
-      this.obligationForm.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  deleteObligation(index: number) {
-    this.obligationsField.removeAt(index);
-  }
-
-  validateForm(): boolean {
-    this.formErrors = [];
-    if (this.modelField.invalid) this.formErrors.push(ExternalInstitutionsObligations.positionName);
-    if (this.descriptionField.invalid) this.formErrors.push(ExternalInstitutionsObligations.obligations);
-    return this.form.valid && this.formErrors.length === 0;
-  }
-
-  openModal(institutionName: string) {
-    this.obligationForm.reset();
-    this.obligationForm.patchValue({model: institutionName});
-    this.displayModal = true;
-  }
-
-  closeModal() {
-    this.displayModal = false;
-  }
-
-  addObligationAndCloseModal() {
-    if (this.obligationForm.invalid) {
-      return;
-    }
-    this.obligationsField.push(this.createObligation(this.obligationForm.value.model, this.obligationForm.value.description));
-    this.closeModal();
-  }
-
-  /* Load Foreign Keys  */
-  loadExternalInstitutions() {
-    /* this.externalInstitutions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_MODEL); */
-
-  }
-
-  loadObligationTypes() {
-    this.obligationType = [
-      {name: 'obligacion mintur'},
-      {name: 'obligacion contraparte'},
-      {name: 'obligacion conjunta'}
-    ]
-  }
-
-  loadMintur() {
-    this.obligationMintur = [
-      {name: 'Mintur'}
-    ]
-  }
-
-  loadObligationInstitutions() {
-    this.obligationInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value);
-    console.log(this.form.value)
   }
 
   patchValueForm() {
-    const {obligations} = this.formInput;
-    if (obligations) {
-      obligations.forEach((value: ObligationModel) => {
-        this.obligationsField.push(this.formBuilder.group(value))
+    this.agreement = this.formInput;
+  }
+
+  checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(this.agreement);
+    });
+  }
+
+  loadObligationTypes() {
+    this.obligationTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_TYPE);
+  }
+
+  loadInstitutions() {
+    if (this.formInput.internalInstitutions && this.formInput.externalInstitutions) {
+      this.institutions = [];
+
+      this.formInput.internalInstitutions.forEach((institution) => {
+        this.institutions.push(institution);
+      });
+
+      this.formInput.externalInstitutions.forEach((institution) => {
+        this.institutions.push(institution);
       });
     }
   }
 
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
+  addObligation() {
+    if (this.agreement.obligations) {
+      this.agreement.obligations.push(this.obligationForm.value);
     } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
+      this.agreement.obligations = [this.obligationForm.value];
     }
-  }
 
-  addMinturObligation(model: any, description: string): void {
-    if (description.trim() === '') {
-      return;
+    const index = this.agreement.obligations.length - 1;
+
+    if (this.agreement.obligations[index].obligationDetails) {
+      this.agreement.obligations[index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
+    } else {
+      this.agreement.obligations[index].obligationDetails = [this.obligationDetailDescriptionField.value];
     }
-    this.obligationsField.push(this.createObligation(model.name, description));
+
+    this.form.patchValue(this.agreement);
+
+    this.obligationForm.reset();
+    this.obligationDetailDescriptionField.reset();
   }
 
-  createObligation(model: string, description: string): FormGroup {
-    return this.formBuilder.group({
-      model: [model, Validators.required],
-      description: [description, Validators.required],
-    });
+  addObligationDetail() {
+    if (this.agreement.obligations) {
+      if (this.agreement.obligations[this.index].obligationDetails) {
+        this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
+      } else {
+        this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
+      }
+    }
+
+    this.form.patchValue(this.agreement);
+
+    this.obligationForm.reset();
+    this.obligationDetailDescriptionField.reset();
+
+    this.isVisibleObligationDetailForm = false;
   }
 
-  onObligationTypesChange(selectedObligations: any[]) {
-    const obligationTypesArray = this.form.get('obligationTypes') as FormArray;
-    obligationTypesArray.clear();
-    selectedObligations.forEach(obligation => {
-      obligationTypesArray.push(new FormControl(obligation));
-    });
+  deleteObligation(index: number) {
+    this.agreement.obligations?.splice(index, 1);
+    this.form.patchValue(this.agreement);
   }
 
-  addObligationForInstitution(institution: CatalogueModel, description: string, save: boolean = true) {
-    const obligationsArray = this.form.get('obligations') as FormArray;
-    const newObligation = this.formBuilder.group({
-      model: [institution.name, Validators.required],
-      description: [description, Validators.required]
-    });
-    obligationsArray.push(newObligation);
+  showObligationDetailModal(index: number) {
+    this.isVisibleObligationDetailForm = true;
+    this.index = index;
   }
 
   get obligationsField(): FormArray {
-    return this.obligationTypeForm.get('obligations') as FormArray;
+    return this.form.get('obligations') as FormArray;
   }
 
-  get type(): FormArray {
-    return this.form.get('type') as FormArray;
+  get obligationInstitutionNameField(): AbstractControl {
+    return this.obligationForm.controls['institutionName'];
   }
 
-  get modelField(): AbstractControl {
-    return this.obligationForm.controls['model'];
+  get obligationTypeField(): AbstractControl {
+    return this.obligationForm.controls['type'];
   }
 
-  get descriptionField(): AbstractControl {
-    return this.obligationForm.controls['description'];
+  get obligationDetailDescriptionField(): AbstractControl {
+    return this.obligationDetailForm.controls['description'];
   }
+
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
 }

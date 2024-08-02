@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {AgreementModel} from '@models/core';
-import { AdministratorFormEnum} from '@shared/enums';
+import {AdministratorFormEnum, SkeletonEnum} from '@shared/enums';
+import {PrimeIcons} from "primeng/api";
 
 @Component({
   selector: 'app-agreement-administrator',
@@ -16,4 +17,7 @@ export class AgreementAdministratorComponent {
 
   ) {
   }
+
+    protected readonly SkeletonEnum = SkeletonEnum;
+  protected readonly PrimeIcons = PrimeIcons;
 }

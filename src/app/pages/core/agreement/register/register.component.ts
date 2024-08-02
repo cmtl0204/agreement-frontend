@@ -106,7 +106,6 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-
     if (this.validateForms) {
 
     } else {
