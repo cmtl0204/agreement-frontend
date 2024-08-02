@@ -47,14 +47,8 @@ export class AppearerComponent implements OnInit {
   protected agreement!: AgreementModel;
   protected internalInstitutionForm!: FormGroup;
   protected externalInstitutionForm!: FormGroup;
-<<<<<<< HEAD
   protected internalInstitutionDetailForm!: FormGroup;
   protected externalInstitutionDetailForm!: FormGroup;
-=======
-  protected externalInstitutionDetailForm!: FormGroup;
-
-  private formErrors: string[] = [];
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
   protected externalInstitutionsColumns: ColumnModel[] = [];
   protected internalInstitutionsColumns: ColumnModel[] = [];
   private formErrors: string[] = [];
@@ -76,13 +70,9 @@ export class AppearerComponent implements OnInit {
   constructor() {
     this.buildForm();
     this.buildExternalInstitutionForm();
-<<<<<<< HEAD
     this.buildInternalInstitutionForm();
     this.buildExternalInstitutionDetailForm();
     this.buildInternalInstitutionDetailForm();
-=======
-    this.buildExternalInstitutionDetailForm();
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
     this.buildExternalInstitutionsColumns();
     this.buildInternalInstitutionsColumns();
   }
@@ -127,7 +117,6 @@ export class AppearerComponent implements OnInit {
       this.validateForm();
     });
   }
-<<<<<<< HEAD
 
   validateForm() {
     this.formErrors = [];
@@ -167,9 +156,6 @@ export class AppearerComponent implements OnInit {
     });
   }
 
-=======
-  
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
   buildInternalInstitutionsColumns() {
     this.internalInstitutionsColumns = [
       {
@@ -278,7 +264,6 @@ export class AppearerComponent implements OnInit {
   }
 
   addExternalInstitution() {
-<<<<<<< HEAD
     if (this.validateExternalInstitutionForm()) {
       if (this.agreement.externalInstitutions) {
         this.agreement.externalInstitutions.push(this.externalInstitutionForm.value);
@@ -288,16 +273,6 @@ export class AppearerComponent implements OnInit {
 
       this.form.patchValue(this.agreement);
 
-=======
-    if (this.validateExternalInstitutionsForm()) {
-      const externalInstitution = this.formBuilder.group({
-        personType: [this.externalInstitutionForm.value.personType],
-        name: [this.externalInstitutionForm.value.name],
-        externalInstitutionDetails: this.formBuilder.array([])
-      });
-      this.externalInstitutionsField.push(externalInstitution);
-      this.addExternalInstitutionDetail(this.externalInstitutionsField.length - 1);
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
       this.externalInstitutionForm.reset();
     } else {
       this.externalInstitutionForm.markAllAsTouched();
@@ -395,7 +370,6 @@ export class AppearerComponent implements OnInit {
   
   validateExternalInstitutionForm(): boolean {
     this.formErrors = [];
-<<<<<<< HEAD
     
     if (this.externalInstitutionNameField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.name);
     if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
@@ -413,26 +387,6 @@ export class AppearerComponent implements OnInit {
   }
 
   validateInternalInstitutionForm() {
-=======
-  
-    if (this.externalInstitutionNameField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.name);
-    if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
-  
-    return this.externalInstitutionForm.valid && this.formErrors.length === 0;
-  }
-  
-  validateExternalInstitutionDetailsForm(): boolean {
-    this.formErrors = [];
-  
-    if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
-    if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
-  
-    return this.externalInstitutionDetailForm.valid && this.formErrors.length === 0;
-  }
-  
-
-  validateInternalInstitutionsForm() {
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
     this.formErrors = [];
 
     if (this.internalInstitutionPersonTypeField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.personType);
@@ -490,19 +444,7 @@ export class AppearerComponent implements OnInit {
   get externalInstitutionsField(): FormArray {
     return this.form.get('externalInstitutions') as FormArray;
   }
-<<<<<<< HEAD
   
-=======
-
-  get externalInstitutionDetailsField(): FormArray {
-    return this.externalInstitutionForm.get('externalInstitutionDetails') as FormArray;
-  }
-
-  get internalInstitutionPositionField(): AbstractControl {
-    return this.internalInstitutionForm.controls['position'];
-  }
-
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
   get internalInstitutionPersonTypeField(): AbstractControl {
     return this.internalInstitutionForm.controls['personType'];
   }
@@ -519,7 +461,6 @@ export class AppearerComponent implements OnInit {
     return this.externalInstitutionForm.controls['personType'];
   }
 
-<<<<<<< HEAD
   get externalInstitutionDetailUnitField(): AbstractControl {
     return this.externalInstitutionDetailForm.controls['unit'];
   }
@@ -528,16 +469,6 @@ export class AppearerComponent implements OnInit {
     return this.externalInstitutionDetailForm.controls['position'];
   }
 
-=======
-
-  get externalInstitutionDetailUnitField(): AbstractControl {
-    return this.externalInstitutionDetailForm.controls['unit'];
-  }
-  
-  get externalInstitutionDetailPositionField(): AbstractControl {
-    return this.externalInstitutionDetailForm.controls['position'];
-  }
->>>>>>> 0ebc4fc9a08c4f49ade26c2c1dafb87f371ac66c
 }
 
 
