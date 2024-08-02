@@ -1,82 +1,108 @@
 <div class="grid">
   <div class="col-12">
-    @if (coreService.isLoading) {
-      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-    }
+    <form [formGroup]="obligationForm" class="p-fluid">
+      <div>
+        <p-dropdown
+          id="type"
+          formControlName="type"
+          dataKey="id"
+          [options]="obligationTypes"
+          placeholder="Seleccione"
+          [filter]="false">
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
 
-    @if (!coreService.isLoading) {
-      <p-toolbar>
-        <div class="p-toolbar-group-left">
-          <app-header-form
-            label="Registro"
-            [icon]="PrimeIcons.PENCIL"/>
-        </div>
-
-        <div class="p-toolbar-group-right">
-          <app-form-button-action
-            (submit)="onSubmit()"
-            (cancel)="prevOutput.emit(true)"
-            labelSubmitButton="Siguiente"
-            labelCancelButton="Atrás"
-            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-            [isVisibleCancelButton]="true"
-          />
-        </div>
-      </p-toolbar>
-      <div class="p-fluid">
-        @for (type of obligationType; track $index) {
-        <div>
-          <p-radioButton
-            name="obligationType"
-            [value]="type.name || ''"
-            [(ngModel)]="selectedObligationType"
-            (onClick)="onObligationTypeChange(type.name || '')"
-            label="{{ type.name || 'Unknown' }}"
-          ></p-radioButton>
-        </div>
+      @if (obligationTypeField.value && (obligationTypeField.value.code === '1' || obligationTypeField.value.code === '2')) {
+        <p-dropdown
+          id="institutionName"
+          formControlName="institutionName"
+          dataKey="id"
+          [options]="institutions"
+          placeholder="Seleccione"
+          optionValue="name"
+          [filter]="false">
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
       }
-      
-        @if (isContraparteOrConjuntaSelected()) {
+
+      @if (obligationTypeField.value && obligationTypeField.value.code === '3') {
         <p-multiSelect
           [options]="institutions"
-          [(ngModel)]="selectedInstitutions"
+          formControlName="institutionName"
           optionLabel="name"
-          placeholder="Select Institutions"
-          (ngModelChange)="onInstitutionsChange($event)">
+          optionValue="name"
+          placeholder="Select Institutions">
         </p-multiSelect>
       }
 
-        <p-table [value]="filteredObligations" dataKey="id">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Entidad</th>
-              <th>Tipo de Obligación</th>
-              <th>Descripción</th>
-              <th>Acciones</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-obligation let-rowIndex="rowIndex">
-            <tr>
-              <td>{{ obligation.get('institutionName')?.value }}</td>
-              <td>{{ obligation.get('obligationType')?.value }}</td>
-              <td>{{ obligation.get('description')?.value }}</td>
-              <td>
-                <p-button icon="pi pi-trash" class="p-button-danger" (click)="deleteObligation(rowIndex)"></p-button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-        
-        <div class="p-field p-grid">
-          <div class="p-col-12 p-md-4">
-            <label for="description">Descripción</label>
-            <textarea id="description" [(ngModel)]="description" rows="3" pInputTextarea></textarea>
-          </div>
-          <div class="p-col-12 p-md-2" style="display: flex; align-items: center;">
-            <p-button label="Agregar" icon="pi pi-plus" (click)="addObligation()"></p-button>
-          </div>
-        </div>
+      <form [formGroup]="obligationDetailForm">
+        <textarea pInputTextarea formControlName="description"></textarea>
+      </form>
+
+      <div>
+        <p-button label="Agregar" (click)="addObligation()"></p-button>
       </div>
+
+    </form>
+
+    @if (agreement.obligations) {
+      <p-table [value]="agreement.obligations" dataKey="id">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Entidad</th>
+            <th>Tipo de Obligación</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.type.name }}</td>
+            <td>
+              <p-button
+                [icon]="IconButtonActionEnum.DELETE"
+                [severity]="SeverityButtonActionEnum.DELETE"
+                (click)="deleteObligation(rowIndex)"></p-button>
+
+              <p-button
+                [icon]="IconButtonActionEnum.ADD"
+                [severity]="SeverityButtonActionEnum.ADD"
+                (click)="showObligationDetailModal(rowIndex)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     }
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="isVisibleObligationDetailForm"
+  [modal]="true"
+  [style]="{width: '50%'}"
+  header="Gestión de Archivos">
+  <form [formGroup]="obligationDetailForm">
+    <textarea pInputTextarea formControlName="description"></textarea>
+    <p-button label="Agregar" (click)="addObligationDetail()"></p-button>
+  </form>
+</p-dialog>

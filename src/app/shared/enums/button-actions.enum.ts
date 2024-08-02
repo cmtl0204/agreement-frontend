@@ -51,6 +51,7 @@ export enum LabelButtonActionEnum {
 }
 
 export enum IconButtonActionEnum {
+  ADD = 'pi pi-plus',
   CREATE = 'pi pi-plus',
   SYNC = 'pi pi-sync',
   UPDATE = 'pi pi-pencil',
@@ -81,5 +82,6 @@ export enum SeverityButtonActionEnum {
   SAVE = 'primary',
   SYNC = 'info',
   DELETE = 'danger',
+  UPDATE = 'warning',
 }
 
