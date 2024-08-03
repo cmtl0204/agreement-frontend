@@ -2,6 +2,12 @@
   <div class="col-12">
     <form [formGroup]="obligationForm" class="p-fluid">
       <div>
+        <label appLabel
+                 for="internalPosition"
+                 [label]="InstitutionsObligations.institutionObligations"
+                 [required]="obligationTypeField">
+          </label>
+          <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
         <p-dropdown
           id="type"
           formControlName="type"
@@ -16,13 +22,26 @@
           </ng-template>
           <ng-template let-item pTemplate="item">
             <div class="flex align-items-center gap-2">
-              <div>{{ item.name }}</div>
+              <div>{{ item?.name }}</div>
             </div>
           </ng-template>
         </p-dropdown>
+        <small
+            appErrorMessage
+            [errors]="obligationTypeField.errors"
+            [touched]="obligationTypeField.touched"
+            [dirty]="obligationTypeField.dirty">
+          </small>
       </div>
 @if (obligationTypeField.value && (obligationTypeField.value.code === '1' || obligationTypeField.value.code === '2')) {
-      <div>
+      <ng-container>
+        <label appLabel
+        for="internalPosition"
+        [label]="InstitutionsObligations.institutionName"
+        [required]="obligationInstitutionNameField">
+ </label>
+ <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
         <p-dropdown
           id="institutionName"
           formControlName="institutionName"
@@ -38,15 +57,19 @@
           </ng-template>
           <ng-template let-item pTemplate="item">
             <div class="flex align-items-center gap-2">
-              <div>{{ item.name }}</div>
+              <div>{{ item?.name }}</div>
             </div>
           </ng-template>
         </p-dropdown>
-      </div>
-    }
-
+        <small
+        appErrorMessage
+        [errors]="obligationInstitutionNameField.errors"
+        [touched]="obligationInstitutionNameField.touched"
+        [dirty]="obligationInstitutionNameField.dirty">
+      </small>
+      </ng-container>}
 @if (obligationTypeField.value && obligationTypeField.value.code === '3') {
-      <div>
+      <ng-container>
         <p-multiSelect
           [options]="institutions"
           formControlName="institutionName"
@@ -54,10 +77,16 @@
           optionValue="name"
           placeholder="Select Institutions">
         </p-multiSelect>
-      </div>
-    }
+      </ng-container>}
 
       <form [formGroup]="obligationDetailForm">
+        
+        <label>
+        Description  
+      </label>
+        
+          <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+          
         <textarea pInputTextarea formControlName="description"></textarea>
       </form>
 
@@ -65,9 +94,9 @@
         <p-button label="Agregar" (click)="addObligation()"></p-button>
       </div>
     </form>
-@for (obligationGroup of agreement.obligations; track $index) {
-    <div>
-      <p-table [value]="[obligationGroup]" [rowGroupMode]="'subheader'" groupField="institutionName" dataKey="institutionName" expandableRowGroups="true">
+@if (agreement.obligations && agreement.obligations.length > 0) {
+    <ng-container>
+      <p-table [value]="agreement.obligations" dataKey="id">
         <ng-template pTemplate="header">
           <tr>
             <th>Entidad</th>
@@ -76,21 +105,13 @@
             <th>Acciones</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="groupheader" let-obligation let-rowIndex="rowIndex" let-expanded="expanded">
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
           <tr>
-            <td colspan="4">
-              <button type="button" pButton pRipple [pRowToggler]="obligation" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-              {{ obligation?.institutionName }}
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="rowexpansion" let-obligation let-rowIndex="rowIndex">
-          <tr>
-            <td>{{ obligation?.institutionName }}</td>
-            <td>{{ obligation?.type?.name }}</td>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.type?.name }}</td>
             <td>
               <ul>
-                @for (item of obligation?.obligationDetails; track $index) {
+                @for (item of item.obligationDetails; track $index) {
                 <li>{{ item }}</li>}
               </ul>
             </td>
@@ -99,7 +120,6 @@
                 [icon]="IconButtonActionEnum.DELETE"
                 [severity]="SeverityButtonActionEnum.DELETE"
                 (click)="deleteObligation(rowIndex)"></p-button>
-
               <p-button
                 [icon]="IconButtonActionEnum.ADD"
                 [severity]="SeverityButtonActionEnum.ADD"
@@ -108,7 +128,7 @@
           </tr>
         </ng-template>
       </p-table>
-    </div>}
+    </ng-container>}
   </div>
 </div>
 
@@ -116,7 +136,7 @@
   [(visible)]="isVisibleObligationDetailForm"
   [modal]="true"
   [style]="{width: '50%'}"
-  header="Gestión de Archivos">
+  header="Agregar Detalle de Obligación">
   <form [formGroup]="obligationDetailForm">
     <textarea pInputTextarea formControlName="description"></textarea>
     <p-button label="Agregar" (click)="addObligationDetail()"></p-button>
