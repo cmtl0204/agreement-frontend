@@ -91,16 +91,14 @@ export class ObligationComponent implements OnInit {
   }
 
   loadInstitutions() {
-    if (this.formInput.internalInstitutions && this.formInput.externalInstitutions) {
-      this.institutions = [];
-
-      this.formInput.internalInstitutions.forEach((institution) => {
-        this.institutions.push(institution);
-      });
-
-      this.formInput.externalInstitutions.forEach((institution) => {
-        this.institutions.push(institution);
-      });
+    this.institutions = [];
+    
+    if (this.formInput.internalInstitutions) {
+      this.institutions.push(...this.formInput.internalInstitutions);
+    }
+  
+    if (this.formInput.externalInstitutions) {
+      this.institutions.push(...this.formInput.externalInstitutions);
     }
   }
 
@@ -110,43 +108,34 @@ export class ObligationComponent implements OnInit {
     } else {
       this.agreement.obligations = [this.obligationForm.value];
     }
-
+  
     const index = this.agreement.obligations.length - 1;
-
+  
     if (this.agreement.obligations[index].obligationDetails) {
       this.agreement.obligations[index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
     } else {
       this.agreement.obligations[index].obligationDetails = [this.obligationDetailDescriptionField.value];
     }
-
+  
     this.form.patchValue(this.agreement);
-
     this.obligationForm.reset();
     this.obligationDetailDescriptionField.reset();
+
   }
 
   addObligationDetail() {
-    if (this.agreement.obligations) {
-      if (this.agreement.obligations[this.index].obligationDetails) {
-        this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
-      } else {
-        this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
-      }
-    }
-
-    this.form.patchValue(this.agreement);
-
-    this.obligationForm.reset();
-    this.obligationDetailDescriptionField.reset();
-
+   
+    const obligationDetails = this.obligationsField.at(this.index).get('obligationDetails') as FormArray;   
+    obligationDetails.push(new FormControl(this.obligationDetailDescriptionField.value, Validators.required));   
+    this.obligationDetailDescriptionField.reset();   
     this.isVisibleObligationDetailForm = false;
+
   }
 
   deleteObligation(index: number) {
-    this.agreement.obligations?.splice(index, 1);
-    this.form.patchValue(this.agreement);
+    this.obligationsField.removeAt(index);
   }
-
+  
   showObligationDetailModal(index: number) {
     this.isVisibleObligationDetailForm = true;
     this.index = index;

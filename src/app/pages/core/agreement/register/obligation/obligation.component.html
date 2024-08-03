@@ -11,7 +11,7 @@
           [filter]="false">
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">
-              <div>{{ selectedItem.name }}</div>
+              <div>{{ selectedItem?.name }}</div>
             </div>
           </ng-template>
           <ng-template let-item pTemplate="item">
@@ -21,8 +21,8 @@
           </ng-template>
         </p-dropdown>
       </div>
-
-      @if (obligationTypeField.value && (obligationTypeField.value.code === '1' || obligationTypeField.value.code === '2')) {
+@if (obligationTypeField.value && (obligationTypeField.value.code === '1' || obligationTypeField.value.code === '2')) {
+      <div>
         <p-dropdown
           id="institutionName"
           formControlName="institutionName"
@@ -33,7 +33,7 @@
           [filter]="false">
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">
-              <div>{{ selectedItem.name }}</div>
+              <div>{{ selectedItem?.name }}</div>
             </div>
           </ng-template>
           <ng-template let-item pTemplate="item">
@@ -42,9 +42,11 @@
             </div>
           </ng-template>
         </p-dropdown>
-      }
+      </div>
+    }
 
-      @if (obligationTypeField.value && obligationTypeField.value.code === '3') {
+@if (obligationTypeField.value && obligationTypeField.value.code === '3') {
+      <div>
         <p-multiSelect
           [options]="institutions"
           formControlName="institutionName"
@@ -52,7 +54,8 @@
           optionValue="name"
           placeholder="Select Institutions">
         </p-multiSelect>
-      }
+      </div>
+    }
 
       <form [formGroup]="obligationDetailForm">
         <textarea pInputTextarea formControlName="description"></textarea>
@@ -61,11 +64,10 @@
       <div>
         <p-button label="Agregar" (click)="addObligation()"></p-button>
       </div>
-
     </form>
-
-    @if (agreement.obligations) {
-      <p-table [value]="agreement.obligations" dataKey="id">
+@for (obligationGroup of agreement.obligations; track $index) {
+    <div>
+      <p-table [value]="[obligationGroup]" [rowGroupMode]="'subheader'" groupField="institutionName" dataKey="institutionName" expandableRowGroups="true">
         <ng-template pTemplate="header">
           <tr>
             <th>Entidad</th>
@@ -74,10 +76,24 @@
             <th>Acciones</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+        <ng-template pTemplate="groupheader" let-obligation let-rowIndex="rowIndex" let-expanded="expanded">
           <tr>
-            <td>{{ item.institutionName }}</td>
-            <td>{{ item.type.name }}</td>
+            <td colspan="4">
+              <button type="button" pButton pRipple [pRowToggler]="obligation" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+              {{ obligation?.institutionName }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-obligation let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ obligation?.institutionName }}</td>
+            <td>{{ obligation?.type?.name }}</td>
+            <td>
+              <ul>
+                @for (item of obligation?.obligationDetails; track $index) {
+                <li>{{ item }}</li>}
+              </ul>
+            </td>
             <td>
               <p-button
                 [icon]="IconButtonActionEnum.DELETE"
@@ -92,7 +108,7 @@
           </tr>
         </ng-template>
       </p-table>
-    }
+    </div>}
   </div>
 </div>
 
