@@ -37,7 +37,7 @@
           </small>
         </div>
       </form>
-      
+
       <form [formGroup]="internalInstitutionDetailForm" class="p-fluid grid">
         <!-- internalInstitutions/positionId -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
@@ -84,57 +84,57 @@
           </div>
         }
       </form>
-      
+
       <!-- table internal-->
-      @if (agreement.internalInstitutions && agreement.internalInstitutions.length > 0){
-        <p-table 
-            [value]="agreement.internalInstitutions"
-            sortField="name" 
-            sortMode="single" 
-            dataKey="name" 
-            rowGroupMode="subheader" 
-            groupRowsBy="name" 
-            [tableStyle]="{'min-width': '70rem'}">
-        <ng-template pTemplate="header">
+      @if (agreement.internalInstitutions && agreement.internalInstitutions.length > 0) {
+        <p-table
+          [value]="agreement.internalInstitutions"
+          sortField="name"
+          sortMode="single"
+          dataKey="name"
+          rowGroupMode="subheader"
+          groupRowsBy="name"
+          [tableStyle]="{'min-width': '70rem'}">
+          <ng-template pTemplate="header">
             <tr>
-                <th style="width:20%">Entidad</th>
-                <th style="width:20%">Posición</th>
-                <th style="width:20%">Unidad</th>
-                <th style="width:20%">Acciones</th>
+              <th style="width:20%">Entidad</th>
+              <th style="width:20%">Posición</th>
+              <th style="width:20%">Unidad</th>
+              <th style="width:20%">Acciones</th>
             </tr>
-        </ng-template>
-        <ng-template pTemplate="groupheader" let-institution let-rowIndex="rowIndex" let-expanded="expanded">
+          </ng-template>
+          <ng-template pTemplate="groupheader" let-institution let-rowIndex="rowIndex" let-expanded="expanded">
             <tr>
-                <td colspan="5">
-                    <button 
-                        type="button" 
-                        pButton 
-                        pRipple 
-                        [pRowToggler]="institution" 
-                        class="p-button-text p-button-rounded p-button-plain mr-2" 
-                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
-                    </button>
-                    <span class="font-bold ml-2">{{institution.name}}</span>
-                </td>
+              <td colspan="5">
+                <button
+                  type="button"
+                  pButton
+                  pRipple
+                  [pRowToggler]="institution"
+                  class="p-button-text p-button-rounded p-button-plain mr-2"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                </button>
+                <span class="font-bold ml-2">{{ institution.name }}</span>
+              </td>
             </tr>
-        </ng-template>
-        
-        <ng-template pTemplate="rowexpansion" let-institution>
+          </ng-template>
+
+          <ng-template pTemplate="rowexpansion" let-institution>
             <tr *ngFor="let detail of institution.internalInstitutionDetails">
-                <td>{{institution.personType.name}}</td>
-                <td>{{detail.position.name}}</td>
-                <td>{{detail.unit}}</td>
-                <td>
-                  <button pButton
-                          [icon]="PrimeIcons.TRASH"
-                          [severity]="SeverityButtonActionEnum.DELETE"
-                          (click)="deleteInternalInstitution(institution)">
-                  </button>
-                </td>
+              <td>{{ institution.personType.name }}</td>
+              <td>{{ detail.position.name }}</td>
+              <td>{{ detail.unit }}</td>
+              <td>
+                <button pButton
+                        [icon]="PrimeIcons.TRASH"
+                        [severity]="SeverityButtonActionEnum.DELETE"
+                        (click)="deleteInternalInstitution(institution)">
+                </button>
+              </td>
             </tr>
-        </ng-template>
-    </p-table> 
-}
+          </ng-template>
+        </p-table>
+      }
     </p-panel>
   </div>
 
@@ -204,66 +204,92 @@
           (click)="addExternalInstitution()"/>
       </div>
 
+      {{ agreement.internalInstitutions | json }}
       <!-- table external-->
-      @if (agreement.externalInstitutions && agreement.externalInstitutions.length > 0){
-        <p-table 
-            [value]="agreement.externalInstitutions"
-            sortField="name" 
-            sortMode="single" 
-            dataKey="name" 
-            rowGroupMode="subheader" 
-            groupRowsBy="name" 
-            [tableStyle]="{'min-width': '70rem'}">
-        <ng-template pTemplate="header">
+      @if (agreement.externalInstitutions && agreement.externalInstitutions.length > 0) {
+        <p-table [value]="agreement.externalInstitutions" [tableStyle]="{ 'min-width': '50rem' }">
+          <ng-template pTemplate="header">
             <tr>
-                <th style="width:20%">Entidad</th>
-                <th style="width:20%">Posición</th>
-                <th style="width:20%">Unidad</th>
-                <th style="width:20%">Acciones</th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
             </tr>
-        </ng-template>
-        <ng-template pTemplate="groupheader" let-institution let-rowIndex="rowIndex" let-expanded="expanded">
+          </ng-template>
+          <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
             <tr>
-                <td colspan="5">
-                    <button 
-                        type="button" 
-                        pButton 
-                        pRipple 
-                        [pRowToggler]="institution" 
-                        class="p-button-text p-button-rounded p-button-plain mr-2" 
-                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
-                    </button>
-                    <span class="font-bold ml-2">{{institution.name}}</span>
-                    <button pButton
-                          [icon]="PrimeIcons.PLUS"
-                          [severity]="SeverityButtonActionEnum.SAVE"
-                          (click)="showExternalInstitutionDetailModal(rowIndex)">
-                    </button>
-                    <button pButton
-                          [icon]="PrimeIcons.TRASH"
-                          [severity]="SeverityButtonActionEnum.DELETE"
-                          (click)="deleteExternalInstitution(institution)">
-                  </button>
-                </td>
+              <td>{{ product.name }}</td>
+              <td>
+                @for (externalInstitutionDetail of product.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+                  <ul>
+                    <li>
+                      {{ externalInstitutionDetail.position }}
+                      <p-button (click)="deleteExternalInstitutionDetail(rowIndex,index)"></p-button>
+                    </li>
+                  </ul>
+                }
+              </td>
             </tr>
-        </ng-template>
-        
-        <ng-template pTemplate="rowexpansion" let-institution>
+          </ng-template>
+        </p-table>
+        <p-table
+          [value]="agreement.externalInstitutions"
+          sortField="name"
+          sortMode="single"
+          dataKey="name"
+          rowGroupMode="subheader"
+          groupRowsBy="name"
+          [tableStyle]="{'min-width': '70rem'}">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width:20%">Entidad</th>
+              <th style="width:20%">Posición</th>
+              <th style="width:20%">Unidad</th>
+              <th style="width:20%">Acciones</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="groupheader" let-institution let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+              <td colspan="5">
+                <button
+                  type="button"
+                  pButton
+                  pRipple
+                  [pRowToggler]="institution"
+                  class="p-button-text p-button-rounded p-button-plain mr-2"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                </button>
+                <span class="font-bold ml-2">{{ institution.name }}</span>
+                <button pButton
+                        [icon]="PrimeIcons.PLUS"
+                        [severity]="SeverityButtonActionEnum.SAVE"
+                        (click)="showExternalInstitutionDetailModal(rowIndex)">
+                </button>
+                <button pButton
+                        [icon]="PrimeIcons.TRASH"
+                        [severity]="SeverityButtonActionEnum.DELETE"
+                        (click)="deleteExternalInstitution(institution)">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="rowexpansion" let-institution>
             <tr *ngFor="let detail of institution.externalInstitutionDetails">
-                <td>{{institution.personType.name}}</td>
-                <td>{{detail.position}}</td>
-                <td>{{detail.unit}}</td>
-                <td>
-                  <button pButton
-                          [icon]="PrimeIcons.TRASH"
-                          [severity]="SeverityButtonActionEnum.DELETE"
-                          (click)="deleteExternalInstitutionDetail(institution, detail)">
-                  </button>
-                </td>
+              <td>{{ institution.personType.name }}</td>
+              <td>{{ detail.position }}</td>
+              <td>{{ detail.unit }}</td>
+              <td>
+                <button pButton
+                        [icon]="PrimeIcons.TRASH"
+                        [severity]="SeverityButtonActionEnum.DELETE"
+                        (click)="deleteExternalInstitutionDetail(institution, detail)">
+                </button>
+              </td>
             </tr>
-        </ng-template>
-    </p-table> 
-}
+          </ng-template>
+        </p-table>
+      }
     </p-panel>
   </div>
 </form>
@@ -312,6 +338,7 @@
         [dirty]="externalInstitutionDetailUnitField.dirty">
       </small>
     </div>
+
     <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
       <p-button
         label="Agregar"
