@@ -19,8 +19,9 @@ export class AgreementsHttpService {
   constructor() {
   }
 
-  create(payload: CatalogueModel): Observable<CatalogueModel> {
+  register(payload: AgreementModel): Observable<AgreementModel> {
     const url = `${this.API_URL}`;
+
     return this.httpClient.post<ServerResponse>(url, payload).pipe(
       map(response => {
         this.messageService.success(response);
@@ -58,7 +59,7 @@ export class AgreementsHttpService {
     const url = `${this.API_URL}/${id}`;
 
     return this.httpClient.get(url).pipe(
-      map(response =>{ 
+      map(response =>{
         console.log(response)
         return response
   })
