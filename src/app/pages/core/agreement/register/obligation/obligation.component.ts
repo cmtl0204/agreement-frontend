@@ -67,6 +67,7 @@ export class ObligationComponent implements OnInit {
     this.obligationForm = this.formBuilder.group({
       institutionName: [null, [Validators.required]],
       type: [null, [Validators.required]],
+      
     });
   }
 
