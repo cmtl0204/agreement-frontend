@@ -80,14 +80,13 @@ export class CataloguesHttpService {
     );
   }
 
-  findCache(): Observable<boolean> {
-    const url = `${this.API_URL}/cache/get`;
-    return this.httpClient.get<ServerResponse>(url).pipe(
-      map(response => {
-        sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        return true;
-      })
-    );
+  loadCache(): void {
+    const url = `${this.API_URL}`;
+
+    this.httpClient.get<ServerResponse>(url).subscribe(response=>{
+      // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
+      sessionStorage.setItem('catalogues', JSON.stringify(response));
+    });
   }
 
   findByType(type: CatalogueTypeEnum): CatalogueModel[] {
@@ -95,6 +94,16 @@ export class CataloguesHttpService {
 
     if (catalogues) {
       return catalogues.filter(catalogue => catalogue.type === type);
+    }
+
+    return [];
+  }
+
+  findByParent(parentId: string): CatalogueModel[] {
+    const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
+
+    if (catalogues) {
+      return catalogues.filter(catalogue => catalogue.parentId === parentId);
     }
 
     return [];
