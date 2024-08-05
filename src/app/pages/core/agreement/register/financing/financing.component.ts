@@ -4,7 +4,7 @@ import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@mo
 import { AuthService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
+import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum, SeverityButtonActionEnum, IconButtonActionEnum } from '@shared/enums';
 import { onlyLetters } from '@shared/helpers';
 import { PrimeIcons } from 'primeng/api';
 
@@ -42,6 +42,8 @@ export class FinancingComponent implements OnInit {
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly FinancingsFormEnum = FinancingsFormEnum;
   protected readonly DocumentationFormEnum = DocumentationFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
