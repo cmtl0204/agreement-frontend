@@ -140,18 +140,23 @@ export class ObligationComponent implements OnInit {
   addObligation() {
     if (this.validateObligationForm()) {
       const obligation = this.obligationForm.value;
-
-      obligation.obligationDetails = [this.obligationDetailForm.value.description];
+      console.log('obligation',obligation.institutionName.toString());
+      obligation.obligationDetails = [this.obligationDetailForm.value];
 
       if (!this.agreement.obligations) {
         this.agreement.obligations = [];
+      } else {
+        if (this.agreement.obligations.findIndex(item => {
+          console.log(obligation.institutionName.toString());
+          console.log(item.institutionName);
+          item.institutionName === obligation.institutionName.toString()
+        }) > -1) {
+          this.messageDialogService.errorCustom('La entidad ya está registrada', 'Intente con otra por favor');
+          return;
+        }
       }
 
       this.agreement.obligations.push(obligation);
-
-      const obligationsArray = this.form.get('obligations') as FormArray;
-
-      obligationsArray.push(this.formBuilder.group(obligation));
 
       this.form.patchValue({obligations: this.agreement.obligations});
 

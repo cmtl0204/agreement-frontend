@@ -36,6 +36,7 @@
   </div>
 
   <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+    {{obligationInstitutionNameField.value |json}}
     @if (obligationTypeField.value
     && (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL
       || obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN)) {
@@ -115,46 +116,45 @@
 </form>
 
 @if (agreement.obligations && agreement.obligations.length > 0) {
-  <ng-container>
-    <p-table
-      dataKey="id"
-      styleClass="p-datatable-striped"
-      [value]="institutions"
-      [columns]="columns"
-      [loading]="coreService.isLoading">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Entidad</th>
-          <th>Tipo de Obligación</th>
-          <th>Descripción</th>
-          <th>Acciones</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-        <tr>
-          <td>{{ item.institutionName }}</td>
-          <td>{{ item.type?.name }}</td>
-          <td>
-            <ul>
-              @for (item of item.obligationDetails; track $index) {
-                <li>{{ item }}</li>
-              }
-            </ul>
-          </td>
-          <td>
-            <p-button
-              [icon]="IconButtonActionEnum.DELETE"
-              [severity]="SeverityButtonActionEnum.DELETE"
-              (click)="deleteObligation(rowIndex)"></p-button>
-            <p-button
-              [icon]="IconButtonActionEnum.ADD"
-              [severity]="SeverityButtonActionEnum.ADD"
-              (click)="showObligationDetailModal(rowIndex)"></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </ng-container>
+  <p-table
+    dataKey="id"
+    styleClass="p-datatable-striped"
+    [value]="agreement.obligations"
+    [columns]="columns"
+    [loading]="coreService.isLoading">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Entidad</th>
+        <th>Tipo de Obligación</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+      <tr>
+        <td>{{ item.institutionName }}</td>
+        <td>{{ item.type?.name }}</td>
+        <td>
+          <ul>
+            @for (item of item.obligationDetails; track item) {
+              <li>{{ item.description }}</li>
+            }
+          </ul>
+        </td>
+        <td>
+          <p-button
+            [icon]="IconButtonActionEnum.DELETE"
+            [severity]="SeverityButtonActionEnum.DELETE"
+            (click)="deleteObligation(rowIndex)"></p-button>
+          <p-button
+            [icon]="IconButtonActionEnum.ADD"
+            [severity]="SeverityButtonActionEnum.ADD"
+            (click)="showObligationDetailModal(rowIndex)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 }
 
 <p-dialog
