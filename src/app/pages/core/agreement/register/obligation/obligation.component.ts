@@ -1,16 +1,13 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl} from '@angular/forms';
-import {AgreementModel, CatalogueModel, ExternalInstitutionModel, InternalInstitutionModel} from '@models/core';
-import {AuthService} from '@servicesApp/auth';
+import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
   SkeletonEnum,
-  RoutesEnum,
-  ExternalInstitutionsObligations,
-  ObligationsMintur,
   SeverityButtonActionEnum,
-  CatalogueTypeEnum, IconButtonActionEnum, ExternalInstitutionsFormEnum
+  CatalogueTypeEnum, IconButtonActionEnum,
+  InstitutionsObligations
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 
@@ -42,7 +39,8 @@ export class ObligationComponent implements OnInit {
   protected agreement!: AgreementModel;
   protected index: number = -1;
   protected isVisibleObligationDetailForm: boolean = false;
-
+  protected readonly InstitutionsObligations = InstitutionsObligations; 
+  
   constructor() {
     this.buildForm();
     this.buildObligationForm();
@@ -67,7 +65,6 @@ export class ObligationComponent implements OnInit {
     this.obligationForm = this.formBuilder.group({
       institutionName: [null, [Validators.required]],
       type: [null, [Validators.required]],
-      
     });
   }
 
@@ -79,6 +76,7 @@ export class ObligationComponent implements OnInit {
 
   patchValueForm() {
     this.agreement = this.formInput;
+    this.form.patchValue(this.agreement);
   }
 
   checkValueChanges() {
@@ -92,39 +90,33 @@ export class ObligationComponent implements OnInit {
   }
 
   loadInstitutions() {
-    if (this.formInput.internalInstitutions && this.formInput.externalInstitutions) {
-      this.institutions = [];
-
-      this.formInput.internalInstitutions.forEach((institution) => {
-        this.institutions.push(institution);
-      });
-
-      this.formInput.externalInstitutions.forEach((institution) => {
-        this.institutions.push(institution);
-      });
+    this.institutions = [];
+    if (this.formInput.internalInstitutions) {
+      this.institutions.push(...this.formInput.internalInstitutions);
+    }
+    if (this.formInput.externalInstitutions) {
+      this.institutions.push(...this.formInput.externalInstitutions);
     }
   }
 
   addObligation() {
-    if (this.agreement.obligations) {
-      this.agreement.obligations.push(this.obligationForm.value);
-    } else {
-      this.agreement.obligations = [this.obligationForm.value];
+    const obligation = this.obligationForm.value;
+    obligation.obligationDetails = [this.obligationDetailForm.value.description];
+  
+    if (!this.agreement.obligations) {
+      this.agreement.obligations = [];
     }
-
-    const index = this.agreement.obligations.length - 1;
-
-    if (this.agreement.obligations[index].obligationDetails) {
-      this.agreement.obligations[index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
-    } else {
-      this.agreement.obligations[index].obligationDetails = [this.obligationDetailDescriptionField.value];
-    }
-
-    this.form.patchValue(this.agreement);
-
+    this.agreement.obligations.push(obligation);
+  
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    obligationsArray.push(this.formBuilder.group(obligation));
+  
+    this.form.patchValue({ obligations: this.agreement.obligations });
+  
     this.obligationForm.reset();
-    this.obligationDetailDescriptionField.reset();
+    this.obligationDetailForm.reset();
   }
+
 
   addObligationDetail() {
     if (this.agreement.obligations) {
@@ -144,13 +136,20 @@ export class ObligationComponent implements OnInit {
   }
 
   deleteObligation(index: number) {
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    obligationsArray.removeAt(index);
+  
     this.agreement.obligations?.splice(index, 1);
-    this.form.patchValue(this.agreement);
+    this.form.patchValue({ obligations: this.agreement.obligations });
   }
 
   showObligationDetailModal(index: number) {
     this.isVisibleObligationDetailForm = true;
     this.index = index;
+  }
+  
+  getObligationDetailsField(index: number): FormArray {
+    return this.obligationsField.at(index).get('obligationDetails') as FormArray;
   }
 
   get obligationsField(): FormArray {
