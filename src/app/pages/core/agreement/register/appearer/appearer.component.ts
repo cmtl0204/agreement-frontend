@@ -99,6 +99,9 @@ export class AppearerComponent implements OnInit {
   patchValueForm() {
     this.agreement = this.formInput;
 
+    this.agreement.internalInstitutions = this.agreement.internalInstitutions || [];
+    this.agreement.externalInstitutions = this.agreement.externalInstitutions || [];
+
     this.form.patchValue(this.formInput);
   }
 
@@ -390,5 +393,4 @@ export class AppearerComponent implements OnInit {
   get externalInstitutionDetailPositionField(): AbstractControl {
     return this.externalInstitutionDetailForm.controls['position'];
   }
-
 }
