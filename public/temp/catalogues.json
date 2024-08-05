@@ -55,7 +55,7 @@
     "description": "Obligación MINTUR",
     "name": "Obligación MINTUR",
     "sort": 1,
-    "type": "OBLIGATION_TYPES_TYPE",
+    "type": "OBLIGATIONS_TYPE",
     "required": true,
     "children": []
   },
