@@ -22,6 +22,7 @@ export enum IdButtonActionEnum {
 }
 
 export enum LabelButtonActionEnum {
+  ADD = 'Agregar',
   ACTIONS = 'Acciones',
   CREATE = 'Crear',
   CANCEL = 'Cancelar',

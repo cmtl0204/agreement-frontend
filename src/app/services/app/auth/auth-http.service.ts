@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {Observable, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
 import {environment} from '@env/environment';
 import {LoginModel, PasswordChangeModel, PasswordResetModel, UpdateUserDto, UserModel} from '@models/auth';
@@ -62,7 +62,7 @@ export class AuthHttpService {
   login(credentials: LoginModel): Observable<LoginResponse> {
     const url = `${this.API_URL}/login`;
 
-    this.findCatalogues();
+    this.loadCatalogues();
     // this.findLocations();
 
     return this.httpClient.post<LoginResponse>(url, credentials)
@@ -75,12 +75,8 @@ export class AuthHttpService {
       );
   }
 
-  findCatalogues() {
-    let catalogues = sessionStorage.getItem('catalogues');
-
-    if (!catalogues || this.coreService.version !== this.coreService.newVersion) {
-      this.cataloguesHttpService.findAll().subscribe();
-    }
+  loadCatalogues() {
+    this.cataloguesHttpService.loadCache();
   }
 
   findLocations() {
