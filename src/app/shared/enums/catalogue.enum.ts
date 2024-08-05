@@ -55,3 +55,9 @@ export enum RoutesEnum {
 export enum AgreementsTypeEnum {
   ESPECIAL = 'especial',
 }
+
+export enum CatalogueObligationsTypeEnum {
+  INTERNAL = 'INTERNAL',
+  EXTERNAL = 'EXTERNAL',
+  JOIN = 'JOIN',
+}

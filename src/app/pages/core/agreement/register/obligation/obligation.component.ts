@@ -1,16 +1,13 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl} from '@angular/forms';
-import {AgreementModel, CatalogueModel, ExternalInstitutionModel, InternalInstitutionModel} from '@models/core';
-import {AuthService} from '@servicesApp/auth';
+import {AgreementModel, CatalogueModel, ColumnModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
   SkeletonEnum,
-  RoutesEnum,
-  ExternalInstitutionsObligations,
-  ObligationsMintur,
   SeverityButtonActionEnum,
-  CatalogueTypeEnum, IconButtonActionEnum, ExternalInstitutionsFormEnum
+  CatalogueTypeEnum, IconButtonActionEnum,
+  ObligationForEnum, ObligationDetailForEnum, LabelButtonActionEnum, CatalogueObligationsTypeEnum
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 
@@ -37,16 +34,25 @@ export class ObligationComponent implements OnInit {
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
   protected form!: FormGroup;
+  private formErrors: string[] = [];
   protected obligationForm!: FormGroup;
   protected obligationDetailForm!: FormGroup;
   protected agreement!: AgreementModel;
-  protected index: number = -1;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
+  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
   protected isVisibleObligationDetailForm: boolean = false;
+  protected readonly ObligationForEnum = ObligationForEnum;
+  protected readonly ObligationDetailForEnum = ObligationDetailForEnum;
+  protected columns: ColumnModel[] = [];
+  protected index: number = -1;
 
   constructor() {
     this.buildForm();
     this.buildObligationForm();
     this.buildObligationDetailForm();
+    this.buildColumns();
+
+    this.checkValueChanges();
   }
 
   ngOnInit(): void {
@@ -55,12 +61,17 @@ export class ObligationComponent implements OnInit {
     this.patchValueForm();
   }
 
+  buildColumns() {
+    this.columns = [
+      {field: 'institutionName', header: ObligationForEnum.institutionName},
+      {field: 'type', header: ObligationForEnum.type},
+    ];
+  }
+
   buildForm() {
     this.form = this.formBuilder.group({
       obligations: this.formBuilder.array([])
     });
-
-    this.checkValueChanges();
   }
 
   buildObligationForm() {
@@ -78,12 +89,39 @@ export class ObligationComponent implements OnInit {
 
   patchValueForm() {
     this.agreement = this.formInput;
+    this.form.patchValue(this.agreement);
   }
 
   checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
       this.formOutput.emit(this.agreement);
     });
+
+    this.obligationTypeField.valueChanges.subscribe(value => {
+      if (value && value.code === CatalogueObligationsTypeEnum.INTERNAL) {
+        console.log(this.formInput.internalInstitutions);
+        if (this.formInput.internalInstitutions)
+          this.obligationInstitutionNameField.setValue(this.formInput.internalInstitutions[0].name);
+      }
+    });
+  }
+
+  validateObligationForm(): boolean {
+    this.formErrors = [];
+
+    if (this.obligationTypeField.invalid) this.formErrors.push(this.ObligationForEnum.type);
+    if (this.obligationInstitutionNameField.invalid) this.formErrors.push(this.ObligationForEnum.institutionName);
+    if (this.obligationDetailDescriptionField.invalid) this.formErrors.push(this.ObligationDetailForEnum.description);
+
+    return this.formErrors.length === 0;
+  }
+
+  validateObligationDetailForm(): boolean {
+    this.formErrors = [];
+
+    if (this.obligationDetailDescriptionField.invalid) this.formErrors.push(this.ObligationDetailForEnum.description);
+
+    return this.formErrors.length === 0;
   }
 
   loadObligationTypes() {
@@ -91,69 +129,79 @@ export class ObligationComponent implements OnInit {
   }
 
   loadInstitutions() {
-    if (this.formInput.internalInstitutions && this.formInput.externalInstitutions) {
-      this.institutions = [];
+    this.institutions = [];
 
-      this.formInput.internalInstitutions.forEach((institution) => {
-        this.institutions.push(institution);
-      });
+    if (this.formInput.internalInstitutions) this.institutions = this.formInput.internalInstitutions;
 
-      this.formInput.externalInstitutions.forEach((institution) => {
-        this.institutions.push(institution);
-      });
-    }
+
+    if (this.formInput.externalInstitutions) this.institutions = this.formInput.externalInstitutions;
   }
 
   addObligation() {
-    if (this.agreement.obligations) {
-      this.agreement.obligations.push(this.obligationForm.value);
+    if (this.validateObligationForm()) {
+      const obligation = this.obligationForm.value;
+      console.log('obligation',obligation.institutionName.toString());
+      obligation.obligationDetails = [this.obligationDetailForm.value];
+
+      if (!this.agreement.obligations) {
+        this.agreement.obligations = [];
+      } else {
+        if (this.agreement.obligations.findIndex(item => {
+          console.log(obligation.institutionName.toString());
+          console.log(item.institutionName);
+          item.institutionName === obligation.institutionName.toString()
+        }) > -1) {
+          this.messageDialogService.errorCustom('La entidad ya está registrada', 'Intente con otra por favor');
+          return;
+        }
+      }
+
+      this.agreement.obligations.push(obligation);
+
+      this.form.patchValue({obligations: this.agreement.obligations});
+
+      this.obligationForm.reset();
+      this.obligationDetailForm.reset();
     } else {
-      this.agreement.obligations = [this.obligationForm.value];
+      this.obligationForm.markAllAsTouched();
+      this.obligationDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
-
-    const index = this.agreement.obligations.length - 1;
-
-    if (this.agreement.obligations[index].obligationDetails) {
-      this.agreement.obligations[index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
-    } else {
-      this.agreement.obligations[index].obligationDetails = [this.obligationDetailDescriptionField.value];
-    }
-
-    this.form.patchValue(this.agreement);
-
-    this.obligationForm.reset();
-    this.obligationDetailDescriptionField.reset();
   }
 
   addObligationDetail() {
-    if (this.agreement.obligations) {
-      if (this.agreement.obligations[this.index].obligationDetails) {
-        this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
-      } else {
-        this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
+    if (this.validateObligationDetailForm()) {
+      if (this.agreement.obligations) {
+        if (this.agreement.obligations[this.index].obligationDetails) {
+          this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
+        } else {
+          this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
+        }
       }
+
+      this.form.patchValue(this.agreement);
+
+      this.obligationForm.reset();
+      this.obligationDetailDescriptionField.reset();
+
+      this.isVisibleObligationDetailForm = false;
+    } else {
+      this.obligationDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
-
-    this.form.patchValue(this.agreement);
-
-    this.obligationForm.reset();
-    this.obligationDetailDescriptionField.reset();
-
-    this.isVisibleObligationDetailForm = false;
   }
 
   deleteObligation(index: number) {
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    obligationsArray.removeAt(index);
+
     this.agreement.obligations?.splice(index, 1);
-    this.form.patchValue(this.agreement);
+    this.form.patchValue({obligations: this.agreement.obligations});
   }
 
   showObligationDetailModal(index: number) {
     this.isVisibleObligationDetailForm = true;
     this.index = index;
-  }
-
-  get obligationsField(): FormArray {
-    return this.form.get('obligations') as FormArray;
   }
 
   get obligationInstitutionNameField(): AbstractControl {
@@ -168,5 +216,5 @@ export class ObligationComponent implements OnInit {
     return this.obligationDetailForm.controls['description'];
   }
 
-  protected readonly IconButtonActionEnum = IconButtonActionEnum;
+  protected readonly CatalogueObligationsTypeEnum = CatalogueObligationsTypeEnum;
 }
