@@ -10,15 +10,13 @@ import { AgreementModel, FinancingModel } from '@models/core';
   templateUrl: './financing.component.html',
   styleUrls: ['./financing.component.scss']
 })
-export class FinancingComponent implements OnInit, OnExitInterface {
+export class FinancingComponent implements OnExitInterface {
   /** Services **/
   protected readonly coreService = inject(CoreService);
 
   /** Form **/
   @Input({required: true}) agreement!:AgreementModel;
   @Input() id!: string;
-
-  financings:FinancingModel[] = [];
 
 
   /** Enums **/
@@ -29,12 +27,6 @@ export class FinancingComponent implements OnInit, OnExitInterface {
 
   constructor(public messageDialogService: MessageDialogService) {
 
-  }
-
-  ngOnInit(): void {
-    if(this.agreement && this.agreement.financings){
-      this.financings = this.agreement.financings;
-    } 
   }
 
   async onExit() {
