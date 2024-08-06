@@ -7,12 +7,13 @@ import {ServerResponse} from '@models/http-response';
 import {MessageService} from '@servicesApp/core';
 import {AgreementModel, CatalogueModel} from '@models/core';
 import {CatalogueTypeEnum} from "@shared/enums";
+import {UserModel} from "@models/auth";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AgreementsHttpService {
-  private readonly API_URL = `${environment.API_URL}/agreements`;
+export class UsersHttpService {
+  private readonly API_URL = `${environment.API_URL}/users`;
   private readonly httpClient = inject(HttpClient);
   private readonly messageService = inject(MessageService);
 
@@ -30,18 +31,16 @@ export class AgreementsHttpService {
     );
   }
 
-  findAll(): Observable<CatalogueModel[]> {
-    const url = this.API_URL;
+  findAllUsersLDAP(): Observable<UserModel[]> {
+    const url = `${this.API_URL}/ldap`;
 
-    return this.httpClient.get<ServerResponse>(url).pipe(
+    return this.httpClient.get<UserModel[]>(url).pipe(
       map(response => {
-        console.log(response);
-        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        sessionStorage.setItem('catalogues', JSON.stringify(response));
-        return response.data;
+        return response;
       })
     );
   }
+
   findAllAgreements(): Observable<AgreementModel[]> {
     const url = this.API_URL;
     return this.httpClient.get<ServerResponse>(url).pipe(
@@ -53,12 +52,12 @@ export class AgreementsHttpService {
       })
     );
   }
-  
+
   findNationalAgreementsByOrigin(): Observable<AgreementModel[]> {
     const url = `${this.API_URL}/national-agreements`;
-    return this.httpClient.get<AgreementModel[]>(url).pipe(
+    return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        return response;
+        return response.data;
       })
     );
   }
@@ -67,10 +66,10 @@ export class AgreementsHttpService {
     const url = `${this.API_URL}/${id}`;
 
     return this.httpClient.get(url).pipe(
-      map(response =>{
+      map(response => {
         console.log(response)
         return response
-  })
+      })
     );
   }
 

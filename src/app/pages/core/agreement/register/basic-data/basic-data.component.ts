@@ -27,7 +27,7 @@ export class BasicDataComponent implements OnInit {
   protected readonly Validators = Validators;
 
   /* Form */
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter()
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter()
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
@@ -94,7 +94,7 @@ export class BasicDataComponent implements OnInit {
     });
 
     this.typeField.valueChanges.subscribe((value) => {
-      if (value && value.code === CatalogueAgreementsTypeEnum.ESPECIAL) {
+      if (value && value.code === CatalogueAgreementsTypeEnum.SPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       } else {
         this.specialTypeField.clearValidators();

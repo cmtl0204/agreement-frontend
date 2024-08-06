@@ -5,6 +5,8 @@ import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum} from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
+import {UserLdapModel, UserModel} from "@models/auth";
+import {UsersHttpService} from "@servicesHttp/auth";
 
 @Component({
   selector: 'app-agreement-administrator',
@@ -17,9 +19,10 @@ export class AgreementAdministratorComponent implements OnInit {
   protected readonly coreService = inject(CoreService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   public readonly messageDialogService = inject(MessageDialogService);
+  public readonly usersHttpService = inject(UsersHttpService);
 
   // Form
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
@@ -31,6 +34,7 @@ export class AgreementAdministratorComponent implements OnInit {
   // Foreign keys
   units: CatalogueModel[] = [];
   positions: CatalogueModel[] = [];
+  users: UserLdapModel[] = [];
 
   // Enums
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -45,6 +49,7 @@ export class AgreementAdministratorComponent implements OnInit {
   ngOnInit(): void {
     this.loadPositions();
     this.loadUnits();
+    this.loadUsers();
     this.patchValueForm();
     this.validateForm();
   }
@@ -73,6 +78,7 @@ export class AgreementAdministratorComponent implements OnInit {
     return this.formBuilder.group({
       unit: [null, Validators.required],
       position: [null, Validators.required],
+      user: [null, Validators.required],
     })
   }
 
@@ -94,6 +100,12 @@ export class AgreementAdministratorComponent implements OnInit {
     this.units = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_UNIT);
   }
 
+  loadUsers() {
+    this.usersHttpService.findAllUsersLDAP().subscribe(response => {
+      this.users = response;
+    })
+  }
+
   // getters Form
   get administratorFormField(): FormGroup {
     return this.form.controls['administrator'] as FormGroup;
@@ -105,5 +117,9 @@ export class AgreementAdministratorComponent implements OnInit {
 
   get positionField(): AbstractControl {
     return this.administratorFormField.controls['position'];
+  }
+
+  get userField(): AbstractControl {
+    return this.administratorFormField.controls['user'];
   }
 }

@@ -1,5 +1,5 @@
 @if (form.value) {
-  <p-stepper orientation="horizontal" [linear]="false">
+  <p-stepper orientation="horizontal" [linear]="true" [activeStep]="activeStep">
     <p-stepperPanel header="Convenio">
       <ng-template
         pTemplate="content"
@@ -14,44 +14,60 @@
           <div class="p-toolbar-group-right">
             <app-form-button-action
               labelSubmitButton="Siguiente"
-              (submit)="nextCallback.emit()"
+              (submit)="validateFormAgreement(nextCallback)"
               [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
               [isVisibleCancelButton]="false"
             />
           </div>
         </p-toolbar>
 
-        <p-panel header="Datos Básicos">
-          <app-basic-data
-            class="col-12"
-            [formInput]="form.value"
-            (formErrorsOutput)="basicDataErrors=$event"
-            (formOutput)="save($event)"/>
-        </p-panel>
+        <div class="p-fluid grid">
+          <p-panel header="Datos Básicos" class="col-12">
+            <app-basic-data
+              [formInput]="form.value"
+              (formErrorsOutput)="basicDataErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
 
-        <p-panel header="Fechas del Convenio">
-          <app-agreement-date
-            class="col-12"
-            [formInput]="form.value"
-            (formErrorsOutput)="agreementDateErrors=$event"
-            (formOutput)="save($event)"/>
-        </p-panel>
+          <p-panel header="Fechas del Convenio" class="col-12">
+            <app-agreement-date
+              [formInput]="form.value"
+              (formErrorsOutput)="agreementDateErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
 
-        <p-panel header="Administrador del Convenio">
-          <app-agreement-administrator
-            class="col-12"
-            [formInput]="form.value"
-            (formErrorsOutput)="agreementAdministratorErrors=$event"
-            (formOutput)="save($event)"/>
-        </p-panel>
+          <p-panel header="Administrador del Convenio" class="col-12">
+            <app-agreement-administrator
+              class="col-12"
+              [formInput]="form.value"
+              (formErrorsOutput)="agreementAdministratorErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
 
-        <p-panel header="Comparecientes">
-          <app-appearer
-            class="col-12"
-            [formInput]="form.value"
-            (formErrorsOutput)="appearerErrors=$event"
-            (formOutput)="save($event)"/>
-        </p-panel>
+          <p-panel header="Comparecientes" class="col-12">
+            <app-appearer
+              [formInput]="form.value"
+              (formErrorsOutput)="appearerErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
+        </div>
+
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
+          </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              labelSubmitButton="Siguiente"
+              (submit)="validateFormAgreement(nextCallback)"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              [isVisibleCancelButton]="false"
+            />
+          </div>
+        </p-toolbar>
       </ng-template>
     </p-stepperPanel>
 
@@ -70,9 +86,10 @@
 
           <div class="p-toolbar-group-right">
             <app-form-button-action
-              (submit)="nextCallback.emit()"
+              (submit)="validateFormObligation(nextCallback)"
               (cancel)="prevCallback.emit()"
               labelSubmitButton="Siguiente"
+              labelCancelButton="Regresar"
               [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
               [isVisibleCancelButton]="true"
             />
@@ -80,9 +97,28 @@
         </p-toolbar>
 
         <app-obligation
-          class="col-12"
           [formInput]="form.value"
+          (formErrorsOutput)="obligationErrors=$event"
           (formOutput)="save($event)"/>
+
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
+          </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              (submit)="nextCallback.emit()"
+              (cancel)="prevCallback.emit()"
+              labelSubmitButton="Siguiente"
+              labelCancelButton="Regresar"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              [isVisibleCancelButton]="true"
+            />
+          </div>
+        </p-toolbar>
       </ng-template>
     </p-stepperPanel>
 
@@ -91,6 +127,7 @@
         pTemplate="content"
         let-prevCallback="prevCallback"
         let-nextCallback="nextCallback">
+
         <p-toolbar>
           <div class="p-toolbar-group-left">
             <app-header-form
@@ -102,19 +139,18 @@
             <app-form-button-action
               (submit)="onSubmit(nextCallback);"
               (cancel)="prevCallback.emit()"
-              labelSubmitButton="Siguiente"
-              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              labelSubmitButton="Guardar"
+              labelCancelButton="Regresar"
               [isVisibleCancelButton]="true"
             />
           </div>
         </p-toolbar>
 
         <app-financing
-          class="col-12"
           (formOutput)="save($event)"
           [formInput]="form.value"
-          [externalInstitutions]="externalInstitutionsField.value"
-          [internalInstitutions]="internalInstitutionsField.value"/>
+          (formErrorsOutput)="financingErrors=$event"
+        />
       </ng-template>
     </p-stepperPanel>
 
@@ -127,7 +163,6 @@
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
             <app-document
-              class="col-12"
               (formOutput)="save($event)"
               (nextOutput)="nextCallback.emit()"
               (prevOutput)="prevCallback.emit()"/>
@@ -142,7 +177,6 @@
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
             <app-addendum
-              class="col-12"
               (formOutput)="save($event)"
               (prevOutput)="prevCallback.emit()"/>
           </div>
@@ -152,3 +186,5 @@
   </p-stepper>
 }
 {{ this.form.value | json }}
+
+<p-confirmDialog key="confirmDialog"/>

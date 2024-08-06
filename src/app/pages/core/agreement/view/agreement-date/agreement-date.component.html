@@ -5,76 +5,68 @@
         <!-- subscriptionAt -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
-          <input pInputText [value]="agreement?.subscribedAt | date" [readOnly]="true"/>
+          <input pInputText [value]="agreement.subscribedAt | date" [readOnly]="true"/>
         </div>
 
         <!-- startedAt -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel [label]="AgreementFormEnum.startedAt"></label>
-          <input pInputText [value]="agreement?.startedAt | date" [readOnly]="true"/>
+          <input pInputText [value]="agreement.startedAt | date" [readOnly]="true"/>
         </div>
 
         <!-- hasTerminationDate -->
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel [label]="AgreementFormEnum.isFinishDate"></label>
-          <div>
-            <input
-              type="radio"
-              name="isFinishDate"
-              [value]="true"
-              [checked]="agreement.isFinishDate"
-            />
-            <label>Sí</label>
-            <input
-              type="radio"
-              name="isFinishDate"
-              [value]="false"
-              [checked]="agreement.isFinishDate"
-            />
-            <label>No</label>
+          <div class="flex align-items-center">
+            <div class="flex align-items-center" style="display: flex; align-items: center;">
+              <p-radioButton
+                id="isFinishDateYes"
+                name="isFinishDate"
+                [value]="true"
+                [(ngModel)]="agreement.isFinishDate"
+                [disabled]="true"
+              ></p-radioButton>
+              <label for="isFinishDateYes" class="ml-2">Sí</label>
+            </div>
+            <div class="flex align-items-center ml-3" style="display: flex; align-items: center;">
+              <p-radioButton
+                id="isFinishDateNo"
+                name="isFinishDate"
+                [value]="false"
+                [(ngModel)]="agreement.isFinishDate"
+                [disabled]="true"
+              ></p-radioButton>
+              <label for="isFinishDateNo" class="ml-2">No</label>
+            </div>
           </div>
         </div>
 
-        @if (agreement.isFinishDate) {
-          <!-- endedAt -->
-          <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.endedAt"></label>
-            <input pInputText [value]="agreement?.endedAt | date" [readOnly]="true"/>
-          </div>
-        }
+        <!-- endedAt or endedReason based on isFinishDate -->
+        <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.endedAt"></label>
+          <input pInputText [value]="agreement.endedAt | date" [readOnly]="true"/>
+        </div>
+        <div *ngIf="!agreement.isFinishDate" class="field col-12">
+          <label appLabel [label]="AgreementFormEnum.endedReason"></label>
+          <textarea pInputTextarea [value]="agreement.endedReason" [autoResize]="true" [readOnly]="true"></textarea>
+        </div>
 
-        @if (!agreement.isFinishDate) {
-          <!-- endedReason -->
-          <div class="field col-12">
-            <label appLabel [label]="AgreementFormEnum.endedReason"></label>
-            <textarea pInputTextarea [value]="agreement?.endedReason" [autoResize]="true" [readOnly]="true"></textarea>
-          </div>
-        }
-
-        @if (agreement.isFinishDate) {
-          <!-- Plazo total del convenio -->
-          <div class="field col-12">
-            <label>Plazo total del convenio:</label>
-          </div>
-
-          <!-- yearTerm -->
-          <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
-            <input pInputText [value]="agreement?.yearTerm" [readOnly]="true"/>
-          </div>
-
-          <!-- monthTerm -->
-          <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
-            <input pInputText [value]="agreement?.monthTerm" [readOnly]="true"/>
-          </div>
-
-          <!-- dayTerm -->
-          <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-            <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
-            <input pInputText [value]="agreement?.dayTerm" [readOnly]="true"/>
-          </div>
-        }
+        <!-- Plazo total del convenio if isFinishDate -->
+        <div *ngIf="agreement.isFinishDate" class="field col-12">
+          <label>Plazo total del convenio:</label>
+        </div>
+        <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
+          <input pInputText [value]="agreement.yearTerm" [readOnly]="true"/>
+        </div>
+        <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
+          <input pInputText [value]="agreement.monthTerm" [readOnly]="true"/>
+        </div>
+        <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
+          <input pInputText [value]="agreement.dayTerm" [readOnly]="true"/>
+        </div>
       </div>
     </p-panel>
   </div>
