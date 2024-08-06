@@ -1,15 +1,13 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
-import {CatalogueModel} from '@models/core';
-import {AuthService} from '@servicesApp/auth';
+import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl} from '@angular/forms';
+import {AgreementModel, CatalogueModel, ColumnModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
   SkeletonEnum,
-  RoutesEnum,
-  ExternalInstitutionsObligations,
-  ObligationsMintur,
-  SeverityButtonActionEnum
+  SeverityButtonActionEnum,
+  CatalogueTypeEnum, IconButtonActionEnum,
+  ObligationForEnum, ObligationDetailForEnum, LabelButtonActionEnum, CatalogueObligationsTypeEnum
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 
@@ -19,30 +17,42 @@ import {PrimeIcons} from 'primeng/api';
   styleUrls: ['./obligation.component.scss']
 })
 export class ObligationComponent implements OnInit {
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  private readonly formBuilder = inject(FormBuilder);
+  public readonly messageDialogService = inject(MessageDialogService);
+
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  @Input() internalInstitutions: CatalogueModel[] = [];
-  @Input() externalInstitutions: CatalogueModel[] = [];
-  @Input() formInput!: any;
+  @Input({required: true}) formInput!: AgreementModel;
+
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
-  protected obligationType: CatalogueModel[] = [];
-  protected institutions: CatalogueModel[] = [];
-  selectedObligationTypes: any[] = [];
-  selectedInstitutions: any[] = [];
-  description: string = '';
+  protected obligationTypes: CatalogueModel[] = [];
+  protected institutions: any[] = [];
+
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
-  form!: FormGroup;
+  protected form!: FormGroup;
+  private formErrors: string[] = [];
+  protected obligationForm!: FormGroup;
+  protected obligationDetailForm!: FormGroup;
+  protected agreement!: AgreementModel;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
+  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected isVisibleObligationDetailForm: boolean = false;
+  protected readonly ObligationForEnum = ObligationForEnum;
+  protected readonly ObligationDetailForEnum = ObligationDetailForEnum;
+  protected columns: ColumnModel[] = [];
+  protected index: number = -1;
 
-  constructor(
-    private fb: FormBuilder,
-   
-    private messageDialogService: MessageDialogService
-  ) {
+  constructor() {
     this.buildForm();
+    this.buildObligationForm();
+    this.buildObligationDetailForm();
+    this.buildColumns();
+
+    this.checkValueChanges();
   }
 
   ngOnInit(): void {
@@ -51,73 +61,160 @@ export class ObligationComponent implements OnInit {
     this.patchValueForm();
   }
 
-  buildForm() {
-    this.form = this.fb.group({
-      obligations: this.fb.array([])
-    });
-  }
-
-  get obligationsField(): FormArray {
-    return this.form.get('obligations') as FormArray;
-  }
-
-  loadObligationTypes() {
-    this.obligationType = [
-      {name: 'obligacion mintur'},
-      {name: 'obligacion contraparte'},
-      {name: 'obligacion conjunta'}
+  buildColumns() {
+    this.columns = [
+      {field: 'institutionName', header: ObligationForEnum.institutionName},
+      {field: 'type', header: ObligationForEnum.type},
     ];
   }
 
+  buildForm() {
+    this.form = this.formBuilder.group({
+      obligations: this.formBuilder.array([])
+    });
+  }
+
+  buildObligationForm() {
+    this.obligationForm = this.formBuilder.group({
+      institutionName: [null, [Validators.required]],
+      type: [null, [Validators.required]],
+    });
+  }
+
+  buildObligationDetailForm() {
+    this.obligationDetailForm = this.formBuilder.group({
+      description: [null, [Validators.required]],
+    });
+  }
+
+  patchValueForm() {
+    this.agreement = this.formInput;
+    this.form.patchValue(this.agreement);
+  }
+
+  checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(this.agreement);
+    });
+
+    this.obligationTypeField.valueChanges.subscribe(value => {
+      if (value && value.code === CatalogueObligationsTypeEnum.INTERNAL) {
+        console.log(this.formInput.internalInstitutions);
+        if (this.formInput.internalInstitutions)
+          this.obligationInstitutionNameField.setValue(this.formInput.internalInstitutions[0].name);
+      }
+    });
+  }
+
+  validateObligationForm(): boolean {
+    this.formErrors = [];
+
+    if (this.obligationTypeField.invalid) this.formErrors.push(this.ObligationForEnum.type);
+    if (this.obligationInstitutionNameField.invalid) this.formErrors.push(this.ObligationForEnum.institutionName);
+    if (this.obligationDetailDescriptionField.invalid) this.formErrors.push(this.ObligationDetailForEnum.description);
+
+    return this.formErrors.length === 0;
+  }
+
+  validateObligationDetailForm(): boolean {
+    this.formErrors = [];
+
+    if (this.obligationDetailDescriptionField.invalid) this.formErrors.push(this.ObligationDetailForEnum.description);
+
+    return this.formErrors.length === 0;
+  }
+
+  loadObligationTypes() {
+    this.obligationTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.OBLIGATIONS_TYPE);
+  }
+
   loadInstitutions() {
-    this.institutions = this.internalInstitutions.concat(this.externalInstitutions);
-  }
+    this.institutions = [];
 
-  onObligationTypesChange(selectedObligations: any[]) {
-    this.selectedObligationTypes = selectedObligations;
-  }
+    if (this.formInput.internalInstitutions) this.institutions = this.formInput.internalInstitutions;
 
-  onInstitutionsChange(selectedInstitutions: any[]) {
-    this.selectedInstitutions = selectedInstitutions;
+
+    if (this.formInput.externalInstitutions) this.institutions = this.formInput.externalInstitutions;
   }
 
   addObligation() {
-    if (this.selectedInstitutions.length && this.selectedObligationTypes.length && this.description.trim()) {
-      this.selectedInstitutions.forEach(institution => {
-        this.selectedObligationTypes.forEach(obligationType => {
-          const obligation = this.fb.group({
-            institutionName: [institution.name, Validators.required],
-            obligationType: [obligationType.name, Validators.required],
-            description: [this.description, Validators.required]
-          });
-          this.obligationsField.push(obligation);
-        });
-      });
-      this.description = '';
+    if (this.validateObligationForm()) {
+      const obligation = this.obligationForm.value;
+      console.log('obligation',obligation.institutionName.toString());
+      obligation.obligationDetails = [this.obligationDetailForm.value];
+
+      if (!this.agreement.obligations) {
+        this.agreement.obligations = [];
+      } else {
+        if (this.agreement.obligations.findIndex(item => {
+          console.log(obligation.institutionName.toString());
+          console.log(item.institutionName);
+          item.institutionName === obligation.institutionName.toString()
+        }) > -1) {
+          this.messageDialogService.errorCustom('La entidad ya está registrada', 'Intente con otra por favor');
+          return;
+        }
+      }
+
+      this.agreement.obligations.push(obligation);
+
+      this.form.patchValue({obligations: this.agreement.obligations});
+
+      this.obligationForm.reset();
+      this.obligationDetailForm.reset();
     } else {
-      this.messageDialogService.fieldErrors(['Debe seleccionar al menos una institución y un tipo de obligación, y proporcionar una descripción.']);
+      this.obligationForm.markAllAsTouched();
+      this.obligationDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  addObligationDetail() {
+    if (this.validateObligationDetailForm()) {
+      if (this.agreement.obligations) {
+        if (this.agreement.obligations[this.index].obligationDetails) {
+          this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
+        } else {
+          this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
+        }
+      }
+
+      this.form.patchValue(this.agreement);
+
+      this.obligationForm.reset();
+      this.obligationDetailDescriptionField.reset();
+
+      this.isVisibleObligationDetailForm = false;
+    } else {
+      this.obligationDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
 
   deleteObligation(index: number) {
-    this.obligationsField.removeAt(index);
+    const obligationsArray = this.form.get('obligations') as FormArray;
+    obligationsArray.removeAt(index);
+
+    this.agreement.obligations?.splice(index, 1);
+    this.form.patchValue({obligations: this.agreement.obligations});
   }
 
-  onSubmit() {
-    if (this.form.valid) {
-      this.formOutput.emit(this.form.value);
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(['Debe completar todos los campos obligatorios.']);
-    }
+  showObligationDetailModal(index: number) {
+    this.isVisibleObligationDetailForm = true;
+    this.index = index;
   }
 
-  patchValueForm() {
-    const {obligations} = this.formInput;
-    if (obligations) {
-      obligations.forEach((value: any) => {
-        this.obligationsField.push(this.fb.group(value));
-      });
-    }
+  get obligationInstitutionNameField(): AbstractControl {
+    return this.obligationForm.controls['institutionName'];
   }
+
+  get obligationTypeField(): AbstractControl {
+    return this.obligationForm.controls['type'];
+  }
+
+  get obligationDetailDescriptionField(): AbstractControl {
+    return this.obligationDetailForm.controls['description'];
+  }
+
+  protected readonly CatalogueObligationsTypeEnum = CatalogueObligationsTypeEnum;
 }

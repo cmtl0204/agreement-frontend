@@ -6,6 +6,14 @@ const routes: Routes = [
   {
     path: 'agreement-list',
     component: AgreementListComponent
+  },
+  {
+    path: 'agreement-update/:id',
+    component: AgreementListComponent
+  },
+  {
+    path: 'agreement-view/:id',
+    component: AgreementListComponent
   }
 ];
 

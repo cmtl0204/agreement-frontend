@@ -79,10 +79,13 @@ export enum ExternalInstitutionsObligations {
   positionName = "positionName"
 }
 
-export enum InstitutionsObligations {
-  institutionName = 'instituciones seleccionadas',
-  institutionObligations = 'obligaciones seleccionadas',
-  positionsNames = "positionsNames"
+export enum ObligationForEnum {
+  institutionName = 'Nombre de la Institución',
+  type = 'Tipo de obligación',
+}
+
+export enum ObligationDetailForEnum {
+  description = 'Obligación'
 }
 
 export enum AgreementFormEnum{

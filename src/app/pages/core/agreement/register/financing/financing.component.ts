@@ -4,7 +4,7 @@ import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@mo
 import { AuthService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
+import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum, SeverityButtonActionEnum, IconButtonActionEnum } from '@shared/enums';
 import { onlyLetters } from '@shared/helpers';
 import { PrimeIcons } from 'primeng/api';
 
@@ -35,7 +35,6 @@ export class FinancingComponent implements OnInit {
   protected id: string = RoutesEnum.NEW
   private formErrors: string[] = [];
 
-
   /** Foreign Keys **/
   @Input() internalInstitutions: CatalogueModel[] = [];
   @Input() externalInstitutions: CatalogueModel[] = [];
@@ -43,6 +42,8 @@ export class FinancingComponent implements OnInit {
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly FinancingsFormEnum = FinancingsFormEnum;
   protected readonly DocumentationFormEnum = DocumentationFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -66,7 +67,7 @@ export class FinancingComponent implements OnInit {
 
     if (financings) {
       financings.forEach((value: FinancingModel) => {
-        this.financings.push(this.formBuilder.group(value))
+        this.financingsField.push(this.formBuilder.group(value))
       });
     }
   }
@@ -109,7 +110,7 @@ export class FinancingComponent implements OnInit {
 
   /** add array **/
   addFinancing() {
-    if (this.financingForm.valid) {
+    if (this.validateFinancings()) {
       const financings = this.formBuilder.group({
         institutionName: [this.financingForm.value.institutionName],
         budget: [this.financingForm.value.budget],
@@ -117,9 +118,9 @@ export class FinancingComponent implements OnInit {
         source: [this.financingForm.value.source],
       });
 
-      this.financings.push(financings);
+      this.financingsField.push(financings);
       this.financingForm.reset();
-      
+
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -128,7 +129,7 @@ export class FinancingComponent implements OnInit {
 
   /** delete array**/
   deleteFinancing(index: number) {
-    this.financings.removeAt(index);
+    this.financingsField.removeAt(index);
   }
 
   loadCombineInstitutions() {
@@ -148,18 +149,29 @@ export class FinancingComponent implements OnInit {
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
     }
     if (!this.isFinancingField.value) {
-      if (this.financings.length > 0) {
-        this.financings.clear();
+      if (this.financingsField.length > 0) {
+        this.financingsField.clear();
       }
       this.formErrors = [];
     } else {
-      if (this.financings.length > 0) {
+      if (this.financingsField.length > 0) {
         this.formErrors = [];
       }
     }
 
     this.formErrorsOutput.emit(this.formErrors);
-    
+
+  }
+
+  validateFinancings(): boolean {
+    this.formErrors = [];
+
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+
+    return this.form.valid && this.formErrors.length === 0;
   }
 
   checkValueChanges() {
@@ -188,7 +200,7 @@ export class FinancingComponent implements OnInit {
     });
   }
 
-  get financings(): FormArray {
+  get financingsField(): FormArray {
     return this.form.get('financings') as FormArray;
   }
 

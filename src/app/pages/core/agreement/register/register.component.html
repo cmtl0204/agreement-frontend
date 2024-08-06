@@ -1,102 +1,128 @@
 @if (form.value) {
   <p-stepper orientation="horizontal" [linear]="false">
     <p-stepperPanel header="Convenio">
-      <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
-          <p-toolbar>
-            <div class="p-toolbar-group-left">
-              <app-header-form
-                label="Registro"
-                [icon]="PrimeIcons.PENCIL"/>
-            </div>
+      <ng-template
+        pTemplate="content"
+        let-nextCallback="nextCallback">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
+          </div>
 
-            <div class="p-toolbar-group-right">
-              <app-form-button-action
-                (submit)="onSubmit()"
-                labelSubmitButton="Siguiente"
-                [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-                [isVisibleCancelButton]="false"
-              />
-            </div>
-          </p-toolbar>
-
-          <p-panel header="Datos Básicos">
-            <app-basic-data
-              class="col-12"
-              [formInput]="form.value"
-              (formErrorsOutput)="basicDataErrors=$event"
-              (formOutput)="save($event)"
-              (nextOutput)="nextCallback.emit()"
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              labelSubmitButton="Siguiente"
+              (submit)="nextCallback.emit()"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              [isVisibleCancelButton]="false"
             />
-          </p-panel>
+          </div>
+        </p-toolbar>
 
-          <p-panel header="Fechas del Convenio">
-            <app-agreement-date
-              class="col-12"
-              [formInput]="form.value"
-              (formErrorsOutput)="agreementDateErrors=$event"
-              (formOutput)="save($event)"/>
-          </p-panel>
+        <p-panel header="Datos Básicos">
+          <app-basic-data
+            class="col-12"
+            [formInput]="form.value"
+            (formErrorsOutput)="basicDataErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
 
-          <p-panel header="Administrador del Convenio">
-            <app-agreement-administrator
-              class="col-12"
-              [formInput]="form.value"
-              (formErrorsOutput)="agreementAdministratorErrors=$event"
-              (formOutput)="save($event)"/>
-          </p-panel>
+        <p-panel header="Fechas del Convenio">
+          <app-agreement-date
+            class="col-12"
+            [formInput]="form.value"
+            (formErrorsOutput)="agreementDateErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
 
-          <p-panel header="Comparecientes">
-            <app-appearer
-              class="col-12"
-              [formInput]="form.value"
-              (formErrorsOutput)="appearerErrors=$event"
-              (formOutput)="save($event)"/>
-          </p-panel>
-        </ng-template>
+        <p-panel header="Administrador del Convenio">
+          <app-agreement-administrator
+            class="col-12"
+            [formInput]="form.value"
+            (formErrorsOutput)="agreementAdministratorErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
+
+        <p-panel header="Comparecientes">
+          <app-appearer
+            class="col-12"
+            [formInput]="form.value"
+            (formErrorsOutput)="appearerErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
+      </ng-template>
     </p-stepperPanel>
 
     <p-stepperPanel header="Obligaciones">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-                   let-index="index">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-obligation
-              class="col-12"
-              [formInput]="form.value"
-              (formOutput)="save($event)"
-              (nextOutput)="nextCallback.emit()"
-              (prevOutput)="prevCallback.emit()"
-              [externalInstitutions]="externalInstitutionsField.value"/>
+      <ng-template
+        pTemplate="content"
+        let-prevCallback="prevCallback"
+        let-nextCallback="nextCallback">
+
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
           </div>
-        </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              (submit)="nextCallback.emit()"
+              (cancel)="prevCallback.emit()"
+              labelSubmitButton="Siguiente"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              [isVisibleCancelButton]="true"
+            />
+          </div>
+        </p-toolbar>
+
+        <app-obligation
+          class="col-12"
+          [formInput]="form.value"
+          (formOutput)="save($event)"/>
       </ng-template>
     </p-stepperPanel>
 
     <p-stepperPanel header="Financiamiento">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-                   let-index="index">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            @if (externalInstitutionsField.value && internalInstitutionsField.value) {
-              <app-financing
-                class="col-12"
-                (formOutput)="save($event)"
-                [formInput]="form.value"
-                (nextOutput)="nextCallback.emit()"
-                (prevOutput)="prevCallback.emit()"
-                [externalInstitutions]="externalInstitutionsField.value"
-                [internalInstitutions]="internalInstitutionsField.value"/>
-            }
+      <ng-template
+        pTemplate="content"
+        let-prevCallback="prevCallback"
+        let-nextCallback="nextCallback">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
           </div>
-        </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              (submit)="onSubmit(nextCallback);"
+              (cancel)="prevCallback.emit()"
+              labelSubmitButton="Siguiente"
+              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+              [isVisibleCancelButton]="true"
+            />
+          </div>
+        </p-toolbar>
+
+        <app-financing
+          class="col-12"
+          (formOutput)="save($event)"
+          [formInput]="form.value"
+          [externalInstitutions]="externalInstitutionsField.value"
+          [internalInstitutions]="internalInstitutionsField.value"/>
       </ng-template>
     </p-stepperPanel>
 
     <p-stepperPanel header="Documentación">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-                   let-index="index">
+      <ng-template
+        pTemplate="content"
+        let-prevCallback="prevCallback"
+        let-nextCallback="nextCallback">
         <div class="flex flex-column ">
           <div
             class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
