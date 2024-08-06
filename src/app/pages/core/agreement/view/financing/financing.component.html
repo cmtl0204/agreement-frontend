@@ -6,10 +6,10 @@
         </div>
       </p-toolbar>
 
-      <p-panel>
+      <p-panel *ngIf="agreement.financings">
         <div class="p-fluid grid">
           <p-table
-            [value]="financings"
+            [value]="agreement.financings"
             styleClass="p-datatable-striped"
             [tableStyle]="{'min-width': '50rem'}"
             class="col-12"
