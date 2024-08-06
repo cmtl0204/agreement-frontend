@@ -102,6 +102,9 @@ export class AppearerComponent implements OnInit {
   patchValueForm() {
     this.agreement = this.formInput;
 
+    this.agreement.internalInstitutions = this.agreement.internalInstitutions || [];
+    this.agreement.externalInstitutions = this.agreement.externalInstitutions || [];
+
     this.form.patchValue(this.formInput);
   }
 
@@ -293,7 +296,8 @@ export class AppearerComponent implements OnInit {
       this.agreement.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.splice(indexExternalInstitutionDetail, 1);
     }
   }
-
+  
+ /** edit array **/
   editExternalInstitution(index: number) {
     if (
       this.agreement.externalInstitutions &&
@@ -444,20 +448,6 @@ export class AppearerComponent implements OnInit {
   }
 
   /** Form Actions **/
-  onSubmit(): void {
-    if (this.internalInstitutions.length > 0 && this.externalInstitutions.length > 0) {
-      this.save()
-    } else {
-       this.internalInstitutionForm.markAllAsTouched();
-        this.externalInstitutionForm.markAllAsTouched();
-        this.messageDialogService.fieldErrors('las tablas deben de tener por lo menos un dato')
-    }
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
-  }
 
   /** Getters Form**/
   get internalInstitutions(): FormArray {
