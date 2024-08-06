@@ -19,8 +19,9 @@ export class AgreementsHttpService {
   constructor() {
   }
 
-  create(payload: CatalogueModel): Observable<CatalogueModel> {
+  register(payload: AgreementModel): Observable<AgreementModel> {
     const url = `${this.API_URL}`;
+
     return this.httpClient.post<ServerResponse>(url, payload).pipe(
       map(response => {
         this.messageService.success(response);
@@ -30,8 +31,7 @@ export class AgreementsHttpService {
   }
 
   findAll(): Observable<CatalogueModel[]> {
-    // const url = this.API_URL;
-    const url = './temp/catalogues.json';
+    const url = this.API_URL;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
@@ -54,11 +54,20 @@ export class AgreementsHttpService {
     );
   }
 
+  findNationalAgreementsByOrigin(): Observable<AgreementModel[]> {
+    const url = `${this.API_URL}/national-agreements`;
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 
     return this.httpClient.get(url).pipe(
-      map(response =>{ 
+      map(response =>{
         console.log(response)
         return response
   })

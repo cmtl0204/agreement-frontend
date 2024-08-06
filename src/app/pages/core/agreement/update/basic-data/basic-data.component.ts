@@ -7,7 +7,7 @@ import {
   AgreementFormEnum,
   SkeletonEnum,
   CatalogueTypeEnum,
-  AgreementsTypeEnum,
+  CatalogueAgreementsTypeEnum,
   AgreementStateEnum
 } from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
@@ -81,7 +81,7 @@ export class BasicDataComponent implements OnInit {
 
   checkValueChanges(){
     this.typeField.valueChanges.subscribe((value) => {
-      if(value && value.code === AgreementsTypeEnum.ESPECIAL) {
+      if(value && value.code === CatalogueAgreementsTypeEnum.ESPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       }else{
         this.specialTypeField.clearValidators();

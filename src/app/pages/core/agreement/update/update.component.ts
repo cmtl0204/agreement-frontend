@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {AgreementsHttpService} from "@servicesHttp/core";
 
 @Component({
   selector: 'app-update',
@@ -7,6 +8,7 @@ import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
   styleUrl: './update.component.scss'
 })
 export class UpdateComponent {
+  private readonly agreementsHttpService = inject(AgreementsHttpService);
   form!: FormGroup;
   private readonly formBuilder = inject(FormBuilder);
 
@@ -53,12 +55,9 @@ export class UpdateComponent {
   };
 
   findAgreement() {
-    // this.agreementsHttpService.findOne('').subscribe(agreement => {
-    //   this.form.patchValue(agreement);
-    // });
-
-    //temp
-    this.form.patchValue(JSON.parse(String(sessionStorage.getItem('agreement'))));
+    this.agreementsHttpService.findOne('4041609d-5530-4196-870e-b844a06ec5a4').subscribe(agreement => {
+      this.form.patchValue(agreement);
+    });
   }
 
   save(event: any) {

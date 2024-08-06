@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AgreementsService, MessageDialogService} from "@servicesApp/core";
 import {PrimeIcons} from "primeng/api";
+import {AgreementsHttpService} from "@servicesHttp/core";
 
 @Component({
   selector: 'app-register',
@@ -10,6 +11,7 @@ import {PrimeIcons} from "primeng/api";
 })
 export class RegisterComponent {
   private readonly agreementsService = inject(AgreementsService);
+  private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly formBuilder = inject(FormBuilder);
   protected readonly messageDialogService = inject(MessageDialogService);
 
@@ -80,7 +82,9 @@ export class RegisterComponent {
   }
 
   register() {
-    // this.agreementHttpServices.register(this.form.value).subscribe();
+    this.agreementsHttpService.register(this.form.value).subscribe(response=>{
+      console.log(response);
+    });
   }
 
   get validateForms(): boolean {
@@ -105,9 +109,11 @@ export class RegisterComponent {
     return this.form.controls['internalInstitutions'] as FormArray;
   }
 
-  onSubmit() {
-    if (this.validateForms) {
-
+  onSubmit(nextCallback:any) {
+    // if (this.validateForms) {
+    if (true) {
+      this.register();
+      nextCallback.emit();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
