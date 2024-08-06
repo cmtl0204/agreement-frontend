@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray } from '@angular/forms';
-import { ColumnModel } from '@models/core';
+import {AgreementModel, ColumnModel} from '@models/core';
 import { AuthService} from '@servicesApp/auth';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
@@ -13,23 +13,23 @@ import { PrimeIcons } from 'primeng/api';
   styleUrl: './addendum.component.scss'
 })
 export class AddendumComponent implements OnInit {
-  
+
   /** Services **/
   protected readonly authService = inject(AuthService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
-  
+
   /** Form **/
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter(); //add
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter(); //add
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   protected form!: FormGroup;
   protected addendumForm! : FormGroup;
   private formErrors: string[] = [];
   protected Validators = Validators;
   protected addendumColumns: ColumnModel[] = [];
-  
+
   /** Enums **/
   protected readonly AddendumEnum = AddendumEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -105,10 +105,10 @@ export class AddendumComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.isAddendumField.invalid){ 
+    if (this.isAddendumField.invalid){
       this.formErrors.push(AddendumEnum.isAddendum);
       this.messageDialogService.fieldErrors(this.formErrors)
-    } 
+    }
 
     if (this.isAddendumField.valid && this.isAddendumField.value) {
       if (this.addendums.value.length === 0) {
@@ -117,7 +117,7 @@ export class AddendumComponent implements OnInit {
         this.save();
       }
     }
-    
+
     if(this.isAddendumField.valid && this.isAddendumField.value === false){
       this.save();
     }
@@ -139,7 +139,7 @@ export class AddendumComponent implements OnInit {
         this.descriptionField.removeValidators(Validators.required),
         this.isModifiedFinishDateField.removeValidators(Validators.required),
         this.documentField.removeValidators(Validators.required),
-        
+
         this.descriptionField.reset(),
         this.isModifiedFinishDateField.reset(),
         this.documentField.reset()

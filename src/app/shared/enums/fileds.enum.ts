@@ -116,6 +116,7 @@ export enum AdministratorFormEnum{
   unit = 'Unidad Administrativa',
   position = 'Cargo del funcionario',
   administrator='Administrador del convenio',
+  user='Administrador del convenio',
 }
 
 export enum AddendumEnum{

@@ -34,7 +34,7 @@ export enum RoutesEnum {
 }
 
 export enum CatalogueAgreementsTypeEnum {
-  ESPECIAL = 'ESPECIAL',
+  SPECIAL = 'SPECIAL',
 }
 
 export enum CatalogueObligationsTypeEnum {
@@ -46,4 +46,16 @@ export enum CatalogueObligationsTypeEnum {
 export enum CatalogueAgreementsEnablingDocumentEnum {
   SIGNED_AGREEMENT = 'SIGNED_AGREEMENT',
   ADMINISTRATOR_ASSIGNMENT = 'ADMINISTRATOR_ASSIGNMENT',
+}
+
+export enum CatalogueInternalInstitutionsPersonTypeEnum {
+  PUBLIC = 'PUBLIC',
+  PRIVATE_NATURAL = 'PRIVATE_NATURAL',
+  PRIVATE_LEGAL = 'PRIVATE_LEGAL',
+}
+
+export enum CatalogueExternalInstitutionsPersonTypeEnum {
+  PUBLIC = 'PUBLIC',
+  PRIVATE_NATURAL = 'PRIVATE_NATURAL',
+  PRIVATE_LEGAL = 'PRIVATE_LEGAL',
 }

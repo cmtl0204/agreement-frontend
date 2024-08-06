@@ -22,7 +22,7 @@ import {DialogModule} from "primeng/dialog";
 import {ProgressBarModule} from "primeng/progressbar";
 import {DividerModule} from "primeng/divider";
 import {ToastModule} from "primeng/toast";
-import {MessageService} from "primeng/api";
+import {ConfirmationService, MessageService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {MegaMenuModule} from "primeng/megamenu";
@@ -34,7 +34,7 @@ import {FileUploadModule} from "primeng/fileupload";
 
 import localEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
-import { AboutComponent } from '@layout';
+import {AboutComponent} from '@layout';
 import {InputTextModule} from "primeng/inputtext";
 import {SidebarModule} from "primeng/sidebar";
 import {BadgeModule} from "primeng/badge";
@@ -82,13 +82,15 @@ registerLocaleData(localEs, 'es');
     PanelMenuModule,
   ],
   providers: [
+    ConfirmationService,
+    MessageService,
     // {
     //   provide: LocationStrategy,
     //   useClass: HashLocationStrategy
     // },
     {provide: LOCALE_ID, useValue: 'es'},
     HttpInterceptorProviders,
-    MessageService,
+
   ],
   bootstrap: [AppComponent]
 })

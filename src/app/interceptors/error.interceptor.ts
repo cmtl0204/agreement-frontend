@@ -1,13 +1,16 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor,} from '@angular/common/http';
 import {delay, Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {CoreService, MessageService} from '@servicesApp/core';
+import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
 
 @Injectable()
 
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private coreService: CoreService, private messageService: MessageService) {
+  private readonly coreService = inject(CoreService);
+  private readonly messageDialogService = inject(MessageDialogService);
+
+  constructor() {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -17,7 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(error => {
         this.coreService.isLoading = false;
         this.coreService.isProcessing = false;
-        this.messageService.error(error.error);
+        this.messageDialogService.errorHttp(error.error);
         return throwError(error);
       }));
   }

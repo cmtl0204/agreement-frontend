@@ -1,13 +1,17 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AgreementModel, CatalogueModel, ColumnModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
-  SkeletonEnum,
+  CatalogueObligationsTypeEnum,
+  CatalogueTypeEnum,
+  IconButtonActionEnum,
+  LabelButtonActionEnum,
+  ObligationDetailForEnum,
+  ObligationForEnum,
   SeverityButtonActionEnum,
-  CatalogueTypeEnum, IconButtonActionEnum,
-  ObligationForEnum, ObligationDetailForEnum, LabelButtonActionEnum, CatalogueObligationsTypeEnum
+  SkeletonEnum
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 
@@ -21,6 +25,7 @@ export class ObligationComponent implements OnInit {
   public readonly messageDialogService = inject(MessageDialogService);
 
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
@@ -40,6 +45,7 @@ export class ObligationComponent implements OnInit {
   protected agreement!: AgreementModel;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected isVisibleObligationForm: boolean = false;
   protected isVisibleObligationDetailForm: boolean = false;
   protected readonly ObligationForEnum = ObligationForEnum;
   protected readonly ObligationDetailForEnum = ObligationDetailForEnum;
@@ -59,6 +65,7 @@ export class ObligationComponent implements OnInit {
     this.loadObligationTypes();
     this.loadInstitutions();
     this.patchValueForm();
+    this.validateForm();
   }
 
   buildColumns() {
@@ -70,7 +77,7 @@ export class ObligationComponent implements OnInit {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      obligations: this.formBuilder.array([])
+      obligations: this.formBuilder.array([], Validators.required)
     });
   }
 
@@ -95,6 +102,7 @@ export class ObligationComponent implements OnInit {
   checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
       this.formOutput.emit(this.agreement);
+      this.validateForm();
     });
 
     this.obligationTypeField.valueChanges.subscribe(value => {
@@ -104,6 +112,14 @@ export class ObligationComponent implements OnInit {
           this.obligationInstitutionNameField.setValue(this.formInput.internalInstitutions[0].name);
       }
     });
+  }
+
+  validateForm() {
+    this.formErrors = [];
+
+    if (this.agreement.obligations?.length === 0) this.formErrors.push('Obligaciones');
+
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   validateObligationForm(): boolean {
@@ -131,25 +147,36 @@ export class ObligationComponent implements OnInit {
   loadInstitutions() {
     this.institutions = [];
 
-    if (this.formInput.internalInstitutions) this.institutions = this.formInput.internalInstitutions;
+    let internalInstitutions: string[] = [];
+    let externalInstitutions: string[] = [];
 
+    if (this.formInput.internalInstitutions) {
+      internalInstitutions = this.formInput.internalInstitutions.map(internalInstitution =>
+        internalInstitution.name);
+    }
 
-    if (this.formInput.externalInstitutions) this.institutions = this.formInput.externalInstitutions;
+    if (this.formInput.externalInstitutions) {
+      externalInstitutions = this.formInput.externalInstitutions.map(externalInstitution =>
+        externalInstitution.name);
+    }
+
+    this.institutions = internalInstitutions.concat(externalInstitutions);
+
+    console.log(this.institutions);
   }
 
   addObligation() {
     if (this.validateObligationForm()) {
       const obligation = this.obligationForm.value;
-      console.log('obligation',obligation.institutionName.toString());
+
+      obligation.institutionName = obligation.institutionName.toString();
       obligation.obligationDetails = [this.obligationDetailForm.value];
 
       if (!this.agreement.obligations) {
         this.agreement.obligations = [];
       } else {
         if (this.agreement.obligations.findIndex(item => {
-          console.log(obligation.institutionName.toString());
-          console.log(item.institutionName);
-          item.institutionName === obligation.institutionName.toString()
+          return item.institutionName === obligation.institutionName.toString();
         }) > -1) {
           this.messageDialogService.errorCustom('La entidad ya está registrada', 'Intente con otra por favor');
           return;
@@ -162,6 +189,7 @@ export class ObligationComponent implements OnInit {
 
       this.obligationForm.reset();
       this.obligationDetailForm.reset();
+      this.isVisibleObligationForm = false;
     } else {
       this.obligationForm.markAllAsTouched();
       this.obligationDetailForm.markAllAsTouched();
@@ -173,16 +201,15 @@ export class ObligationComponent implements OnInit {
     if (this.validateObligationDetailForm()) {
       if (this.agreement.obligations) {
         if (this.agreement.obligations[this.index].obligationDetails) {
-          this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
+          this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailForm.value);
         } else {
-          this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
+          this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailForm.value];
         }
       }
 
       this.form.patchValue(this.agreement);
 
       this.obligationForm.reset();
-      this.obligationDetailDescriptionField.reset();
 
       this.isVisibleObligationDetailForm = false;
     } else {
@@ -197,6 +224,10 @@ export class ObligationComponent implements OnInit {
 
     this.agreement.obligations?.splice(index, 1);
     this.form.patchValue({obligations: this.agreement.obligations});
+  }
+
+  showObligationModal() {
+    this.isVisibleObligationForm = true;
   }
 
   showObligationDetailModal(index: number) {

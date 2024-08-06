@@ -5,4 +5,5 @@ export * from './permission.model';
 export * from './role.model';
 export * from './user.model';
 export * from './menu.model';
+export * from './user-ldap.model';
 
