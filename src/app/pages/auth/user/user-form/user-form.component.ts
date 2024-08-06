@@ -22,7 +22,7 @@ import {
   SeverityButtonActionEnum,
   SkeletonEnum,
   UsersFormEnum,
-  UsersIdentificationTypeStateEnum
+  CatalogueUsersIdentificationTypeEnum
 } from "@shared/enums";
 
 @Component({
@@ -79,7 +79,7 @@ export class UserFormComponent implements OnInit, OnExitInterface {
         this.identificationField.disable();
       }
 
-      if (value.code === UsersIdentificationTypeStateEnum.IDENTIFICATION) {
+      if (value.code === CatalogueUsersIdentificationTypeEnum.IDENTIFICATION) {
         this.identificationField.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
       } else {
         this.identificationField.setValidators([Validators.required]);
@@ -195,7 +195,7 @@ export class UserFormComponent implements OnInit, OnExitInterface {
   }
 
   loadIdentificationTypes(): void {
-    this.identificationTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.IDENTIFICATION_TYPE);
+    this.identificationTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_IDENTIFICATION_TYPE);
   }
 
   handleChangePassword(event: any) {

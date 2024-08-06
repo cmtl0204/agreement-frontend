@@ -16,7 +16,7 @@ import {
   SkeletonEnum,
   RoutesEnum,
   CatalogueTypeEnum,
-  SeverityButtonActionEnum,
+  SeverityButtonActionEnum, LabelButtonActionEnum, IconButtonActionEnum, AgreementFormEnum, TableEnum,
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 import {onlyLetters} from "@shared/helpers";
@@ -173,7 +173,7 @@ export class AppearerComponent implements OnInit {
         field: 'name', header: ExternalInstitutionsFormEnum.name
       },
       {
-        field: 'position', header: ExternalInstitutionsFormEnum.position
+        field: 'position', header: `${ExternalInstitutionsFormEnum.unit} / ${ExternalInstitutionsFormEnum.position}`
       },
     ];
   }
@@ -226,9 +226,9 @@ export class AppearerComponent implements OnInit {
 
       this.form.patchValue(this.agreement);
 
-      console.log(this.form.value)
-
       this.externalInstitutionForm.reset();
+
+      this.showExternalInstitutionDetailModal(this.agreement.externalInstitutions.length - 1);
     } else {
       this.externalInstitutionForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -393,4 +393,9 @@ export class AppearerComponent implements OnInit {
   get externalInstitutionDetailPositionField(): AbstractControl {
     return this.externalInstitutionDetailForm.controls['position'];
   }
+
+  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
+  protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly TableEnum = TableEnum;
 }

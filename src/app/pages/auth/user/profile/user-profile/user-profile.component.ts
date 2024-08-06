@@ -10,7 +10,7 @@ import {CataloguesHttpService} from '@servicesHttp/core';
 import {OnExitInterface} from '@shared/interfaces';
 import {DateValidators} from '@shared/validators';
 import {DateFormatPipe} from "@shared/pipes";
-import {CatalogueTypeEnum, SkeletonEnum, UsersIdentificationTypeStateEnum} from "@shared/enums";
+import {CatalogueTypeEnum, SkeletonEnum, CatalogueUsersIdentificationTypeEnum} from "@shared/enums";
 import {environment} from "@env/environment";
 
 @Component({
@@ -44,7 +44,7 @@ export class UserProfileComponent implements OnInit, OnExitInterface {
   ) {
     this.form = this.newForm;
     this.identificationField.valueChanges.subscribe(value => {
-      if (value.code === UsersIdentificationTypeStateEnum.IDENTIFICATION) {
+      if (value.code === CatalogueUsersIdentificationTypeEnum.IDENTIFICATION) {
         this.identificationField.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)])
       } else {
         this.identificationField.clearValidators();
@@ -107,27 +107,27 @@ export class UserProfileComponent implements OnInit, OnExitInterface {
   }
 
   loadBloodTypes(): void {
-    this.bloodTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.BLOOD_TYPE);
+    this.bloodTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_BLOOD_TYPE);
   }
 
   loadEthnicOrigins(): void {
-    this.ethnicOrigins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ETHNIC_ORIGIN);
+    this.ethnicOrigins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_ETHNIC_ORIGIN);
   }
 
   loadGenders(): void {
-    this.genders = this.cataloguesHttpService.findByType(CatalogueTypeEnum.GENDER);
+    this.genders = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_GENDER);
   }
 
   loadIdentificationTypes(): void {
-    this.identificationTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.IDENTIFICATION_TYPE);
+    this.identificationTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_IDENTIFICATION_TYPE);
   }
 
   loadMaritalStatus(): void {
-    this.maritalStatus = this.cataloguesHttpService.findByType(CatalogueTypeEnum.MARITAL_STATUS);
+    this.maritalStatus = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_MARITAL_STATUS);
   }
 
   loadSexes(): void {
-    this.sexes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.SEX);
+    this.sexes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.USERS_SEX);
   }
 
   updateProfile(user: UpdateUserDto): void {

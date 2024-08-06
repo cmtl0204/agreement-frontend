@@ -30,8 +30,7 @@ export class CataloguesHttpService {
   }
 
   findAll(): Observable<CatalogueModel[]> {
-    // const url = this.API_URL;
-    const url = './temp/catalogues.json';
+    const url = this.API_URL;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
