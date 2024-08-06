@@ -61,7 +61,6 @@ export class FinancingComponent implements OnInit {
     this.patchValueForm();
   }
 
-
   patchValueForm() {
     const { financings } = this.formInput;
 
@@ -134,7 +133,6 @@ export class FinancingComponent implements OnInit {
 
   loadCombineInstitutions() {
     this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
-    console.log(this.combinedInstitutions)
   }
 
   validateForm() {
