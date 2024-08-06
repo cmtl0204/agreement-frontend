@@ -4,7 +4,7 @@ import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@mo
 import { AuthService } from '@servicesApp/auth';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum } from '@shared/enums';
+import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum, SeverityButtonActionEnum, IconButtonActionEnum } from '@shared/enums';
 import { onlyLetters } from '@shared/helpers';
 import { PrimeIcons } from 'primeng/api';
 
@@ -42,6 +42,8 @@ export class FinancingComponent implements OnInit {
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly FinancingsFormEnum = FinancingsFormEnum;
   protected readonly DocumentationFormEnum = DocumentationFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
@@ -70,7 +72,7 @@ export class FinancingComponent implements OnInit {
 
     if (financings) {
       financings.forEach((value: FinancingModel) => {
-        this.financings.push(this.formBuilder.group(value))
+        this.financingsField.push(this.formBuilder.group(value))
       });
     }
   }
@@ -118,7 +120,7 @@ export class FinancingComponent implements OnInit {
         paymentMethod: [this.financingForm.value.paymentMethod],
         source: [this.financingForm.value.source],
       });
-      this.financings.push(financings);
+      this.financingsField.push(financings);
       this.financingForm.reset();
 
     } else {
@@ -129,17 +131,17 @@ export class FinancingComponent implements OnInit {
 
   /** delete array**/
   deleteFinancing(index: number) {
-    this.financings.removeAt(index);
+    this.financingsField.removeAt(index);
   }
 
   /** Edit**/
   editFinancing(index: number) {
-    const financing = this.financings.at(index);
+    const financing = this.financingsField.at(index);
 
     if (financing) {
       this.financingForm.patchValue(financing.value);
     }
-    this.financings.removeAt(index);
+    this.financingsField.removeAt(index);
   }
 
 
@@ -159,13 +161,13 @@ export class FinancingComponent implements OnInit {
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
     }
     if (!this.isFinancingField.value) {
-      if (this.financings.length > 0) {
-        this.financings.clear();
+      if (this.financingsField.length > 0) {
+        this.financingsField.clear();
       }
       this.save();
       this.formErrors = [];
     } else {
-      if (this.financings.length > 0) {
+      if (this.financingsField.length > 0) {
         this.save();
         this.formErrors = [];
       }
@@ -175,7 +177,7 @@ export class FinancingComponent implements OnInit {
 
   onSubmit(): void {
     if (this.validateForm()) {
-      if (this.financings.length === 0 && this.isFinancingField.value) {
+      if (this.financingsField.length === 0 && this.isFinancingField.value) {
         this.messageDialogService.fieldErrors(['Debe añadir']);
       } else {
         this.save();
@@ -208,7 +210,7 @@ export class FinancingComponent implements OnInit {
     });
   }
 
-  get financings(): FormArray {
+  get financingsField(): FormArray {
     return this.form.get('financings') as FormArray;
   }
 
