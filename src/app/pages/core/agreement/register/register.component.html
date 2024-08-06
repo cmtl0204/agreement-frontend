@@ -100,7 +100,7 @@
 
           <div class="p-toolbar-group-right">
             <app-form-button-action
-              (submit)="onSubmit();nextCallback.emit()"
+              (submit)="onSubmit(nextCallback);"
               (cancel)="prevCallback.emit()"
               labelSubmitButton="Siguiente"
               [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"

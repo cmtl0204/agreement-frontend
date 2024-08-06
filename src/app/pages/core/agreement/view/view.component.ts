@@ -26,13 +26,8 @@ export class ViewComponent {
   }
 
   findAgreement() {
-    // this.agreementsHttpService.findOne('').subscribe(agreement => {
-    //   this.agreement = agreement;
-    // });
-
-    //temp
-    this.agreement = JSON.parse(String(sessionStorage.getItem('agreement')));
-    this.coreService.isLoading = true;
-    this.coreService.isLoading = false;
+    this.agreementsHttpService.findOne('4041609d-5530-4196-870e-b844a06ec5a4').subscribe(agreement => {
+      this.agreement = agreement;
+    });
   }
 }

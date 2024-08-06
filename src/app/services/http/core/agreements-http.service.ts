@@ -55,6 +55,15 @@ export class AgreementsHttpService {
     );
   }
 
+  findNationalAgreementsByOrigin(): Observable<AgreementModel[]> {
+    const url = `${this.API_URL}/national-agreements`;
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 

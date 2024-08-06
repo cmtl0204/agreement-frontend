@@ -109,9 +109,11 @@ export class RegisterComponent {
     return this.form.controls['internalInstitutions'] as FormArray;
   }
 
-  onSubmit() {
-    if (this.validateForms) {
+  onSubmit(nextCallback:any) {
+    // if (this.validateForms) {
+    if (true) {
       this.register();
+      nextCallback.emit();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
