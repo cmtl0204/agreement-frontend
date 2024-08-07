@@ -40,8 +40,14 @@ import {SidebarModule} from "primeng/sidebar";
 import {BadgeModule} from "primeng/badge";
 import {PanelMenuModule} from "primeng/panelmenu";
 import {ThemeComponent} from "./layout/theme/theme.component";
+import {JwtModule} from "@auth0/angular-jwt";
+import {environment} from "@env/environment";
 
 registerLocaleData(localEs, 'es');
+
+export function tokenGetter(){
+  return sessionStorage.getItem(environment.TOKEN_NAME);
+}
 
 @NgModule({
   declarations: [
@@ -56,6 +62,13 @@ registerLocaleData(localEs, 'es');
     ThemeComponent,
   ],
   imports: [
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:8080"],
+        disallowedRoutes: ["http://localhost:8080/login/forget"]
+      }
+    }),
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

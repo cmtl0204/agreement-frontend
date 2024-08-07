@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Observable, of, throwError} from 'rxjs';
@@ -11,6 +11,7 @@ import {CoreService, MessageService} from '@servicesApp/core';
 import {RoutesService} from "@servicesApp/core";
 import {CataloguesHttpService, LocationsHttpService} from "@servicesHttp/core";
 import {RolePipe} from "@shared/pipes";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +20,17 @@ import {RolePipe} from "@shared/pipes";
 export class AuthHttpService {
   API_URL: string = `${environment.API_URL}/auth`;
   rolePipe: RolePipe = new RolePipe();
+  private readonly jwtHelperService = inject(JwtHelperService);
+  private readonly httpClient = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly coreService = inject(CoreService);
+  private readonly cataloguesHttpService = inject(CataloguesHttpService);
+  private readonly locationsHttpService = inject(LocationsHttpService);
+  private readonly router = inject(Router);
+  private readonly routesService = inject(RoutesService);
+  private readonly messageService = inject(MessageService);
 
-  constructor(private readonly httpClient: HttpClient,
-              private readonly authService: AuthService,
-              private readonly coreService: CoreService,
-              private readonly cataloguesHttpService: CataloguesHttpService,
-              private readonly locationsHttpService: LocationsHttpService,
-              private readonly router: Router,
-              private readonly routesService: RoutesService,
-              private readonly messageService: MessageService) {
+  constructor() {
   }
 
   signup(userData: UserModel): Observable<UserModel> {
@@ -62,14 +65,17 @@ export class AuthHttpService {
   login(credentials: LoginModel): Observable<LoginResponse> {
     const url = `${this.API_URL}/login`;
 
-    this.loadCatalogues();
+
     // this.findLocations();
 
     return this.httpClient.post<LoginResponse>(url, credentials)
       .pipe(
         map(response => {
-          this.authService.token = response.data.token;
-          this.authService.auth = response.data.user;
+          const token = this.jwtHelperService.decodeToken(response.accessToken);
+          console.log(token);
+          this.authService.token = token;
+          // this.authService.auth = response.data.user;
+          this.loadCatalogues();
           return response;
         })
       );
