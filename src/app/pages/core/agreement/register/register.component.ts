@@ -1,9 +1,8 @@
 import {Component, inject} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AgreementsService, MessageDialogService} from "@servicesApp/core";
-import {ConfirmationService, MessageService, PrimeIcons} from "primeng/api";
+import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {AgreementsHttpService} from "@servicesHttp/core";
-import {Event} from "@angular/router";
 import {AgreementModel} from "@models/core";
 
 @Component({

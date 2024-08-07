@@ -43,26 +43,26 @@ export enum CourseFormEnum {
   AREA = 'Área',
 }
 
-export enum FinancingsFormEnum{
+export enum FinancingsFormEnum {
   model = 'Comparecientes del convenio',
   budget = 'Presupusesto y financiamiento',
   paymentMethod = 'Forma de pago',
   source = 'Fuente de financiamiento',
 }
 
-export enum DocumentationFormEnum{
+export enum DocumentationFormEnum {
   signedAgreement = 'Convenio suscrito',
   administratorAgreement = 'Designación del administrador del convenio'
 }
 
-export enum InternalInstitutionsFormEnum{
+export enum InternalInstitutionsFormEnum {
   name = 'Nombre entidad/institución contraparte que firma el convenio',
   unit = 'Unidad a la que pertenece la contraparte',
   position = 'Cargo del funcionario Ministerio de Turismo',
   personType = 'Entidad',
 }
 
-export enum ExternalInstitutionsFormEnum{
+export enum ExternalInstitutionsFormEnum {
   name = 'Nombre entidad/institución contraparte que firma el convenio',
   position = 'Cargo de la contraparte',
   unit = 'Unidad a la que pertenece la contraparte',
@@ -88,18 +88,18 @@ export enum ObligationDetailForEnum {
   description = 'Obligación'
 }
 
-export enum AgreementFormEnum{
-  subscribedAt='Fecha suscripción de convenio',
-  startedAt ='Fecha inicio de convenio',
-  isFinishDate='¿El convenio cuenta con fecha de terminación?',
-  endedAt='Fecha de terminación del Convenio',
-  endedReason ='Razón de terminación del convenio',
-  totalTerm ='Plazo total del convenio',
+export enum AgreementFormEnum {
+  subscribedAt = 'Fecha suscripción de convenio',
+  startedAt = 'Fecha inicio de convenio',
+  isFinishDate = '¿El convenio cuenta con fecha de terminación?',
+  endedAt = 'Fecha de terminación del Convenio',
+  endedReason = 'Razón de terminación del convenio',
+  totalTerm = 'Plazo total del convenio',
   yearTerm = 'Años',
   monthTerm = 'Meses',
   dayTerm = 'Días',
-  objective='Objeto del convenio',
-  name ='Nombre del convenio',
+  objective = 'Objeto del convenio',
+  name = 'Nombre del convenio',
   internalNumber = 'Numero interno de convenio',
   number = 'Numero de convenio',
   origin = 'Origen del convenio',
@@ -108,21 +108,21 @@ export enum AgreementFormEnum{
   specialType = 'Tipo especifico del convenio',
 }
 
-export enum AgreementStateEnum{
-  state='Estado del convenio',
+export enum AgreementStateEnum {
+  state = 'Estado del convenio',
 }
 
-export enum AdministratorFormEnum{
-  unit = 'Unidad Administrativa',
+export enum AdministratorFormEnum {
+  header = 'Administrador del convenio',
   position = 'Cargo del funcionario',
-  administrator='Administrador del convenio',
-  user='Administrador del convenio',
+  unit = 'Unidad Administrativa',
+  user = 'Administrador del convenio',
 }
 
-export enum AddendumEnum{
-  isAddendum='Registrar Adenda',
-  description= 'Información de la Adenda',
-  isModifiedFinishDate= '¿Se modifica fecha de terminación del convenio?',
-  document='Documento de adenda o modificatorio',
-  agreementEndedAt='Fecha de terminación'
+export enum AddendumEnum {
+  isAddendum = 'Registrar Adenda',
+  description = 'Información de la Adenda',
+  isModifiedFinishDate = '¿Se modifica fecha de terminación del convenio?',
+  document = 'Documento de adenda o modificatorio',
+  agreementEndedAt = 'Fecha de terminación'
 }
