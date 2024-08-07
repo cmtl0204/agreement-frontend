@@ -44,6 +44,7 @@ export enum CourseFormEnum {
 }
 
 export enum FinancingsFormEnum {
+  header = 'Financiamiento', 
   model = 'Comparecientes del convenio',
   budget = 'Presupusesto y financiamiento',
   paymentMethod = 'Forma de pago',
@@ -51,8 +52,13 @@ export enum FinancingsFormEnum {
 }
 
 export enum DocumentationFormEnum {
+  header = 'Documentación', 
   signedAgreement = 'Convenio suscrito',
   administratorAgreement = 'Designación del administrador del convenio'
+}
+
+export enum AppearerFormEnum {
+  header = 'Comparecientes del convenio', 
 }
 
 export enum InternalInstitutionsFormEnum {
@@ -80,6 +86,7 @@ export enum ExternalInstitutionsObligations {
 }
 
 export enum ObligationForEnum {
+  header = 'Obligaciones',
   institutionName = 'Nombre de la Institución',
   type = 'Tipo de obligación',
 }
@@ -88,7 +95,20 @@ export enum ObligationDetailForEnum {
   description = 'Obligación'
 }
 
+export enum AgreementDateFormEnum {
+  header = 'Fechas del convenio',
+  subscribedAt = 'Fecha suscripción de convenio',
+  startedAt = 'Fecha inicio de convenio',
+  isFinishDate = '¿El convenio cuenta con fecha de terminación?',
+  endedAt = 'Fecha de terminación del Convenio',
+  endedReason = 'Razón de terminación del convenio',
+  yearTerm = 'Años',
+  monthTerm = 'Meses',
+  dayTerm = 'Días',
+}
+
 export enum AgreementFormEnum {
+  header = 'Datos Básicos',
   subscribedAt = 'Fecha suscripción de convenio',
   startedAt = 'Fecha inicio de convenio',
   isFinishDate = '¿El convenio cuenta con fecha de terminación?',
@@ -120,6 +140,7 @@ export enum AdministratorFormEnum {
 }
 
 export enum AddendumEnum {
+  header = 'Adendas',
   isAddendum = 'Registrar Adenda',
   description = 'Información de la Adenda',
   isModifiedFinishDate = '¿Se modifica fecha de terminación del convenio?',
