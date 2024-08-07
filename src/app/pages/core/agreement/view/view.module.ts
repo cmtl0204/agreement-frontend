@@ -38,49 +38,52 @@ import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
-  declarations: [
-    ViewComponent,
-    BasicDataComponent,
-    AgreementDateComponent,
-    AppearerComponent,
-    ObligationComponent,
-    FinancingComponent,
-    AddendumComponent,
-    AgreementAdministratorComponent
-  ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    SharedModule,
-    ButtonModule,
-    CardModule,
-    CheckboxModule,
-    DividerModule,
-    InputTextModule,
-    PasswordModule,
-    RippleModule,
-    DropdownModule,
-    NgOptimizedImage,
-    MessageModule,
-    PanelModule,
-    AvatarModule,
-    ToolbarModule,
-    OverlayPanelModule,
-    ViewRoutingModule,
-    TableModule,
-    TagModule,
-    ToastModule,
-    FormsModule,
-    InputNumberModule,
-    ToggleButtonModule,
-    CalendarModule,
-    RadioButtonModule,
-    StepperModule,
-    FileUploadModule,
-    InputTextareaModule,
-    ButtonModule,
-    TagModule
-  ]
+    declarations: [
+        ViewComponent,
+        BasicDataComponent,
+        AgreementDateComponent,
+        AppearerComponent,
+        ObligationComponent,
+        FinancingComponent,
+        AddendumComponent,
+        AgreementAdministratorComponent
+    ],
+    exports: [
+        ViewComponent
+    ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        SharedModule,
+        ButtonModule,
+        CardModule,
+        CheckboxModule,
+        DividerModule,
+        InputTextModule,
+        PasswordModule,
+        RippleModule,
+        DropdownModule,
+        NgOptimizedImage,
+        MessageModule,
+        PanelModule,
+        AvatarModule,
+        ToolbarModule,
+        OverlayPanelModule,
+        ViewRoutingModule,
+        TableModule,
+        TagModule,
+        ToastModule,
+        FormsModule,
+        InputNumberModule,
+        ToggleButtonModule,
+        CalendarModule,
+        RadioButtonModule,
+        StepperModule,
+        FileUploadModule,
+        InputTextareaModule,
+        ButtonModule,
+        TagModule
+    ]
 })
 export class ViewModule {
 }

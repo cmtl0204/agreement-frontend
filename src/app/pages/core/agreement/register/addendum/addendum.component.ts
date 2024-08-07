@@ -4,7 +4,7 @@ import {AgreementModel, ColumnModel} from '@models/core';
 import { AuthService} from '@servicesApp/auth';
 import { CoreService, MessageDialogService } from '@servicesApp/core';
 import { CataloguesHttpService } from '@servicesHttp/core';
-import { AddendumEnum, SkeletonEnum } from '@shared/enums';
+import {AddendumEnum, IconButtonActionEnum, LabelButtonActionEnum, SkeletonEnum} from '@shared/enums';
 import { PrimeIcons } from 'primeng/api';
 
 @Component({
@@ -181,4 +181,7 @@ export class AddendumComponent implements OnInit {
   get agreementEndedAtField(): AbstractControl {
     return this.addendumForm.controls['agreementEndedAt'];
   }
+
+    protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
 }

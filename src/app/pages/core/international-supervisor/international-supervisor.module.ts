@@ -12,6 +12,9 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SharedModule } from '@shared/shared.module';
+import {DialogModule} from "primeng/dialog";
+import {ViewModule} from "../agreement/view/view.module";
+import {InputGroupAddonModule} from "primeng/inputgroupaddon";
 
 
 @NgModule({
@@ -29,7 +32,10 @@ import { SharedModule } from '@shared/shared.module';
     InputGroupModule,
     TagModule,
     ReactiveFormsModule,
-    InputTextModule
+    InputTextModule,
+    DialogModule,
+    ViewModule,
+    InputGroupAddonModule
   ]
 })
 export class InternationalSupervisorModule { }

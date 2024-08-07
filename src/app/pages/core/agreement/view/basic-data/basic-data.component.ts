@@ -14,4 +14,8 @@ export class BasicDataComponent {
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly AgreementStateEnum = AgreementStateEnum;
+
+  constructor() {
+    console.log(this.agreement);
+  }
 }

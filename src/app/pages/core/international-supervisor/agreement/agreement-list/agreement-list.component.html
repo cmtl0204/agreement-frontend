@@ -29,19 +29,16 @@
   styleClass="p-datatable-striped"
   [value]="items"
   [columns]="columns"
-  [loading]="coreService.isLoading"
- >
+  [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <div class="flex">
       <h1>{{ BreadcrumbEnum.AGREEMENTS }}</h1>
       <div class="p-input-icon-right ml-auto">
         <p-inputGroup>
-          <p-button
-            [icon]="PrimeIcons.SEARCH"></p-button>
-          <input type="text"
-                 pInputText
-                 [formControl]="search"
-                 placeholder="Buscar...">
+          <p-inputGroupAddon>
+            <i [class]="PrimeIcons.SEARCH"></i>
+          </p-inputGroupAddon>
+          <input pInputText [formControl]="search" placeholder="Buscar...">
         </p-inputGroup>
       </div>
     </div>
@@ -55,13 +52,13 @@
         </th>
       }
       <th class="text-center">
-        {{TableEnum.ACTIONS}}
+        {{ TableEnum.ACTIONS }}
       </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
-      
+
       @for (col of columns; track col) {
         <td>
           <!--Objects-->
@@ -93,8 +90,8 @@
       }
       <td class="text-center">
         <p-button
-            [icon]="PrimeIcons.ELLIPSIS_V"
-            (click)="selectItem(rowData)"></p-button>
+          [icon]="PrimeIcons.ELLIPSIS_V"
+          (click)="selectItem(rowData)"></p-button>
       </td>
     </tr>
   </ng-template>
@@ -114,3 +111,12 @@
                    [enabled]="isButtonActions"
                    (isHide)="isButtonActions=!$event">
 </app-button-action>
+
+<p-dialog
+  header="Convenio"
+  [(visible)]="isVisibleAgreementView"
+  [modal]="true">
+  @if (selectedItem?.id) {
+    <app-view [id]="selectedItem.id!"/>
+  }
+</p-dialog>

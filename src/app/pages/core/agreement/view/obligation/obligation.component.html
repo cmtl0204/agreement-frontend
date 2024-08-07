@@ -1,65 +1,39 @@
-<div class="grid">
-  <div class="col-12">
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form [id]="id" label="Obligaciones de las partes"></app-header-form>
-      </div>
-    </p-toolbar>
-    <p-panel>
-      <div class="p-fluid grid">
-        <p-table [value]="obligations" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }"
-          [expandedRowKeys]="expandedRows" class="col-12">
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 5rem"></th>
-              <th pSortableColumn="name">Nombre institucion <p-sortIcon field="name" /></th>
-              <th pSortableColumn="price">Tipo <p-sortIcon field="price" /></th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-item let-expanded="expanded">
-            <tr>
-              <td>
-                <p-button type="button" pRipple [pRowToggler]="item" [text]="true" [rounded]="true" [plain]="true"
-                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
-              </td>
-              <td>{{item.institutionName}}</td>
-              <td>{{ item.obligationType.typeId}}</td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="rowexpansion" let-obligation>
-            <tr>
-              <td colspan="7">
-                <div class="p-3">
-                  <p-table [value]="obligation.obligationDetails" dataKey="id"
-                    [expandedRowKeys]="expandedObligationDetailRows">
-                    <ng-template pTemplate="header">
-            <tr>
-              <th pSortableColumn="customer">Customer <p-sortIcon field="customer" /></th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-item2 let-obligationExpanded="expanded">
-            <tr>
-              <td>
-                <p-button type="button" pRipple [pRowToggler]="item2" [text]="true" [rounded]="true" [plain]="true"
-                  [icon]="obligationExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
-              </td>
-              <td>{{ item2.description }}</td>
+@if (agreement.obligations) {
+  <p-panel>
+    <ng-template pTemplate="header">
+      Obligaciones
+    </ng-template>
 
+    <ng-template pTemplate="content">
+      <p-table
+        [value]="agreement.obligations"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ ObligationForEnum.type }}</th>
+            <th>Presupuesto y Financiamiento</th>
+            <th>Método de Pago</th>
+            <th>Fuente de Financiamiento</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.type.name }}</td>
+            <td>
+              <ul>
+                @for (obligationDetail of item.obligationDetails; track obligationDetail.id) {
 
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="6">There are no orders for this product yet.</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-      </td>
-      </tr>
-      </ng-template>
+                  <li>
+                    {{ obligationDetail.description }}
+                  </li>
+                }
+              </ul>
+            </td>
+          </tr>
+        </ng-template>
       </p-table>
-  </div>
+    </ng-template>
   </p-panel>
-</div>
-</div>
+}

@@ -1,12 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ColumnModel, AgreementModel } from '@models/core';
-import { CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
-import { AgreementsHttpService } from '@servicesHttp/core';
-import { IconButtonActionEnum, SeverityButtonActionEnum, LabelButtonActionEnum, BreadcrumbEnum, IdButtonActionEnum, TableEnum, AgreementFormEnum, AgreementStateEnum, AdministratorFormEnum } from '@shared/enums';
-import { PrimeIcons, MenuItem } from 'primeng/api';
-import { debounceTime } from 'rxjs';
+import {Component, inject} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ColumnModel, AgreementModel} from '@models/core';
+import {CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
+import {AgreementsHttpService} from '@servicesHttp/core';
+import {
+  IconButtonActionEnum,
+  SeverityButtonActionEnum,
+  LabelButtonActionEnum,
+  BreadcrumbEnum,
+  IdButtonActionEnum,
+  TableEnum,
+  AgreementFormEnum,
+  AgreementStateEnum,
+  AdministratorFormEnum
+} from '@shared/enums';
+import {PrimeIcons, MenuItem} from 'primeng/api';
+import {debounceTime} from 'rxjs';
 
 @Component({
   selector: 'app-agreement-list',
@@ -41,7 +51,7 @@ export class AgreementListComponent {
   protected items: AgreementModel[] = [];
 
   constructor() {
-    this.breadcrumbService.setItems([{ label: BreadcrumbEnum.AGREEMENTS }]);
+    this.breadcrumbService.setItems([{label: BreadcrumbEnum.AGREEMENTS}]);
 
     // this.paginator = this.coreService.paginator;
 
@@ -64,10 +74,10 @@ export class AgreementListComponent {
         this.items = response;
       });
   }
-  
+
   findOne(id: string) {
     this.agreementsHttpService.findOne(id)
-    .subscribe((response) => {
+      .subscribe((response) => {
         console.log(response)
         // this.selectedItem = response;
       });
@@ -75,12 +85,12 @@ export class AgreementListComponent {
 
   get buildColumns(): ColumnModel[] {
     return [
-      { field: 'name', header: AgreementFormEnum.name },
-      { field: 'internalNumber', header: AgreementFormEnum.internalNumber },
-      { field: 'number', header: AgreementFormEnum.number },
-      { field: 'administrator', header: AdministratorFormEnum.unit },
-      { field: 'endedAt', header: AgreementFormEnum.endedAt },
-      { field: 'agreementState', header: AgreementStateEnum.state }
+      {field: 'name', header: AgreementFormEnum.name},
+      {field: 'internalNumber', header: AgreementFormEnum.internalNumber},
+      {field: 'number', header: AgreementFormEnum.number},
+      {field: 'administrator', header: AdministratorFormEnum.unit},
+      {field: 'endedAt', header: AgreementFormEnum.endedAt},
+      {field: 'agreementState', header: AgreementStateEnum.state}
     ];
   }
 
@@ -139,8 +149,7 @@ export class AgreementListComponent {
   }
 
   redirectViewAgreement(id: string) {
-    // this.router.navigate(['/core/agreements/view', id]);
-    this.router.navigate(['/core/agreements/view']); //review
+    this.router.navigate(['/core/agreements/view',id]);
   }
 
   remove(id: string) {
@@ -184,15 +193,15 @@ export class AgreementListComponent {
   }
 
   validateButtonActions(item: AgreementModel): void {
-  //   this.buttonActions = this.buildButtonActions;
+    //   this.buttonActions = this.buildButtonActions;
 
-  //   if (item.suspendedAt) {
-  //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.SUSPEND), 1);
-  //   }
+    //   if (item.suspendedAt) {
+    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.SUSPEND), 1);
+    //   }
 
-  //   if (!item.suspendedAt) {
-  //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
-  //   }
+    //   if (!item.suspendedAt) {
+    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
+    //   }
   }
 
   paginate(event: any) {

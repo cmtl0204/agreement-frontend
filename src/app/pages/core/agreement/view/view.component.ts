@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {AgreementModel, AgreementStateModel} from "@models/core";
 import {AgreementsHttpService} from "@servicesHttp/core";
 import {SkeletonEnum} from "@shared/enums";
@@ -9,24 +9,24 @@ import {CoreService} from "@servicesApp/core";
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
-export class ViewComponent {
+export class ViewComponent implements OnInit {
   /** Services **/
   protected readonly agreementsHttpService = inject(AgreementsHttpService);
   protected readonly coreService = inject(CoreService);
 
   /** Form **/
+  @Input({required: true}) id!: string;
   protected agreement!: AgreementModel;
-  protected agreementState!: AgreementStateModel;
 
   /** Enums **/
   protected readonly SkeletonEnum = SkeletonEnum;
 
-  constructor() {
+  ngOnInit() {
     this.findAgreement();
   }
 
   findAgreement() {
-    this.agreementsHttpService.findOne('4041609d-5530-4196-870e-b844a06ec5a4').subscribe(agreement => {
+    this.agreementsHttpService.findOne(this.id).subscribe(agreement => {
       this.agreement = agreement;
     });
   }

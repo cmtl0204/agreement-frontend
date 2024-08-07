@@ -1,12 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ColumnModel, AgreementModel } from '@models/core';
-import { CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
-import { AgreementsHttpService } from '@servicesHttp/core';
-import { IconButtonActionEnum, SeverityButtonActionEnum, LabelButtonActionEnum, BreadcrumbEnum, IdButtonActionEnum, TableEnum, AgreementFormEnum, AgreementStateEnum, AdministratorFormEnum } from '@shared/enums';
-import { PrimeIcons, MenuItem } from 'primeng/api';
-import { debounceTime } from 'rxjs';
+import {Component, inject} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ColumnModel, AgreementModel} from '@models/core';
+import {CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
+import {AgreementsHttpService} from '@servicesHttp/core';
+import {
+  IconButtonActionEnum,
+  SeverityButtonActionEnum,
+  LabelButtonActionEnum,
+  BreadcrumbEnum,
+  IdButtonActionEnum,
+  TableEnum,
+  AgreementFormEnum,
+  AgreementStateEnum,
+  AdministratorFormEnum
+} from '@shared/enums';
+import {PrimeIcons, MenuItem} from 'primeng/api';
+import {debounceTime} from 'rxjs';
 
 @Component({
   selector: 'app-agreement-list',
@@ -30,7 +40,7 @@ export class AgreementListComponent {
   // protected paginator: PaginatorModel;
   protected readonly messageService = inject(MessageService)
 
-  protected buttonActions: MenuItem[] = this.buildButtonActions;
+  protected buttonActions: MenuItem[] = [];
   protected isButtonActions: boolean = false;
 
   protected columns: ColumnModel[] = this.buildColumns;
@@ -40,10 +50,14 @@ export class AgreementListComponent {
   protected selectedItem!: AgreementModel;
   protected items: AgreementModel[] = [];
 
+  protected isVisibleAgreementView: boolean = false;
+
+
   constructor() {
-    this.breadcrumbService.setItems([{ label: BreadcrumbEnum.AGREEMENTS }]);
+    this.breadcrumbService.setItems([{label: BreadcrumbEnum.AGREEMENTS}]);
 
     // this.paginator = this.coreService.paginator;
+    this.buildButtonActions();
 
     this.search.valueChanges.pipe(
       debounceTime(500)
@@ -64,10 +78,10 @@ export class AgreementListComponent {
         this.items = response;
       });
   }
-  
+
   findOne(id: string) {
     this.agreementsHttpService.findOne(id)
-    .subscribe((response) => {
+      .subscribe((response) => {
         console.log(response)
         // this.selectedItem = response;
       });
@@ -75,22 +89,22 @@ export class AgreementListComponent {
 
   get buildColumns(): ColumnModel[] {
     return [
-      { field: 'name', header: AgreementFormEnum.name },
-      { field: 'internalNumber', header: AgreementFormEnum.internalNumber },
-      { field: 'number', header: AgreementFormEnum.number },
-      { field: 'administrator', header: AdministratorFormEnum.unit },
-      { field: 'endedAt', header: AgreementFormEnum.endedAt },
-      { field: 'agreementState', header: AgreementStateEnum.state }
+      {field: 'name', header: AgreementFormEnum.name},
+      {field: 'internalNumber', header: AgreementFormEnum.internalNumber},
+      {field: 'number', header: AgreementFormEnum.number},
+      {field: 'administrator', header: AdministratorFormEnum.unit},
+      {field: 'endedAt', header: AgreementFormEnum.endedAt},
+      {field: 'agreementState', header: AgreementStateEnum.state}
     ];
   }
 
   /** Button Actions**/
-  get buildButtonActions(): MenuItem[] {
-    return [
+  buildButtonActions() {
+    this.buttonActions= [
       {
-        id: IdButtonActionEnum.UPDATE,
+        id: IdButtonActionEnum.VIEW,
         label: LabelButtonActionEnum.VIEW,
-        icon: IconButtonActionEnum.UPDATE,
+        icon: IconButtonActionEnum.VIEW,
         command: () => {
           if (this.selectedItem?.id) this.redirectViewAgreement(this.selectedItem.id);
         },
@@ -139,8 +153,8 @@ export class AgreementListComponent {
   }
 
   redirectViewAgreement(id: string) {
-    // this.router.navigate(['/core/agreements/view', id]);
-    this.router.navigate(['/core/agreements/view']); //review
+    // this.router.navigate(['/core/agreements/view']); //review
+    this.isVisibleAgreementView = true;
   }
 
   remove(id: string) {
@@ -153,20 +167,6 @@ export class AgreementListComponent {
     //       });
     //     }
     //   });
-  }
-
-  removeAll() {
-    // this.messageService.questionDelete().then((result) => {
-    //   if (result.isConfirmed) {
-    //     this.agreementsHttpService.removeAll(this.selectedItems).subscribe((users) => {
-    //       this.selectedItems.forEach(userDeleted => {
-    //         this.items = this.items.filter(user => user.id !== userDeleted.id);
-    //         this.paginator.totalItems--;
-    //       });
-    //       this.selectedItems = [];
-    //     });
-    //   }
-    // });
   }
 
   suspend(id: string) {
@@ -184,15 +184,15 @@ export class AgreementListComponent {
   }
 
   validateButtonActions(item: AgreementModel): void {
-  //   this.buttonActions = this.buildButtonActions;
+    //   this.buttonActions = this.buildButtonActions;
 
-  //   if (item.suspendedAt) {
-  //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.SUSPEND), 1);
-  //   }
+    //   if (item.suspendedAt) {
+    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.SUSPEND), 1);
+    //   }
 
-  //   if (!item.suspendedAt) {
-  //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
-  //   }
+    //   if (!item.suspendedAt) {
+    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
+    //   }
   }
 
   paginate(event: any) {
@@ -204,5 +204,4 @@ export class AgreementListComponent {
     this.selectedItem = item;
     this.validateButtonActions(item);
   }
-
 }
