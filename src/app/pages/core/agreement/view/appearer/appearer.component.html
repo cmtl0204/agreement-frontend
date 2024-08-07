@@ -37,8 +37,8 @@
   <ng-template pTemplate="header">
     <h3>Comparecientes</h3>
   </ng-template>
+  @if (agreement.externalInstitutions) {
 
-  <ng-container *ngIf="agreement.externalInstitutions">
     <ng-template pTemplate="content">
       <p-table
         [value]="agreement.externalInstitutions"
@@ -63,6 +63,6 @@
         </ng-template>
       </p-table>
     </ng-template>
-  </ng-container>
+        }
 </p-panel>
 
