@@ -87,6 +87,7 @@ export class AgreementAdministratorComponent implements OnInit {
 
     if (this.unitField.invalid) this.formErrors.push(AdministratorFormEnum.unit);
     if (this.positionField.invalid) this.formErrors.push(AdministratorFormEnum.position);
+    if (this.userField.invalid) this.formErrors.push(AdministratorFormEnum.user);
 
     this.formErrorsOutput.emit(this.formErrors);
   }
