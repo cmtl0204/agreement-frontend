@@ -1,139 +1,39 @@
-<div class="grid">
-  <div class="col-12">
-      <p-toolbar>
-        <div class="p-toolbar-group-left">
-          <app-header-form [id]="id" label="Obligaciones de las partes"></app-header-form>
-        </div>
-      </p-toolbar>
-      <p-panel>
-        <div class="p-fluid grid">
-          <p-table 
-            [value]="products" 
-            dataKey="id" 
-            [tableStyle]="{ 'min-width': '60rem' }" 
-            [expandedRowKeys]="expandedRows" 
-            class="col-12"
-          >
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 5rem"></th>
-                <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
-                <th>Image</th>
-                <th pSortableColumn="price">Price <p-sortIcon field="price" /></th>
-                <th pSortableColumn="category">Category <p-sortIcon field="category" /></th>
-                <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus" /></th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-product let-expanded="expanded">
-              <tr>
-                <td>
-                  <p-button 
-                    type="button" 
-                    pRipple 
-                    [pRowToggler]="product" 
-                    [text]="true" 
-                    [rounded]="true" 
-                    [plain]="true" 
-                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
-                  />
-                </td>
-                <td>{{ product.name }}</td>
-                <td>
-                  <img 
-                    [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" 
-                    [alt]="product.name" 
-                    width="50" 
-                    class="shadow-4" 
-                  />
-                </td>
-                <td>{{ product.price | currency : 'USD' }}</td>
-                <td>{{ product.category }}</td>
-                <td>
-                  <p-tag [value]="product.inventoryStatus" />
-                </td>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="rowexpansion" let-product>
-              <tr>
-                <td colspan="7">
-                  <div class="p-3">
-                    <p-table 
-                      [value]="product.orders" 
-                      dataKey="id" 
-                      [expandedRowKeys]="expandedOrderRows"
-                    >
-                      <ng-template pTemplate="header">
-                        <tr>
-                          <th pSortableColumn="id">Id <p-sortIcon field="id" /></th>
-                          <th pSortableColumn="customer">Customer <p-sortIcon field="customer" /></th>
-                          <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
-                          <th pSortableColumn="amount">Amount <p-sortIcon field="amount" /></th>
-                          <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
-                          <th style="width: 4rem"></th>
-                        </tr>
-                      </ng-template>
-                      <ng-template pTemplate="body" let-order let-orderExpanded="expanded">
-                        <tr>
-                          <td>
-                            <p-button 
-                              type="button" 
-                              pRipple 
-                              [pRowToggler]="order" 
-                              [text]="true" 
-                              [rounded]="true" 
-                              [plain]="true" 
-                              [icon]="orderExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
-                            />
-                          </td>
-                          <td>{{ order.id }}</td>
-                          <td>{{ order.customer }}</td>
-                          <td>{{ order.date }}</td>
-                          <td>{{ order.amount | currency : 'USD' }}</td>
-                          <td>
-                            <p-tag [value]="order.status" />
-                          </td>
-                          <td>
-                            <p-button type="button" icon="pi pi-search" />
-                          </td>
-                        </tr>
-                      </ng-template>
-                      <ng-template pTemplate="rowexpansion" let-order>
-                        <tr>
-                          <td colspan="6">
-                            <div class="p-3">
-                              <p-table [value]="order.names">
-                                <ng-template pTemplate="header">
-                                  <tr>
-                                    <th>Name</th>
-                                  </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-name>
-                                  <tr>
-                                    <td>{{ name }}</td>
-                                  </tr>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage">
-                                  <tr>
-                                    <td colspan="1">There are no names for this order yet.</td>
-                                  </tr>
-                                </ng-template>
-                              </p-table>
-                            </div>
-                          </td>
-                        </tr>
-                      </ng-template>
-                      <ng-template pTemplate="emptymessage">
-                        <tr>
-                          <td colspan="6">There are no orders for this product yet.</td>
-                        </tr>
-                      </ng-template>
-                    </p-table>
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </div>
-      </p-panel>
-  </div>
-</div>
+@if (agreement.obligations) {
+  <p-panel>
+    <ng-template pTemplate="header">
+      Obligaciones
+    </ng-template>
+
+    <ng-template pTemplate="content">
+      <p-table
+        [value]="agreement.obligations"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ ObligationForEnum.type }}</th>
+            <th>Presupuesto y Financiamiento</th>
+            <th>Método de Pago</th>
+            <th>Fuente de Financiamiento</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.type.name }}</td>
+            <td>
+              <ul>
+                @for (obligationDetail of item.obligationDetails; track obligationDetail.id) {
+
+                  <li>
+                    {{ obligationDetail.description }}
+                  </li>
+                }
+              </ul>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+  </p-panel>
+}
