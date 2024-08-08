@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ColumnModel, AgreementModel } from '@models/core';
 import { CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
 import { AgreementsHttpService } from '@servicesHttp/core';
-import { IconButtonActionEnum, SeverityButtonActionEnum, LabelButtonActionEnum, BreadcrumbEnum, IdButtonActionEnum, TableEnum, AgreementFormEnum, AgreementStateEnum } from '@shared/enums';
+import { IconButtonActionEnum, SeverityButtonActionEnum, LabelButtonActionEnum, BreadcrumbEnum, IdButtonActionEnum, TableEnum, AgreementFormEnum, AgreementStateEnum, AdministratorFormEnum } from '@shared/enums';
 import { PrimeIcons, MenuItem } from 'primeng/api';
 import { debounceTime } from 'rxjs';
 
@@ -57,7 +57,7 @@ export class AgreementListComponent {
   }
 
   findAgreements() {
-    this.agreementsHttpService.findAllAgreements()
+    this.agreementsHttpService.findNationalAgreementsByOrigin()
       .subscribe((response) => {
         console.log(response)
         // this.paginator = response.pagination!;
@@ -78,7 +78,7 @@ export class AgreementListComponent {
       { field: 'name', header: AgreementFormEnum.name },
       { field: 'internalNumber', header: AgreementFormEnum.internalNumber },
       { field: 'number', header: AgreementFormEnum.number },
-      { field: 'startedAt', header: AgreementFormEnum.startedAt },
+      { field: 'administrator', header: AdministratorFormEnum.unit },
       { field: 'endedAt', header: AgreementFormEnum.endedAt },
       { field: 'agreementState', header: AgreementStateEnum.state }
     ];

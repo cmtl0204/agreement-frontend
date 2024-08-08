@@ -1,16 +1,17 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
 import {environment} from '@env/environment';
-import {LoginModel, PasswordChangeModel, PasswordResetModel, UpdateUserDto, UserModel} from '@models/auth';
+import {JwtModel, LoginModel, PasswordChangeModel, PasswordResetModel, UpdateUserDto, UserModel} from '@models/auth';
 import {LoginResponse, ServerResponse} from '@models/http-response';
 import {AuthService} from '@servicesApp/auth';
 import {CoreService, MessageService} from '@servicesApp/core';
 import {RoutesService} from "@servicesApp/core";
 import {CataloguesHttpService, LocationsHttpService} from "@servicesHttp/core";
 import {RolePipe} from "@shared/pipes";
+import {jwtDecode} from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +20,16 @@ import {RolePipe} from "@shared/pipes";
 export class AuthHttpService {
   API_URL: string = `${environment.API_URL}/auth`;
   rolePipe: RolePipe = new RolePipe();
+  private readonly httpClient = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly coreService = inject(CoreService);
+  private readonly cataloguesHttpService = inject(CataloguesHttpService);
+  private readonly locationsHttpService = inject(LocationsHttpService);
+  private readonly router = inject(Router);
+  private readonly routesService = inject(RoutesService);
+  private readonly messageService = inject(MessageService);
 
-  constructor(private readonly httpClient: HttpClient,
-              private readonly authService: AuthService,
-              private readonly coreService: CoreService,
-              private readonly cataloguesHttpService: CataloguesHttpService,
-              private readonly locationsHttpService: LocationsHttpService,
-              private readonly router: Router,
-              private readonly routesService: RoutesService,
-              private readonly messageService: MessageService) {
+  constructor() {
   }
 
   signup(userData: UserModel): Observable<UserModel> {
@@ -62,32 +64,22 @@ export class AuthHttpService {
   login(credentials: LoginModel): Observable<LoginResponse> {
     const url = `${this.API_URL}/login`;
 
-    this.loadCatalogues();
-    // this.findLocations();
+    this.cataloguesHttpService.loadCache();
 
     return this.httpClient.post<LoginResponse>(url, credentials)
       .pipe(
         map(response => {
-          this.authService.token = response.data.token;
-          this.authService.auth = response.data.user;
+          const token: JwtModel = jwtDecode(response.accessToken);
+          console.log(token);
+          this.authService.accessToken = response.accessToken;
+          // this.authService.auth = response.data.user;
+          //  this.authService.roles = token.role.split(',');
           return response;
         })
       );
   }
 
-  loadCatalogues() {
-    this.cataloguesHttpService.loadCache();
-  }
-
-  findLocations() {
-    let locations = sessionStorage.getItem('locations');
-
-    if (!locations || this.coreService.version !== this.coreService.newVersion) {
-      this.locationsHttpService.findCache().subscribe();
-    }
-  }
-
-  signOut(): void {
+    signOut(): void {
     console.log('signOut');
     this.authService.removeLogin();
     this.messageService.successCustom('Cerrar Sesión', 'Se cerró correctamente');
@@ -106,12 +98,6 @@ export class AuthHttpService {
         })
       );
       */
-  }
-
-  loginGoogle(): Observable<LoginResponse> {
-    // const url = `${this.URL_PUBLIC}/login/google`;
-    const url = `${this.API_URL}/login/google`;
-    return this.httpClient.get<LoginResponse>(url);
   }
 
   resetPassword(credentials: PasswordResetModel): Observable<ServerResponse> {

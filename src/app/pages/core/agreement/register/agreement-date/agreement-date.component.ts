@@ -20,7 +20,7 @@ export class AgreementDateComponent implements OnInit {
   protected readonly messageDialogService = inject(MessageDialogService);
 
   // Form
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()

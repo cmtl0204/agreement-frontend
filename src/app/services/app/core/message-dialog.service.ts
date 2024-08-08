@@ -1,7 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {ServerResponse} from '@models/http-response';
 import {BehaviorSubject, Observable} from "rxjs";
-import {MessageService, PrimeIcons} from "primeng/api";
+import {ConfirmationService, MessageService, PrimeIcons} from "primeng/api";
 
 type Severity =
   | 'success'
@@ -20,18 +19,19 @@ type Severity =
 })
 export class MessageDialogService {
   private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
   private _modalVisible: boolean = false;
   private _modalConfirmVisible: boolean = false;
   private _modalTitle: string = '';
   private _modalAcceptSeverity: Severity = null;
   private _modalRejectSeverity: Severity = 'danger';
   private _modalMessage: string | string[] = '';
-  private _modalIcon: string  = '';
-  private _modalIconColor: string  = '';
-  private _toastSummary: string  = '';
-  private _toastDetail: string  = '';
+  private _modalIcon: string = '';
+  private _modalIconColor: string = '';
+  private _toastSummary: string = '';
+  private _toastDetail: string = '';
   private _modalResult = new BehaviorSubject<boolean>(true);
-  public modalResult$:Observable<boolean> = this._modalResult.asObservable();
+  public modalResult$: Observable<boolean> = this._modalResult.asObservable();
 
   accept(): void {
     console.log('accept component')
@@ -45,7 +45,34 @@ export class MessageDialogService {
   constructor() {
   }
 
+  errorHttp(error: string | string[] | any) {
+    if (Array.isArray(error)) error.sort();
+
+    this._modalVisible = true;
+    this._modalAcceptSeverity = 'danger';
+    this._modalTitle = error.error;
+    this._modalMessage = error.status;
+  }
+
   errorCustom(title: string, message: string | string[]) {
+    if (Array.isArray(message)) message.sort();
+
+    this._modalVisible = true;
+    this._modalAcceptSeverity = 'danger';
+    this._modalTitle = title;
+    this._modalMessage = message;
+  }
+
+  successCustom(title: string, message: string | string[]) {
+    if (Array.isArray(message)) message.sort();
+
+    this._modalVisible = true;
+    this._modalAcceptSeverity = 'danger';
+    this._modalTitle = title;
+    this._modalMessage = message;
+  }
+
+  successHttp(title: string, message: string | string[]) {
     if (Array.isArray(message)) message.sort();
 
     this._modalVisible = true;
@@ -61,6 +88,23 @@ export class MessageDialogService {
     this._modalAcceptSeverity = 'info';
     this._modalTitle = 'Existen errores en los siguientes campos';
     this._modalMessage = message;
+  }
+
+  questionSave() {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'You have accepted'});
+      },
+      reject: () => {
+        this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000});
+      }
+    });
   }
 
   questionDelete(title = '¿Está seguro de eliminar?', message = 'No podrá recuperar esta información!') {

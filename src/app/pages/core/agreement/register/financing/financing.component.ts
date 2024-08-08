@@ -1,12 +1,19 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { AgreementModel, CatalogueModel, ColumnModel, FinancingModel } from '@models/core';
-import { AuthService } from '@servicesApp/auth';
-import { CoreService, MessageDialogService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { AgreementFormEnum, FinancingsFormEnum, DocumentationFormEnum, SkeletonEnum, RoutesEnum, SeverityButtonActionEnum, IconButtonActionEnum } from '@shared/enums';
-import { onlyLetters } from '@shared/helpers';
-import { PrimeIcons } from 'primeng/api';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
+import {AgreementModel, CatalogueModel, ColumnModel} from '@models/core';
+import {AuthService} from '@servicesApp/auth';
+import {AgreementsService, CoreService, MessageDialogService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {
+  AgreementFormEnum,
+  FinancingsFormEnum,
+  SkeletonEnum,
+  RoutesEnum,
+  SeverityButtonActionEnum,
+  IconButtonActionEnum, LabelButtonActionEnum, TableEnum
+} from '@shared/enums';
+import {onlyLetters} from '@shared/helpers';
+import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-financing',
@@ -17,6 +24,7 @@ export class FinancingComponent implements OnInit {
   /** Services **/
   protected readonly authService = inject(AuthService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly agreementsService = inject(AgreementsService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
@@ -24,11 +32,10 @@ export class FinancingComponent implements OnInit {
   /** variables **/
   protected form!: FormGroup;
   protected financingForm!: FormGroup;
-  @Input({ required: true }) formInput!: AgreementModel;
   protected financingsColumns: ColumnModel[] = [];
 
   /** Form **/
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
@@ -38,48 +45,44 @@ export class FinancingComponent implements OnInit {
   /** Foreign Keys **/
   @Input() internalInstitutions: CatalogueModel[] = [];
   @Input() externalInstitutions: CatalogueModel[] = [];
-  protected combinedInstitutions: CatalogueModel[] = [];
+  protected combinedInstitutions: string[] = [];
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
+  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
   protected readonly FinancingsFormEnum = FinancingsFormEnum;
-  protected readonly DocumentationFormEnum = DocumentationFormEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly PrimeIcons = PrimeIcons;
+
+  protected isVisibleFinancingForm = false;
 
   constructor() {
     this.buildForm();
     this.buildFinancingForm();
     this.buildFinancingsColumns();
+
+    this.checkValueChanges();
   }
 
   ngOnInit(): void {
     this.loadCombineInstitutions();
-    this.form.patchValue(this.formInput);
+
     this.patchValueForm();
+    this.validateForm();
   }
 
-
   patchValueForm() {
-    const { financings } = this.formInput;
-
-    if (financings) {
-      financings.forEach((value: FinancingModel) => {
-        this.financingsField.push(this.formBuilder.group(value))
-      });
-    }
+    this.form.patchValue(this.agreementsService.agreement);
   }
 
   /** Form Builder & Validates **/
   buildForm() {
     this.form = this.formBuilder.group({
       isFinancing: [null, [Validators.required]],
-      financings: this.formBuilder.array([])
+      financings: this.formBuilder.array([], Validators.required)
     });
-
-    this.checkValueChanges();
   }
 
   buildFinancingForm() {
@@ -94,7 +97,7 @@ export class FinancingComponent implements OnInit {
   buildFinancingsColumns() {
     this.financingsColumns = [
       {
-        field: 'institutionName', header: FinancingsFormEnum.model
+        field: 'institutionName', header: FinancingsFormEnum.institutionName
       },
       {
         field: 'budget', header: FinancingsFormEnum.budget
@@ -110,17 +113,26 @@ export class FinancingComponent implements OnInit {
 
   /** add array **/
   addFinancing() {
-    if (this.validateFinancings()) {
-      const financings = this.formBuilder.group({
-        institutionName: [this.financingForm.value.institutionName],
-        budget: [this.financingForm.value.budget],
-        paymentMethod: [this.financingForm.value.paymentMethod],
-        source: [this.financingForm.value.source],
-      });
+    if (this.validateFinancingForm()) {
+      const financing = this.financingForm.value;
 
-      this.financingsField.push(financings);
+      if (!this.agreementsService.agreement.financings) {
+        this.agreementsService.agreement.financings = [];
+      } else {
+        if (this.agreementsService.agreement.financings.findIndex(item => {
+          return item.institutionName === financing.institutionName.toString();
+        }) > -1) {
+          this.messageDialogService.errorCustom('La entidad ya está registrada', 'Intente con otra por favor');
+          return;
+        }
+      }
+
+      this.agreementsService.agreement.financings.push(financing);
+
+      this.form.patchValue({financings: this.agreementsService.agreement.financings});
+
       this.financingForm.reset();
-
+      this.isVisibleFinancingForm = false;
     } else {
       this.financingForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -129,58 +141,64 @@ export class FinancingComponent implements OnInit {
 
   /** delete array**/
   deleteFinancing(index: number) {
-    this.financingsField.removeAt(index);
+    if (this.agreementsService.agreement.financings) {
+      this.agreementsService.agreement.financings.splice(index, 1);
+    }
+
+    this.form.patchValue(this.agreementsService.agreement);
   }
 
   loadCombineInstitutions() {
-    this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
-    console.log(this.combinedInstitutions)
+    this.combinedInstitutions = [];
+
+    let internalInstitutions: string[] = [];
+    let externalInstitutions: string[] = [];
+
+    if (this.agreementsService.agreement.internalInstitutions) {
+      internalInstitutions = this.agreementsService.agreement.internalInstitutions.map(internalInstitution =>
+        internalInstitution.name);
+    }
+
+    if (this.agreementsService.agreement.externalInstitutions) {
+      externalInstitutions = this.agreementsService.agreement.externalInstitutions.map(externalInstitution =>
+        externalInstitution.name);
+    }
+
+    this.combinedInstitutions = internalInstitutions.concat(externalInstitutions);
   }
 
   validateForm() {
     this.formErrors = [];
 
-    if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
-
-    if (this.formErrors.length === 0) {
-      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
-      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
-      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
-      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
-    }
-    if (!this.isFinancingField.value) {
-      if (this.financingsField.length > 0) {
-        this.financingsField.clear();
-      }
-      this.formErrors = [];
-    } else {
-      if (this.financingsField.length > 0) {
-        this.formErrors = [];
+    if (this.isFinancingField.value) {
+      if (this.agreementsService.agreement.financings && this.agreementsService.agreement.financings.length === 0) {
+        this.formErrors.push('Financiamientos');
       }
     }
 
     this.formErrorsOutput.emit(this.formErrors);
-
   }
 
-  validateFinancings(): boolean {
+  validateFinancingForm(): boolean {
     this.formErrors = [];
 
-      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
-      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
-      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
-      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+    if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.institutionName);
+    if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+    if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+    if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
 
-    return this.form.valid && this.formErrors.length === 0;
+    return this.financingForm.valid && this.formErrors.length === 0;
   }
 
   checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
-      this.formOutput.emit(value);
+      this.formOutput.emit(this.agreementsService.agreement);
       this.validateForm();
     });
 
     this.isFinancingField.valueChanges.subscribe(value => {
+      this.agreementsService.agreement.isFinancing = value;
+
       if (value) {
         this.institutionNameField.setValidators(Validators.required);
         this.budgetField.setValidators(Validators.required);
@@ -193,6 +211,7 @@ export class FinancingComponent implements OnInit {
         this.paymentMethodField.clearValidators();
         this.sourceField.clearValidators();
       }
+
       this.institutionNameField.updateValueAndValidity();
       this.budgetField.updateValueAndValidity();
       this.paymentMethodField.updateValueAndValidity();
@@ -200,8 +219,8 @@ export class FinancingComponent implements OnInit {
     });
   }
 
-  get financingsField(): FormArray {
-    return this.form.get('financings') as FormArray;
+  showFinancingModal() {
+    this.isVisibleFinancingForm = true;
   }
 
   get isFinancingField(): AbstractControl {
@@ -223,4 +242,6 @@ export class FinancingComponent implements OnInit {
   get sourceField(): AbstractControl {
     return this.financingForm.controls['source']
   }
+
+  protected readonly TableEnum = TableEnum;
 }

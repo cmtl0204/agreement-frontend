@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UpdateComponent } from './update.component';
 import { ObligationComponent } from './obligation/obligation.component';
-import { ExitGuard } from '@guards/exit.guard';
+import { ExitGuard } from '@guards';
 
 const routes: Routes = [
   {

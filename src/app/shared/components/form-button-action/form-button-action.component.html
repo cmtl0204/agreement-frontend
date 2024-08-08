@@ -17,6 +17,6 @@
     [label]="labelSubmitButton"
     [loading]="coreService.isLoading"
     [severity]="severitySubmitButton"
-    (click)="submit.emit()">
+    (click)="submit.emit($event)">
   </p-button>
 </div>

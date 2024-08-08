@@ -68,10 +68,10 @@
           @if (rowData[col.field]?.id) {
             @switch (col.field) {
               @case ('administrator') {
-                {{ rowData[col.field].name }}
+                {{ rowData[col.field].unit.name }}
               }
               @case ('agreementState') {
-                {{ rowData[col.field].name }}
+                {{ rowData[col.field].state.name }}
               }
             }
           }

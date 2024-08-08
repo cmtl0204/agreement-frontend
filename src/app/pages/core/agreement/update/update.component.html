@@ -21,7 +21,7 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-appearer 
+          <app-appearer
             class="col-12"
             [formInput]="form.value"
             (formOutput)="save($event)"
@@ -37,7 +37,7 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-agreement-date 
+          <app-agreement-date
             class="col-12"
             [formInput]="form.value"
             (formOutput)="save($event)"
@@ -53,13 +53,12 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-obligation 
+          <app-obligation
             class="col-12"
             [formInput]="form.value"
             (formOutput)="save($event)"
             (nextOutput)="nextCallback.emit()"
-            (prevOutput)="prevCallback.emit()"
-            [externalInstitutions]="[]"/>
+            (prevOutput)="prevCallback.emit()"/>
         </div>
       </div>
     </ng-template>
@@ -89,7 +88,7 @@
       <div class="flex flex-column ">
         <div
           class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-          <app-document 
+          <app-document
             class="col-12"
             (formOutput)="save($event)"
             (prevOutput)="prevCallback.emit()"/>

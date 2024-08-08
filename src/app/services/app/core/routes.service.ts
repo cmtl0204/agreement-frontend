@@ -279,25 +279,19 @@ export class RoutesService {
     this.router.navigateByUrl(`/core/dashboards/admin`);
   }
 
-  dashboardPlanner() {
-    this.router.navigateByUrl(`/core/dashboards/planner`);
+  dashboardAdministrator() {
+    this.router.navigateByUrl(`/core/dashboards/administrator`);
   }
 
-  dashboardFollower() {
-    this.router.navigateByUrl(`/core/dashboards/follower`);
+  dashboardNationalSupervisor() {
+    // this.router.navigateByUrl(`/core/dashboards/national-supervisor`);
+    this.router.navigateByUrl(`/core/agreements/register`);
   }
 
-  dashboardApplicant() {
-    this.router.navigateByUrl(`/core/dashboards/applicant`);
+  dashboardInternationalSupervisor() {
+    this.router.navigateByUrl(`/core/dashboards/international-supervisor`);
   }
 
-  dashboardApprover() {
-    this.router.navigateByUrl(`/core/dashboards/approver`);
-  }
-
-  dashboardPlannerApprover() {
-    this.router.navigateByUrl(`/core/dashboards/planner-approver`);
-  }
 
   passwordReset() {
     this.router.navigateByUrl(`/password-reset`);

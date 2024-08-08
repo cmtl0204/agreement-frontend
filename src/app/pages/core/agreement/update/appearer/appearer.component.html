@@ -1,32 +1,11 @@
- <p-toolbar>
-
-        <div class="p-toolbar-group-left">
-          <app-header-form
-            [id]="id"
-            label="Editar"
-            [icon]="PrimeIcons.PENCIL"/>
-        </div>
-
-        <div class="p-toolbar-group-right">
-          <app-form-button-action
-            (submit)="onSubmit()"
-            (cancel)="prevOutput.emit(true)"
-            labelSubmitButton="Siguiente"
-            labelCancelButton="Atrás"
-            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-            [isVisibleCancelButton]="true"
-          />
-        </div>
-
-      </p-toolbar>
 <form class="p-fluid grid">
-  
   <!-- internalInstitutionsForm -->
   <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
 <p-panel header="Ministerio de Turismo">
-      <form [formGroup]="internalInstitutionForm" class="p-fluid grid">
+  <div class="p-fluid grid">
+      <form [formGroup]="internalInstitutionForm" class="col-6 xl:col-6 lg:col-6 md:col-12 sm:col-12">
         <!-- internalInstitutions/personTypeId -->
-        <div class="field col-12 xl:col-5 lg:col-5 md:col-5 sm:col-12">
+        <div class="field col-12 ">
           <label appLabel
                  for="internalPersonType"
                  [label]="InternalInstitutionsFormEnum.personType"
@@ -60,9 +39,9 @@
         </div>
       </form>
 
-    <form [formGroup]="internalInstitutionDetailForm" class="p-fluid grid">
+    <form [formGroup]="internalInstitutionDetailForm" class="flex col-6 xl:col-6 lg:col-6 md:col-12 sm:col-12">
         <!-- internalInstitutions/positionId -->
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <div class="field col-10">
           <label appLabel
                  for="internalPosition"
                  [label]="InternalInstitutionsFormEnum.position"
@@ -97,17 +76,17 @@
     
         <!-- button add internalInstitution -->
         @if (agreement.internalInstitutions && agreement.internalInstitutions.length < 1) {
-          <div class="ml-2" style="display: flex; align-items: center;">
+          <div class="field col-2 mt-4">
             <p-button
               label="Añadir"
               [icon]="PrimeIcons.PLUS"
               [severity]="SeverityButtonActionEnum.ADD"
               (click)="addInternalInstitution()"
-              class="button-adjustment "/>
-  </div>
+            />
+    </div>
         } 
       </form>
-
+   </div>
       <!-- table internal-->
       @if (agreement.internalInstitutions && agreement.internalInstitutions.length > 0) {
         <p-table [value]="agreement.internalInstitutions" [tableStyle]="{ 'min-width': '50rem' }">
@@ -117,7 +96,6 @@
                 {{ col.header }}
               </th>
             }
-            <th>Acciones</th>
           </ng-template>
           <ng-template pTemplate="body" let-internalInstitution let-rowIndex="rowIndex">
             <tr>
@@ -125,7 +103,7 @@
               <td class="text-center">{{ internalInstitution.name }}</td>
               <td>
                 @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
-                  <ul>
+                  <ul class="text-center">
                       {{ internalInstitutionDetail.position.name }}
                   </ul>
                 }
@@ -151,7 +129,7 @@
     <p-panel header="Contraparte">
       <form [formGroup]="externalInstitutionForm" class="p-fluid grid">
         <!-- externalInstitutions/personTypeId -->
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-12 sm:col-12">
           <label appLabel
                  for="externalPersonType"
                  [label]="ExternalInstitutionsFormEnum.personType"
@@ -185,7 +163,7 @@
         </div>
 
         <!-- externalInstitutions/name -->
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-12 sm:col-12">
           <label appLabel for="name"
                  [label]="ExternalInstitutionsFormEnum.name"
                  [required]="externalInstitutionNameField">
@@ -236,7 +214,7 @@
                 {{ col.header }}
               </th>
             }
-            <th>Acciones</th>
+          
           </ng-template>
           <ng-template pTemplate="body" let-externalInstitution let-rowIndex="rowIndex">
             <tr>

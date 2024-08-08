@@ -12,7 +12,7 @@ import {LoginFormEnum} from "@shared/enums";
   encapsulation: ViewEncapsulation.None,
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   //Services
   protected readonly authService = inject(AuthService);
   private readonly authHttpService = inject(AuthHttpService);
@@ -32,15 +32,12 @@ export class LoginComponent implements OnInit {
     this.buildForm();
   }
 
-  ngOnInit(): void {
-  }
-
   buildForm() {
     this.form = this.formBuilder.group({
-      // username: ['reviewer', [Validators.required]],
-      username: [null, [Validators.required]],
-      // password: ['12345678', [Validators.required]],
-      password: [null, [Validators.required]],
+      username: ['juan.perez', [Validators.required]],
+      // username: [null, [Validators.required]],
+      password: ['12345678', [Validators.required]],
+      // password: [null, [Validators.required]],
     });
   }
 
@@ -59,13 +56,14 @@ export class LoginComponent implements OnInit {
     this.authHttpService.login(this.form.value)
       .subscribe(
         response => {
-          if (this.authService.roles.length === 0) {
-            this.messageService.errorCustom('Sin Rol', 'No cuenta con un rol asignado');
-            this.authService.removeLogin();
-            return;
-          }
+          // if (this.authService.roles.length === 0) {
+          //   this.messageService.errorCustom('Sin Rol', 'No cuenta con un rol asignado');
+          //   this.authService.removeLogin();
+          //   return;
+          // }
 
-          this.routesService.roleSelect();
+          this.routesService.dashboardNationalSupervisor();
+          // this.routesService.roleSelect();
         });
   }
 

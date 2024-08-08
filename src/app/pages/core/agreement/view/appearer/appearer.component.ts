@@ -1,10 +1,10 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
+import { AgreementModel, ColumnModel } from '@models/core';
+import { CoreService } from "@servicesApp/core";
 import {
   ExternalInstitutionsFormEnum,
   InternalInstitutionsFormEnum
 } from '@shared/enums';
-import {AgreementModel, ColumnModel} from '@models/core';
-import {CoreService} from "@servicesApp/core";
 
 @Component({
   selector: 'app-appearer',

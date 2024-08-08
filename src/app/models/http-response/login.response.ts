@@ -4,9 +4,10 @@ export interface LoginResponse {
   data: Data;
   message: string;
   title: string;
+  accessToken: string;
 }
 
 interface Data {
   user: UserModel;
-  token: string;
+  accessToken: string;
 }

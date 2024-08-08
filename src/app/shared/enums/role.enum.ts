@@ -1,9 +1,6 @@
 export enum RoleEnum {
   ADMIN = 'admin',
-  PLANNER = 'planner',
-  FOLLOWER = 'follower',
-  APPLICANT = 'applicant',
-  APPROVER = 'approver',
-  PLANNER_APPROVER = 'planner_approver',
-  CATALOGUE = 'catalogue',
+  ADMINISTRATOR = 'administrator',
+  NATIONAL_SUPERVISOR = 'national_supervisor',
+  INTERNATIONAL_SUPERVISOR = 'international_supervisor',
 }

@@ -1,60 +1,102 @@
-<form [formGroup]="obligationForm" class="p-fluid grid">
-  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-    <label appLabel
-           for="type"
-           [label]="ObligationForEnum.type"
-           [required]="obligationTypeField">
-    </label>
+<p-panel>
+  <ng-template pTemplate="header">
+    <h4>Obligaciones:</h4>
+    <p-button
+      class="ml-2"
+      [icon]="IconButtonActionEnum.ADD"
+      [label]="LabelButtonActionEnum.ADD"
+      [severity]="SeverityButtonActionEnum.ADD"
+      (click)="showObligationModal()"/>
+  </ng-template>
 
-    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+  <ng-template pTemplate="content">
+    @if (agreementsService.agreement.obligations && agreementsService.agreement.obligations.length > 0) {
+      <p-table
+        styleClass="p-datatable-striped"
+        [value]="agreementsService.agreement.obligations"
+        [columns]="columns">
 
-    <p-dropdown
-      id="type"
-      formControlName="type"
-      dataKey="id"
-      [options]="obligationTypes"
-      placeholder="Seleccione"
-      [filter]="false">
-      <ng-template pTemplate="selectedItem" let-selectedItem>
-        <div class="flex align-items-center gap-2">
-          <div>{{ selectedItem?.name }}</div>
-        </div>
-      </ng-template>
-      <ng-template let-item pTemplate="item">
-        <div class="flex align-items-center gap-2">
-          <div>{{ item?.name }}</div>
-        </div>
-      </ng-template>
-    </p-dropdown>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th>
+              {{ TableEnum.ACTIONS }}
+            </th>
 
-    <small
-      appErrorMessage
-      [errors]="obligationTypeField.errors"
-      [touched]="obligationTypeField.touched"
-      [dirty]="obligationTypeField.dirty">
-    </small>
-  </div>
+            @for (col of columns; track col.field) {
+              <th [pSortableColumn]="col.field">
+                {{ col.header }}
+              </th>
+            }
 
-  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-    {{obligationInstitutionNameField.value |json}}
-    @if (obligationTypeField.value
-    && (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL
-      || obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN)) {
-      <label appLabel
-             for="institutionName"
-             [label]="ObligationForEnum.institutionName"
-             [required]="obligationInstitutionNameField">
-      </label>
+            <th>
+              {{ TableEnum.ACTIONS }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+          <tr>
+            <td>
+              <p-button
+                [icon]="IconButtonActionEnum.DELETE"
+                [severity]="SeverityButtonActionEnum.DELETE"
+                [pTooltip]="LabelButtonActionEnum.DELETE"
+                (click)="deleteObligation(rowIndex)"/>
+            </td>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.type?.name }}</td>
+            <td>
+              <ul>
+                @for (item of item.obligationDetails; track item; let index = $index) {
+                  <li class="mt-1">
+                    <p-button
+                      [icon]="IconButtonActionEnum.DELETE"
+                      [severity]="SeverityButtonActionEnum.DELETE"
+                      size="small"
+                      [pTooltip]="LabelButtonActionEnum.DELETE"
+                      (click)="deleteObligationDetail(rowIndex,index)"/>
+                    {{ item.description }}
+                  </li>
+                }
+              </ul>
+            </td>
+            <td>
+              <div class="button-group">
+                <p-button
+                  [icon]="IconButtonActionEnum.ADD"
+                  [severity]="SeverityButtonActionEnum.ADD"
+                  [pTooltip]="LabelButtonActionEnum.ADD"
+                  (click)="showObligationDetailModal(rowIndex)"/>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     }
+  </ng-template>
+</p-panel>
 
-    @if (obligationTypeField.value && obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL) {
+<p-dialog
+  [(visible)]="isVisibleObligationForm"
+  [modal]="true"
+  [style]="{width: '50%'}"
+  header="Agregar Obligaciíón">
+  <form [formGroup]="obligationForm" class="p-fluid grid">
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <label appLabel
+             for="type"
+             [label]="ObligationForEnum.type"
+             [required]="obligationTypeField">
+      </label>
+
+      <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+
       <p-dropdown
-        id="institutionName"
-        formControlName="institutionName"
+        id="type"
+        formControlName="type"
         dataKey="id"
-        [options]="institutions"
+        [options]="obligationTypes"
         placeholder="Seleccione"
-        optionValue="name"
         [filter]="false">
         <ng-template pTemplate="selectedItem" let-selectedItem>
           <div class="flex align-items-center gap-2">
@@ -67,95 +109,93 @@
           </div>
         </ng-template>
       </p-dropdown>
-    }
-
-    @if (obligationTypeField.value && obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN) {
-      <p-multiSelect
-        [options]="institutions"
-        formControlName="institutionName"
-        optionLabel="name"
-        optionValue="name"
-        placeholder="Select Institutions">
-      </p-multiSelect>
-    }
-
-    <small
-      appErrorMessage
-      [errors]="obligationInstitutionNameField.errors"
-      [touched]="obligationInstitutionNameField.touched"
-      [dirty]="obligationInstitutionNameField.dirty">
-    </small>
-  </div>
-
-  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-    <form [formGroup]="obligationDetailForm">
-      <label appLabel
-             for="description"
-             [label]="ObligationDetailForEnum.description"
-             [required]="obligationDetailDescriptionField">
-      </label>
-
-      <textarea pInputTextarea id="description" formControlName="description"></textarea>
 
       <small
         appErrorMessage
-        [errors]="obligationDetailDescriptionField.errors"
-        [touched]="obligationDetailDescriptionField.touched"
-        [dirty]="obligationDetailDescriptionField.dirty">
+        [errors]="obligationTypeField.errors"
+        [touched]="obligationTypeField.touched"
+        [dirty]="obligationTypeField.dirty">
       </small>
-    </form>
-  </div>
+    </div>
 
-  <div class="field col-12 xl:col-2 lg:col-2 md:col-2 sm:col-12">
-    <p-button
-      [icon]="IconButtonActionEnum.ADD"
-      [label]="LabelButtonActionEnum.ADD"
-      [severity]="SeverityButtonActionEnum.ADD"
-      (click)="addObligation()"></p-button>
-  </div>
-</form>
+    @if (obligationTypeField.value
+    && (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL
+      || obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN)) {
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
 
-@if (agreement.obligations && agreement.obligations.length > 0) {
-  <p-table
-    dataKey="id"
-    styleClass="p-datatable-striped"
-    [value]="agreement.obligations"
-    [columns]="columns"
-    [loading]="coreService.isLoading">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Entidad</th>
-        <th>Tipo de Obligación</th>
-        <th>Descripción</th>
-        <th>Acciones</th>
-      </tr>
-    </ng-template>
+        <label appLabel
+               for="institutionName"
+               [label]="ObligationForEnum.institutionName"
+               [required]="obligationInstitutionNameField">
+        </label>
 
-    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-      <tr>
-        <td>{{ item.institutionName }}</td>
-        <td>{{ item.type?.name }}</td>
-        <td>
-          <ul>
-            @for (item of item.obligationDetails; track item) {
-              <li>{{ item.description }}</li>
-            }
-          </ul>
-        </td>
-        <td>
-          <p-button
-            [icon]="IconButtonActionEnum.DELETE"
-            [severity]="SeverityButtonActionEnum.DELETE"
-            (click)="deleteObligation(rowIndex)"></p-button>
-          <p-button
-            [icon]="IconButtonActionEnum.ADD"
-            [severity]="SeverityButtonActionEnum.ADD"
-            (click)="showObligationDetailModal(rowIndex)"></p-button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-}
+        @if (obligationTypeField.value && obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL) {
+          <p-dropdown
+            id="institutionName"
+            formControlName="institutionName"
+            dataKey="id"
+            [options]="agreementsService.agreement.externalInstitutions"
+            placeholder="Seleccione"
+            optionValue="name"
+            [filter]="false">
+            <ng-template pTemplate="selectedItem" let-selectedItem>
+              <div class="flex align-items-center gap-2">
+                <div>{{ selectedItem?.name }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ item?.name }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        }
+
+        @if (obligationTypeField.value && obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN) {
+          <p-multiSelect
+            [options]="institutions"
+            formControlName="institutionName"
+            placeholder="Select Institutions">
+          </p-multiSelect>
+        }
+
+        <small
+          appErrorMessage
+          [errors]="obligationInstitutionNameField.errors"
+          [touched]="obligationInstitutionNameField.touched"
+          [dirty]="obligationInstitutionNameField.dirty">
+        </small>
+      </div>
+    }
+
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <form [formGroup]="obligationDetailForm">
+        <label appLabel
+               for="description"
+               [label]="ObligationDetailForEnum.description"
+               [required]="obligationDetailDescriptionField">
+        </label>
+
+        <textarea pInputTextarea id="description" formControlName="description"></textarea>
+
+        <small
+          appErrorMessage
+          [errors]="obligationDetailDescriptionField.errors"
+          [touched]="obligationDetailDescriptionField.touched"
+          [dirty]="obligationDetailDescriptionField.dirty">
+        </small>
+      </form>
+    </div>
+
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <p-button
+        [icon]="IconButtonActionEnum.ADD"
+        [label]="LabelButtonActionEnum.ADD"
+        [severity]="SeverityButtonActionEnum.ADD"
+        (click)="addObligation()"></p-button>
+    </div>
+  </form>
+</p-dialog>
 
 <p-dialog
   [(visible)]="isVisibleObligationDetailForm"

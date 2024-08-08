@@ -1,8 +1,9 @@
 import {Component, inject} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AgreementsService, MessageDialogService} from "@servicesApp/core";
-import {PrimeIcons} from "primeng/api";
+import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {AgreementsHttpService} from "@servicesHttp/core";
+import {AgreementModel} from "@models/core";
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,7 @@ import {AgreementsHttpService} from "@servicesHttp/core";
 export class RegisterComponent {
   private readonly agreementsService = inject(AgreementsService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly formBuilder = inject(FormBuilder);
   protected readonly messageDialogService = inject(MessageDialogService);
 
@@ -21,6 +23,9 @@ export class RegisterComponent {
   protected agreementDateErrors: string[] = [];
   protected agreementAdministratorErrors: string[] = [];
   protected appearerErrors: string[] = [];
+  protected obligationErrors: string[] = [];
+  protected financingErrors: string[] = [];
+  protected activeStep: number = 0;
 
   protected readonly PrimeIcons = PrimeIcons;
 
@@ -30,7 +35,6 @@ export class RegisterComponent {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      // basic-data
       agreementState: [null],
       name: [null],
       internalNumber: [null],
@@ -38,12 +42,8 @@ export class RegisterComponent {
       origin: [null],
       type: [null],
       specialType: [null],
-
-      // appearer
       internalInstitutions: [null],
       externalInstitutions: [null],
-
-      // agreement-date
       subscribedAt: [new Date()],
       startedAt: [new Date()],
       isFinishDate: [null],
@@ -53,38 +53,21 @@ export class RegisterComponent {
       monthTerm: [null],
       dayTerm: [null],
       objective: [null],
-
-      // agreement-administrator
       administrator: [null],
-
-      // obligation
       obligations: [null],
-
-      // financing
       isFinancing: [false],
       financings: [null],
-
-      // document
-
-      // addendum
       isAddendum: [false],
       addendums: [null]
     });
 
     if (this.agreementsService.agreement) {
-      this.form.patchValue(this.agreementsService.agreement);
+      this.form.patchValue(this.agreementsService.agreementStorage);
+
+      if (this.agreementsService.agreement.id) {
+        this.activeStep = 3;
+      }
     }
-  }
-
-  save(event: any) {
-    this.form.patchValue(event);
-    this.agreementsService.agreement = this.form.value;
-  }
-
-  register() {
-    this.agreementsHttpService.register(this.form.value).subscribe(response=>{
-      console.log(response);
-    });
   }
 
   get validateForms(): boolean {
@@ -98,24 +81,72 @@ export class RegisterComponent {
 
     if (this.appearerErrors.length > 0) this.formErrors = this.formErrors.concat(this.appearerErrors);
 
+    if (this.obligationErrors.length > 0) this.formErrors = this.formErrors.concat(this.obligationErrors);
+
+    if (this.financingErrors.length > 0) this.formErrors = this.formErrors.concat(this.financingErrors);
+
     return this.formErrors.length === 0;
   }
 
-  get externalInstitutionsField(): FormArray {
-    return this.form.controls['externalInstitutions'] as FormArray;
-  }
+  validateFormAgreement(nextCallback: any) {
+    this.formErrors = [];
 
-  get internalInstitutionsField(): FormArray {
-    return this.form.controls['internalInstitutions'] as FormArray;
-  }
+    if (this.basicDataErrors.length > 0) this.formErrors = this.formErrors.concat(this.basicDataErrors);
 
-  onSubmit(nextCallback:any) {
-    // if (this.validateForms) {
-    if (true) {
-      this.register();
+    if (this.agreementDateErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementDateErrors);
+
+    if (this.agreementAdministratorErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
+
+    if (this.appearerErrors.length > 0) this.formErrors = this.formErrors.concat(this.appearerErrors);
+
+    if (this.formErrors.length === 0) {
       nextCallback.emit();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
+  }
+
+  validateFormObligation(nextCallback: any) {
+    this.formErrors = [];
+
+    if (this.obligationErrors.length > 0) this.formErrors = this.formErrors.concat(this.obligationErrors);
+
+    if (this.formErrors.length === 0) {
+      nextCallback.emit();
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  onSubmit(nextCallback: any) {
+    if (this.validateForms) {
+      this.register(nextCallback);
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  save(event: AgreementModel) {
+    this.form.patchValue(event);
+
+    this.agreementsService.agreement = this.form.value;
+  }
+
+  register(nextCallback: any) {
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
+      header: '¿Está seguro de guardar?',
+      icon: PrimeIcons.TIMES_CIRCLE,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.agreementsHttpService.register(this.agreementsService.agreement).subscribe(response => {
+          this.agreementsService.agreement = response; //review
+          nextCallback.emit();
+        });
+      }
+    });
   }
 }

@@ -81,7 +81,7 @@ export class BasicDataComponent implements OnInit {
 
   checkValueChanges(){
     this.typeField.valueChanges.subscribe((value) => {
-      if(value && value.code === CatalogueAgreementsTypeEnum.ESPECIAL) {
+      if(value && value.code === CatalogueAgreementsTypeEnum.SPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       }else{
         this.specialTypeField.clearValidators();

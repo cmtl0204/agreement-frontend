@@ -1,63 +1,68 @@
-<div class="grid">
-  <p-panel class="col-12">
-    <ng-template pTemplate="header">
-      <h3>Ministerio de Turismo</h3>
-    </ng-template>
+<p-panel>
+  <ng-template pTemplate="header">
+    <h3>Ministerio de Turismo</h3>
+  </ng-template>
 
-    @if (agreement.internalInstitutions) {
-      <ng-template pTemplate="content">
-        <p-table [value]="agreement.internalInstitutions" styleClass="p-datatable-striped"
-                 [tableStyle]="{'width':'100%'}">
-          <ng-template pTemplate="header">
-            @for (col of internalInstitutionColumns; track col.field) {
-              <th [pSortableColumn]="col.field">
-                {{ col.header }}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
-              </th>
-            }
-          </ng-template>
+  @if (agreement.internalInstitutions) {
+    <ng-template pTemplate="content">
+      <p-table
+        [value]="agreement.internalInstitutions"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{'width':'100%'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of internalInstitutionColumns" [pSortableColumn]="col.field">
+              {{ col.header }}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
 
-          <ng-template pTemplate="body" let-item>
+        <ng-template pTemplate="body" let-item>
+          @for (detail of item.internalInstitutionDetails; track detail) {
             <tr>
               <td>{{ item.name }}</td>
-              <td>{{ item.unit }}</td>
-              <td>{{ item.position.name }}</td>
-              <td>{{ item.personType.name }}</td>
+              <td>{{ detail.unit?.name }}</td>
+              <td>{{ detail.position?.name }}</td>
+              <td>{{ item.personType?.name }}</td>
             </tr>
-          </ng-template>
-        </p-table>
-      </ng-template>
-    }
-  </p-panel>
-
-  <p-panel class="col-12">
-    <ng-template pTemplate="header">
-      <h3>Comparecientes</h3>
+          }
+        </ng-template>
+      </p-table>
     </ng-template>
+  }
+</p-panel>
 
-    @if (agreement.externalInstitutions) {
-      <ng-template pTemplate="content">
-        <p-table [value]="agreement.externalInstitutions" styleClass="p-datatable-striped"
-                 [tableStyle]="{'width':'100%'}">
-          <ng-template pTemplate="header">
-            @for (col of externalInstitutionsColumns; track col.field) {
-              <th [pSortableColumn]="col.field">
-                {{ col.header }}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
-              </th>
-            }
-          </ng-template>
+<p-panel>
+  <ng-template pTemplate="header">
+    <h3>Comparecientes</h3>
+  </ng-template>
+  @if (agreement.externalInstitutions) {
 
-          <ng-template pTemplate="body" let-item>
-            <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ item.unit }}</td>
-              <td>{{ item.position }}</td>
-              <td>{{ item.personType.name }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </ng-template>
-    }
-  </p-panel>
-</div>
+    <ng-template pTemplate="content">
+      <p-table
+        [value]="agreement.externalInstitutions"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{'width':'100%'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of externalInstitutionsColumns" [pSortableColumn]="col.field">
+              {{ col.header }}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item>
+          <tr *ngFor="let detail of item.externalInstitutionDetails">
+            <td>{{ item.name }}</td>
+            <td>{{ detail.position }}</td>
+            <td>{{ detail.unit }}</td>
+            <td>{{ item.personType?.name }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+        }
+</p-panel>
+

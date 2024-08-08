@@ -18,7 +18,8 @@ export enum IdButtonActionEnum {
   FILE_LIST = 'file_list',
   SUBJECT_REQUIREMENTS = 'subject_requirements',
   SUSPEND = 'suspend',
-  REACTIVATE = 'reactivate'
+  REACTIVATE = 'reactivate',
+  VIEW = 'view'
 }
 
 export enum LabelButtonActionEnum {
@@ -29,7 +30,7 @@ export enum LabelButtonActionEnum {
   RETURN = 'Regresar',
   SAVE = 'Guardar',
   UPDATE = 'Editar',
-  VIEW = 'VISUALIZAR',
+  VIEW = 'Visualizar',
   DELETE = 'Eliminar',
   DOWNLOADS = 'Descargas',
   SUSPEND = 'Suspender',
@@ -73,7 +74,8 @@ export enum IconButtonActionEnum {
   CLOSE_SCHOOL_PERIOD = 'Cerrar Periodo Lectivo',
   FILE_LIST = 'pi pi-file',
   SUBJECT_REQUIREMENTS = 'Pre y Co Requisitos',
-  REACTIVATE = 'Reactivar'
+  REACTIVATE = 'Reactivar',
+  VIEW = 'pi pi-eye'
 }
 
 export enum SeverityButtonActionEnum {

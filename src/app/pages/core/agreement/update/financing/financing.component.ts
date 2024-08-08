@@ -30,6 +30,7 @@ export class FinancingComponent implements OnInit {
 
   /** Form **/
   @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   protected id: string = RoutesEnum.NEW
@@ -57,17 +58,11 @@ export class FinancingComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCombineInstitutions();
+    this.form.patchValue(this.formInput);
     this.patchValueForm();
   }
 
-  save() {
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
-  }
-
   patchValueForm() {
-    this.form.patchValue(this.formInput);
-
     const { financings } = this.formInput;
 
     if (financings) {
@@ -83,6 +78,8 @@ export class FinancingComponent implements OnInit {
       isFinancing: [null, [Validators.required]],
       financings: this.formBuilder.array([])
     });
+
+    this.checkValueChanges();
   }
 
   buildFinancingForm() {
@@ -97,7 +94,7 @@ export class FinancingComponent implements OnInit {
   buildFinancingsColumns() {
     this.financingsColumns = [
       {
-        field: 'institutionName', header: FinancingsFormEnum.model
+        field: 'institutionName', header: FinancingsFormEnum.institutionName
       },
       {
         field: 'budget', header: FinancingsFormEnum.budget
@@ -113,7 +110,7 @@ export class FinancingComponent implements OnInit {
 
   /** add array **/
   addFinancing() {
-    if (this.validateForm()) {
+    if (this.validateFinancings()) {
       const financings = this.formBuilder.group({
         institutionName: [this.financingForm.value.institutionName],
         budget: [this.financingForm.value.budget],
@@ -144,18 +141,17 @@ export class FinancingComponent implements OnInit {
     this.financingsField.removeAt(index);
   }
 
-
   loadCombineInstitutions() {
     this.combinedInstitutions = this.internalInstitutions.concat(this.externalInstitutions);
   }
 
-  validateForm(): boolean {
+  validateForm() {
     this.formErrors = [];
 
     if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
 
     if (this.formErrors.length === 0) {
-      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.institutionName);
       if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
@@ -164,32 +160,34 @@ export class FinancingComponent implements OnInit {
       if (this.financingsField.length > 0) {
         this.financingsField.clear();
       }
-      this.save();
       this.formErrors = [];
     } else {
       if (this.financingsField.length > 0) {
-        this.save();
         this.formErrors = [];
       }
     }
+
+    this.formErrorsOutput.emit(this.formErrors);
+
+  }
+
+  validateFinancings(): boolean {
+    this.formErrors = [];
+
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.institutionName);
+      if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
+      if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
+      if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
+
     return this.form.valid && this.formErrors.length === 0;
   }
 
-  onSubmit(): void {
-    if (this.validateForm()) {
-      if (this.financingsField.length === 0 && this.isFinancingField.value) {
-        this.messageDialogService.fieldErrors(['Debe añadir']);
-      } else {
-        this.save();
-      }
-    } else {
-      this.form.markAllAsTouched();
-      this.financingForm.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
   checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
+    });
+
     this.isFinancingField.valueChanges.subscribe(value => {
       if (value) {
         this.institutionNameField.setValidators(Validators.required);

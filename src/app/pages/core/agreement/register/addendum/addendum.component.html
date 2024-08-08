@@ -1,173 +1,172 @@
 <div class="grid w-full">
-    <div class="col-12">
-      @if (coreService.isLoading) {
-        <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
-      }
-  
-      @if (!coreService.isLoading) {
-        <p-toolbar>
-          <div class="p-toolbar-group-left">
-            <app-header-form
-              label="Registro"
-              [icon]="PrimeIcons.PENCIL"/>
-          </div>
-  
-          <div class="p-toolbar-group-right">
-            <app-form-button-action
-              (submit)="onSubmit()"
-              (cancel)="prevOutput.emit(true)"
-              labelSubmitButton="Siguiente"
-              labelCancelButton="Atrás"
-              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-              [isVisibleCancelButton]="true"
-            />
+  <div class="col-12">
+    @if (coreService.isLoading) {
+      <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+    }
+
+    @if (!coreService.isLoading) {
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <app-form-button-action
+            (submit)="onSubmit()"
+            (cancel)="prevOutput.emit(true)"
+            labelSubmitButton="Siguiente"
+            labelCancelButton="Atrás"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="true"
+          />
+        </div>
+
+      </p-toolbar>
+
+      <p-panel>
+        <form [formGroup]="form" class="p-fluid grid">
+          <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+            <label appLabel for="isAddendum"
+                   [label]="AddendumEnum.isAddendum"
+                   [required]="isAddendumField"></label>
+            <div class="flex gap-3">
+              <div class="flex align-items-center">
+                <p-radioButton
+                  formControlName="isAddendum"
+                  name="isAddendum"
+                  [value]="true"
+                  id="yes"/>
+                <label for="yes" class="ml-2">
+                  Si
+                </label>
+              </div>
+
+              <div class="flex align-items-center">
+                <p-radioButton
+                  formControlName="isAddendum"
+                  name="isAddendum"
+                  [value]="false"
+                  id="no"/>
+                <label for="no" class="ml-2">
+                  No
+                </label>
+              </div>
+            </div>
+            <small
+              appErrorMessage
+              [errors]="isAddendumField.errors"
+              [touched]="isAddendumField.touched"
+              [dirty]="isAddendumField.dirty">
+            </small>
           </div>
 
-        </p-toolbar>
-  
-        <p-panel>
-          <form [formGroup]="form" class="p-fluid grid">
-            <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-              <label appLabel for="isAddendum"
-                     [label]="AddendumEnum.isAddendum"
-                     [required]="isAddendumField"></label>
-              <div class="flex gap-3">
-                <div class="flex align-items-center">
-                    <p-radioButton 
-                        formControlName="isAddendum"
-                        name="isAddendum" 
+          @if (descriptionField.hasValidator(Validators.required)) {
+
+            <div class="col-12">
+              <div [formGroup]="addendumForm" class="p-fluid grid">
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label
+                    appLabel
+                    for="description"
+                    [label]="AddendumEnum.description"
+                    [required]="descriptionField"></label>
+                  <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                  <input pInputText type="text" id="description" formControlName="description"/>
+                  <small
+                    appErrorMessage
+                    [errors]="descriptionField.errors"
+                    [touched]="descriptionField.touched"
+                    [dirty]="descriptionField.dirty">
+                  </small>
+                </div>
+
+                <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label
+                    appLabel
+                    for="document"
+                    [label]="AddendumEnum.document"
+                    [required]="documentField"></label>
+                  <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                  <input pInputText type="file" id="document" formControlName="document"/>
+                  <small
+                    appErrorMessage
+                    [errors]="documentField.errors"
+                    [touched]="documentField.touched"
+                    [dirty]="documentField.dirty">
+                  </small>
+                </div>
+
+                <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                  <label appLabel for="isModifiedFinishDate"
+                         [label]="AddendumEnum.isModifiedFinishDate"
+                         [required]="isModifiedFinishDateField"></label>
+                  <div class="flex gap-3">
+                    <div class="flex align-items-center">
+                      <p-radioButton
+                        formControlName="isModifiedFinishDate"
+                        name="isModifiedFinishDate"
                         [value]="true"
-                        id="yes" />
-                        <label for="yes" class="ml-2">
-                          Si
-                        </label>
-                </div>
-                      
-                <div class="flex align-items-center">
-                    <p-radioButton 
-                        formControlName="isAddendum"
-                        name="isAddendum" 
+                        id="yes"/>
+                      <label for="yes" class="ml-2">
+                        Si
+                      </label>
+                    </div>
+
+                    <div class="flex align-items-center">
+                      <p-radioButton
+                        formControlName="isModifiedFinishDate"
+                        name="isModifiedFinishDate"
                         [value]="false"
-                        id="no" />
-                    <label for="no" class="ml-2">
+                        id="no"/>
+                      <label for="no" class="ml-2">
                         No
-                    </label>
-                </div>
-            </div>
-              <small
-                appErrorMessage
-                [errors]="isAddendumField.errors"
-                [touched]="isAddendumField.touched"
-                [dirty]="isAddendumField.dirty">
-              </small>
-            </div>
-
-              @if (descriptionField.hasValidator(Validators.required)) {
-
-                <div class="col-12">
-                  <div [formGroup]="addendumForm" class="p-fluid grid">
-                    <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                      <label
-                        appLabel
-                        for="description"
-                        [label]="AddendumEnum.description"
-                        [required]="descriptionField"></label>
-                        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                        <input pInputText type="text" id="description" formControlName="description"/>
-                      <small
-                        appErrorMessage
-                        [errors]="descriptionField.errors"
-                        [touched]="descriptionField.touched"
-                        [dirty]="descriptionField.dirty">
-                      </small>
+                      </label>
                     </div>
-      
-                    <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                      <label
-                        appLabel
-                        for="document"
-                        [label]="AddendumEnum.document"
-                        [required]="documentField"></label>
-                        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                        <input pInputText type="file" id="document" formControlName="document"/>
-                      <small
-                        appErrorMessage
-                        [errors]="documentField.errors"
-                        [touched]="documentField.touched"
-                        [dirty]="documentField.dirty">
-                      </small>
-                    </div>
-      
-                    <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                      <label appLabel for="isModifiedFinishDate"
-                             [label]="AddendumEnum.isModifiedFinishDate"
-                             [required]="isModifiedFinishDateField"></label>
-                      <div class="flex gap-3">
-                        <div class="flex align-items-center">
-                            <p-radioButton 
-                                formControlName="isModifiedFinishDate"
-                                name="isModifiedFinishDate" 
-                                [value]="true"
-                                id="yes" />
-                                <label for="yes" class="ml-2">
-                                  Si
-                                </label>
-                        </div>
-                              
-                        <div class="flex align-items-center">
-                            <p-radioButton 
-                                formControlName="isModifiedFinishDate"
-                                name="isModifiedFinishDate" 
-                                [value]="false"
-                                id="no" />
-                            <label for="no" class="ml-2">
-                                No
-                            </label>
-                        </div>
-                    </div>
-                      <small
-                        appErrorMessage
-                        [errors]="isModifiedFinishDateField.errors"
-                        [touched]="isModifiedFinishDateField.touched"
-                        [dirty]="isModifiedFinishDateField.dirty">
-                      </small>
-                    </div>
-                    <!-- isModifiedFinishDate -->
-                    @if(agreementEndedAtField.hasValidator(Validators.required)){
-                      <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-                        <label appLabel for="endedAt"
-                               [label]="AddendumEnum.agreementEndedAt"
-                               [required]="agreementEndedAtField"></label>
-                        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-                        <p-calendar
-                          formControlName="agreementEndedAt"
-                          [iconDisplay]="'input'"
-                          [showIcon]="true"
-                          id="agreementEndedAt"
-                          dateFormat="yy-mm-dd" />
-                        <small
-                          appErrorMessage
-                          [errors]="agreementEndedAtField.errors"
-                          [touched]="agreementEndedAtField.touched"
-                          [dirty]="agreementEndedAtField.dirty">
-                        </small>
-                      </div>
-                    }
                   </div>
+                  <small
+                    appErrorMessage
+                    [errors]="isModifiedFinishDateField.errors"
+                    [touched]="isModifiedFinishDateField.touched"
+                    [dirty]="isModifiedFinishDateField.dirty">
+                  </small>
                 </div>
-                <div class="field col-12">
-                  <button pButton class="col-12 p-button p-button-primary" 
-                  label="Agregar" 
-                  type="button" 
-                  [icon]="PrimeIcons.PLUS" 
-                  (click)="addAddendum()">
-                  </button>
-                </div>
-              }
-          </form>
-        </p-panel>
+                <!-- isModifiedFinishDate -->
+                @if (agreementEndedAtField.hasValidator(Validators.required)) {
+                  <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+                    <label appLabel for="endedAt"
+                           [label]="AddendumEnum.agreementEndedAt"
+                           [required]="agreementEndedAtField"></label>
+                    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+                    <p-calendar
+                      formControlName="agreementEndedAt"
+                      [iconDisplay]="'input'"
+                      [showIcon]="true"
+                      id="agreementEndedAt"
+                      dateFormat="yy-mm-dd"/>
+                    <small
+                      appErrorMessage
+                      [errors]="agreementEndedAtField.errors"
+                      [touched]="agreementEndedAtField.touched"
+                      [dirty]="agreementEndedAtField.dirty">
+                    </small>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="field col-12">
+              <p-button
+                [label]="LabelButtonActionEnum.ADD"
+                [icon]="IconButtonActionEnum.ADD"
+                (click)="addAddendum()">
+              </p-button>
+            </div>
+          }
+        </form>
+      </p-panel>
 
-        @if(addendums.value.length > 0){
+      @if (addendums.value.length > 0) {
 
         <p-table [value]="addendums.value" [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template pTemplate="header">
@@ -176,28 +175,28 @@
                 {{ col.header }}
               </th>
             }
-            
+
             <th class="text-center">
               Acciones
             </th>
           </ng-template>
-          <ng-template pTemplate="body" let-addendum let-i="rowIndex" >
-              <tr>
-                  <td>{{ addendum.description }}</td>
-                  <td>{{ addendum.isModifiedFinishDate }}</td>
-                  <td>{{ addendum.agreementEndedAt }}</td>
-                  <td>{{ addendum.document }}</td>
-                  <td>
-                    <button pButton type="button" [icon]="PrimeIcons.ERASER" class="p-button p-button-danger"
-                    (click)="deleteAddendum(i)">
-                    </button>
-                  </td>
+          <ng-template pTemplate="body" let-addendum let-i="rowIndex">
+            <tr>
+              <td>{{ addendum.description }}</td>
+              <td>{{ addendum.isModifiedFinishDate }}</td>
+              <td>{{ addendum.agreementEndedAt }}</td>
+              <td>{{ addendum.document }}</td>
+              <td>
+                <button pButton type="button" [icon]="PrimeIcons.ERASER" class="p-button p-button-danger"
+                        (click)="deleteAddendum(i)">
+                </button>
+              </td>
 
-              </tr>
+            </tr>
           </ng-template>
-      </p-table>
-    }
+        </p-table>
       }
-    </div>
+    }
   </div>
-  
+</div>
+
