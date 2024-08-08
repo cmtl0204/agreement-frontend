@@ -149,7 +149,7 @@ export class AgreementListComponent {
   }
 
   redirectViewAgreement(id: string) {
-    this.router.navigate(['/core/agreements/view',id]);
+    this.router.navigate(['/core/agreements/view', id]);
   }
 
   remove(id: string) {
