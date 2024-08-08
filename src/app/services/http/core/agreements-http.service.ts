@@ -22,10 +22,10 @@ export class AgreementsHttpService {
   register(payload: AgreementModel): Observable<AgreementModel> {
     const url = `${this.API_URL}`;
 
-    return this.httpClient.post<AgreementModel>(url, payload).pipe(
+    return this.httpClient.post<ServerResponse>(url, payload).pipe(
       map(response => {
-        // this.messageService.success(response);
-        return response;
+        this.messageService.success(response);
+        return response.data;
       })
     );
   }
@@ -53,12 +53,12 @@ export class AgreementsHttpService {
       })
     );
   }
-  
+
   findNationalAgreementsByOrigin(): Observable<AgreementModel[]> {
     const url = `${this.API_URL}/national-agreements`;
-    return this.httpClient.get<AgreementModel[]>(url).pipe(
+    return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        return response;
+        return response.data;
       })
     );
   }
