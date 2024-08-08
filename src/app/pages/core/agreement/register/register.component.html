@@ -21,6 +21,8 @@
           </div>
         </p-toolbar>
 
+        <p-divider/>
+
         <div class="p-fluid grid">
           <p-panel header="Datos Básicos" class="col-12">
             <app-basic-data
@@ -46,7 +48,6 @@
 
           <p-panel header="Comparecientes" class="col-12">
             <app-appearer
-              [formInput]="form.value"
               (formErrorsOutput)="appearerErrors=$event"
               (formOutput)="save($event)"/>
           </p-panel>
@@ -96,29 +97,11 @@
           </div>
         </p-toolbar>
 
+        <p-divider/>
+
         <app-obligation
-          [formInput]="form.value"
           (formErrorsOutput)="obligationErrors=$event"
           (formOutput)="save($event)"/>
-
-        <p-toolbar>
-          <div class="p-toolbar-group-left">
-            <app-header-form
-              label="Registro"
-              [icon]="PrimeIcons.PENCIL"/>
-          </div>
-
-          <div class="p-toolbar-group-right">
-            <app-form-button-action
-              (submit)="nextCallback.emit()"
-              (cancel)="prevCallback.emit()"
-              labelSubmitButton="Siguiente"
-              labelCancelButton="Regresar"
-              [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-              [isVisibleCancelButton]="true"
-            />
-          </div>
-        </p-toolbar>
       </ng-template>
     </p-stepperPanel>
 
@@ -146,11 +129,11 @@
           </div>
         </p-toolbar>
 
+        <p-divider/>
+
         <app-financing
           (formOutput)="save($event)"
-          [formInput]="form.value"
-          (formErrorsOutput)="financingErrors=$event"
-        />
+          (formErrorsOutput)="financingErrors=$event"/>
       </ng-template>
     </p-stepperPanel>
 

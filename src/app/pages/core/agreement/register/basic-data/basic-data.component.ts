@@ -11,7 +11,6 @@ import {
   AgreementStateEnum
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
-import {getFormattedDate} from "@shared/helpers";
 
 @Component({
   selector: 'app-basic-data',

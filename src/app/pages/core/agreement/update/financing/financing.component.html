@@ -2,7 +2,7 @@
   <div class="col-12">
      <p-panel >
         <form [formGroup]="form" class="p-fluid grid ">
-        
+
           <!-- financingOptionId -->
           <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
             <label appLabel for="isFinancing"
@@ -10,22 +10,22 @@
                    [required]="isFinancingField"></label>
             <div class="flex gap-3">
               <div class="flex align-items-center">
-                  <p-radioButton 
-                      id="yes" 
+                  <p-radioButton
+                      id="yes"
                       formControlName="isFinancing"
-                      name="isFinancing" 
+                      name="isFinancing"
                       [value]="true"
                       />
                       <label for="yes" class="ml-2">
                         Si
                       </label>
               </div>
-                    
+
               <div class="flex align-items-center">
-                  <p-radioButton 
-                      id="no" 
+                  <p-radioButton
+                      id="no"
                       formControlName="isFinancing"
-                      name="isFinancing" 
+                      name="isFinancing"
                       [value]="false"
                       />
                   <label for="no" class="ml-2">
@@ -40,18 +40,18 @@
               [dirty]="isFinancingField.dirty">
             </small>
           </div>
-        </form> 
+        </form>
 
           <!-- financingsForm -->
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             @if (isFinancingField.value) {
                 <div [formGroup]="financingForm" class="p-fluid grid">
-                
+
                     <!-- financingsForm/model  -->
                     <div class="field xl:col-6 md:col-6 sm:col-12">
                       <label appLabel
                              for="combinedInstitution"
-                             [label]="FinancingsFormEnum.model"
+                             [label]="FinancingsFormEnum.institutionName"
                              [required]="institutionNameField">
                       </label>
                       <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
@@ -65,11 +65,11 @@
                         <ng-template pTemplate="selectedItem" let-selectedItem>
                           <div class="flex align-items-center gap-2">
                             <div>
-                              {{ selectedItem.name }} 
+                              {{ selectedItem.name }}
                             </div>
                           </div>
                         </ng-template>
-      
+
                         <ng-template let-item pTemplate="item">
                           <div class="flex align-items-center gap-2">
                             <div>
@@ -150,7 +150,7 @@
 
               <!-- button add financing -->
               <div class="field col-12" style="display: flex; justify-content: center;">
-                <p-button 
+                <p-button
                 label="Añadir"
                 [icon]="PrimeIcons.PLUS"
                 [severity]="SeverityButtonActionEnum.ADD"
@@ -158,13 +158,13 @@
               </div>
 
               <!-- table -->
-              @if(financingsField.length > 0){  
+              @if(financingsField.length > 0){
               <p-panel class="field col-12">
               <p-table
                 [value]="financingsField.controls"
                 styleClass="p-datatable-striped"
                 [tableStyle]="{'min-width': '50rem'}">
-                
+
                 <ng-template pTemplate="header">
                   @for (col of financingsColumns; track col.field) {
                     <th [pSortableColumn]="col.field">
@@ -182,11 +182,11 @@
                     <td>{{ financing.get('paymentMethod')?.value }}</td>
                     <td>{{ financing.get('source')?.value }}</td>
                     <td>
-                      <p-button 
+                      <p-button
                       [icon]="IconButtonActionEnum.DELETE"
                       [severity]="SeverityButtonActionEnum.DELETE"
                       (click)="deleteFinancing(i)"/>
-                      <p-button 
+                      <p-button
                       [icon]="IconButtonActionEnum.UPDATE"
                       [severity]="SeverityButtonActionEnum.UPDATE"
                       (click)=" editFinancing(i)" />

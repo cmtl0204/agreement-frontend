@@ -1,99 +1,32 @@
 <!-- internalInstitutionsForm -->
-<p-panel header="Ministerio de Turismo">
-  <div class="grid">
-    <form [formGroup]="internalInstitutionForm" class="field col-12 xl:col-4 lg:col-4 md:col-12 sm:col-12">
-      <!-- internalInstitutions/personTypeId -->
-      <label appLabel
-             for="internalPersonType"
-             [label]="InternalInstitutionsFormEnum.personType"
-             [required]="internalInstitutionPersonTypeField">
-      </label>
+<p-panel>
+  <ng-template pTemplate="header">
+    <h4>Ministerio de Turismo:</h4>
+    <p-button
+      class="ml-2"
+      [icon]="IconButtonActionEnum.ADD"
+      [label]="LabelButtonActionEnum.ADD"
+      [severity]="SeverityButtonActionEnum.ADD"
+      (click)="showInternalInstitutionModal()"
+      [disabled]="agreementsService.agreement.internalInstitutions"/>
+  </ng-template>
 
-      <p-dropdown
-        id="internalPersonType"
-        formControlName="personType"
-        dataKey="id"
-        [options]="internalPersonTypes"
-        placeholder="Seleccione"
-        [filter]="false">
-        <ng-template pTemplate="selectedItem" let-selectedOption>
-          <div class="flex align-items-center gap-2">
-            <div>{{ selectedOption.name }}</div>
-          </div>
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          <div class="flex align-items-center gap-2">
-            <div>{{ item.name }}</div>
-          </div>
-        </ng-template>
-      </p-dropdown>
-
-      <small
-        appErrorMessage
-        [errors]="internalInstitutionPersonTypeField.errors"
-        [touched]="internalInstitutionPersonTypeField.touched"
-        [dirty]="internalInstitutionPersonTypeField.dirty">
-      </small>
-    </form>
-
-    <form [formGroup]="internalInstitutionDetailForm" class="field col-12 xl:col-7 lg:col-7 md:col-12 sm:col-12">
-      <!-- internalInstitutions/positionId -->
-      <label appLabel
-             for="internalPosition"
-             [label]="InternalInstitutionsFormEnum.position"
-             [required]="internalInstitutionDetailPositionField">
-      </label>
-
-      <p-dropdown
-        id="internalPosition"
-        formControlName="position"
-        dataKey="id"
-        [options]="positions"
-        placeholder="Seleccione"
-        [filter]="false">
-        <ng-template pTemplate="selectedItem" let-selectedOption>
-          <div class="flex align-items-center gap-2">
-            <div>{{ selectedOption.name }}</div>
-          </div>
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          <div class="flex align-items-center gap-2">
-            <div>{{ item.name }}</div>
-          </div>
-        </ng-template>
-      </p-dropdown>
-      <small
-        appErrorMessage
-        [errors]="internalInstitutionDetailPositionField.errors"
-        [touched]="internalInstitutionDetailPositionField.touched"
-        [dirty]="internalInstitutionDetailPositionField.dirty">
-      </small>
-    </form>
-
-    <!-- button add internalInstitution -->
-    @if (agreementsService.agreement.internalInstitutions && agreementsService.agreement.internalInstitutions.length < 1) {
-      <div class="field col-12 xl:col-1 lg:col-1 md:col-12 sm:col-12 mt-4">
-        <p-button
-          [icon]="IconButtonActionEnum.ADD"
-          [severity]="SeverityButtonActionEnum.ADD"
-          [pTooltip]="LabelButtonActionEnum.ADD"
-          (click)="addInternalInstitution()"/>
-      </div>
-    }
-
+  <ng-template pTemplate="content">
     <!-- table internal-->
     @if (agreementsService.agreement.internalInstitutions && agreementsService.agreement.internalInstitutions.length > 0) {
       <p-table
-        dataKey="id"
         styleClass="p-datatable-striped"
         [value]="agreementsService.agreement.internalInstitutions"
         [columns]="internalInstitutionsColumns">
         <ng-template pTemplate="header">
-          @for (col of internalInstitutionsColumns; track col.field) {
-            <th [pSortableColumn]="col.field">
-              {{ col.header }}
-            </th>
-          }
+          <tr>
+            @for (col of internalInstitutionsColumns; track col.field) {
+              <th [pSortableColumn]="col.field">
+                {{ col.header }}
+              </th>
+            }
+            <th>{{TableEnum.ACTIONS}}</th>
+          </tr>
         </ng-template>
         <ng-template pTemplate="body" let-internalInstitution let-rowIndex="rowIndex">
           <tr>
@@ -119,9 +52,10 @@
         </ng-template>
       </p-table>
     }
-  </div>
+  </ng-template>
 </p-panel>
 
+<br>
 <!-- externalInstitutionsForm -->
 <p-panel header="Contraparte">
   <form [formGroup]="externalInstitutionForm" class="p-fluid grid">
@@ -194,49 +128,60 @@
   @if (agreementsService.agreement.externalInstitutions && agreementsService.agreement.externalInstitutions.length > 0) {
     <p-table
       [value]="agreementsService.agreement.externalInstitutions"
+      [columns]="externalInstitutionsColumns"
       styleClass="p-datatable-striped">
-      <ng-template pTemplate="header">
-        <th>{{ TableEnum.ACTIONS }}</th>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th>{{ TableEnum.ACTIONS }}</th>
 
-        @for (col of externalInstitutionsColumns; track col.field) {
-          <th [pSortableColumn]="col.field">
-            {{ col.header }}
-          </th>
-        }
+          @for (col of columns; track col.field) {
+            <th [pSortableColumn]="col.field">
+              {{ col.header }}
+            </th>
+          }
+
+          <th>{{ TableEnum.ACTIONS }}</th>
+        </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-externalInstitution let-rowIndex="rowIndex">
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
         <tr>
           <td>
             <div class="button-group">
               <p-button
-                [icon]="IconButtonActionEnum.ADD"
-                [severity]="SeverityButtonActionEnum.ADD"
-                [pTooltip]="LabelButtonActionEnum.ADD"
-                (click)="showExternalInstitutionDetailModal(rowIndex)"/>
-
-              <p-button
                 [icon]="IconButtonActionEnum.DELETE"
                 [severity]="SeverityButtonActionEnum.DELETE"
                 [pTooltip]="LabelButtonActionEnum.DELETE"
-                (click)="deleteExternalInstitution(externalInstitution)"/>
+                (click)="deleteExternalInstitution(item)"/>
             </div>
           </td>
-          <td>{{ externalInstitution.personType.name }}</td>
-          <td>{{ externalInstitution.name }}</td>
+          <td>{{ item.personType.name }}</td>
+          <td>{{ item.name }}</td>
           <td>
-            @for (externalInstitutionDetail of externalInstitution.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
-              <ul>
-                <p-button
-                  [icon]="IconButtonActionEnum.DELETE"
-                  [severity]="SeverityButtonActionEnum.DELETE"
-                  [pTooltip]="LabelButtonActionEnum.DELETE"
-                  (click)="deleteExternalInstitutionDetail(rowIndex,index)">
-                </p-button>
-                {{ externalInstitutionDetail.position }} /
-                {{ externalInstitutionDetail.unit }}
-              </ul>
-            }
+            <ul>
+              @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+                <li class="mt-1">
+                  <p-button
+                    class="ml-1"
+                    [icon]="IconButtonActionEnum.DELETE"
+                    [severity]="SeverityButtonActionEnum.DELETE"
+                    [pTooltip]="LabelButtonActionEnum.DELETE"
+                    (click)="deleteExternalInstitutionDetail(rowIndex,index)">
+                  </p-button>
+
+                  {{ externalInstitutionDetail.position }} /
+                  {{ externalInstitutionDetail.unit }}
+                </li>
+              }
+            </ul>
+          </td>
+          <td>
+            <p-button
+              [icon]="IconButtonActionEnum.ADD"
+              [severity]="SeverityButtonActionEnum.ADD"
+              [pTooltip]="LabelButtonActionEnum.ADD"
+              (click)="showExternalInstitutionDetailModal(rowIndex)"/>
+
           </td>
         </tr>
       </ng-template>
@@ -299,4 +244,92 @@
         (click)="addExternalInstitutionDetail()"/>
     </div>
   </form>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="isVisibleInternalInstitutionForm"
+  [modal]="true"
+  [style]="{width: '50%'}"
+  header="Agregar Mintur">
+  <div class="p-fluid grid">
+    <form [formGroup]="internalInstitutionDetailForm" class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <!-- internalInstitutions/positionId -->
+      <label
+        appLabel
+        for="internalPosition"
+        [label]="InternalInstitutionsFormEnum.position"
+        [required]="internalInstitutionDetailPositionField">
+      </label>
+
+      <p-dropdown
+        id="internalPosition"
+        formControlName="position"
+        dataKey="id"
+        [options]="positions"
+        placeholder="Seleccione"
+        [filter]="true"
+        filterBy="name">
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.name }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ item.name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+      <small
+        appErrorMessage
+        [errors]="internalInstitutionDetailPositionField.errors"
+        [touched]="internalInstitutionDetailPositionField.touched"
+        [dirty]="internalInstitutionDetailPositionField.dirty">
+      </small>
+    </form>
+
+    <form [formGroup]="internalInstitutionForm" class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <!-- internalInstitutions/personTypeId -->
+      <label appLabel
+             for="internalPersonType"
+             [label]="InternalInstitutionsFormEnum.personType"
+             [required]="internalInstitutionPersonTypeField">
+      </label>
+
+      <p-dropdown
+        id="internalPersonType"
+        formControlName="personType"
+        dataKey="id"
+        [options]="internalPersonTypes"
+        placeholder="Seleccione"
+        [filter]="false">
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.name }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ item.name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+      <small
+        appErrorMessage
+        [errors]="internalInstitutionPersonTypeField.errors"
+        [touched]="internalInstitutionPersonTypeField.touched"
+        [dirty]="internalInstitutionPersonTypeField.dirty">
+      </small>
+    </form>
+
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <p-button
+        [icon]="IconButtonActionEnum.ADD"
+        [severity]="SeverityButtonActionEnum.ADD"
+        [label]="LabelButtonActionEnum.ADD"
+        (click)="addInternalInstitution()"/>
+    </div>
+  </div>
 </p-dialog>

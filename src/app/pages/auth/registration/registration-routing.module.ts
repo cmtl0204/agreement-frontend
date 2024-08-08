@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {ProfessionalComponent} from "./professional/professional.component";
 import {CompanyComponent} from "./company/company.component";
 import {RegistrationComponent} from "./registration.component";
-import {ExitGuard} from "@guards/exit.guard";
+import {ExitGuard} from "@guards";
 
 
 const routes: Routes = [
@@ -28,7 +28,7 @@ const routes: Routes = [
     path: 'companies/:id',
     component: CompanyComponent
   },
-  
+
 ];
 
 @NgModule({

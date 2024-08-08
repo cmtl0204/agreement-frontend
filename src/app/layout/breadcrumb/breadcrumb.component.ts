@@ -29,7 +29,7 @@ export class BreadcrumbComponent {
 
   constructor() {
     if (this.authService.auth) {
-      this.nickname = `${this.authService.auth.identification} - ${this.authService.role.name}`;
+      this.nickname = `${this.authService.auth.username} - ${this.authService.role.name}`;
     }
 
     this.subscription = this.breadcrumbService.itemsHandler.subscribe(response => {

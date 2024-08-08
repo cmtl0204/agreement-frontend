@@ -1,39 +1,27 @@
-import {Injectable} from '@angular/core';
-import {PermissionModel, RoleModel, UserModel} from '@models/auth';
+import {inject, Injectable} from '@angular/core';
+import {AuthModel, PermissionModel, RoleModel} from '@models/auth';
 import {environment} from "@env/environment";
 import {RoleEnum} from "@shared/enums";
-import {MessageService, RoutesService} from "@servicesApp/core";
+import {MessageDialogService, RoutesService} from "@servicesApp/core";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly routesService = inject(RoutesService);
+  private readonly messageDialogService = inject(MessageDialogService);
 
-  constructor(private routesService: RoutesService, private messageService: MessageService) {
+  get accessToken(): string | null {
+    let accessToken = sessionStorage.getItem('accessToken');
+
+    if (accessToken) {
+      accessToken = 'Bearer ' + accessToken.replace(/"/g, '');
+    }
+
+    return accessToken;
   }
 
-  changeTheme(theme: string) {
-    // const themePath = themes.find(element => element.name == theme)?.path;
-    //
-    // const element = document.getElementById('theme-css');
-    // if (element && themePath) {
-    //   element.setAttribute('href', themePath);
-    // }
-  }
-
-  get isLoggedIn(): boolean {
-    return Boolean(sessionStorage.getItem('isLoggedIn'));
-  }
-
-  set isLoggedIn(value: boolean) {
-    sessionStorage.setItem('isLoggedIn', String(value));
-  }
-
-  get token(): string | null {
-    return sessionStorage.getItem('accessToken');
-  }
-
-  set token(value: string | undefined | null) {
+  set accessToken(value: string) {
     sessionStorage.setItem('accessToken', JSON.stringify(value));
   }
 
@@ -43,12 +31,12 @@ export class AuthService {
     sessionStorage.setItem('auth', JSON.stringify(auth));
   }
 
-  get auth(): UserModel {
+  get auth(): AuthModel {
     return JSON.parse(String(sessionStorage.getItem('auth')));
   }
 
-  set auth(user: UserModel | undefined | null) {
-    sessionStorage.setItem('auth', JSON.stringify(user));
+  set auth(auth: AuthModel | undefined | null) {
+    sessionStorage.setItem('auth', JSON.stringify(auth));
   }
 
   get permissions(): PermissionModel[] {
@@ -92,41 +80,32 @@ export class AuthService {
   }
 
   removeLogin() {
-    sessionStorage.clear();
+    localStorage.clear();
     sessionStorage.clear();
   }
 
   selectDashboard() {
-    this.messageService.successCustom('Bienvenido', 'Ingreso Correcto');
+    this.messageDialogService.successCustom('Bienvenido', 'Ingreso Correcto');
 
     switch (this.role.code) {
       case RoleEnum.ADMIN: {
         this.routesService.dashboardAdmin();
         break;
       }
-      case RoleEnum.PLANNER: {
-        this.routesService.dashboardPlanner();
+      case RoleEnum.ADMINISTRATOR: {
+        this.routesService.dashboardAdministrator();
         break;
       }
-      case RoleEnum.CATALOGUE: {
-        this.routesService.dashboardPlanner();
+      case RoleEnum.NATIONAL_SUPERVISOR: {
+        this.routesService.dashboardNationalSupervisor();
         break;
       }
-      case RoleEnum.FOLLOWER: {
-        this.routesService.dashboardFollower();
+      case RoleEnum.INTERNATIONAL_SUPERVISOR: {
+        this.routesService.dashboardInternationalSupervisor();
         break;
       }
-      case RoleEnum.APPLICANT: {
-        this.routesService.dashboardApplicant();
-        break;
-      }
-      case RoleEnum.APPROVER: {
-        this.routesService.dashboardApprover();
-        break;
-      }
-      case RoleEnum.PLANNER_APPROVER: {
-        this.routesService.dashboardPlannerApprover();
-        break;
+      default: {
+        this.routesService.dashboardNationalSupervisor();
       }
     }
   }
