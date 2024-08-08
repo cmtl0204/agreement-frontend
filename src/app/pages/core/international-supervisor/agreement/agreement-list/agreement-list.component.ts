@@ -100,7 +100,7 @@ export class AgreementListComponent {
 
   /** Button Actions**/
   buildButtonActions() {
-    this.buttonActions= [
+    this.buttonActions = [
       {
         id: IdButtonActionEnum.VIEW,
         label: LabelButtonActionEnum.VIEW,
