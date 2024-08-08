@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '@env/environment';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MessageService as MessageServicePn} from 'primeng/api';
-import { FileModel} from "@models/core";
+import {FileModel} from "@models/core";
 import {ServerResponse} from '@models/http-response';
-import {CoreService, MessageService} from '@servicesApp/core';
+import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
 import {CoreMessageEnum} from "@shared/enums";
 
 @Injectable({
@@ -14,23 +14,18 @@ import {CoreMessageEnum} from "@shared/enums";
 })
 export class FilesHttpService {
   API_URL = `${environment.API_URL}/files`;
+  private messageServicePn = inject(MessageServicePn);
+  private coreService = inject(CoreService);
+  private httpClient = inject(HttpClient);
+  private messageDialogService = inject(MessageDialogService);
 
-  constructor(private messageServicePn: MessageServicePn,
-              private coreService: CoreService, private httpClient: HttpClient,
-              private messageService: MessageService) {
+  constructor() {
   }
 
-  findByModel(modelId: string, page: number = 0, search: string = ''): Observable<ServerResponse> {
+  findByModel(modelId: string): Observable<ServerResponse> {
     const url = `${this.API_URL}/models/${modelId}`;
 
-    const headers = new HttpHeaders().append('pagination', 'true');
-
-    const params = new HttpParams()
-      .append('page', page.toString())
-      .append('limit', '20')
-      .append('search', search);
-
-    return this.httpClient.get<ServerResponse>(url, {headers, params}).pipe(
+    return this.httpClient.get<ServerResponse>(url).pipe(
       map((response) => {
         return response;
       })
@@ -86,28 +81,16 @@ export class FilesHttpService {
   }
 
   uploadFiles(modelId: string, payload: FormData): Observable<FileModel> {
-    const url = `${this.API_URL}/${modelId}/uploads`;
+    const url = `${this.API_URL}/models/${modelId}`;
 
-    this.coreService.isProcessing = true;
     return this.httpClient.post<ServerResponse>(url, payload).pipe(
       map((response) => {
-        this.coreService.isProcessing = false;
-        this.messageService.success(response);
+        this.messageDialogService.successHttp(response);
         return response.data;
       })
     );
   }
 
-  reactivate(id: string): Observable<FileModel> {
-    const url = `${this.API_URL}/${id}/reactivate`;
-
-    return this.httpClient.patch<ServerResponse>(url, null).pipe(
-      map((response) => {
-        this.messageService.success(response);
-        return response.data;
-      })
-    );
-  }
 
   remove(id: string): Observable<FileModel> {
     const url = `${this.API_URL}/${id}`;
@@ -130,28 +113,6 @@ export class FilesHttpService {
     );
   }
 
-  removeAll(payload: FileModel[]): Observable<FileModel[]> {
-    const url = `${this.API_URL}/remove-all`;
-
-    return this.httpClient.patch<ServerResponse>(url, payload).pipe(
-      map((response) => {
-        this.messageService.success(response);
-        return response.data;
-      })
-    );
-  }
-
-  hide(id: string): Observable<FileModel> {
-    const url = `${this.API_URL}/${id}/hide`;
-
-    return this.httpClient.patch<ServerResponse>(url, null).pipe(
-      map((response) => {
-        this.messageService.success(response);
-        return response.data;
-      })
-    );
-  }
-
   downloadFile(file: FileModel) {
     const url = `${this.API_URL}/${file.id}/download`;
     this.coreService.isProcessing = true;
@@ -161,7 +122,7 @@ export class FilesHttpService {
         const filePath = URL.createObjectURL(new Blob([response]));
         const downloadLink = document.createElement('a');
         downloadLink.href = filePath;
-        downloadLink.setAttribute('download', file.originalName!);
+        downloadLink.setAttribute('download', file.name!);
         document.body.appendChild(downloadLink);
         downloadLink.click();
         this.coreService.isProcessing = false;

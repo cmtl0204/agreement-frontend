@@ -5,6 +5,7 @@ export interface ServerResponse {
   pagination?: PaginatorModel;
   error?: string;
   message: string;
+  detail: string;
   statusCode: number;
   title: string;
   version?: string;

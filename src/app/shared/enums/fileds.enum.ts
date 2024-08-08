@@ -34,13 +34,9 @@ export enum UsersFormEnum {
   ethnicOrigin = 'Etnia',
 }
 
-export const CompanyRegistrationFormEnum2 = [{
-  tradeName: 'Correo electrónico',
-  personTypeId: 'Número de documento',
-}];
-
-export enum CourseFormEnum {
-  AREA = 'Área',
+export enum FileFormEnum {
+  type = 'Tipo de archivo',
+  myFile = 'Archivo',
 }
 
 export enum FinancingsFormEnum {
