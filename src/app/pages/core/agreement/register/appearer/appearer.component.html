@@ -8,7 +8,7 @@
       [label]="LabelButtonActionEnum.ADD"
       [severity]="SeverityButtonActionEnum.ADD"
       (click)="showInternalInstitutionModal()"
-      [disabled]="!(agreementsService.agreement.internalInstitutions && agreementsService.agreement.internalInstitutions.length < 1)"/>
+      [disabled]="agreementsService.agreement.internalInstitutions"/>
   </ng-template>
 
   <ng-template pTemplate="content">

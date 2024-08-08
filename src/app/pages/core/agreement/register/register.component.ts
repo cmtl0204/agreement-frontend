@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AgreementsService, MessageDialogService} from "@servicesApp/core";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {AgreementsHttpService} from "@servicesHttp/core";
@@ -10,7 +10,7 @@ import {AgreementModel} from "@models/core";
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private readonly agreementsService = inject(AgreementsService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly confirmationService = inject(ConfirmationService);
@@ -33,8 +33,19 @@ export class RegisterComponent {
     this.buildForm();
   }
 
+  ngOnInit() {
+    if (this.agreementsService.agreementStorage) {
+      this.form.patchValue(this.agreementsService.agreementStorage);
+
+      if (this.idField.value) {
+        this.activeStep = 3;
+      }
+    }
+  }
+
   buildForm() {
     this.form = this.formBuilder.group({
+      id: [null],
       agreementState: [null],
       name: [null],
       internalNumber: [null],
@@ -60,14 +71,6 @@ export class RegisterComponent {
       isAddendum: [false],
       addendums: [null]
     });
-
-    if (this.agreementsService.agreement) {
-      this.form.patchValue(this.agreementsService.agreementStorage);
-
-      if (this.agreementsService.agreement.id) {
-        this.activeStep = 3;
-      }
-    }
   }
 
   get validateForms(): boolean {
@@ -148,5 +151,9 @@ export class RegisterComponent {
         });
       }
     });
+  }
+
+  get idField(): AbstractControl {
+    return this.form.controls['id'];
   }
 }
