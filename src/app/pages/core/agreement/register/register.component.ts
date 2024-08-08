@@ -25,6 +25,8 @@ export class RegisterComponent implements OnInit {
   protected appearerErrors: string[] = [];
   protected obligationErrors: string[] = [];
   protected financingErrors: string[] = [];
+  protected documentErrors: string[] = [];
+  protected addendumErrors: string[] = [];
   protected activeStep: number = 0;
 
   protected readonly PrimeIcons = PrimeIcons;
@@ -121,9 +123,25 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  onSubmit(nextCallback: any) {
+  validateFormDocument(nextCallback: any) {
+    this.formErrors = [];
+
+    if (this.documentErrors.length > 0) this.formErrors = this.formErrors.concat(this.documentErrors);
+
+    return this.formErrors.length === 0;
+  }
+
+  onSubmitAgreement(nextCallback: any) {
     if (this.validateForms) {
       this.register(nextCallback);
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  onSubmitDocuments(nextCallback: any) {
+    if (this.validateFormDocument(nextCallback)) {
+      this.registerDocuments(nextCallback);
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
@@ -136,6 +154,24 @@ export class RegisterComponent implements OnInit {
   }
 
   register(nextCallback: any) {
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
+      header: '¿Está seguro de guardar?',
+      icon: PrimeIcons.TIMES_CIRCLE,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.agreementsHttpService.register(this.agreementsService.agreement).subscribe(response => {
+          this.agreementsService.agreement = response; //review
+          nextCallback.emit();
+        });
+      }
+    });
+  }
+
+  registerDocuments(nextCallback: any) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       message: 'Después de guardar, no podrá realizar cambios en la información del convenio',

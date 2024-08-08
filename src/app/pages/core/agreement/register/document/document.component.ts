@@ -19,8 +19,8 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 })
 export class DocumentComponent implements OnInit {
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
-  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
-  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
+
   protected readonly PrimeIcons = PrimeIcons;
   protected readonly TableEnum = TableEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
@@ -31,11 +31,12 @@ export class DocumentComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected form!: FormGroup;
   protected formErrors: string[] = [];
-  protected uploadedFiles: FormData = new FormData;
-
-  files: FileModel[] = [];
-  types: CatalogueModel[] = [];
-  columns: ColumnModel[] = [];
+  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
+  protected readonly FileFormEnum = FileFormEnum;
+  protected files: FileModel[] = [];
+  protected types: CatalogueModel[] = [];
+  protected columns: ColumnModel[] = [];
 
   constructor() {
     this.buildFileForm();
@@ -122,10 +123,4 @@ export class DocumentComponent implements OnInit {
   get fileFiled(): AbstractControl {
     return this.form.controls['myFile'];
   }
-
-  protected readonly ExternalInstitutionsFormEnum = ExternalInstitutionsFormEnum;
-  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
-  protected readonly IconButtonActionEnum = IconButtonActionEnum;
-  protected readonly FileFormEnum = FileFormEnum;
-  protected readonly onsubmit = onsubmit;
 }
