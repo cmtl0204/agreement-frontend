@@ -19,13 +19,13 @@ export class TokenDirective implements OnInit {
     this.viewContainerRef.clear();
     switch (val) {
       case 'authenticated': {
-        if (this.authService.token) {
+        if (this.authService.accessToken) {
           this.viewContainerRef.createEmbeddedView(this.templateRef);
         }
         break;
       }
       case 'unauthenticated': {
-        if (!this.authService.token) {
+        if (!this.authService.accessToken) {
           this.viewContainerRef.createEmbeddedView(this.templateRef);
         }
         break;

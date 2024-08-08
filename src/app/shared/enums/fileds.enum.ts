@@ -44,21 +44,21 @@ export enum CourseFormEnum {
 }
 
 export enum FinancingsFormEnum {
-  header = 'Financiamiento', 
-  model = 'Comparecientes del convenio',
+  header = 'Financiamiento',
+  institutionName = 'Comparecientes del convenio',
   budget = 'Presupusesto y financiamiento',
   paymentMethod = 'Forma de pago',
   source = 'Fuente de financiamiento',
 }
 
 export enum DocumentationFormEnum {
-  header = 'Documentación', 
+  header = 'Documentación',
   signedAgreement = 'Convenio suscrito',
   administratorAgreement = 'Designación del administrador del convenio'
 }
 
 export enum AppearerFormEnum {
-  header = 'Comparecientes del convenio', 
+  header = 'Comparecientes del convenio',
 }
 
 export enum InternalInstitutionsFormEnum {

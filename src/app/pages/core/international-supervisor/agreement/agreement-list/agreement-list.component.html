@@ -116,7 +116,7 @@
   header="Convenio"
   [(visible)]="isVisibleAgreementView"
   [modal]="true">
-  @if (selectedItem?.id) {
+  @if (selectedItem.id) {
     <app-view [id]="selectedItem.id!"/>
   }
 </p-dialog>

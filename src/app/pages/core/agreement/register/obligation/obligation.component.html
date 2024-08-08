@@ -1,6 +1,6 @@
 <p-panel>
   <ng-template pTemplate="header">
-    <h2>Obligaciones:</h2>
+    <h4>Obligaciones:</h4>
     <p-button
       class="ml-2"
       [icon]="IconButtonActionEnum.ADD"
@@ -8,53 +8,72 @@
       [severity]="SeverityButtonActionEnum.ADD"
       (click)="showObligationModal()"/>
   </ng-template>
-  @if (agreement.obligations && agreement.obligations.length > 0) {
-    <p-table
-      dataKey="id"
-      styleClass="p-datatable-striped"
-      [value]="agreement.obligations"
-      [columns]="columns"
-      [loading]="coreService.isLoading">
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Entidad</th>
-          <th>Tipo de Obligación</th>
-          <th>Descripción</th>
-          <th>Acciones</th>
-        </tr>
-      </ng-template>
+  <ng-template pTemplate="content">
+    @if (agreementsService.agreement.obligations && agreementsService.agreement.obligations.length > 0) {
+      <p-table
+        styleClass="p-datatable-striped"
+        [value]="agreementsService.agreement.obligations"
+        [columns]="columns">
 
-      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-        <tr>
-          <td>{{ item.institutionName }}</td>
-          <td>{{ item.type?.name }}</td>
-          <td>
-            <ul>
-              @for (item of item.obligationDetails; track item) {
-                <li>{{ item.description }}</li>
-              }
-            </ul>
-          </td>
-          <td>
-            <div class="button-group">
-              <p-button
-                [icon]="IconButtonActionEnum.ADD"
-                [severity]="SeverityButtonActionEnum.ADD"
-                [pTooltip]="LabelButtonActionEnum.ADD"
-                (click)="showObligationDetailModal(rowIndex)"/>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th>
+              {{ TableEnum.ACTIONS }}
+            </th>
 
+            @for (col of columns; track col.field) {
+              <th [pSortableColumn]="col.field">
+                {{ col.header }}
+              </th>
+            }
+
+            <th>
+              {{ TableEnum.ACTIONS }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+          <tr>
+            <td>
               <p-button
                 [icon]="IconButtonActionEnum.DELETE"
                 [severity]="SeverityButtonActionEnum.DELETE"
                 [pTooltip]="LabelButtonActionEnum.DELETE"
                 (click)="deleteObligation(rowIndex)"/>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  }
+            </td>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.type?.name }}</td>
+            <td>
+              <ul>
+                @for (item of item.obligationDetails; track item; let index = $index) {
+                  <li class="mt-1">
+                    <p-button
+                      [icon]="IconButtonActionEnum.DELETE"
+                      [severity]="SeverityButtonActionEnum.DELETE"
+                      size="small"
+                      [pTooltip]="LabelButtonActionEnum.DELETE"
+                      (click)="deleteObligationDetail(rowIndex,index)"/>
+                    {{ item.description }}
+                  </li>
+                }
+              </ul>
+            </td>
+            <td>
+              <div class="button-group">
+                <p-button
+                  [icon]="IconButtonActionEnum.ADD"
+                  [severity]="SeverityButtonActionEnum.ADD"
+                  [pTooltip]="LabelButtonActionEnum.ADD"
+                  (click)="showObligationDetailModal(rowIndex)"/>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </ng-template>
 </p-panel>
 
 <p-dialog
@@ -98,6 +117,7 @@
         [dirty]="obligationTypeField.dirty">
       </small>
     </div>
+
     @if (obligationTypeField.value
     && (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL
       || obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN)) {
@@ -109,13 +129,12 @@
                [required]="obligationInstitutionNameField">
         </label>
 
-
         @if (obligationTypeField.value && obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL) {
           <p-dropdown
             id="institutionName"
             formControlName="institutionName"
             dataKey="id"
-            [options]="agreement.externalInstitutions"
+            [options]="agreementsService.agreement.externalInstitutions"
             placeholder="Seleccione"
             optionValue="name"
             [filter]="false">

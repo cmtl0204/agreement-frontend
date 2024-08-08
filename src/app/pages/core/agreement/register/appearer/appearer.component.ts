@@ -46,9 +46,7 @@ export class AppearerComponent implements OnInit {
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  @Input({required: true}) formInput!: AgreementModel;
 
-  protected id: string = RoutesEnum.NEW
   protected form!: FormGroup;
   protected internalInstitutionForm!: FormGroup;
   protected externalInstitutionForm!: FormGroup;
@@ -58,6 +56,7 @@ export class AppearerComponent implements OnInit {
   protected internalInstitutionsColumns: ColumnModel[] = [];
   private formErrors: string[] = [];
   protected isVisibleExternalInstitutionDetailForm: boolean = false;
+  protected isVisibleInternalInstitutionForm: boolean = false;
   protected index: number = -1;
 
   /** Foreign Keys **/
@@ -80,6 +79,8 @@ export class AppearerComponent implements OnInit {
     this.buildInternalInstitutionDetailForm();
     this.buildExternalInstitutionsColumns();
     this.buildInternalInstitutionsColumns();
+
+    this.checkValueChanges();
   }
 
   ngOnInit(): void {
@@ -97,15 +98,10 @@ export class AppearerComponent implements OnInit {
       internalInstitutions: this.formBuilder.array([], Validators.required),
       externalInstitutions: this.formBuilder.array([], Validators.required),
     });
-
-    this.checkValueChanges();
   }
 
   patchValueForm() {
-    this.agreementsService.agreement.internalInstitutions = this.agreementsService.agreement.internalInstitutions || [];
-    this.agreementsService.agreement.externalInstitutions = this.agreementsService.agreement.externalInstitutions || [];
-
-    this.form.patchValue(this.formInput);
+    this.form.patchValue(this.agreementsService.agreement);
   }
 
   checkValueChanges() {
@@ -118,9 +114,9 @@ export class AppearerComponent implements OnInit {
   validateForm() {
     this.formErrors = [];
 
-    if (this.agreementsService.agreementStorage.internalInstitutions?.length===0) this.formErrors.push('Comparecientes - Mintur');//review
+    if (this.agreementsService.agreementStorage.internalInstitutions?.length === 0) this.formErrors.push('Comparecientes - Mintur');//review
 
-    if (this.agreementsService.agreementStorage.externalInstitutions?.length===0) this.formErrors.push('Comparecientes - Contraparte');//review
+    if (this.agreementsService.agreementStorage.externalInstitutions?.length === 0) this.formErrors.push('Comparecientes - Contraparte');//review
 
     this.formErrorsOutput.emit(this.formErrors);
   }
@@ -197,6 +193,8 @@ export class AppearerComponent implements OnInit {
       this.addInternalInstitutionDetail();
 
       this.internalInstitutionPersonTypeField.reset();
+
+      this.isVisibleInternalInstitutionForm = false;
     } else {
       this.internalInstitutionForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -213,7 +211,6 @@ export class AppearerComponent implements OnInit {
         }
       }
 
-      console.log(this.agreementsService.agreement.internalInstitutions);
       this.internalInstitutionDetailPositionField.reset();
     } else {
       this.internalInstitutionDetailForm.markAllAsTouched();
@@ -251,8 +248,6 @@ export class AppearerComponent implements OnInit {
       }
 
       this.form.patchValue(this.agreementsService.agreement);
-      console.log(this.agreementsService.agreement);
-      console.log(this.form.value);
 
       this.isVisibleExternalInstitutionDetailForm = false;
       this.externalInstitutionDetailForm.reset();
@@ -370,6 +365,10 @@ export class AppearerComponent implements OnInit {
   save() {
     this.formOutput.emit(this.form.value);
     this.nextOutput.emit(true);
+  }
+
+  showInternalInstitutionModal() {
+    this.isVisibleInternalInstitutionForm = true;
   }
 
   /** Getters Form**/

@@ -35,20 +35,15 @@ export class RegisterComponent {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      // basic-data
-      agreementState: [null, Validators.required],
-      name: [null, Validators.required],
+      agreementState: [null],
+      name: [null],
       internalNumber: [null],
       number: [null],
       origin: [null],
       type: [null],
       specialType: [null],
-
-      // appearer
       internalInstitutions: [null],
       externalInstitutions: [null],
-
-      // agreement-date
       subscribedAt: [new Date()],
       startedAt: [new Date()],
       isFinishDate: [null],
@@ -58,55 +53,21 @@ export class RegisterComponent {
       monthTerm: [null],
       dayTerm: [null],
       objective: [null],
-
-      // agreement-administrator
       administrator: [null],
-
-      // obligation
       obligations: [null],
-
-      // financing
       isFinancing: [false],
       financings: [null],
-
-      // document
-
-      // addendum
       isAddendum: [false],
       addendums: [null]
     });
 
-    if (this.agreementsService.agreementStorage) {
+    if (this.agreementsService.agreement) {
       this.form.patchValue(this.agreementsService.agreementStorage);
-      console.log(this.agreementsService.agreementStorage.id);
-      if (this.agreementsService.agreementStorage.id) {
+
+      if (this.agreementsService.agreement.id) {
         this.activeStep = 3;
       }
     }
-  }
-
-  save(event: AgreementModel) {
-    this.form.patchValue(event);
-    this.agreementsService.agreement = this.form.value;
-  }
-
-  register(nextCallback: any) {
-    this.confirmationService.confirm({
-      key: 'confirmDialog',
-      message: 'Después de guardar no podrá cambiar la información',
-      header: '¿Está seguro de guardar?',
-      icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      rejectButtonStyleClass: "p-button-text",
-      accept: () => {
-        this.agreementsHttpService.register(this.form.value).subscribe(response => {
-          console.log(response.id)
-          this.agreementsService.agreement = response; //review
-          nextCallback.emit();
-        });
-      }
-    });
   }
 
   get validateForms(): boolean {
@@ -124,7 +85,7 @@ export class RegisterComponent {
 
     if (this.financingErrors.length > 0) this.formErrors = this.formErrors.concat(this.financingErrors);
 
-    return this.formErrors.length === 0 && this.form.valid;
+    return this.formErrors.length === 0;
   }
 
   validateFormAgreement(nextCallback: any) {
@@ -138,7 +99,7 @@ export class RegisterComponent {
 
     if (this.appearerErrors.length > 0) this.formErrors = this.formErrors.concat(this.appearerErrors);
 
-    if (this.formErrors.length === 0 && this.form.valid) {
+    if (this.formErrors.length === 0) {
       nextCallback.emit();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -150,31 +111,11 @@ export class RegisterComponent {
 
     if (this.obligationErrors.length > 0) this.formErrors = this.formErrors.concat(this.obligationErrors);
 
-    if (this.formErrors.length === 0 && this.form.valid) {
+    if (this.formErrors.length === 0) {
       nextCallback.emit();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
-  }
-
-  validateFormFinancing(nextCallback: any) {
-    this.formErrors = [];
-
-    if (this.financingErrors.length > 0) this.formErrors = this.formErrors.concat(this.financingErrors);
-
-    if (this.formErrors.length === 0 && this.form.valid) {
-      nextCallback.emit();
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  get externalInstitutionsField(): FormArray {
-    return this.form.controls['externalInstitutions'] as FormArray;
-  }
-
-  get internalInstitutionsField(): FormArray {
-    return this.form.controls['internalInstitutions'] as FormArray;
   }
 
   onSubmit(nextCallback: any) {
@@ -183,5 +124,29 @@ export class RegisterComponent {
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
+  }
+
+  save(event: AgreementModel) {
+    this.form.patchValue(event);
+
+    this.agreementsService.agreement = this.form.value;
+  }
+
+  register(nextCallback: any) {
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
+      header: '¿Está seguro de guardar?',
+      icon: PrimeIcons.TIMES_CIRCLE,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.agreementsHttpService.register(this.agreementsService.agreement).subscribe(response => {
+          this.agreementsService.agreement = response; //review
+          nextCallback.emit();
+        });
+      }
+    });
   }
 }

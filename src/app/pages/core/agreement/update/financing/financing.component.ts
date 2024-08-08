@@ -94,7 +94,7 @@ export class FinancingComponent implements OnInit {
   buildFinancingsColumns() {
     this.financingsColumns = [
       {
-        field: 'institutionName', header: FinancingsFormEnum.model
+        field: 'institutionName', header: FinancingsFormEnum.institutionName
       },
       {
         field: 'budget', header: FinancingsFormEnum.budget
@@ -151,7 +151,7 @@ export class FinancingComponent implements OnInit {
     if (this.isFinancingField.invalid) this.formErrors.push(AgreementFormEnum.isFinancing);
 
     if (this.formErrors.length === 0) {
-      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.institutionName);
       if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
@@ -174,7 +174,7 @@ export class FinancingComponent implements OnInit {
   validateFinancings(): boolean {
     this.formErrors = [];
 
-      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.model);
+      if (this.institutionNameField.invalid) this.formErrors.push(FinancingsFormEnum.institutionName);
       if (this.budgetField.invalid) this.formErrors.push(FinancingsFormEnum.budget);
       if (this.paymentMethodField.invalid) this.formErrors.push(FinancingsFormEnum.paymentMethod);
       if (this.sourceField.invalid) this.formErrors.push(FinancingsFormEnum.source);
@@ -187,7 +187,7 @@ export class FinancingComponent implements OnInit {
       this.formOutput.emit(value);
       this.validateForm();
     });
-    
+
     this.isFinancingField.valueChanges.subscribe(value => {
       if (value) {
         this.institutionNameField.setValidators(Validators.required);

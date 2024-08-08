@@ -4,14 +4,14 @@ import {Router} from '@angular/router';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
 import {environment} from '@env/environment';
-import {LoginModel, PasswordChangeModel, PasswordResetModel, UpdateUserDto, UserModel} from '@models/auth';
+import {JwtModel, LoginModel, PasswordChangeModel, PasswordResetModel, UpdateUserDto, UserModel} from '@models/auth';
 import {LoginResponse, ServerResponse} from '@models/http-response';
 import {AuthService} from '@servicesApp/auth';
 import {CoreService, MessageService} from '@servicesApp/core';
 import {RoutesService} from "@servicesApp/core";
 import {CataloguesHttpService, LocationsHttpService} from "@servicesHttp/core";
 import {RolePipe} from "@shared/pipes";
-import {JwtHelperService} from "@auth0/angular-jwt";
+import {jwtDecode} from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,6 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 export class AuthHttpService {
   API_URL: string = `${environment.API_URL}/auth`;
   rolePipe: RolePipe = new RolePipe();
-  private readonly jwtHelperService = inject(JwtHelperService);
   private readonly httpClient = inject(HttpClient);
   private readonly authService = inject(AuthService);
   private readonly coreService = inject(CoreService);
@@ -65,35 +64,22 @@ export class AuthHttpService {
   login(credentials: LoginModel): Observable<LoginResponse> {
     const url = `${this.API_URL}/login`;
 
-
-    // this.findLocations();
+    this.cataloguesHttpService.loadCache();
 
     return this.httpClient.post<LoginResponse>(url, credentials)
       .pipe(
         map(response => {
-          const token = this.jwtHelperService.decodeToken(response.accessToken);
+          const token: JwtModel = jwtDecode(response.accessToken);
           console.log(token);
-          this.authService.token = token;
+          this.authService.accessToken = response.accessToken;
           // this.authService.auth = response.data.user;
-          this.loadCatalogues();
+          //  this.authService.roles = token.role.split(',');
           return response;
         })
       );
   }
 
-  loadCatalogues() {
-    this.cataloguesHttpService.loadCache();
-  }
-
-  findLocations() {
-    let locations = sessionStorage.getItem('locations');
-
-    if (!locations || this.coreService.version !== this.coreService.newVersion) {
-      this.locationsHttpService.findCache().subscribe();
-    }
-  }
-
-  signOut(): void {
+    signOut(): void {
     console.log('signOut');
     this.authService.removeLogin();
     this.messageService.successCustom('Cerrar Sesión', 'Se cerró correctamente');
@@ -112,12 +98,6 @@ export class AuthHttpService {
         })
       );
       */
-  }
-
-  loginGoogle(): Observable<LoginResponse> {
-    // const url = `${this.URL_PUBLIC}/login/google`;
-    const url = `${this.API_URL}/login/google`;
-    return this.httpClient.get<LoginResponse>(url);
   }
 
   resetPassword(credentials: PasswordResetModel): Observable<ServerResponse> {
