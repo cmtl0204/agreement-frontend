@@ -30,6 +30,17 @@ export class AgreementsHttpService {
     );
   }
 
+  registerAddendum(id: string, formData: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}/addendums`;
+
+    return this.httpClient.post<ServerResponse>(url, formData).pipe(
+      map(response => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
   findAll(): Observable<CatalogueModel[]> {
     const url = this.API_URL;
 
@@ -42,6 +53,7 @@ export class AgreementsHttpService {
       })
     );
   }
+
   findAllAgreements(): Observable<AgreementModel[]> {
     const url = this.API_URL;
     return this.httpClient.get<ServerResponse>(url).pipe(
@@ -66,11 +78,11 @@ export class AgreementsHttpService {
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 
-    return this.httpClient.get(url).pipe(
-      map(response =>{
+    return this.httpClient.get<AgreementModel>(url).pipe(
+      map(response => {
         console.log(response)
         return response
-  })
+      })
     );
   }
 

@@ -1,11 +1,17 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray } from '@angular/forms';
-import {AgreementModel, ColumnModel} from '@models/core';
-import { AuthService} from '@servicesApp/auth';
-import { CoreService, MessageDialogService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import {AddendumEnum, IconButtonActionEnum, LabelButtonActionEnum, SkeletonEnum} from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators, AbstractControl, FormArray} from '@angular/forms';
+import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from '@models/core';
+import {AuthService} from '@servicesApp/auth';
+import {AgreementsService, CoreService, MessageDialogService} from '@servicesApp/core';
+import {AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
+import {
+  AddendumEnum, AgreementFormEnum, CatalogueObligationsTypeEnum,
+  CatalogueTypeEnum, FileFormEnum,
+  IconButtonActionEnum,
+  LabelButtonActionEnum, ObligationDetailForEnum, ObligationForEnum, SeverityButtonActionEnum,
+  SkeletonEnum, TableEnum
+} from '@shared/enums';
+import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-addendum',
@@ -13,175 +19,242 @@ import { PrimeIcons } from 'primeng/api';
   styleUrl: './addendum.component.scss'
 })
 export class AddendumComponent implements OnInit {
+  @Input({required: true}) formInput: AgreementModel = createAgreementModel();
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
 
-  /** Services **/
-  protected readonly authService = inject(AuthService);
+  protected readonly agreementsHttpService = inject(AgreementsHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  protected readonly coreService = inject(CoreService);
-  private readonly formBuilder = inject(FormBuilder);
-  public readonly messageDialogService = inject(MessageDialogService);
+  protected readonly messageDialogService = inject(MessageDialogService);
+  protected readonly formBuilder = inject(FormBuilder);
 
-  /** Form **/
-  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter(); //add
-  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   protected form!: FormGroup;
-  protected addendumForm! : FormGroup;
-  private formErrors: string[] = [];
-  protected Validators = Validators;
-  protected addendumColumns: ColumnModel[] = [];
-
-  /** Enums **/
+  protected addendumForm!: FormGroup;
+  protected fileForm!: FormGroup;
+  protected formErrors: string[] = [];
+  protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly AddendumEnum = AddendumEnum;
-  protected readonly SkeletonEnum = SkeletonEnum;
+  protected readonly AgreementFormEnum = AgreementFormEnum;
+  protected readonly TableEnum = TableEnum;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
 
+  protected types: CatalogueModel[] = [];
+  protected columns: ColumnModel[] = [];
+  protected file!: FileModel;
+
+  protected isVisibleAddendumForm: boolean = false;
+  protected yesNo: any[] = []
+
   constructor() {
-    this.buildForm()
-    this.buildAddendumForm()
-    this.buildAddendumColumns()
+    this.buildForm();
+    this.buildAddendumForm();
+    this.buildFileForm();
+
+    this.checkValuesChange();
+
+    this.buildColumns();
+
+    this.yesNo = [{label: 'Si', value: true}, {label: 'No', value: false}];
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.loadTypes();
+
+    this.patchValueForm();
+    this.validateForm();
   }
 
+  patchValueForm() {
+    this.form.patchValue(this.formInput);
 
-  buildForm() {
-    this.form =this.formBuilder.group({
-      isAddendum: [null, Validators.required],
-      addendums: this.formBuilder.array([])
-    })
-    this.checkValueChanges()
+    if (this.formInput.addendums.length > 0) {
+      this.isAddendumField.disable();
+    }else{
+      this.isAddendumField.enable();
+    }
   }
 
-  buildAddendumForm(){
+  buildForm(): void {
+    this.form = this.formBuilder.group({
+      isAddendum: [false],
+      addendums: this.formBuilder.array([], Validators.required),
+    });
+  }
+
+  buildAddendumForm() {
     this.addendumForm = this.formBuilder.group({
       description: [null],
-      isModifiedFinishDate: [null],
-      document: [null],
+      isModifiedFinishDate: [false],
+      file: [null],
       agreementEndedAt: [null]
     })
   }
 
-  addAddendum(){
-    if (this.validateForm()) {
-      this.addendums.push(this.formBuilder.group(this.addendumForm.value))
-      this.addendumForm.reset()
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
+  buildFileForm(): void {
+    this.fileForm = this.formBuilder.group({
+      type: [null, Validators.required],
+      myFile: [null, Validators.required]
+    });
+
+    this.checkValuesChange();
   }
 
-  deleteAddendum(index:number){
-   this.addendums.removeAt(index)
+  checkValuesChange() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(this.formInput);
+
+      this.validateForm();
+    });
+
+    this.isAddendumField.valueChanges.subscribe(value => {
+      this.formInput.isAddendum = value;
+
+      if (value) {
+        this.descriptionField.setValidators(Validators.required);
+        this.fileField.setValidators(Validators.required);
+      } else {
+        this.descriptionField.clearValidators();
+        this.fileField.clearValidators();
+      }
+
+      this.descriptionField.updateValueAndValidity();
+    });
+
+    this.isModifiedFinishDateField.valueChanges.subscribe(value => {
+      if (value) {
+        this.agreementEndedAtField.setValidators(Validators.required);
+      } else {
+        this.agreementEndedAtField.clearValidators();
+      }
+
+      this.agreementEndedAtField.reset();
+      this.agreementEndedAtField.updateValueAndValidity();
+    });
   }
 
-  buildAddendumColumns() {
-    this.addendumColumns = [
+  buildColumns() {
+    this.columns = [
       {
-        field: 'Description', header: AddendumEnum.description
+        field: 'description', header: AddendumEnum.description
       },
       {
-        field: '', header: AddendumEnum.isModifiedFinishDate
+        field: 'file', header: AddendumEnum.file
       },
       {
-        field: 'position', header: AddendumEnum.agreementEndedAt
+        field: 'isModifiedFinishDate', header: AddendumEnum.isModifiedFinishDate
       },
       {
-        field: 'Documento', header: AddendumEnum.document
-      },
+        field: 'agreementEndedAt', header: AddendumEnum.agreementEndedAt
+      }
     ];
   }
 
-  validateForm(): boolean {
+  loadTypes() {
+    this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ADDENDUM_DOCUMENT);
+  }
+
+  validateForm() {
+    this.formErrors = [];
+
+    this.formErrorsOutput.emit(this.formErrors);
+  }
+
+  validateAddendumForm() {
     this.formErrors = [];
 
     if (this.descriptionField.invalid) this.formErrors.push(AddendumEnum.description);
     if (this.isModifiedFinishDateField.invalid) this.formErrors.push(AddendumEnum.isModifiedFinishDate);
-    if (this.documentField.invalid) this.formErrors.push(AddendumEnum.document);
     if (this.agreementEndedAtField.invalid) this.formErrors.push(AddendumEnum.agreementEndedAt);
+    if (this.fileField.invalid) this.formErrors.push(AddendumEnum.file);
 
-    return this.form.valid && this.formErrors.length === 0;
+    return this.formErrors.length === 0
   }
 
-  onSubmit(): void {
-    if (this.isAddendumField.invalid){
-      this.formErrors.push(AddendumEnum.isAddendum);
-      this.messageDialogService.fieldErrors(this.formErrors)
-    }
+  addAddendumFile(event: any, uploadFiles: any) {
+    this.fileField.patchValue({
+      file: event.files[0],
+      name: event.files[0].name,
+      type: this.types[0]
+    });
 
-    if (this.isAddendumField.valid && this.isAddendumField.value) {
-      if (this.addendums.value.length === 0) {
-        this.messageDialogService.fieldErrors('Es necesaria al menos una adenda')
-      } else {
-        this.save();
+    this.file = {file: event.files[0]};
+    this.file.type = this.types[0];
+
+    uploadFiles.clear();
+  }
+
+  onUpload() {
+    if (this.validateAddendumForm()) {
+      const formData = new FormData();
+      // formData.append('files', this.file.file);
+      formData.append('file', this.fileField.value.file);
+      formData.append('typeId', this.fileField.value.type.id);
+      formData.append('description', this.descriptionField.value);
+      formData.append('isModifiedFinishDate', this.isModifiedFinishDateField.value);
+      formData.append('agreementEndedAt', this.agreementEndedAtField.value);
+      formData.append('isAddendum', this.isAddendumField.value);
+
+      // this.agreementsHttpService.registerAddendum(this.formInput.id!, formData).subscribe(response => {
+      this.formInput.addendums.push({
+        description: this.descriptionField.value,
+        isModifiedFinishDate: this.isModifiedFinishDateField.value,
+        agreementEndedAt: this.agreementEndedAtField.value,
+        file: {
+          file: this.fileField.value.file,
+          name: this.fileField.value.name,
+        },
+      });
+      this.form.patchValue(this.formInput);
+
+      this.addendumForm.reset();
+      this.isVisibleAddendumForm = false;
+      // });
+
+      if (this.formInput.addendums.length > 0) {
+        this.isAddendumField.disable();
       }
-    }
-
-    if(this.isAddendumField.valid && this.isAddendumField.value === false){
-      this.save();
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+      this.form.markAllAsTouched();
+      this.addendumForm.markAllAsTouched();
     }
   }
 
-  save() {
-    this.formOutput.emit(this.form.value); //add
+  showAddendumModal() {
+    this.isVisibleAddendumForm = true;
   }
 
-    checkValueChanges(){
-    this.isAddendumField.valueChanges.subscribe((value) => {
-     if (value){
+  deleteAddendum(index: number) {
+    this.formInput.addendums.splice(index, 1);
 
-        this.descriptionField.addValidators(Validators.required),
-        this.isModifiedFinishDateField.addValidators(Validators.required)
-        this.documentField.addValidators(Validators.required)
-     } else{
-        this.addendums.clear()
-        this.descriptionField.removeValidators(Validators.required),
-        this.isModifiedFinishDateField.removeValidators(Validators.required),
-        this.documentField.removeValidators(Validators.required),
+    this.form.patchValue(this.formInput);
 
-        this.descriptionField.reset(),
-        this.isModifiedFinishDateField.reset(),
-        this.documentField.reset()
-     }
 
-     this.isModifiedFinishDateField.valueChanges.subscribe(()=>{
-
-      if(this.isModifiedFinishDateField.value == true){
-
-        this.agreementEndedAtField.addValidators(Validators.required)
-
-      } else{
-
-        this.agreementEndedAtField.removeValidators(Validators.required)
-        this.agreementEndedAtField.reset()
-
-      }
-     })
-    })
+    if (this.formInput.addendums.length === 0) {
+      this.isAddendumField.enable();
+    }
   }
 
   /** Getters Form**/
   get isAddendumField(): AbstractControl {
     return this.form.controls['isAddendum'];
   }
-  get addendums():FormArray {
-    return this.form.controls['addendums'] as FormArray;
-  }
 
   get descriptionField(): AbstractControl {
     return this.addendumForm.controls['description'];
   }
+
   get isModifiedFinishDateField(): AbstractControl {
     return this.addendumForm.controls['isModifiedFinishDate'];
   }
-  get documentField(): AbstractControl {
-    return this.addendumForm.controls['document'];
+
+  get fileField(): AbstractControl {
+    return this.addendumForm.controls['file'];
   }
+
   get agreementEndedAtField(): AbstractControl {
     return this.addendumForm.controls['agreementEndedAt'];
   }
-
-    protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
-  protected readonly IconButtonActionEnum = IconButtonActionEnum;
 }

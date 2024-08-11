@@ -2,8 +2,9 @@ import {Component, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AgreementsService, MessageDialogService} from "@servicesApp/core";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
-import {AgreementsHttpService} from "@servicesHttp/core";
-import {AgreementModel} from "@models/core";
+import {AgreementsHttpService, FilesHttpService} from "@servicesHttp/core";
+import {AgreementModel, FileModel} from "@models/core";
+import {SeverityButtonActionEnum} from "@shared/enums";
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,7 @@ export class RegisterComponent implements OnInit {
   private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly formBuilder = inject(FormBuilder);
+  protected readonly filesHttpService = inject(FilesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
 
   protected form!: FormGroup;
@@ -42,6 +44,14 @@ export class RegisterComponent implements OnInit {
       if (this.idField.value) {
         this.activeStep = 3;
       }
+
+      if (this.filesField.value.length > 0) {
+        this.activeStep = 4;
+      }
+
+      if(this.enabledField.value){
+        // this.activeStep = 4;
+      }
     }
   }
 
@@ -55,8 +65,8 @@ export class RegisterComponent implements OnInit {
       origin: [null],
       type: [null],
       specialType: [null],
-      internalInstitutions: [null],
-      externalInstitutions: [null],
+      internalInstitutions: [[]],
+      externalInstitutions: [[]],
       subscribedAt: [new Date()],
       startedAt: [new Date()],
       isFinishDate: [null],
@@ -67,28 +77,30 @@ export class RegisterComponent implements OnInit {
       dayTerm: [null],
       objective: [null],
       administrator: [null],
-      obligations: [null],
+      obligations: [[]],
       isFinancing: [false],
-      financings: [null],
+      financings: [[]],
       isAddendum: [false],
-      addendums: [null]
+      addendums: [[]],
+      files: [[]],
+      enabled: [false],
     });
   }
 
   get validateForms(): boolean {
     this.formErrors = [];
 
-    if (this.basicDataErrors.length > 0) this.formErrors = this.formErrors.concat(this.basicDataErrors);
+    this.formErrors = this.formErrors.concat(this.basicDataErrors);
 
-    if (this.agreementDateErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementDateErrors);
+    this.formErrors = this.formErrors.concat(this.agreementDateErrors);
 
-    if (this.agreementAdministratorErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
+    this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
 
-    if (this.appearerErrors.length > 0) this.formErrors = this.formErrors.concat(this.appearerErrors);
+    this.formErrors = this.formErrors.concat(this.appearerErrors);
 
-    if (this.obligationErrors.length > 0) this.formErrors = this.formErrors.concat(this.obligationErrors);
+    this.formErrors = this.formErrors.concat(this.obligationErrors);
 
-    if (this.financingErrors.length > 0) this.formErrors = this.formErrors.concat(this.financingErrors);
+    this.formErrors = this.formErrors.concat(this.financingErrors);
 
     return this.formErrors.length === 0;
   }
@@ -96,13 +108,13 @@ export class RegisterComponent implements OnInit {
   validateFormAgreement(nextCallback: any) {
     this.formErrors = [];
 
-    if (this.basicDataErrors.length > 0) this.formErrors = this.formErrors.concat(this.basicDataErrors);
+    this.formErrors = this.formErrors.concat(this.basicDataErrors);
 
-    if (this.agreementDateErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementDateErrors);
+    this.formErrors = this.formErrors.concat(this.agreementDateErrors);
 
-    if (this.agreementAdministratorErrors.length > 0) this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
+    this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
 
-    if (this.appearerErrors.length > 0) this.formErrors = this.formErrors.concat(this.appearerErrors);
+    this.formErrors = this.formErrors.concat(this.appearerErrors);
 
     if (this.formErrors.length === 0) {
       nextCallback.emit();
@@ -114,7 +126,7 @@ export class RegisterComponent implements OnInit {
   validateFormObligation(nextCallback: any) {
     this.formErrors = [];
 
-    if (this.obligationErrors.length > 0) this.formErrors = this.formErrors.concat(this.obligationErrors);
+    this.formErrors = this.formErrors.concat(this.obligationErrors);
 
     if (this.formErrors.length === 0) {
       nextCallback.emit();
@@ -123,12 +135,20 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  validateFormDocument(nextCallback: any) {
+  get validateFormDocument(): boolean {
     this.formErrors = [];
 
-    if (this.documentErrors.length > 0) this.formErrors = this.formErrors.concat(this.documentErrors);
+    this.formErrors = this.formErrors.concat(this.documentErrors);
 
-    return this.formErrors.length === 0;
+    return this.formErrors.length === 0
+  }
+
+  get validateFormAddendum(): boolean {
+    this.formErrors = [];
+
+    this.formErrors = this.formErrors.concat(this.addendumErrors);
+
+    return this.formErrors.length === 0
   }
 
   onSubmitAgreement(nextCallback: any) {
@@ -140,8 +160,16 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmitDocuments(nextCallback: any) {
-    if (this.validateFormDocument(nextCallback)) {
+    if (this.validateFormDocument) {
       this.registerDocuments(nextCallback);
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  onSubmitAddendums() {
+    if (this.validateFormAddendum) {
+      this.registerAddendums();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
@@ -165,6 +193,7 @@ export class RegisterComponent implements OnInit {
       accept: () => {
         this.agreementsHttpService.register(this.agreementsService.agreement).subscribe(response => {
           this.agreementsService.agreement = response; //review
+          this.form.patchValue(response);
           nextCallback.emit();
         });
       }
@@ -181,10 +210,44 @@ export class RegisterComponent implements OnInit {
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
-        this.agreementsHttpService.register(this.agreementsService.agreement).subscribe(response => {
-          this.agreementsService.agreement = response; //review
-          nextCallback.emit();
-        });
+        const formData = new FormData();
+
+        for (const myFile of this.filesField.value) {
+          formData.append('typeIds', myFile.type.id);
+          formData.append('files', myFile.file);
+        }
+
+        if (this.idField.valid) {
+          this.filesHttpService.uploadFiles(this.idField.value, formData).subscribe(response => {
+            nextCallback.emit();
+          });
+        }
+      }
+    });
+  }
+
+  registerAddendums() {
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
+      header: '¿Está seguro de guardar?',
+      icon: PrimeIcons.TIMES_CIRCLE,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        const formData = new FormData();
+
+        for (const addendum of this.filesField.value) {
+          formData.append('typeIds', addendum.type.id);
+          formData.append('files', addendum.file);
+        }
+
+        if (this.idField.valid) {
+          this.filesHttpService.uploadFiles(this.idField.value, formData).subscribe(response => {
+            // this.form.patchValue(response);
+          });
+        }
       }
     });
   }
@@ -192,4 +255,18 @@ export class RegisterComponent implements OnInit {
   get idField(): AbstractControl {
     return this.form.controls['id'];
   }
+
+  get filesField(): AbstractControl {
+    return this.form.controls['files'];
+  }
+
+  get addendumsField(): AbstractControl {
+    return this.form.controls['addendums'];
+  }
+
+  get enabledField(): AbstractControl {
+    return this.form.controls['enabled'];
+  }
+
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
 }

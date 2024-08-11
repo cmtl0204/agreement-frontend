@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CoreService} from '@servicesApp/core';
-import { AddendumEnum} from '@shared/enums';
+import {AddendumEnum, AgreementFormEnum} from '@shared/enums';
 import { AddendumModel } from '@models/core/addendum.model';
 import { AgreementModel, ColumnModel } from '@models/core';
 
@@ -27,7 +27,7 @@ export class AddendumComponent{
   buildaddendumColumns() {
     this.addendumColumns = [
       {
-        field: 'isAddendum', header: AddendumEnum.isAddendum
+        field: 'isAddendum', header: AgreementFormEnum.isAddendum
       },
       {
         field: 'description', header: AddendumEnum.description
@@ -36,7 +36,7 @@ export class AddendumComponent{
         field: 'isModifiedFinishDate', header: AddendumEnum.isModifiedFinishDate
       },
       {
-        field: 'document', header: AddendumEnum.document
+        field: 'document', header: AddendumEnum.file
       },
       {
         field: 'agreementEndedAt', header: AddendumEnum.agreementEndedAt

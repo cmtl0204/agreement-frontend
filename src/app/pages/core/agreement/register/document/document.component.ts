@@ -1,9 +1,10 @@
-import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
-import {AgreementModel, CatalogueModel, ColumnModel, FileModel} from "@models/core";
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from "@models/core";
 import {PrimeIcons} from "primeng/api";
 import {
   CatalogueTypeEnum,
-  ExternalInstitutionsFormEnum, FileFormEnum, IconButtonActionEnum,
+  FileFormEnum,
+  IconButtonActionEnum,
   LabelButtonActionEnum,
   SeverityButtonActionEnum,
   TableEnum
@@ -18,55 +19,115 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
   styleUrl: './document.component.scss'
 })
 export class DocumentComponent implements OnInit {
+  @Input({required: true}) formInput: AgreementModel = createAgreementModel();
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
 
-  protected readonly PrimeIcons = PrimeIcons;
-  protected readonly TableEnum = TableEnum;
-  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
-  protected readonly filesHttpService = inject(FilesHttpService);
-  protected readonly agreementsService = inject(AgreementsService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
   protected readonly formBuilder = inject(FormBuilder);
+
   protected form!: FormGroup;
+  protected fileForm!: FormGroup;
   protected formErrors: string[] = [];
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly FileFormEnum = FileFormEnum;
-  protected files: FileModel[] = [];
+  protected readonly TableEnum = TableEnum;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly PrimeIcons = PrimeIcons;
+
   protected types: CatalogueModel[] = [];
   protected columns: ColumnModel[] = [];
 
   constructor() {
+    this.buildForm();
     this.buildFileForm();
+    this.buildColumns();
   }
 
   ngOnInit() {
     this.loadTypes();
+
+    this.patchValueForm();
+    this.validateForm();
   }
 
-  findFilesByAgreement() {
+  patchValueForm() {
+    this.form.patchValue(this.formInput);
+  }
 
+  buildForm(): void {
+    this.form = this.formBuilder.group({
+      files: this.formBuilder.array([], Validators.required),
+    });
+
+    this.checkValuesChange();
   }
 
   buildFileForm(): void {
-    this.form = this.formBuilder.group({
+    this.fileForm = this.formBuilder.group({
       type: [null, Validators.required],
       myFile: [null, Validators.required]
-    })
+    });
+
+    this.checkValuesChange();
+  }
+
+  checkValuesChange() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(this.formInput);
+
+      this.validateForm();
+    });
+  }
+
+  buildColumns() {
+    this.columns = [
+      {
+        field: 'type', header: FileFormEnum.type
+      },
+      {
+        field: 'name', header: FileFormEnum.name
+      }
+    ];
   }
 
   loadTypes() {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ENABLING_DOCUMENT);
   }
 
+  validateForm() {
+    this.formErrors = [];
+
+    if (this.formInput.files.length < 2)
+      this.formErrors.push(`Debe cargar los ${this.types.length} tipos de archivos`);
+
+    this.formErrorsOutput.emit(this.formErrors);
+  }
+
+  validateFileForm() {
+    this.formErrors = [];
+
+    if (this.typeField.invalid) this.formErrors.push(FileFormEnum.type);
+
+    if (this.formInput.files.findIndex(item => item.type?.id === this.typeField.value?.id) > -1)
+      this.formErrors.push(`${this.typeField.value.name} ya se encuentra cargado`);
+
+    return this.formErrors.length === 0
+  }
+
   onUpload(event: any, uploadFiles: any) {
-    if (this.validateForm()) {
-      this.files.push({
-        type: this.typeFiled.value,
-        file: event.files[0]
+    if (this.validateFileForm()) {
+      const file = event.files[0];
+
+      this.formInput.files.push({
+        type: this.typeField.value,
+        name: file.name,
+        file
       });
+
+      this.form.patchValue(this.formInput);
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
       this.form.markAllAsTouched();
@@ -75,52 +136,17 @@ export class DocumentComponent implements OnInit {
     uploadFiles.clear();
   }
 
-  validateForm() {
-    this.formErrors = [];
-
-    if (this.typeFiled.invalid) this.formErrors.push(FileFormEnum.type);
-
-    if (this.files.findIndex(item => item.type === this.typeFiled.value) > -1) this.formErrors.push(`${this.typeFiled.value.name} ya se encuentra cargado`);
-
-    return this.formErrors.length === 0
-  }
-
-  validateFiles() {
-    this.formErrors = [];
-
-    if (this.files.length < 2) this.formErrors.push(`Debe cargar los ${this.types.length} tipos de archivos`);
-
-    return this.formErrors.length === 0
-  }
-
   removeFile(index: number) {
-    this.files.splice(index, 1);
+    this.formInput.files.splice(index, 1);
+
+    this.form.patchValue(this.formInput.files);
   }
 
-  onSubmit() {
-    if (this.validateFiles()) {
-      const payload = new FormData();
-
-      for (const myFile of this.files) {
-        payload.append('typeIds', myFile.type!.id!);
-        payload.append('files', myFile.file);
-      }
-
-      console.log(this.agreementsService.agreement.id)
-      // if (this.agreementsService.agreement.id) {
-      this.filesHttpService.uploadFiles('a247c1da-6ae7-482a-8bca-5312c158f95f', payload).subscribe();
-      // this.filesHttpService.uploadFiles(this.agreementsService.agreement.id, this.uploadedFiles).subscribe();
-      // }
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
+  get typeField(): AbstractControl {
+    return this.fileForm.controls['type'];
   }
 
-  get typeFiled(): AbstractControl {
-    return this.form.controls['type'];
-  }
-
-  get fileFiled(): AbstractControl {
-    return this.form.controls['myFile'];
+  get fileField(): AbstractControl {
+    return this.fileForm.controls['myFile'];
   }
 }

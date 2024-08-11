@@ -3,8 +3,8 @@ import {ObligationDetailModel} from "@models/core/obligation-detail.model";
 
 
 export interface ObligationModel {
-  id: string;
-  institutionName?: string;
-  type?: CatalogueModel;
-  obligationDetails?: ObligationDetailModel[];
+  id?: string;
+  institutionName: string;
+  type: CatalogueModel;
+  obligationDetails: ObligationDetailModel[];
 }

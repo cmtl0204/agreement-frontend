@@ -37,10 +37,11 @@ export enum UsersFormEnum {
 export enum FileFormEnum {
   type = 'Tipo de archivo',
   myFile = 'Archivo',
+  name = 'Nombre del archivo',
 }
 
 export enum FinancingsFormEnum {
-  header = 'Financiamiento',
+  header = 'Financiamientos',
   institutionName = 'Comparecientes del convenio',
   budget = 'Presupusesto y financiamiento',
   paymentMethod = 'Forma de pago',
@@ -110,6 +111,7 @@ export enum AgreementFormEnum {
   isFinishDate = '¿El convenio cuenta con fecha de terminación?',
   endedAt = 'Fecha de terminación del Convenio',
   endedReason = 'Razón de terminación del convenio',
+  isAddendum = '¿Registra Adendas?',
   totalTerm = 'Plazo total del convenio',
   yearTerm = 'Años',
   monthTerm = 'Meses',
@@ -120,7 +122,7 @@ export enum AgreementFormEnum {
   number = 'Numero de convenio',
   origin = 'Origen del convenio',
   type = 'Tipo del convenio',
-  isFinancing = 'Financiamiento',
+  isFinancing = '¿Registra Financiamiento?',
   specialType = 'Tipo especifico del convenio',
 }
 
@@ -137,9 +139,8 @@ export enum AdministratorFormEnum {
 
 export enum AddendumEnum {
   header = 'Adendas',
-  isAddendum = 'Registrar Adenda',
   description = 'Información de la Adenda',
   isModifiedFinishDate = '¿Se modifica fecha de terminación del convenio?',
-  document = 'Documento de adenda o modificatorio',
+  file = 'Documento de adenda o modificatorio',
   agreementEndedAt = 'Fecha de terminación'
 }

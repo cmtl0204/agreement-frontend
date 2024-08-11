@@ -1,19 +1,18 @@
 <form [formGroup]="form" class="p-fluid grid">
   <!-- subscriptionAt -->
   <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-    <label appLabel for="subscribedAt"
-           [label]="AgreementFormEnum.subscribedAt"
-           [required]="subscribedAtField"></label>
-
-    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+    <label
+      appLabel
+      for="subscribedAt"
+      [label]="AgreementFormEnum.subscribedAt"
+      [required]="subscribedAtField"></label>
 
     <p-calendar
       id="subscribedAt"
       formControlName="subscribedAt"
       [iconDisplay]="'input'"
       [showIcon]="true"
-      dateFormat="yy-mm-dd"
-    />
+      dateFormat="yy-mm-dd"/>
 
     <small
       appErrorMessage
@@ -25,11 +24,11 @@
 
   <!-- startedAt -->
   <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-    <label appLabel for="startedAt"
-           [label]="AgreementFormEnum.startedAt"
-           [required]="startedAtField"></label>
-
-    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+    <label
+      appLabel
+      for="startedAt"
+      [label]="AgreementFormEnum.startedAt"
+      [required]="startedAtField"></label>
 
     <p-calendar
       id="startedAt"
@@ -37,8 +36,7 @@
       [iconDisplay]="'input'"
       [showIcon]="true"
       [minDate]="subscribedAtField.value"
-      dateFormat="yy-mm-dd"
-    />
+      dateFormat="yy-mm-dd"/>
 
     <small
       appErrorMessage
@@ -48,21 +46,22 @@
     </small>
   </div>
 
-  <!-- hasTerminationDate -->
+  <!-- isFinishDate -->
   <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
     <label
       appLabel
       for="isFinishDate"
       [label]="AgreementFormEnum.isFinishDate"
       [required]="isFinishDateField"></label>
+
     <div class="flex gap-3">
       <div class="flex align-items-center">
         <p-radioButton
           id="isFinishDate"
           formControlName="isFinishDate"
           name="isFinishDate"
-          [value]="true"
-        />
+          [value]="true"/>
+
         <label for="isFinishDate" class="ml-2">
           Si
         </label>
@@ -73,14 +72,14 @@
           id="no"
           formControlName="isFinishDate"
           name="isFinishDate"
-          [value]="false"
-        />
+          [value]="false"/>
 
         <label for="no" class="ml-2">
           No
         </label>
       </div>
     </div>
+
     <small
       appErrorMessage
       [errors]="isFinishDateField.errors"
@@ -91,7 +90,7 @@
 
   <!-- endedAt -->
   @if (isFinishDateField.value) {
-    <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+    <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
       <label appLabel for="endedAt"
              [label]="AgreementFormEnum.endedAt"
              [required]="endedAtField"></label>
@@ -114,23 +113,23 @@
 
     <div class="field col-12">
       <label>Plazo total del convenio:</label>
-      <app-form-help-field
-        [content]='["Especifique la duración del convenio en:","Años","Meses","Días"]'></app-form-help-field>
     </div>
+
     <!-- yearTerm -->
-    <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
       <label
         appLabel
         for="yearTerm"
         [label]="AgreementFormEnum.yearTerm"
         [required]="yearTermField"></label>
+
       <p-inputNumber
         id="yearTerm"
         formControlName="yearTerm"
         [showButtons]="true"
         [min]="0"
-        [useGrouping]="false"
-      />
+        [useGrouping]="false"/>
+
       <small
         appErrorMessage
         [errors]="yearTermField.errors"
@@ -140,18 +139,20 @@
     </div>
 
     <!-- monthTerm -->
-    <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
       <label
         appLabel
         for="monthTerm"
         [label]="AgreementFormEnum.monthTerm"
         [required]="monthTermField"></label>
+
       <p-inputNumber
         id="monthTerm"
         formControlName="monthTerm"
         [showButtons]="true"
         [min]="0"
       />
+
       <small
         appErrorMessage
         [errors]="monthTermField.errors"
@@ -161,18 +162,19 @@
     </div>
 
     <!-- dayTerm -->
-    <div class="field xl:col-4 lg:col-4 md:col-4 sm:col-12">
+    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
       <label
         appLabel
         for="dayTerm"
         [label]="AgreementFormEnum.dayTerm"
         [required]="dayTermField"></label>
+
       <p-inputNumber
         id="dayTerm"
         formControlName="dayTerm"
         [showButtons]="true"
-        [min]="0"
-      />
+        [min]="0"/>
+
       <small
         appErrorMessage
         [errors]="dayTermField.errors"
@@ -180,26 +182,26 @@
         [dirty]="dayTermField.dirty">
       </small>
     </div>
-
   }
 
   <!-- endedReason -->
   @if (isFinishDateField.value === false) {
     <div class="field col-12">
-      <label appLabel
-             for="endedReason"
-             [label]="AgreementFormEnum.endedReason"
-             [required]="endedReasonField"></label>
-      <app-form-help-field content="Explique las razones por las que termina el convenio"></app-form-help-field>
-      <textarea pInputTextarea
-                id="endedReason"
-                formControlName="endedReason"
-                rows="10"
-                cols="30"
-                class="col-12"
-                style="resize: none;"
-      >
-                </textarea>
+      <label
+        appLabel
+        for="endedReason"
+        [label]="AgreementFormEnum.endedReason"
+        [required]="endedReasonField"></label>
+
+      <textarea
+        pInputTextarea
+        id="endedReason"
+        formControlName="endedReason"
+        rows="5"
+        cols="30"
+        style="resize: none;">
+      </textarea>
+
       <small
         appErrorMessage
         [errors]="endedReasonField.errors"

@@ -1,13 +1,12 @@
-import { AgreementModel } from "@models/core";
+import {AgreementModel, FileModel} from "@models/core";
 
 export interface AddendumModel {
-  id: string;
-  agreementId: string;
+  id?: string;
   agreement?: AgreementModel;
-  isAddendum: boolean;
   description: string;
   isModifiedFinishDate: boolean;
-  agreementEndedAt: Date; //fechas son at
- 
+  agreementEndedAt: Date;
+  file?: FileModel;
+
 }
 

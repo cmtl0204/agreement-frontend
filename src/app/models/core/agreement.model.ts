@@ -1,7 +1,8 @@
 import {
+  AddendumModel,
   AdministratorModel, AgreementStateModel,
   CatalogueModel,
-  ExternalInstitutionModel,
+  ExternalInstitutionModel, FileModel,
   FinancingModel,
   InternalInstitutionModel, ObligationModel
 } from "@models/core";
@@ -18,6 +19,7 @@ export interface AgreementModel {
   subscribedAt?: Date;
   startedAt?: Date;
   isFinishDate?: boolean;
+  enabled?: boolean;
   endedAt?: Date | null;
   endedReason?: string;
   yearTerm?: number;
@@ -25,12 +27,26 @@ export interface AgreementModel {
   dayTerm?: number;
   objective?: string;
   isFinancing?: boolean;
+  isAddendum?: boolean;
   userId?: string;
   origin?: CatalogueModel;
   type?: CatalogueModel;
   specialType?: CatalogueModel;
-  externalInstitutions?: ExternalInstitutionModel[];
-  internalInstitutions?: InternalInstitutionModel[];
-  financings?: FinancingModel[];
-  obligations?: ObligationModel[];
+  externalInstitutions: ExternalInstitutionModel[];
+  internalInstitutions: InternalInstitutionModel[];
+  financings: FinancingModel[];
+  obligations: ObligationModel[];
+  files: FileModel[];
+  addendums: AddendumModel[];
+}
+
+export function createAgreementModel(): AgreementModel {
+  return {
+    externalInstitutions: [],
+    internalInstitutions: [],
+    financings: [],
+    obligations: [],
+    files: [],
+    addendums: [],
+  }
 }

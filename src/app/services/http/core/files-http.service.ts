@@ -80,10 +80,10 @@ export class FilesHttpService {
     );
   }
 
-  uploadFiles(modelId: string, payload: FormData): Observable<FileModel> {
+  uploadFiles(modelId: string, formData: FormData): Observable<FileModel> {
     const url = `${this.API_URL}/models/${modelId}`;
 
-    return this.httpClient.post<ServerResponse>(url, payload).pipe(
+    return this.httpClient.post<ServerResponse>(url, formData).pipe(
       map((response) => {
         this.messageDialogService.successHttp(response);
         return response.data;

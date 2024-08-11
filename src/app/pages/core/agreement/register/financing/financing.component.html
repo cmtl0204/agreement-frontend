@@ -1,64 +1,38 @@
+<form [formGroup]="form" class="p-fluid grid text-center">
+  <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+    <label
+      appLabel
+      [label]="AgreementFormEnum.isFinancing"
+      [required]="isFinancingField"></label>
+
+    <p-inputSwitch formControlName="isFinancing" class="ml-2"/>
+  </div>
+</form>
+
 <p-panel>
   <ng-template pTemplate="header">
-    <form [formGroup]="form" class="p-fluid grid ">
-      <!-- financingOptionId -->
-      <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label
-          appLabel
-          [label]="AgreementFormEnum.isFinancing"
-          [required]="isFinancingField"></label>
-        <div class="flex gap-3">
-          <div class="flex align-items-center">
-            <p-radioButton
-              id="yes"
-              formControlName="isFinancing"
-              name="isFinancing"
-              [value]="true"/>
-            <label for="yes" class="ml-2">
-              Si
-            </label>
-          </div>
-
-          <div class="flex align-items-center">
-            <p-radioButton
-              id="no"
-              formControlName="isFinancing"
-              name="isFinancing"
-              [value]="false"
-            />
-            <label for="no" class="ml-2">
-              No
-            </label>
-          </div>
-        </div>
-        <small
-          appErrorMessage
-          [errors]="isFinancingField.errors"
-          [touched]="isFinancingField.touched"
-          [dirty]="isFinancingField.dirty">
-        </small>
-      </div>
-    </form>
+    <h4>{{FinancingsFormEnum.header}}:</h4>
 
     @if (isFinancingField.value) {
       <p-button
         class="ml-2"
         [icon]="IconButtonActionEnum.ADD"
-        [label]="LabelButtonActionEnum.ADD"
+        [pTooltip]="LabelButtonActionEnum.ADD"
         [severity]="SeverityButtonActionEnum.ADD"
         (click)="showFinancingModal()"/>
     }
   </ng-template>
+
   <ng-template pTemplate="content">
     <!-- table -->
-    @if (isFinancingField.value && agreementsService.agreement.financings && agreementsService.agreement.financings.length > 0) {
-      <p-panel>
-        <p-table
-          [value]="agreementsService.agreement.financings"
-          styleClass="p-datatable-striped"
-          [columns]="financingsColumns">
+    @if (isFinancingField.value && formInput.financings.length > 0) {
+      <p-table
+        styleClass="p-datatable-striped"
+        [value]="formInput.financings"
+        [columns]="financingsColumns">
 
-          <ng-template pTemplate="header" let-columns>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
             @for (col of columns; track col.field) {
               <th [pSortableColumn]="col.field">
                 {{ col.header }}
@@ -67,24 +41,25 @@
             <th class="text-center">
               {{ TableEnum.ACTIONS }}
             </th>
-          </ng-template>
+          </tr>
+        </ng-template>
 
-          <ng-template pTemplate="body" let-item let-i="rowIndex">
-            <tr>
-              <td>{{ item.institutionName }}</td>
-              <td>{{ item.budget }}</td>
-              <td>{{ item.paymentMethod }}</td>
-              <td>{{ item.source }}</td>
-              <td>
-                <p-button
-                  [icon]="IconButtonActionEnum.DELETE"
-                  [severity]="SeverityButtonActionEnum.DELETE"
-                  (click)="deleteFinancing(i)"/>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </p-panel>
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ item.institutionName }}</td>
+            <td>{{ item.budget }}</td>
+            <td>{{ item.paymentMethod }}</td>
+            <td>{{ item.source }}</td>
+            <td>
+              <p-button
+                [icon]="IconButtonActionEnum.DELETE"
+                [severity]="SeverityButtonActionEnum.DELETE"
+                [pTooltip]="LabelButtonActionEnum.DELETE"
+                (click)="deleteFinancing(rowIndex)"/>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     }
   </ng-template>
 </p-panel>
@@ -92,101 +67,118 @@
 <p-dialog
   [(visible)]="isVisibleFinancingForm"
   [modal]="true"
-  [style]="{width: '50%'}"
-  header="Agregar Fianciamiento">
-  <form [formGroup]="financingForm" class="p-fluid grid">
-    <!-- institutionName  -->
-    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-      <label appLabel
-             for="combinedInstitution"
-             [label]="FinancingsFormEnum.institutionName"
-             [required]="institutionNameField">
-      </label>
+  [style]="{width: '50rem'}"
+  header="Agregar">
+  <ng-template pTemplate="content">
+    <form [formGroup]="financingForm" class="p-fluid grid">
+      <!-- institutionName  -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="combinedInstitution"
+          [label]="FinancingsFormEnum.institutionName"
+          [required]="institutionNameField">
+        </label>
 
-      <p-dropdown
-        id="combinedInstitution"
-        formControlName="institutionName"
-        [options]="combinedInstitutions"
-        placeholder="Seleccione"
-        [filter]="false">
-      </p-dropdown>
+        <p-dropdown
+          id="combinedInstitution"
+          formControlName="institutionName"
+          [options]="combinedInstitutions"
+          placeholder="Seleccione"
+          [filter]="true">
+        </p-dropdown>
 
-      <small
-        appErrorMessage
-        [errors]="institutionNameField.errors"
-        [touched]="institutionNameField.touched"
-        [dirty]="institutionNameField.dirty">
-      </small>
-    </div>
+        <small
+          appErrorMessage
+          [errors]="institutionNameField.errors"
+          [touched]="institutionNameField.touched"
+          [dirty]="institutionNameField.dirty">
+        </small>
+      </div>
 
-    <!-- budget  -->
-    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-      <label appLabel
-             for="budget"
-             [label]="FinancingsFormEnum.budget"
-             [required]="budgetField">
-      </label>
-      <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-      <p-inputNumber
-        id="budget"
-        formControlName="budget"
-        mode="decimal"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        placeholder="Ingrese el monto"/>
-      <small
-        appErrorMessage
-        [errors]="budgetField.errors"
-        [touched]="budgetField.touched"
-        [dirty]="budgetField.dirty">
-      </small>
-    </div>
+      <!-- budget  -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="budget"
+          [label]="FinancingsFormEnum.budget"
+          [required]="budgetField">
+        </label>
 
-    <!-- paymentMethod  -->
-    <div class="field col-12 xl:col-12 lg:col-12 md:col-12sm:col-12">
-      <label appLabel
-             for="paymentMethod"
-             [label]="FinancingsFormEnum.paymentMethod"
-             [required]="paymentMethodField">
-      </label>
-      <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-      <input pInputText
-             id="paymentMethod"
-             formControlName="paymentMethod"/>
-      <small
-        appErrorMessage
-        [errors]="paymentMethodField.errors"
-        [touched]="paymentMethodField.touched"
-        [dirty]="paymentMethodField.dirty">
-      </small>
-    </div>
+        <p-inputNumber
+          id="budget"
+          formControlName="budget"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          placeholder="Ingrese el monto"/>
 
-    <!-- source  -->
-    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-      <label appLabel
-             for="source"
-             [label]="FinancingsFormEnum.source"
-             [required]="sourceField">
-      </label>
-      <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-      <input pInputText
-             id="source"
-             formControlName="source"/>
-      <small
-        appErrorMessage
-        [errors]="sourceField.errors"
-        [touched]="sourceField.touched"
-        [dirty]="sourceField.dirty">
-      </small>
-    </div>
+        <small
+          appErrorMessage
+          [errors]="budgetField.errors"
+          [touched]="budgetField.touched"
+          [dirty]="budgetField.dirty">
+        </small>
+      </div>
 
-    <!-- button add financing -->
-    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-      <p-button
-        [label]="LabelButtonActionEnum.ADD"
-        [icon]="IconButtonActionEnum.ADD"
-        [severity]="SeverityButtonActionEnum.ADD"
-        (click)="addFinancing()"/>
-    </div>
-  </form>
+      <!-- paymentMethod  -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12sm:col-12">
+        <label
+          appLabel
+          for="paymentMethod"
+          [label]="FinancingsFormEnum.paymentMethod"
+          [required]="paymentMethodField">
+        </label>
+
+        <input
+          pInputText
+          id="paymentMethod"
+          formControlName="paymentMethod"/>
+
+        <small
+          appErrorMessage
+          [errors]="paymentMethodField.errors"
+          [touched]="paymentMethodField.touched"
+          [dirty]="paymentMethodField.dirty">
+        </small>
+      </div>
+
+      <!-- source  -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="source"
+          [label]="FinancingsFormEnum.source"
+          [required]="sourceField">
+        </label>
+
+        <input
+          pInputText
+          id="source"
+          formControlName="source"/>
+
+        <small
+          appErrorMessage
+          [errors]="sourceField.errors"
+          [touched]="sourceField.touched"
+          [dirty]="sourceField.dirty">
+        </small>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="isVisibleFinancingForm=false"/>
+
+    <p-button
+      [label]="LabelButtonActionEnum.ADD"
+      [icon]="IconButtonActionEnum.ADD"
+      [severity]="SeverityButtonActionEnum.ADD"
+      (click)="addFinancing()"/>
+  </ng-template>
 </p-dialog>

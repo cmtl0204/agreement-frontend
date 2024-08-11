@@ -1,12 +1,12 @@
 import {Injectable, signal, WritableSignal} from '@angular/core';
-import {AgreementModel} from "@models/core";
+import {AgreementModel, createAgreementModel} from "@models/core";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AgreementsService {
-  private _agreement$: WritableSignal<AgreementModel> = signal({});
+  private _agreement$: WritableSignal<AgreementModel> = signal(createAgreementModel());
 
   constructor() {
   }
