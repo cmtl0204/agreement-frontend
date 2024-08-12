@@ -30,25 +30,43 @@ export class AgreementsHttpService {
     );
   }
 
+  uploadEnablingDocuments(id:string,formData: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}/enabling-documents`;
+
+    return this.httpClient.post<ServerResponse>(url, formData).pipe(
+      map(response => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
+  uploadAddendum(id:string,formData: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}/addendums`;
+
+    return this.httpClient.post<ServerResponse>(url, formData).pipe(
+      map(response => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
   findAll(): Observable<CatalogueModel[]> {
     const url = this.API_URL;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        console.log(response);
-        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        sessionStorage.setItem('catalogues', JSON.stringify(response));
         return response.data;
       })
     );
   }
+
   findAllAgreements(): Observable<AgreementModel[]> {
     const url = this.API_URL;
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
         console.log(response);
-        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        // sessionStorage.setItem('catalogues', JSON.stringify(response));
         return response.data;
       })
     );
@@ -63,14 +81,22 @@ export class AgreementsHttpService {
     );
   }
 
+  findInternationalAgreementsByOrigin(): Observable<AgreementModel[]> {
+    const url = `${this.API_URL}/national-agreements`;
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 
-    return this.httpClient.get(url).pipe(
-      map(response =>{
-        console.log(response)
-        return response
-  })
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
     );
   }
 
@@ -92,35 +118,5 @@ export class AgreementsHttpService {
         return response.data;
       })
     );
-  }
-
-  removeAll(id: CatalogueModel[]): Observable<boolean> {
-    const url = `${this.API_URL}/${id}`;
-    return this.httpClient.delete<ServerResponse>(url).pipe(
-      map(response => {
-        this.messageService.success(response);
-        return response.data;
-      })
-    );
-  }
-
-  findCache(): Observable<boolean> {
-    const url = `${this.API_URL}/cache/get`;
-    return this.httpClient.get<ServerResponse>(url).pipe(
-      map(response => {
-        sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        return true;
-      })
-    );
-  }
-
-  findByType(type: CatalogueTypeEnum): CatalogueModel[] {
-    const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
-
-    if (catalogues) {
-      return catalogues.filter(catalogue => catalogue.type === type);
-    }
-
-    return [];
   }
 }

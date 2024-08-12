@@ -36,7 +36,7 @@ export class LoginComponent {
     this.form = this.formBuilder.group({
       username: ['juan.perez', [Validators.required]],
       // username: [null, [Validators.required]],
-      password: ['12345678', [Validators.required]],
+      password: ['123', [Validators.required]],
       // password: [null, [Validators.required]],
     });
   }
@@ -56,14 +56,13 @@ export class LoginComponent {
     this.authHttpService.login(this.form.value)
       .subscribe(
         response => {
-          // if (this.authService.roles.length === 0) {
-          //   this.messageService.errorCustom('Sin Rol', 'No cuenta con un rol asignado');
-          //   this.authService.removeLogin();
-          //   return;
-          // }
+          if (this.authService.roles.length === 0) {
+            this.messageService.errorCustom('Sin Rol', 'No cuenta con un rol asignado');
+            this.authService.removeLogin();
+            return;
+          }
 
-          this.routesService.dashboardNationalSupervisor();
-          // this.routesService.roleSelect();
+          this.routesService.roleSelect();
         });
   }
 

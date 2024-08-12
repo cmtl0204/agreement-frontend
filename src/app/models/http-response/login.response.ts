@@ -8,6 +8,7 @@ export interface LoginResponse {
 }
 
 interface Data {
-  user: UserModel;
+  auth: UserModel;
   accessToken: string;
+  roles: RoleModel[];
 }

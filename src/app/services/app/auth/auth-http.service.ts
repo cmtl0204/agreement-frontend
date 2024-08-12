@@ -69,11 +69,11 @@ export class AuthHttpService {
     return this.httpClient.post<LoginResponse>(url, credentials)
       .pipe(
         map(response => {
-          const token: JwtModel = jwtDecode(response.accessToken);
-          console.log(token);
-          this.authService.accessToken = response.accessToken;
-          // this.authService.auth = response.data.user;
-          //  this.authService.roles = token.role.split(',');
+          const token: JwtModel = jwtDecode(response.data.accessToken);
+
+          this.authService.accessToken = response.data.accessToken;
+          this.authService.auth = response.data.auth;
+          this.authService.roles = response.data.roles;
           return response;
         })
       );

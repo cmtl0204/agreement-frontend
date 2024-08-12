@@ -35,8 +35,7 @@ export class CataloguesHttpService {
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
         console.log(response);
-        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        sessionStorage.setItem('catalogues', JSON.stringify(response));
+        sessionStorage.setItem('catalogues', JSON.stringify(response.data));
         return response.data;
       })
     );
@@ -83,8 +82,7 @@ export class CataloguesHttpService {
     const url = `${this.API_URL}`;
 
     this.httpClient.get<ServerResponse>(url).subscribe(response=>{
-      // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-      sessionStorage.setItem('catalogues', JSON.stringify(response));
+      sessionStorage.setItem('catalogues', JSON.stringify(response.data));
     });
   }
 

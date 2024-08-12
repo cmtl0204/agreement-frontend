@@ -1,6 +1,7 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {ConfirmationService, MessageService, PrimeIcons} from "primeng/api";
+import {ServerResponse} from "@models/http-response";
 
 type Severity =
   | 'success'
@@ -72,13 +73,13 @@ export class MessageDialogService {
     this._modalMessage = message;
   }
 
-  successHttp(title: string, message: string | string[]) {
-    if (Array.isArray(message)) message.sort();
+  successHttp(serverResponse:ServerResponse) {
+    if (Array.isArray(serverResponse.message)) serverResponse.message.sort();
 
     this._modalVisible = true;
     this._modalAcceptSeverity = 'danger';
-    this._modalTitle = title;
-    this._modalMessage = message;
+    this._modalTitle = serverResponse.message;
+    this._modalMessage = serverResponse.detail;
   }
 
   fieldErrors(message: string | string[]) {
