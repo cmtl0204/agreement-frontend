@@ -1,6 +1,6 @@
 <p-panel>
   <ng-template pTemplate="header">
-    <h4>{{ObligationForEnum.header}}:</h4>
+    <h4>{{ ObligationForEnum.header }}:</h4>
 
     <p-button
       class="ml-2"
@@ -92,24 +92,13 @@
           [required]="obligationTypeField">
         </label>
 
-        <p-dropdown
+        <p-listbox
           id="type"
-          formControlName="type"
-          dataKey="id"
           [options]="obligationTypes"
-          placeholder="Seleccione"
-          [filter]="false">
-          <ng-template pTemplate="selectedItem" let-selectedItem>
-            <div class="flex align-items-center gap-2">
-              <div>{{ selectedItem?.name }}</div>
-            </div>
-          </ng-template>
-          <ng-template let-item pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <div>{{ item?.name }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
+          formControlName="type"
+          optionLabel="name"
+          [filter]="true"
+          [listStyle]="{'max-height': '150px'}"/>
 
         <small
           appErrorMessage
@@ -118,75 +107,6 @@
           [dirty]="obligationTypeField.dirty">
         </small>
       </div>
-
-      @if (obligationTypeField.value
-      && (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL
-        || obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN)) {
-        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-          <label
-            appLabel
-            for="institutionName"
-            [label]="ObligationForEnum.institutionName"
-            [required]="obligationInstitutionNameField">
-          </label>
-
-          @if (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL) {
-            <!--            <p-dropdown-->
-              <!--              id="institutionName"-->
-              <!--              formControlName="institutionName"-->
-              <!--              [options]="formInput.externalInstitutions"-->
-              <!--              placeholder="Seleccione"-->
-              <!--              [filter]="true"-->
-              <!--              filterBy="name"-->
-              <!--              optionValue="name">-->
-              <!--              <ng-template pTemplate="selectedItem" let-selectedItem>-->
-              <!--                <div class="flex align-items-center gap-2">-->
-              <!--                  <div>{{ selectedItem.name }}</div>-->
-              <!--                </div>-->
-              <!--              </ng-template>-->
-              <!--              <ng-template let-item pTemplate="item">-->
-              <!--                <div class="flex align-items-center gap-2">-->
-              <!--                  <div>{{ item.name }}</div>-->
-              <!--                </div>-->
-              <!--              </ng-template>-->
-              <!--            </p-dropdown>-->
-            {{obligationInstitutionNameField.value}}
-            <p-listbox
-              id="institutionName"
-              formControlName="institutionName"
-              [options]="formInput.externalInstitutions"
-              optionLabel="name"
-              optionValue="name"
-              [filter]="true"
-              [listStyle]="{'max-height': '150px'}"/>
-          }
-
-          @if (obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN) {
-<!--            <p-multiSelect-->
-<!--              [options]="institutions"-->
-<!--              formControlName="institutionName"-->
-<!--              placeholder="Seleccione"-->
-<!--              [filter]="true">-->
-<!--            </p-multiSelect>-->
-
-            <p-listbox
-              formControlName="institutionName"
-              [options]="institutions"
-              [multiple]="true"
-              [filter]="true"
-              [listStyle]="{'max-height': '150px'}"/>
-
-            {{obligationInstitutionNameField.value}}
-          }
-
-          <small
-            appErrorMessage
-            [errors]="obligationInstitutionNameField.errors"
-            [touched]="obligationInstitutionNameField.touched"
-            [dirty]="obligationInstitutionNameField.dirty">
-          </small>
-        </div>
-      }
 
       <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <form [formGroup]="obligationDetailForm">
@@ -206,6 +126,60 @@
           </small>
         </form>
       </div>
+
+      @if (obligationTypeField.value
+      && (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL
+        || obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN)) {
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label
+            appLabel
+            for="institutionName"
+            [label]="ObligationForEnum.institutionName"
+            [required]="obligationInstitutionNameField">
+          </label>
+
+          @if (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL) {
+            <p-listbox
+              id="institutionName"
+              formControlName="institutionName"
+              [options]="formInput.externalInstitutions"
+              optionLabel="name"
+              optionValue="name"
+              [filter]="true"
+              [listStyle]="{'max-height': '150px'}"/>
+          }
+
+          @if (obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN) {
+            <p-listbox
+              formControlName="institutionName"
+              [options]="institutions"
+              [multiple]="true"
+              [filter]="true"
+              [listStyle]="{'max-height': '150px'}"/>
+          }
+
+          <small
+            appErrorMessage
+            [errors]="obligationInstitutionNameField.errors"
+            [touched]="obligationInstitutionNameField.touched"
+            [dirty]="obligationInstitutionNameField.dirty">
+          </small>
+        </div>
+
+<!--        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">-->
+<!--          @if (obligationInstitutionNameField.value) {-->
+<!--            <h5>Seleccionadas:</h5>-->
+<!--            -->
+<!--            <p-messages severity="info">-->
+<!--              <ng-template pTemplate>-->
+<!--                <i [class]="PrimeIcons.BUILDING"></i>-->
+
+<!--                <div class="ml-2">{{ obligationInstitutionNameField.value }}</div>-->
+<!--              </ng-template>-->
+<!--            </p-messages>-->
+<!--          }-->
+<!--        </div>-->
+      }
     </form>
   </ng-template>
 

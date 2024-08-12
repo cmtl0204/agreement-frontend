@@ -40,19 +40,14 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     if (this.agreementsService.agreementStorage) {
-      console.log('entro');
       this.form.patchValue(this.agreementsService.agreementStorage);
 
       if (this.idField.value) {
-        this.activeStep = 3;
-      }
-
-      if (this.filesField.value.length > 0) {
-        this.activeStep = 4;
+        this.activeStep = 2;
       }
 
       if (this.enabledField.value) {
-        // this.activeStep = 4;
+        this.activeStep = 4;
       }
     }
   }
@@ -205,6 +200,9 @@ export class RegisterComponent implements OnInit {
 
         if (this.idField.valid) {
           this.agreementsHttpService.uploadEnablingDocuments(this.idField.value, formData).subscribe(response => {
+            this.enabledField.setValue(true);
+            this.agreementsService.agreement = this.form.value;
+
             nextCallback.emit();
           });
         }

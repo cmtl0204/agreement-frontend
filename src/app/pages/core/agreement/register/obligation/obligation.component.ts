@@ -106,8 +106,9 @@ export class ObligationComponent implements OnInit {
     });
 
     this.obligationTypeField.valueChanges.subscribe(value => {
-      if (value && value.code === CatalogueObligationsTypeEnum.INTERNAL) {
+      this.obligationInstitutionNameField.reset();
 
+      if (value && value.code === CatalogueObligationsTypeEnum.INTERNAL) {
         if (this.formInput.internalInstitutions)
           this.obligationInstitutionNameField.setValue(this.formInput.internalInstitutions[0].name);
       }
