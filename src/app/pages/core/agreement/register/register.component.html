@@ -178,7 +178,7 @@
 
           <div class="p-toolbar-group-right">
             <app-form-button-action
-              (submit)="onSubmitAddendums()"
+              (submit)="finish()"
               labelSubmitButton="Finalizar"
               [severitySubmitButton]="SeverityButtonActionEnum.ADD"
               [isVisibleCancelButton]="false"
@@ -197,6 +197,5 @@
     </p-stepperPanel>
   </p-stepper>
 }
-{{ this.form.value | json }}
 
 <p-confirmDialog key="confirmDialog"/>

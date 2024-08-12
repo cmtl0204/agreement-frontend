@@ -1,10 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AgreementsService, MessageDialogService} from "@servicesApp/core";
+import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
-import {AgreementsHttpService, FilesHttpService} from "@servicesHttp/core";
-import {AgreementModel, FileModel} from "@models/core";
-import {SeverityButtonActionEnum} from "@shared/enums";
+import {AgreementModel} from "@models/core";
+import {AuthService} from "@servicesApp/auth";
+import {AgreementsService, MessageDialogService} from "@servicesApp/core";
+import {AgreementsHttpService} from "@servicesHttp/core";
+import {RoleEnum, SeverityButtonActionEnum} from "@shared/enums";
 
 @Component({
   selector: 'app-register',
@@ -12,12 +14,13 @@ import {SeverityButtonActionEnum} from "@shared/enums";
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
+  private readonly authService = inject(AuthService);
   private readonly agreementsService = inject(AgreementsService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly formBuilder = inject(FormBuilder);
-  protected readonly filesHttpService = inject(FilesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
+  protected readonly router = inject(Router);
 
   protected form!: FormGroup;
   protected formErrors: string[] = [];
@@ -31,14 +34,13 @@ export class RegisterComponent implements OnInit {
   protected addendumErrors: string[] = [];
   protected activeStep: number = 0;
 
-  protected readonly PrimeIcons = PrimeIcons;
-
   constructor() {
     this.buildForm();
   }
 
   ngOnInit() {
     if (this.agreementsService.agreementStorage) {
+      console.log('entro');
       this.form.patchValue(this.agreementsService.agreementStorage);
 
       if (this.idField.value) {
@@ -49,7 +51,7 @@ export class RegisterComponent implements OnInit {
         this.activeStep = 4;
       }
 
-      if(this.enabledField.value){
+      if (this.enabledField.value) {
         // this.activeStep = 4;
       }
     }
@@ -143,14 +145,6 @@ export class RegisterComponent implements OnInit {
     return this.formErrors.length === 0
   }
 
-  get validateFormAddendum(): boolean {
-    this.formErrors = [];
-
-    this.formErrors = this.formErrors.concat(this.addendumErrors);
-
-    return this.formErrors.length === 0
-  }
-
   onSubmitAgreement(nextCallback: any) {
     if (this.validateForms) {
       this.register(nextCallback);
@@ -162,14 +156,6 @@ export class RegisterComponent implements OnInit {
   onSubmitDocuments(nextCallback: any) {
     if (this.validateFormDocument) {
       this.registerDocuments(nextCallback);
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  onSubmitAddendums() {
-    if (this.validateFormAddendum) {
-      this.registerAddendums();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
@@ -218,7 +204,7 @@ export class RegisterComponent implements OnInit {
         }
 
         if (this.idField.valid) {
-          this.filesHttpService.uploadFiles(this.idField.value, formData).subscribe(response => {
+          this.agreementsHttpService.uploadEnablingDocuments(this.idField.value, formData).subscribe(response => {
             nextCallback.emit();
           });
         }
@@ -226,30 +212,16 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  registerAddendums() {
-    this.confirmationService.confirm({
-      key: 'confirmDialog',
-      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
-      header: '¿Está seguro de guardar?',
-      icon: PrimeIcons.TIMES_CIRCLE,
-      acceptLabel: "Si",
-      rejectLabel: "No",
-      rejectButtonStyleClass: "p-button-text",
-      accept: () => {
-        const formData = new FormData();
+  finish() {
+    // this.agreementsService.clearAgreement();
 
-        for (const addendum of this.filesField.value) {
-          formData.append('typeIds', addendum.type.id);
-          formData.append('files', addendum.file);
-        }
+    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+      this.router.navigate(['/core/national-supervisor/agreement-list']);
+    }
 
-        if (this.idField.valid) {
-          this.filesHttpService.uploadFiles(this.idField.value, formData).subscribe(response => {
-            // this.form.patchValue(response);
-          });
-        }
-      }
-    });
+    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+      this.router.navigate(['/core/international-supervisor/agreement-list']);
+    }
   }
 
   get idField(): AbstractControl {
@@ -260,13 +232,10 @@ export class RegisterComponent implements OnInit {
     return this.form.controls['files'];
   }
 
-  get addendumsField(): AbstractControl {
-    return this.form.controls['addendums'];
-  }
-
   get enabledField(): AbstractControl {
     return this.form.controls['enabled'];
   }
 
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly PrimeIcons = PrimeIcons;
 }

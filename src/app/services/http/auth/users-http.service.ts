@@ -56,9 +56,9 @@ export class UsersHttpService {
   findAllUsersLDAP(): Observable<UserModel[]> {
     const url = `${this.API_URL}/ldap`;
 
-    return this.httpClient.get<UserModel[]>(url).pipe(
+    return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        return response;
+        return response.data;
       })
     );
   }

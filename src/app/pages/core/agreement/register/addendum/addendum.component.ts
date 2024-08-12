@@ -1,15 +1,16 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, AbstractControl, FormArray} from '@angular/forms';
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from '@models/core';
-import {AuthService} from '@servicesApp/auth';
-import {AgreementsService, CoreService, MessageDialogService} from '@servicesApp/core';
-import {AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
+import {MessageDialogService} from '@servicesApp/core';
+import {AddendumsHttpService, AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
 import {
-  AddendumEnum, AgreementFormEnum, CatalogueObligationsTypeEnum,
-  CatalogueTypeEnum, FileFormEnum,
+  AddendumEnum,
+  AgreementFormEnum,
+  CatalogueTypeEnum,
   IconButtonActionEnum,
-  LabelButtonActionEnum, ObligationDetailForEnum, ObligationForEnum, SeverityButtonActionEnum,
-  SkeletonEnum, TableEnum
+  LabelButtonActionEnum,
+  SeverityButtonActionEnum,
+  TableEnum
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 
@@ -24,6 +25,7 @@ export class AddendumComponent implements OnInit {
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
 
   protected readonly agreementsHttpService = inject(AgreementsHttpService);
+  protected readonly addendumsHttpService = inject(AddendumsHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
   protected readonly formBuilder = inject(FormBuilder);
@@ -71,7 +73,7 @@ export class AddendumComponent implements OnInit {
 
     if (this.formInput.addendums.length > 0) {
       this.isAddendumField.disable();
-    }else{
+    } else {
       this.isAddendumField.enable();
     }
   }
@@ -86,9 +88,7 @@ export class AddendumComponent implements OnInit {
   buildAddendumForm() {
     this.addendumForm = this.formBuilder.group({
       description: [null],
-      isModifiedFinishDate: [false],
       file: [null],
-      agreementEndedAt: [null]
     })
   }
 
@@ -121,17 +121,6 @@ export class AddendumComponent implements OnInit {
 
       this.descriptionField.updateValueAndValidity();
     });
-
-    this.isModifiedFinishDateField.valueChanges.subscribe(value => {
-      if (value) {
-        this.agreementEndedAtField.setValidators(Validators.required);
-      } else {
-        this.agreementEndedAtField.clearValidators();
-      }
-
-      this.agreementEndedAtField.reset();
-      this.agreementEndedAtField.updateValueAndValidity();
-    });
   }
 
   buildColumns() {
@@ -141,12 +130,6 @@ export class AddendumComponent implements OnInit {
       },
       {
         field: 'file', header: AddendumEnum.file
-      },
-      {
-        field: 'isModifiedFinishDate', header: AddendumEnum.isModifiedFinishDate
-      },
-      {
-        field: 'agreementEndedAt', header: AddendumEnum.agreementEndedAt
       }
     ];
   }
@@ -165,9 +148,6 @@ export class AddendumComponent implements OnInit {
     this.formErrors = [];
 
     if (this.descriptionField.invalid) this.formErrors.push(AddendumEnum.description);
-    if (this.isModifiedFinishDateField.invalid) this.formErrors.push(AddendumEnum.isModifiedFinishDate);
-    if (this.agreementEndedAtField.invalid) this.formErrors.push(AddendumEnum.agreementEndedAt);
-    if (this.fileField.invalid) this.formErrors.push(AddendumEnum.file);
 
     return this.formErrors.length === 0
   }
@@ -188,29 +168,29 @@ export class AddendumComponent implements OnInit {
   onUpload() {
     if (this.validateAddendumForm()) {
       const formData = new FormData();
-      // formData.append('files', this.file.file);
+
       formData.append('file', this.fileField.value.file);
       formData.append('typeId', this.fileField.value.type.id);
       formData.append('description', this.descriptionField.value);
-      formData.append('isModifiedFinishDate', this.isModifiedFinishDateField.value);
-      formData.append('agreementEndedAt', this.agreementEndedAtField.value);
-      formData.append('isAddendum', this.isAddendumField.value);
 
-      // this.agreementsHttpService.registerAddendum(this.formInput.id!, formData).subscribe(response => {
-      this.formInput.addendums.push({
-        description: this.descriptionField.value,
-        isModifiedFinishDate: this.isModifiedFinishDateField.value,
-        agreementEndedAt: this.agreementEndedAtField.value,
-        file: {
-          file: this.fileField.value.file,
-          name: this.fileField.value.name,
-        },
+      console.log(this.formInput.id);
+
+      this.agreementsHttpService.uploadAddendum(this.formInput.id!, formData).subscribe(response => {
+        this.formInput.addendums.push({
+          id: response.id,
+          description: this.descriptionField.value,
+          file: {
+            file: this.fileField.value.file,
+            name: this.fileField.value.name,
+          },
+        });
+
+        this.form.patchValue(this.formInput);
+
+        this.addendumForm.reset();
+
+        this.isVisibleAddendumForm = false;
       });
-      this.form.patchValue(this.formInput);
-
-      this.addendumForm.reset();
-      this.isVisibleAddendumForm = false;
-      // });
 
       if (this.formInput.addendums.length > 0) {
         this.isAddendumField.disable();
@@ -226,15 +206,18 @@ export class AddendumComponent implements OnInit {
     this.isVisibleAddendumForm = true;
   }
 
-  deleteAddendum(index: number) {
-    this.formInput.addendums.splice(index, 1);
+  deleteAddendum(id: string) {
+    this.addendumsHttpService.remove(id).subscribe(response => {
+      const index = this.formInput.addendums.findIndex(item => item.id === id);
 
-    this.form.patchValue(this.formInput);
+      this.formInput.addendums.splice(index, 1);
 
+      this.form.patchValue(this.formInput);
 
-    if (this.formInput.addendums.length === 0) {
-      this.isAddendumField.enable();
-    }
+      if (this.formInput.addendums.length === 0) {
+        this.isAddendumField.enable();
+      }
+    });
   }
 
   /** Getters Form**/
@@ -246,15 +229,7 @@ export class AddendumComponent implements OnInit {
     return this.addendumForm.controls['description'];
   }
 
-  get isModifiedFinishDateField(): AbstractControl {
-    return this.addendumForm.controls['isModifiedFinishDate'];
-  }
-
   get fileField(): AbstractControl {
     return this.addendumForm.controls['file'];
-  }
-
-  get agreementEndedAtField(): AbstractControl {
-    return this.addendumForm.controls['agreementEndedAt'];
   }
 }

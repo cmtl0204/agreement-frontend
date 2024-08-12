@@ -233,6 +233,7 @@ export class AppearerComponent implements OnInit {
       this.isVisibleExternalInstitutionForm = false;
     } else {
       this.externalInstitutionForm.markAllAsTouched();
+      this.externalInstitutionDetailForm.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
@@ -307,13 +308,16 @@ export class AppearerComponent implements OnInit {
 
     if (this.externalInstitutionNameField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.name);
     if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
+    if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
+    if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
+
     if (this.formInput.externalInstitutions) {
       if (this.formInput.externalInstitutions?.findIndex(item => item.name === this.externalInstitutionNameField.value) > -1) {
         this.formErrors.push('Ya existe la institución');
       }
     }
 
-    return this.externalInstitutionForm.valid && this.formErrors.length === 0;
+    return this.formErrors.length === 0;
   }
 
   validateExternalInstitutionDetailForm(): boolean {
@@ -322,7 +326,7 @@ export class AppearerComponent implements OnInit {
     if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
     if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
 
-    return this.externalInstitutionDetailForm.valid && this.formErrors.length === 0;
+    return this.formErrors.length === 0;
   }
 
   validateInternalInstitutionForm() {
@@ -330,7 +334,7 @@ export class AppearerComponent implements OnInit {
 
     if (this.internalInstitutionPersonTypeField.invalid) this.formErrors.push(InternalInstitutionsFormEnum.personType);
 
-    return this.internalInstitutionForm.valid && this.formErrors.length === 0;
+    return this.formErrors.length === 0;
   }
 
   validateInternalInstitutionDetailForm() {

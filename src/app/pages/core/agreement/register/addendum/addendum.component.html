@@ -1,3 +1,8 @@
+<h3>La sección que se muestra a continuación no es de carácter obligatorio,
+  sin embargo, si se ha realizado una adenda o modificatorio al convenio,
+  por favor complete los siguientes campos:
+</h3>
+
 <form [formGroup]="form" class="p-fluid grid text-center">
   <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
     <label
@@ -17,60 +22,57 @@
   </div>
 </form>
 
+@if (formInput.isAddendum) {
+  <p-panel>
+    <ng-template pTemplate="header">
+      <h4>{{ AddendumEnum.header }}:</h4>
 
-<p-panel>
-  <ng-template pTemplate="header">
-    <h4>{{AddendumEnum.header}}:</h4>
+      @if (isAddendumField.value) {
+        <p-button
+          class="ml-2"
+          [icon]="IconButtonActionEnum.ADD"
+          [pTooltip]="LabelButtonActionEnum.ADD"
+          [severity]="SeverityButtonActionEnum.ADD"
+          (click)="showAddendumModal()"/>
+      }
+    </ng-template>
 
-    @if (isAddendumField.value) {
-      <p-button
-        class="ml-2"
-        [icon]="IconButtonActionEnum.ADD"
-        [pTooltip]="LabelButtonActionEnum.ADD"
-        [severity]="SeverityButtonActionEnum.ADD"
-        (click)="showAddendumModal()"/>
-    }
-  </ng-template>
+    <ng-template pTemplate="content">
+      @if (formInput.addendums.length > 0) {
+        <p-table
+          styleClass="p-datatable-striped"
+          [value]="formInput.addendums"
+          [columns]="columns">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              @for (col of columns; track col.field) {
+                <th [pSortableColumn]="col.field">
+                  {{ col.header }}
+                </th>
+              }
 
-  <ng-template pTemplate="content">
+              <th>{{ TableEnum.ACTIONS }}</th>
+            </tr>
+          </ng-template>
 
-    @if (formInput.addendums.length > 0) {
-      <p-table
-        styleClass="p-datatable-striped"
-        [value]="formInput.addendums"
-        [columns]="columns">
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-            @for (col of columns; track col.field) {
-              <th [pSortableColumn]="col.field">
-                {{ col.header }}
-              </th>
-            }
-
-            <th>{{ TableEnum.ACTIONS }}</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-          <tr>
-            <td>{{ item.description }}</td>
-            <td>{{ item.file.name }}</td>
-            <td>{{ item.isModifiedFinishDate | yesNo }}</td>
-            <td>{{ item.agreementEndedAt  | date }}</td>
-            <td>
-              <p-button
-                [icon]="IconButtonActionEnum.DELETE"
-                [pTooltip]="LabelButtonActionEnum.DELETE"
-                [severity]="SeverityButtonActionEnum.DELETE"
-                (click)="deleteAddendum(rowIndex)"/>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    }
-  </ng-template>
-</p-panel>
-
+          <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+            <tr>
+              <td>{{ item.description }}</td>
+              <td>{{ item.file.name }}</td>
+              <td>
+                <p-button
+                  [icon]="IconButtonActionEnum.DELETE"
+                  [pTooltip]="LabelButtonActionEnum.DELETE"
+                  [severity]="SeverityButtonActionEnum.DELETE"
+                  (click)="deleteAddendum(item.id)"/>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      }
+    </ng-template>
+  </p-panel>
+}
 <p-dialog
   [(visible)]="isVisibleAddendumForm"
   [modal]="true"
@@ -78,7 +80,7 @@
   header="Agregar">
   <ng-template pTemplate="content">
     <div [formGroup]="addendumForm" class="p-fluid grid">
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-6 sm:col-12">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
           for="description"
@@ -95,7 +97,7 @@
         </small>
       </div>
 
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-6 sm:col-12">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="file"
@@ -114,8 +116,6 @@
           [auto]="true"
           [customUpload]="true"
           (uploadHandler)="addAddendumFile($event,uploadFiles)"/>
-
-        {{ fileField.value?.name }}
         <small
           appErrorMessage
           [errors]="fileField.errors"
@@ -124,43 +124,14 @@
         </small>
       </div>
 
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-        <label
-          appLabel
-          [label]="AddendumEnum.isModifiedFinishDate"
-          [required]="isModifiedFinishDateField"></label>
-
-        <p-inputSwitch formControlName="isModifiedFinishDate" class="ml-2"/>
-
-        <small
-          appErrorMessage
-          [errors]="isModifiedFinishDateField.errors"
-          [touched]="isModifiedFinishDateField.touched"
-          [dirty]="isModifiedFinishDateField.dirty">
-        </small>
-      </div>
-
-      <!-- isModifiedFinishDate -->
-      @if (isModifiedFinishDateField.value) {
-        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-          <label
-            appLabel for="agreementEndedAt"
-            [label]="AddendumEnum.agreementEndedAt"
-            [required]="agreementEndedAtField"></label>
-
-          <p-calendar
-            formControlName="agreementEndedAt"
-            [iconDisplay]="'input'"
-            [showIcon]="true"
-            id="agreementEndedAt"
-            dateFormat="yy-mm-dd"/>
-
-          <small
-            appErrorMessage
-            [errors]="agreementEndedAtField.errors"
-            [touched]="agreementEndedAtField.touched"
-            [dirty]="agreementEndedAtField.dirty">
-          </small>
+      @if (fileField.value) {
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <p-messages severity="info">
+            <ng-template pTemplate>
+              <i [class]="PrimeIcons.FILE_PDF"></i>
+              <div class="ml-2">{{ fileField.value?.name }}</div>
+            </ng-template>
+          </p-messages>
         </div>
       }
     </div>

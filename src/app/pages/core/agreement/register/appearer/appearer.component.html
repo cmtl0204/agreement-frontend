@@ -150,32 +150,13 @@
         [required]="internalInstitutionDetailPositionField">
       </label>
 
-<!--      <p-dropdown-->
-<!--        id="internalPosition"-->
-<!--        formControlName="position"-->
-<!--        dataKey="id"-->
-<!--        [options]="positions"-->
-<!--        placeholder="Seleccione"-->
-<!--        [filter]="true"-->
-<!--        filterBy="name">-->
-<!--        <ng-template pTemplate="selectedItem" let-selectedOption>-->
-<!--          <div class="flex align-items-center gap-2">-->
-<!--            <div>{{ selectedOption.name }}</div>-->
-<!--          </div>-->
-<!--        </ng-template>-->
-<!--        <ng-template let-item pTemplate="item">-->
-<!--          <div class="flex align-items-center gap-2">-->
-<!--            <div>{{ item.name }}</div>-->
-<!--          </div>-->
-<!--        </ng-template>-->
-<!--      </p-dropdown>-->
-
       <p-listbox
+        id="internalPosition"
         [options]="positions"
         formControlName="position"
         optionLabel="name"
         [filter]="true"
-        [listStyle]="{'max-height': '150px'}" />
+        [listStyle]="{'max-height': '150px'}"/>
 
       <small
         appErrorMessage
@@ -195,24 +176,13 @@
              [required]="internalInstitutionPersonTypeField">
       </label>
 
-      <p-dropdown
+      <p-listbox
         id="internalPersonType"
-        formControlName="personType"
-        dataKey="id"
         [options]="internalPersonTypes"
-        placeholder="Seleccione"
-        [filter]="false">
-        <ng-template pTemplate="selectedItem" let-selectedOption>
-          <div class="flex align-items-center gap-2">
-            <div>{{ selectedOption.name }}</div>
-          </div>
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          <div class="flex align-items-center gap-2">
-            <div>{{ item.name }}</div>
-          </div>
-        </ng-template>
-      </p-dropdown>
+        formControlName="personType"
+        optionLabel="name"
+        [filter]="true"
+        [listStyle]="{'max-height': '150px'}"/>
 
       <small
         appErrorMessage
@@ -246,6 +216,26 @@
   header="Agregar">
   <ng-template pTemplate="content">
     <form [formGroup]="externalInstitutionForm" class="p-fluid grid">
+      <!-- name -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label appLabel for="name"
+               [label]="ExternalInstitutionsFormEnum.name"
+               [required]="externalInstitutionNameField">
+        </label>
+
+        <input
+          pInputText
+          id="name"
+          formControlName="name"/>
+
+        <small
+          appErrorMessage
+          [errors]="externalInstitutionNameField.errors"
+          [touched]="externalInstitutionNameField.touched"
+          [dirty]="externalInstitutionNameField.dirty">
+        </small>
+      </div>
+
       <!-- personType -->
       <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
@@ -255,24 +245,13 @@
           [required]="externalInstitutionPersonTypeField">
         </label>
 
-        <p-dropdown
+        <p-listbox
           id="externalPersonType"
-          formControlName="personType"
-          dataKey="id"
           [options]="externalPersonTypes"
-          placeholder="Seleccione"
-          [filter]="false">
-          <ng-template pTemplate="selectedItem" let-selectedOption>
-            <div class="flex align-items-center gap-2">
-              <div>{{ selectedOption.name }}</div>
-            </div>
-          </ng-template>
-          <ng-template let-item pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <div>{{ item.name }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
+          formControlName="personType"
+          optionLabel="name"
+          [filter]="true"
+          [listStyle]="{'max-height': '150px'}"/>
 
         <small
           appErrorMessage
@@ -281,30 +260,11 @@
           [dirty]="externalInstitutionPersonTypeField.dirty">
         </small>
       </div>
-
-      <!-- name -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-        <label appLabel for="name"
-               [label]="ExternalInstitutionsFormEnum.name"
-               [required]="externalInstitutionNameField">
-        </label>
-        <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
-        <input
-          pInputText
-          id="name"
-          formControlName="name"/>
-        <small
-          appErrorMessage
-          [errors]="externalInstitutionNameField.errors"
-          [touched]="externalInstitutionNameField.touched"
-          [dirty]="externalInstitutionNameField.dirty">
-        </small>
-      </div>
     </form>
 
     <form [formGroup]="externalInstitutionDetailForm" class="p-fluid grid">
       <!-- position -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="externalPosition2"
@@ -326,7 +286,7 @@
       </div>
 
       <!-- unit -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="unit2"

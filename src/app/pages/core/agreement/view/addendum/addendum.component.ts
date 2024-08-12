@@ -33,13 +33,7 @@ export class AddendumComponent{
         field: 'description', header: AddendumEnum.description
       },
       {
-        field: 'isModifiedFinishDate', header: AddendumEnum.isModifiedFinishDate
-      },
-      {
         field: 'document', header: AddendumEnum.file
-      },
-      {
-        field: 'agreementEndedAt', header: AddendumEnum.agreementEndedAt
       },
     ];
   }

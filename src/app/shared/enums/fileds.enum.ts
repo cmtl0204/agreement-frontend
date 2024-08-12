@@ -140,7 +140,5 @@ export enum AdministratorFormEnum {
 export enum AddendumEnum {
   header = 'Adendas',
   description = 'Información de la Adenda',
-  isModifiedFinishDate = '¿Se modifica fecha de terminación del convenio?',
   file = 'Documento de adenda o modificatorio',
-  agreementEndedAt = 'Fecha de terminación'
 }

@@ -24,4 +24,8 @@ export class AgreementsService {
     this._agreement$.update(() => value);
     sessionStorage.setItem('agreement', JSON.stringify(value));
   }
+
+  clearAgreement():void{
+    sessionStorage.removeItem('agreement');
+  }
 }

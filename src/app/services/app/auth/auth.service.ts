@@ -25,6 +25,16 @@ export class AuthService {
     sessionStorage.setItem('accessToken', JSON.stringify(value));
   }
 
+  get tokenDecode(): string | null {
+    let tokenDecode = sessionStorage.getItem('tokenDecode');
+
+    return tokenDecode;
+  }
+
+  set tokenDecode(value: string) {
+    sessionStorage.setItem('tokenDecode', JSON.stringify(value));
+  }
+
   set avatar(value: string) {
     const auth = this.auth;
     auth.avatar = value;
