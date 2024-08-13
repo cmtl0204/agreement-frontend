@@ -23,6 +23,7 @@ export class ObligationComponent implements OnInit {
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
 
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
@@ -104,6 +105,14 @@ export class ObligationComponent implements OnInit {
           this.obligationInstitutionNameField.setValue(this.formInput.internalInstitutions[0].name);
       }
     });
+  }
+
+  validateForm() {
+    this.formErrors = [];
+
+    if (this.formInput.obligations?.length === 0) this.formErrors.push('Obligaciones');
+
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   validateObligationForm(): boolean {
