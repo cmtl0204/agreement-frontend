@@ -1,9 +1,7 @@
 @if (form.value) {
   <p-stepper orientation="horizontal" [linear]="true" [activeStep]="activeStep">
     <p-stepperPanel header="Convenio">
-      <ng-template
-        pTemplate="content"
-        let-nextCallback="nextCallback">
+      <ng-template pTemplate="content" let-nextCallback="nextCallback">
         <p-toolbar>
           <div class="p-toolbar-group-left">
             <app-header-form
@@ -48,6 +46,7 @@
 
           <p-panel header="Comparecientes" class="col-12">
             <app-appearer
+              [formInput]="form.value"
               (formErrorsOutput)="appearerErrors=$event"
               (formOutput)="save($event)"/>
           </p-panel>
@@ -100,6 +99,7 @@
         <p-divider/>
 
         <app-obligation
+          [formInput]="form.value"
           (formErrorsOutput)="obligationErrors=$event"
           (formOutput)="save($event)"/>
       </ng-template>
@@ -120,7 +120,7 @@
 
           <div class="p-toolbar-group-right">
             <app-form-button-action
-              (submit)="onSubmit(nextCallback);"
+              (submit)="onSubmitAgreement(nextCallback)"
               (cancel)="prevCallback.emit()"
               labelSubmitButton="Guardar"
               labelCancelButton="Regresar"
@@ -132,42 +132,70 @@
         <p-divider/>
 
         <app-financing
+          [formInput]="form.value"
           (formOutput)="save($event)"
           (formErrorsOutput)="financingErrors=$event"/>
       </ng-template>
     </p-stepperPanel>
 
-    <p-stepperPanel header="Documentación">
+    <p-stepperPanel header="Documentos Habilitantes">
       <ng-template
         pTemplate="content"
-        let-prevCallback="prevCallback"
         let-nextCallback="nextCallback">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-document
-              (formOutput)="save($event)"
-              (nextOutput)="nextCallback.emit()"
-              (prevOutput)="prevCallback.emit()"/>
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
           </div>
-        </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              (submit)="onSubmitDocuments(nextCallback)"
+              labelSubmitButton="Guardar"
+              [isVisibleCancelButton]="false"
+            />
+          </div>
+        </p-toolbar>
+
+        <p-divider/>
+
+        <app-document
+          [formInput]="form.value"
+          (formOutput)="save($event)"
+          (formErrorsOutput)="documentErrors=$event"/>
       </ng-template>
     </p-stepperPanel>
 
     <p-stepperPanel header="Adendas">
-      <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
-        <div class="flex flex-column ">
-          <div
-            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-            <app-addendum
-              (formOutput)="save($event)"
-              (prevOutput)="prevCallback.emit()"/>
+      <ng-template pTemplate="content">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-header-form
+              label="Registro"
+              [icon]="PrimeIcons.PENCIL"/>
           </div>
-        </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              (submit)="finish()"
+              labelSubmitButton="Finalizar"
+              [severitySubmitButton]="SeverityButtonActionEnum.ADD"
+              [isVisibleCancelButton]="false"
+            />
+          </div>
+        </p-toolbar>
+
+        <p-divider/>
+
+        <app-addendum
+          [formInput]="form.value"
+          (formOutput)="save($event)"
+          (formErrorsOutput)="documentErrors=$event"/>
+
       </ng-template>
     </p-stepperPanel>
   </p-stepper>
 }
-{{ this.form.value | json }}
 
 <p-confirmDialog key="confirmDialog"/>

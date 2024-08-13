@@ -1,11 +1,10 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { AgreementModel, CatalogueModel } from '@models/core';
-import { CoreService, MessageDialogService, RoutesService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
-import { SkeletonEnum, AgreementFormEnum, AdministratorFormEnum } from '@shared/enums';
-import { getFormattedDate } from '@shared/helpers';
-import { PrimeIcons } from 'primeng/api';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
+import {AgreementModel} from '@models/core';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
+import {CataloguesHttpService} from '@servicesHttp/core';
+import {SkeletonEnum, AgreementFormEnum} from '@shared/enums';
+import {getFormattedDate} from '@shared/helpers';
 
 @Component({
   selector: 'app-agreement-date',
@@ -13,27 +12,26 @@ import { PrimeIcons } from 'primeng/api';
   styleUrl: './agreement-date.component.scss'
 })
 export class AgreementDateComponent implements OnInit {
-  // Services
-  protected readonly formBuilder = inject(FormBuilder);
+  /** Services **/
   protected readonly coreService = inject(CoreService);
+  protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
 
-  // Form
+  /** Form **/
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
-  @Input({ required: true }) formInput!: AgreementModel;
+  @Input({required: true}) formInput!: AgreementModel;
 
   protected form!: FormGroup;
   private formErrors: string[] = [];
   protected readonly Validators = Validators;
 
-  // Enums
+  /** Enums **/
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
-  protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
     this.buildForm();
@@ -61,7 +59,7 @@ export class AgreementDateComponent implements OnInit {
   }
 
   patchValueForm() {
-    const { endedAt, startedAt, subscribedAt,...agreement } = this.formInput;
+    const {endedAt, startedAt, subscribedAt, ...agreement} = this.formInput;
 
     this.form.patchValue(agreement);
 
@@ -92,7 +90,7 @@ export class AgreementDateComponent implements OnInit {
         this.dayTermField.setValidators(Validators.required);
         this.endedReasonField.clearValidators();
         this.endedReasonField.reset();
-      } else if(value === false) {
+      } else if (value === false) {
         this.endedReasonField.setValidators(Validators.required);
         this.yearTermField.clearValidators();
         this.monthTermField.clearValidators();
@@ -127,7 +125,7 @@ export class AgreementDateComponent implements OnInit {
     this.formErrorsOutput.emit(this.formErrors);
   }
 
-  /*getters forms*/
+  /** getters forms **/
   get subscribedAtField(): AbstractControl {
     return this.form.controls['subscribedAt'];
   }

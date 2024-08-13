@@ -58,7 +58,7 @@ export enum IconButtonActionEnum {
   CREATE = 'pi pi-plus',
   SYNC = 'pi pi-sync',
   UPDATE = 'pi pi-pencil',
-  CANCEL = 'pi pi-arrow-left',
+  CANCEL = 'pi pi-times',
   RETURN = 'pi pi-arrow-left',
   DOWNLOADS = 'pi pi-download',
   SAVE = 'pi pi-save',
@@ -81,7 +81,7 @@ export enum IconButtonActionEnum {
 export enum SeverityButtonActionEnum {
   CREATE = 'success',
   ADD = 'success',
-  CANCEL = 'warning',
+  CANCEL = 'danger',
   RETURN = 'warning',
   SAVE = 'primary',
   SYNC = 'info',

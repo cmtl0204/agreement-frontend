@@ -53,6 +53,16 @@ export class UsersHttpService {
     );
   }
 
+  findAllUsersLDAP(): Observable<UserModel[]> {
+    const url = `${this.API_URL}/ldap`;
+
+    return this.httpClient.get<UserModel[]>(url).pipe(
+      map(response => {
+        return response;
+      })
+    );
+  }
+
   update(id: string, payload: UpdateUserDto): Observable<UserModel> {
     const url = `${this.API_URL}/${id}`;
 

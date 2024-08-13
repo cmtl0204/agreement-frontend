@@ -38,6 +38,10 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {TableModule} from "primeng/table";
 import {DialogModule} from 'primeng/dialog';
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {SelectButtonModule} from "primeng/selectbutton";
+import {InputSwitchModule} from "primeng/inputswitch";
+import {TagModule} from "primeng/tag";
+import {ListboxModule} from "primeng/listbox";
 
 @NgModule({
   declarations: [
@@ -86,7 +90,11 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
     FormsModule,
     TableModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SelectButtonModule,
+    InputSwitchModule,
+    TagModule,
+    ListboxModule
   ]
 })
 export class RegisterModule {

@@ -1,12 +1,12 @@
 import {Injectable, signal, WritableSignal} from '@angular/core';
-import {AgreementModel} from "@models/core";
+import {AgreementModel, createAgreementModel} from "@models/core";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AgreementsService {
-  private _agreement$: WritableSignal<AgreementModel> = signal({});
+  private _agreement$: WritableSignal<AgreementModel> = signal(createAgreementModel());
 
   constructor() {
   }
@@ -23,5 +23,9 @@ export class AgreementsService {
   set agreement(value: AgreementModel) {
     this._agreement$.update(() => value);
     sessionStorage.setItem('agreement', JSON.stringify(value));
+  }
+
+  clearAgreement():void{
+    sessionStorage.removeItem('agreement');
   }
 }

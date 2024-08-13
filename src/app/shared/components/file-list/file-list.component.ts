@@ -60,7 +60,7 @@ export class FileListComponent implements OnInit {
   }
 
   findByModel(page: number = 0) {
-    this.filesHttpService.findByModel(this.modelId, page, this.search.value)
+    this.filesHttpService.findByModel(this.modelId)
       .subscribe((response: any) => {
         this.paginator = response.pagination!;
         this.items = response.data;

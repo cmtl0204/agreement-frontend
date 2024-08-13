@@ -4,13 +4,14 @@
       <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
-          for="unit"
+          for="user"
           [label]="AdministratorFormEnum.user"
           [required]="userField"></label>
 
         <p-dropdown
           id="user"
           formControlName="user"
+          dataKey="email"
           [options]="users"
           placeholder="Seleccione"
           [filter]="true"
@@ -18,13 +19,13 @@
 
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">
-              <div>{{ selectedItem.email }} | {{ selectedItem.name }} | {{ selectedItem.lastname }}</div>
+              <div>{{ selectedItem.name }} {{ selectedItem.lastname }} ({{ selectedItem.email }})</div>
             </div>
           </ng-template>
 
           <ng-template let-item pTemplate="item">
             <div class="flex align-items-center gap-2">
-              <div>{{ item.email }} | {{ item.name }} | {{ item.lastname }}</div>
+              <div>{{ item.name }} {{ item.lastname }} ({{ item.email }})</div>
             </div>
           </ng-template>
         </p-dropdown>
