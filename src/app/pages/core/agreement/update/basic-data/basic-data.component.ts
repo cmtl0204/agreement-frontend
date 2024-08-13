@@ -10,7 +10,6 @@ import {
   CatalogueAgreementsTypeEnum,
   AgreementStateEnum
 } from '@shared/enums';
-import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-basic-data',
@@ -18,31 +17,32 @@ import { PrimeIcons } from 'primeng/api';
   styleUrl: './basic-data.component.scss'
 })
 export class BasicDataComponent implements OnInit {
-  protected readonly formBuilder = inject(FormBuilder)
+  /** Services **/
   protected readonly coreService = inject(CoreService )
   protected readonly cataloguesHttpService = inject(CataloguesHttpService)
+  protected readonly formBuilder = inject(FormBuilder)
   protected readonly messageDialogService = inject(MessageDialogService)
-  protected readonly Validators = Validators;
 
   /** Form && Output **/
-  @Output() formOutput:EventEmitter<FormGroup> = new EventEmitter()
-  @Output() nextOutput:EventEmitter<boolean> = new EventEmitter()
-  @Output() prevOutput:EventEmitter<boolean> = new EventEmitter()
+  protected readonly Validators = Validators;
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter()
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Input({required: true}) formInput!: AgreementModel;
+
+  /** Form **/
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
   /** Foreign Keys **/
-  protected states: CatalogueModel[] = [];
   protected origins: CatalogueModel[] = [];
-  protected types: CatalogueModel[] = [];
   protected specialTypes: CatalogueModel[]=[]
+  protected states: CatalogueModel[] = [];
+  protected types: CatalogueModel[] = [];
 
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
-  protected readonly AgreementStateFormEnum = AgreementStateEnum;
+  protected readonly AgreementStateEnum = AgreementStateEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
-  protected readonly PrimeIcons = PrimeIcons; //pending
 
   constructor() {
     this.buildForm();
@@ -52,9 +52,10 @@ export class BasicDataComponent implements OnInit {
     this.loadStates();
     this.loadOrigins();
     this.loadTypes();
-    this.loadSpecialTypes()
+    this.loadSpecialTypes();
 
-    this.form.patchValue(this.formInput);
+    this.patchValueForm();
+    this.validateForm();
   }
 
   /** Form Builder & Validates **/
@@ -73,25 +74,35 @@ export class BasicDataComponent implements OnInit {
     this.checkValueChanges();
   }
 
-   get agreementStateForm(){
+  patchValueForm(){
+    this.form.patchValue(this.formInput);
+  }
+
+  get agreementStateForm(){
     return this.formBuilder.group({
-    state: [{value:null, disabled:true}, [Validators.required]]
+      state: [{value:null, disabled:true}, [Validators.required]]
     })
   }
 
   checkValueChanges(){
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
+    });
+
     this.typeField.valueChanges.subscribe((value) => {
       if(value && value.code === CatalogueAgreementsTypeEnum.SPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
       }else{
         this.specialTypeField.clearValidators();
       }
-      this.specialTypeField.updateValueAndValidity();
+
       this.specialTypeField.reset();
+      this.specialTypeField.updateValueAndValidity();
     })
   }
 
-  validateForm(): boolean {
+  validateForm() {
     this.formErrors = [];
 
     if (this.stateField.invalid) this.formErrors.push(AgreementStateEnum.state);
@@ -103,7 +114,7 @@ export class BasicDataComponent implements OnInit {
     if (this.typeField.invalid) this.formErrors.push(AgreementFormEnum.type);
     if (this.specialTypeField.invalid) this.formErrors.push(AgreementFormEnum.specialType);
 
-    return this.form.valid && this.formErrors.length === 0;
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   /** Load Foreign Keys  **/
@@ -123,28 +134,11 @@ export class BasicDataComponent implements OnInit {
     this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE);
   }
 
-  /** Form Actions **/
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
-      /*
-     TODO
-     */
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  save(){
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
-  }
-
-  /** Getters Form**/
+  /** Getters Form **/
   get agreementStateFormField(): FormGroup {
     return this.form.controls['agreementState'] as FormGroup;
   }
+
   get stateField(): AbstractControl {
     return this.agreementStateFormField.controls['state'];
   }
@@ -176,6 +170,4 @@ export class BasicDataComponent implements OnInit {
   get specialTypeField(): AbstractControl {
     return this.form.controls['specialType'];
   }
-
-  protected readonly AgreementStateEnum = AgreementStateEnum;
 }
