@@ -9,7 +9,9 @@
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid grid">
         <div class="field col-12 text-center">
-          <h2>Ingreso al Sistema</h2>
+          <h2>
+            Ingreso al Sistema {{ authService.systemShortName }}
+          </h2>
         </div>
 
         <div class="field col-12">
@@ -54,12 +56,6 @@
           [icon]="PrimeIcons.KEY"
           label="Recuperar Contraseña"
           (click)="redirectPasswordReset()"></p-button>
-
-        <p-button
-          severity="success"
-          [icon]="PrimeIcons.PLUS"
-          label="Crear Cuenta"
-          (click)="redirectRegistration()"></p-button>
       </div>
     </ng-template>
   </p-panel>
