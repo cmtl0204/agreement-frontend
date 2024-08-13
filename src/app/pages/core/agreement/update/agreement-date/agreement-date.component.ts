@@ -19,10 +19,11 @@ export class AgreementDateComponent implements OnInit {
   public readonly messageDialogService = inject(MessageDialogService);
 
   // Form
-  @Output() formOutput: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
-  @Input({ required: true }) formInput!: AgreementModel;
+  @Input({required: true}) formInput!: AgreementModel;
 
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -31,7 +32,6 @@ export class AgreementDateComponent implements OnInit {
   // Enums
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
-  protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
     this.buildForm();
@@ -39,6 +39,7 @@ export class AgreementDateComponent implements OnInit {
 
   ngOnInit(): void {
     this.patchValueForm();
+    this.validateForm();
   }
 
   /** Form Builder & Validates **/
@@ -76,6 +77,11 @@ export class AgreementDateComponent implements OnInit {
   }
 
   checkValueChanges() {
+    this.form.valueChanges.subscribe(value => {
+      this.formOutput.emit(value);
+      this.validateForm();
+    });
+
     this.isFinishDateField.valueChanges.subscribe(value => {
       if (value) {
         this.endedAtField.setValidators(Validators.required);
@@ -84,7 +90,7 @@ export class AgreementDateComponent implements OnInit {
         this.dayTermField.setValidators(Validators.required);
         this.endedReasonField.clearValidators();
         this.endedReasonField.reset();
-      } else {
+      } else if (value === false) {
         this.endedReasonField.setValidators(Validators.required);
         this.yearTermField.clearValidators();
         this.monthTermField.clearValidators();
@@ -104,7 +110,7 @@ export class AgreementDateComponent implements OnInit {
     });
   }
 
-  validateForm(): boolean {
+  validateForm() {
     this.formErrors = [];
 
     if (this.subscribedAtField.invalid) this.formErrors.push(AgreementFormEnum.subscribedAt);
@@ -116,22 +122,7 @@ export class AgreementDateComponent implements OnInit {
     if (this.monthTermField.invalid) this.formErrors.push(AgreementFormEnum.monthTerm);
     if (this.dayTermField.invalid) this.formErrors.push(AgreementFormEnum.dayTerm);
 
-    return this.form.valid && this.formErrors.length === 0;
-  }
-
-  // FormActions
-  onSubmit(): void {
-    if (this.validateForm()) {
-      this.save();
-    } else {
-      this.form.markAllAsTouched();
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  save() {
-    this.formOutput.emit(this.form.value);
-    this.nextOutput.emit(true);
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   /*getters forms*/

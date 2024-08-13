@@ -34,6 +34,8 @@ import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DialogModule } from 'primeng/dialog';
+import { ListboxModule } from 'primeng/listbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
     declarations: [
@@ -80,7 +82,9 @@ import { DialogModule } from 'primeng/dialog';
         MultiSelectModule,
         DialogModule,
         MultiSelectModule,
-        DialogModule
+        DialogModule,
+        ListboxModule,
+        ConfirmDialogModule
     ]
 })
 export class UpdateModule { }

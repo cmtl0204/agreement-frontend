@@ -21,6 +21,7 @@ export class ObligationComponent implements OnInit {
   public readonly messageDialogService = inject(MessageDialogService);
 
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
   @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
