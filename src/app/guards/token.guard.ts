@@ -7,7 +7,6 @@ export const TokenGuard: CanActivateFn = (route, state) => {
   const routesService = inject(RoutesService);
   const authService = inject(AuthService);
 
-  console.log('toke guad');
   if (authService.accessToken) {
     return true;
   }

@@ -211,7 +211,7 @@ export class RegisterComponent implements OnInit {
   }
 
   finish() {
-    // this.agreementsService.clearAgreement();
+    this.agreementsService.clearAgreement();
 
     if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
       this.router.navigate(['/core/national-supervisor/agreement-list']);
@@ -220,6 +220,14 @@ export class RegisterComponent implements OnInit {
     if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
       this.router.navigate(['/core/international-supervisor/agreement-list']);
     }
+  }
+
+  redirectAgreementList() {
+    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR)
+      this.router.navigate(['/core/national-supervisor/agreement-list']);
+
+    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR)
+      this.router.navigate(['/core/international-supervisor/agreement-list']);
   }
 
   get idField(): AbstractControl {

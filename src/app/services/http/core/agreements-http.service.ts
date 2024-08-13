@@ -82,7 +82,7 @@ export class AgreementsHttpService {
   }
 
   findInternationalAgreementsByOrigin(): Observable<AgreementModel[]> {
-    const url = `${this.API_URL}/national-agreements`;
+    const url = `${this.API_URL}/international-agreements`;
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
         return response.data;

@@ -102,7 +102,7 @@ export class AuthService {
         this.routesService.dashboardAdmin();
         break;
       }
-      case RoleEnum.ADMINISTRATOR: {
+      case RoleEnum.AGREEMENT_ADMINISTRATOR: {
         this.routesService.dashboardAdministrator();
         break;
       }

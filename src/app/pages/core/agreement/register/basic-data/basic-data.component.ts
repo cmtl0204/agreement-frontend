@@ -9,8 +9,9 @@ import {
   SkeletonEnum,
   CatalogueTypeEnum,
   CatalogueAgreementsTypeEnum,
-  AgreementStateEnum
+  AgreementStateEnum, RoleEnum, CatalogueAgreementsOriginEnum
 } from '@shared/enums';
+import {AuthService} from "@servicesApp/auth";
 
 @Component({
   selector: 'app-basic-data',
@@ -19,10 +20,11 @@ import {
 })
 export class BasicDataComponent implements OnInit {
   /** Services **/
-  protected readonly cataloguesHttpService = inject(CataloguesHttpService)
-  protected readonly coreService = inject(CoreService)
-  protected readonly formBuilder = inject(FormBuilder)
-  protected readonly messageDialogService = inject(MessageDialogService)
+  protected readonly authService = inject(AuthService);
+  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly coreService = inject(CoreService);
+  protected readonly formBuilder = inject(FormBuilder);
+  protected readonly messageDialogService = inject(MessageDialogService);
 
   /** Input Output **/
   protected readonly Validators = Validators;
@@ -125,6 +127,14 @@ export class BasicDataComponent implements OnInit {
 
   loadOrigins() {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
+
+    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+      this.origins = this.origins.filter(origin => origin.code === CatalogueAgreementsOriginEnum.NATIONAL);
+    }
+
+    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+      this.origins = this.origins.filter(origin => origin.code === CatalogueAgreementsOriginEnum.INTERNATIONAL);
+    }
   };
 
   loadTypes() {
