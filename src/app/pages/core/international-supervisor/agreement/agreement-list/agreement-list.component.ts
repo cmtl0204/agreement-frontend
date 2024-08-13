@@ -71,7 +71,7 @@ export class AgreementListComponent {
   }
 
   findAgreements() {
-    this.agreementsHttpService.findNationalAgreementsByOrigin()
+    this.agreementsHttpService.findInternationalAgreementsByOrigin()
       .subscribe((response) => {
         console.log(response)
         // this.paginator = response.pagination!;
@@ -145,7 +145,7 @@ export class AgreementListComponent {
   }
 
   redirectCreateForm() {
-    this.router.navigate(['/core/international-supervisor/agreements', 'new']);
+    this.router.navigate(['/core/agreements', 'register']);
   }
 
   redirectEditForm(id: string) {
