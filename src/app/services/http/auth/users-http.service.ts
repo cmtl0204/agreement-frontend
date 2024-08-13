@@ -1,32 +1,54 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {environment} from '@env/environment';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {environment} from '@env/environment';
+import {CreateUserDto, UpdateUserDto, UserModel} from '@models/auth';
 import {ServerResponse} from '@models/http-response';
-import {MessageService} from '@servicesApp/core';
-import {AgreementModel, CatalogueModel} from '@models/core';
-import {CatalogueTypeEnum} from "@shared/enums";
-import {UserModel} from "@models/auth";
+import {MessageService} from "@servicesApp/core";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersHttpService {
-  private readonly API_URL = `${environment.API_URL}/users`;
-  private readonly httpClient = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
+  API_URL = `${environment.API_URL}/users`;
 
-  constructor() {
+  constructor(private httpClient: HttpClient, private messageService: MessageService) {
   }
 
-  register(payload: AgreementModel): Observable<AgreementModel> {
+  create(payload: CreateUserDto): Observable<UserModel> {
     const url = `${this.API_URL}`;
 
-    return this.httpClient.post<AgreementModel>(url, payload).pipe(
-      map(response => {
-        // this.messageService.success(response);
+    return this.httpClient.post<ServerResponse>(url, payload).pipe(
+      map((response) => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
+  findUsers(page: number = 0, search: string = ''): Observable<ServerResponse> {
+    const url = this.API_URL;
+
+    const headers = new HttpHeaders().append('pagination', 'true');
+    const params = new HttpParams()
+      .append('page', page)
+      .append('search', search)
+      .append('limit', '2');
+
+    return this.httpClient.get<ServerResponse>(url, {headers, params}).pipe(
+      map((response) => {
         return response;
+      })
+    );
+  }
+
+  findOne(id: string): Observable<UserModel> {
+    const url = `${this.API_URL}/${id}`;
+
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
       })
     );
   }
@@ -34,27 +56,6 @@ export class UsersHttpService {
   findAllUsersLDAP(): Observable<UserModel[]> {
     const url = `${this.API_URL}/ldap`;
 
-    return this.httpClient.get<UserModel[]>(url).pipe(
-      map(response => {
-        return response;
-      })
-    );
-  }
-
-  findAllAgreements(): Observable<AgreementModel[]> {
-    const url = this.API_URL;
-    return this.httpClient.get<ServerResponse>(url).pipe(
-      map(response => {
-        console.log(response);
-        // sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        // sessionStorage.setItem('catalogues', JSON.stringify(response));
-        return response.data;
-      })
-    );
-  }
-
-  findNationalAgreementsByOrigin(): Observable<AgreementModel[]> {
-    const url = `${this.API_URL}/national-agreements`;
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
         return response.data;
@@ -62,19 +63,9 @@ export class UsersHttpService {
     );
   }
 
-  findOne(id: string): Observable<AgreementModel> {
+  update(id: string, payload: UpdateUserDto): Observable<UserModel> {
     const url = `${this.API_URL}/${id}`;
 
-    return this.httpClient.get(url).pipe(
-      map(response => {
-        console.log(response)
-        return response
-      })
-    );
-  }
-
-  update(id: string, payload: CatalogueModel): Observable<CatalogueModel> {
-    const url = `${this.API_URL}/${id}`;
     return this.httpClient.put<ServerResponse>(url, payload).pipe(
       map(response => {
         this.messageService.success(response);
@@ -83,43 +74,57 @@ export class UsersHttpService {
     );
   }
 
-  remove(id: string): Observable<boolean> {
-    const url = `${this.API_URL}/${id}`;
-    return this.httpClient.delete<ServerResponse>(url).pipe(
-      map(response => {
+  reactivate(id: string): Observable<UserModel> {
+    const url = `${this.API_URL}/${id}/reactivate`;
+
+    return this.httpClient.put<ServerResponse>(url, null).pipe(
+      map((response) => {
         this.messageService.success(response);
         return response.data;
       })
     );
   }
 
-  removeAll(id: CatalogueModel[]): Observable<boolean> {
+  remove(id: string): Observable<UserModel> {
     const url = `${this.API_URL}/${id}`;
+
     return this.httpClient.delete<ServerResponse>(url).pipe(
-      map(response => {
+      map((response) => {
         this.messageService.success(response);
         return response.data;
       })
     );
   }
 
-  findCache(): Observable<boolean> {
-    const url = `${this.API_URL}/cache/get`;
+  removeAll(users: UserModel[]): Observable<UserModel[]> {
+    const url = `${this.API_URL}/remove-all`;
+
+    return this.httpClient.patch<ServerResponse>(url, users).pipe(
+      map((response) => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
+  suspend(id: string): Observable<UserModel> {
+    const url = `${this.API_URL}/${id}/suspend`;
+
+    return this.httpClient.put<ServerResponse>(url, null).pipe(
+      map((response) => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
+  findCatalogues(): Observable<UserModel[]> {
+    const url = `${this.API_URL}/catalogues`;
+
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        sessionStorage.setItem('catalogues', JSON.stringify(response.data));
-        return true;
+        return response.data;
       })
     );
-  }
-
-  findByType(type: CatalogueTypeEnum): CatalogueModel[] {
-    const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
-
-    if (catalogues) {
-      return catalogues.filter(catalogue => catalogue.type === type);
-    }
-
-    return [];
   }
 }

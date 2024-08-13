@@ -14,15 +14,14 @@
 
         <div class="field col-12">
           <label for="role" appLabel [label]="LoginFormEnum.roleSelect" [required]="roleField"></label>
-          <p-dropdown id="role"
-                      formControlName="role"
-                      dataKey="id"
-                      [options]="roles"
-                      optionLabel="name"
-                      [filter]="true"
-                      filterBy="name"
-                      placeholder="Seleccione...">
-          </p-dropdown>
+
+          <p-listbox
+            id="role"
+            formControlName="role"
+            [options]="roles"
+            optionLabel="name"
+            [listStyle]="{'max-height': '150px'}"/>
+
           <small appErrorMessage
                  [errors]="roleField.errors"
                  [touched]="roleField.touched"

@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ColumnModel, AgreementModel} from '@models/core';
-import {CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
+import {CoreService, BreadcrumbService, MessageService, AgreementsService} from '@servicesApp/core';
 import {AgreementsHttpService} from '@servicesHttp/core';
 import {
   IconButtonActionEnum,
@@ -28,6 +28,7 @@ export class AgreementListComponent {
   // Services
   protected readonly coreService = inject(CoreService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly agreementsService = inject(AgreementsService);
   private readonly router = inject(Router);
   private readonly breadcrumbService = inject(BreadcrumbService);
 
@@ -141,7 +142,9 @@ export class AgreementListComponent {
   }
 
   redirectCreateForm() {
-    this.router.navigate(['/core/international-supervisor/agreements', 'new']);
+    this.agreementsService.clearAgreement();
+
+    this.router.navigate(['/core/agreements', 'register']);
   }
 
   redirectEditForm(id: string) {

@@ -4,8 +4,7 @@ import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {SkeletonEnum, AgreementFormEnum, AdministratorFormEnum, CatalogueTypeEnum} from '@shared/enums';
-import {PrimeIcons} from 'primeng/api';
-import {UserLdapModel, UserModel} from "@models/auth";
+import {UserLdapModel} from "@models/auth";
 import {UsersHttpService} from "@servicesHttp/auth";
 
 @Component({
@@ -15,17 +14,15 @@ import {UsersHttpService} from "@servicesHttp/auth";
 })
 export class AgreementAdministratorComponent implements OnInit {
 
-  protected readonly formBuilder = inject(FormBuilder);
   protected readonly coreService = inject(CoreService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
   public readonly usersHttpService = inject(UsersHttpService);
 
   // Form
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
-  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter()
-  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter()
   @Input({required: true}) formInput!: AgreementModel;
   protected form!: FormGroup;
   private formErrors: string[] = [];
@@ -40,7 +37,6 @@ export class AgreementAdministratorComponent implements OnInit {
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly AdministratorFormEnum = AdministratorFormEnum;
-  protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
     this.buildForm();
@@ -50,6 +46,7 @@ export class AgreementAdministratorComponent implements OnInit {
     this.loadPositions();
     this.loadUnits();
     this.loadUsers();
+
     this.patchValueForm();
     this.validateForm();
   }
@@ -70,6 +67,7 @@ export class AgreementAdministratorComponent implements OnInit {
   checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
       this.formOutput.emit(value);
+
       this.validateForm();
     });
   }

@@ -1,1 +1,100 @@
-<p>document works!</p>
+@if (formInput.files.length < types.length) {
+  <form [formGroup]="fileForm" class="p-fluid grid">
+    <!-- type -->
+    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+      <label
+        appLabel
+        for="type"
+        [label]="FileFormEnum.type"
+        [required]="typeField">
+      </label>
+
+      <p-dropdown
+        id="type"
+        formControlName="type"
+        dataKey="id"
+        [options]="types"
+        placeholder="Seleccione"
+        [filter]="false">
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.name }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ item.name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+      <small
+        appErrorMessage
+        [errors]="typeField.errors"
+        [touched]="typeField.touched"
+        [dirty]="typeField.dirty">
+      </small>
+    </div>
+
+    <!-- file -->
+    <div class="field col-12 xl:col-7 lg:col-7 md:col-7 sm:col-12">
+      <label appLabel for="file"
+             [label]="FileFormEnum.myFile"
+             [required]="fileField">
+      </label>
+
+      <p-fileUpload
+        #uploadFiles
+        id="file"
+        mode="basic"
+        chooseLabel="Choose"
+        [chooseIcon]="PrimeIcons.UPLOAD"
+        name="files[]"
+        accept=".pdf"
+        maxFileSize="1000000"
+        [auto]="true"
+        [customUpload]="true"
+        (uploadHandler)="onUpload($event,uploadFiles)"/>
+
+      <small
+        appErrorMessage
+        [errors]="fileField.errors"
+        [touched]="fileField.touched"
+        [dirty]="fileField.dirty">
+      </small>
+    </div>
+  </form>
+}
+
+@if (formInput.files.length > 0) {
+  <p-table
+    styleClass="p-datatable-striped"
+    [value]="formInput.files"
+    [columns]="columns">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        @for (col of columns; track col.field) {
+          <th [pSortableColumn]="col.field">
+            {{ col.header }}
+          </th>
+        }
+
+        <th>{{ TableEnum.ACTIONS }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+      <tr>
+        <td>{{ item.type.name }}</td>
+        <td>{{ item.name }}</td>
+        <td>
+          <p-button
+            [icon]="IconButtonActionEnum.DELETE"
+            [pTooltip]="LabelButtonActionEnum.DELETE"
+            [severity]="SeverityButtonActionEnum.DELETE"
+            (click)="removeFile(rowIndex)"/>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+}

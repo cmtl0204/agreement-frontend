@@ -11,11 +11,11 @@ export class FormButtonActionComponent {
   @Output() submit: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
   @Input() labelSubmitButton: string = LabelButtonActionEnum.SAVE;
-  @Input() labelCancelButton: string = LabelButtonActionEnum.CANCEL;
+  @Input() labelCancelButton: string = LabelButtonActionEnum.RETURN;
   @Input() iconSubmitButton: string = IconButtonActionEnum.SAVE;
-  @Input() iconCancelButton: string = IconButtonActionEnum.CANCEL;
+  @Input() iconCancelButton: string = IconButtonActionEnum.RETURN;
   @Input() severitySubmitButton = SeverityButtonActionEnum.SAVE;
-  @Input() severityCancelButton = SeverityButtonActionEnum.CANCEL;
+  @Input() severityCancelButton = SeverityButtonActionEnum.RETURN;
   @Input() isVisibleCancelButton = true;
 
   protected readonly coreService = inject(CoreService);

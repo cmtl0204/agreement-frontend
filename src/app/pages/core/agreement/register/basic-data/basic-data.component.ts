@@ -1,5 +1,6 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PrimeIcons} from 'primeng/api';
 import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
@@ -10,7 +11,6 @@ import {
   CatalogueAgreementsTypeEnum,
   AgreementStateEnum
 } from '@shared/enums';
-import {PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-basic-data',
@@ -18,33 +18,32 @@ import {PrimeIcons} from 'primeng/api';
   styleUrl: './basic-data.component.scss'
 })
 export class BasicDataComponent implements OnInit {
-  /* Services */
-  protected readonly formBuilder = inject(FormBuilder)
-  protected readonly coreService = inject(CoreService)
+  /** Services **/
   protected readonly cataloguesHttpService = inject(CataloguesHttpService)
+  protected readonly coreService = inject(CoreService)
+  protected readonly formBuilder = inject(FormBuilder)
   protected readonly messageDialogService = inject(MessageDialogService)
-  protected readonly Validators = Validators;
 
-  /* Form */
+  /** Input Output **/
+  protected readonly Validators = Validators;
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter()
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
-  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
   @Input({required: true}) formInput!: AgreementModel;
 
+  /** Form **/
   protected form!: FormGroup;
   private formErrors: string[] = [];
 
-  /* Foreign Keys */
-  protected states: CatalogueModel[] = [];
+  /** Foreign Keys **/
   protected origins: CatalogueModel[] = [];
-  protected types: CatalogueModel[] = [];
   protected specialTypes: CatalogueModel[] = []
+  protected states: CatalogueModel[] = [];
+  protected types: CatalogueModel[] = [];
 
-  /* Enums */
+  /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly AgreementStateEnum = AgreementStateEnum;
   protected readonly SkeletonEnum = SkeletonEnum;
-  protected readonly PrimeIcons = PrimeIcons; //pending
 
   constructor() {
     this.buildForm();
