@@ -35,6 +35,7 @@ import { FinancingComponent } from './financing/financing.component';
 import { ObligationComponent } from './obligation/obligation.component';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
+import { DocumentComponent } from './document/document.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { ToastModule } from 'primeng/toast';
         ObligationComponent,
         FinancingComponent,
         AddendumComponent,
-        AgreementAdministratorComponent
+        AgreementAdministratorComponent,
+        DocumentComponent
     ],
     exports: [
         ViewComponent

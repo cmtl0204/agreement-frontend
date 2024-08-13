@@ -1,12 +1,10 @@
-@if (formInput.files.length < types.length) {
-    <form [formGroup]="fileForm" class="p-fluid grid">
+    <form class="p-fluid grid">
       <!-- type -->
       <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
         <label
           appLabel
           for="type"
-          [label]="FileFormEnum.type"
-          [required]="typeField">
+          [label]="FileFormEnum.type">
         </label>
   
         <p-dropdown
@@ -27,20 +25,12 @@
             </div>
           </ng-template>
         </p-dropdown>
-  
-        <small
-          appErrorMessage
-          [errors]="typeField.errors"
-          [touched]="typeField.touched"
-          [dirty]="typeField.dirty">
-        </small>
       </div>
   
       <!-- file -->
       <div class="field col-12 xl:col-7 lg:col-7 md:col-7 sm:col-12">
         <label appLabel for="file"
-               [label]="FileFormEnum.myFile"
-               [required]="fileField">
+               [label]="FileFormEnum.myFile">
         </label>
   
         <p-fileUpload
@@ -53,23 +43,14 @@
           accept=".pdf"
           maxFileSize="1000000"
           [auto]="true"
-          [customUpload]="true"
-          (uploadHandler)="onUpload($event,uploadFiles)"/>
-  
-        <small
-          appErrorMessage
-          [errors]="fileField.errors"
-          [touched]="fileField.touched"
-          [dirty]="fileField.dirty">
-        </small>
+          [customUpload]="true"/>
       </div>
     </form>
-  }
   
-  @if (formInput.files.length > 0) {
+  @if (agreement.files.length > 0) {
     <p-table
       styleClass="p-datatable-striped"
-      [value]="formInput.files"
+      [value]="agreement.files"
       [columns]="columns">
       <ng-template pTemplate="header" let-columns>
         <tr>
@@ -91,8 +72,7 @@
             <p-button
               [icon]="IconButtonActionEnum.DELETE"
               [pTooltip]="LabelButtonActionEnum.DELETE"
-              [severity]="SeverityButtonActionEnum.DELETE"
-              (click)="removeFile(rowIndex)"/>
+              [severity]="SeverityButtonActionEnum.DELETE"/>
           </td>
         </tr>
       </ng-template>
