@@ -59,15 +59,13 @@
 <p-panel>
   <ng-template pTemplate="header">
     <h4>Contraparte:</h4>
-  
-        <p-button
+
+    <p-button
       class="ml-2"
       [icon]="IconButtonActionEnum.ADD"
       [pTooltip]="LabelButtonActionEnum.ADD"
       [severity]="SeverityButtonActionEnum.ADD"
       (click)="showExternalInstitutionModal()"/>
-    
-  
   </ng-template>
 
   <ng-template pTemplate="content">
@@ -100,12 +98,6 @@
                   [severity]="SeverityButtonActionEnum.DELETE"
                   [pTooltip]="LabelButtonActionEnum.DELETE"
                   (click)="deleteExternalInstitution(rowIndex)"/>
-                  <p-button
-                  [icon]="IconButtonActionEnum.UPDATE"
-                  [severity]="SeverityButtonActionEnum.UPDATE"
-                  [pTooltip]="LabelButtonActionEnum.UPDATE"
-                  (click)="editExternalInstitution(rowIndex)"/>
-              
               </div>
             </td>
             <td>{{ item.personType.name }}</td>
@@ -121,13 +113,6 @@
                       [pTooltip]="LabelButtonActionEnum.DELETE"
                       (click)="deleteExternalInstitutionDetail(rowIndex,index)">
                     </p-button>
-
-                    <p-button
-                    [icon]="IconButtonActionEnum.UPDATE"
-                    [severity]="SeverityButtonActionEnum.UPDATE"
-                    [pTooltip]="LabelButtonActionEnum.UPDATE"
-                    (click)="editExternalInstitutionDetail(rowIndex,index)"
-                     />
 
                     {{ externalInstitutionDetail.position }} /
                     {{ externalInstitutionDetail.unit }}
@@ -325,22 +310,7 @@
   </ng-template>
 
   <ng-template pTemplate="footer">
-    @if(this.isEditing){
-      <div class="button-group">
-       <p-button
-       [icon]="IconButtonActionEnum.UPDATE"
-       [severity]="SeverityButtonActionEnum.UPDATE"
-       [pTooltip]="LabelButtonActionEnum.UPDATE"
-        (click)="updateExternalInstitution()"/>
-
-        <p-button
-        [label]="LabelButtonActionEnum.CANCEL"
-        [icon]="IconButtonActionEnum.CANCEL"
-        [text]="true"
-        [severity]="SeverityButtonActionEnum.CANCEL"
-        (click)="cancelEdit()"/> </div>
-    } @else {
-       <p-button
+    <p-button
       [label]="LabelButtonActionEnum.CANCEL"
       [icon]="IconButtonActionEnum.CANCEL"
       [text]="true"
@@ -352,8 +322,6 @@
       [severity]="SeverityButtonActionEnum.ADD"
       [label]="LabelButtonActionEnum.ADD"
       (click)="addExternalInstitution()"/>
-    }
-   
   </ng-template>
 </p-dialog>
 
@@ -410,22 +378,7 @@
     </form>
   </ng-template>
   <ng-template pTemplate="footer">
-    @if( this.isEditingDetail){
-      <div class="button-group">
-       <p-button
-       [icon]="IconButtonActionEnum.UPDATE"
-       [severity]="SeverityButtonActionEnum.UPDATE"
-       [pTooltip]="LabelButtonActionEnum.UPDATE"
-        (click)="updateExternalInstitutionDetail()"/>
-
-        <p-button
-        [label]="LabelButtonActionEnum.CANCEL"
-       [icon]="IconButtonActionEnum.CANCEL"
-       [text]="true"
-       [severity]="SeverityButtonActionEnum.CANCEL"
-        (click)="cancelEditDetail()"/> </div>
-    } @else {
-       <p-button
+    <p-button
       [label]="LabelButtonActionEnum.CANCEL"
       [icon]="IconButtonActionEnum.CANCEL"
       [text]="true"
@@ -437,7 +390,5 @@
       [icon]="IconButtonActionEnum.ADD"
       [severity]="SeverityButtonActionEnum.ADD"
       (click)="addExternalInstitutionDetail()"/>
-    }
-   
   </ng-template>
 </p-dialog>
