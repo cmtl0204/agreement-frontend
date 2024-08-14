@@ -37,32 +37,34 @@
     </div>
 
     <!-- file -->
-    <div class="field col-12 xl:col-7 lg:col-7 md:col-7 sm:col-12">
-      <label appLabel for="file"
-             [label]="FileFormEnum.myFile"
-             [required]="fileField">
-      </label>
+    @if (typeField.value) {
+      <div class="field col-12 xl:col-7 lg:col-7 md:col-7 sm:col-12">
+        <label appLabel for="file"
+               [label]="FileFormEnum.myFile"
+               [required]="fileField">
+        </label>
 
-      <p-fileUpload
-        #uploadFiles
-        id="file"
-        mode="basic"
-        chooseLabel="Choose"
-        [chooseIcon]="PrimeIcons.UPLOAD"
-        name="files[]"
-        accept=".pdf"
-        maxFileSize="1000000"
-        [auto]="true"
-        [customUpload]="true"
-        (uploadHandler)="onUpload($event,uploadFiles)"/>
+        <p-fileUpload
+          #uploadFiles
+          id="file"
+          mode="basic"
+          chooseLabel="Cargar"
+          [chooseIcon]="PrimeIcons.UPLOAD"
+          name="files[]"
+          accept=".pdf"
+          maxFileSize="1000000"
+          [auto]="true"
+          [customUpload]="true"
+          (uploadHandler)="onUpload($event,uploadFiles)"/>
 
-      <small
-        appErrorMessage
-        [errors]="fileField.errors"
-        [touched]="fileField.touched"
-        [dirty]="fileField.dirty">
-      </small>
-    </div>
+        <small
+          appErrorMessage
+          [errors]="fileField.errors"
+          [touched]="fileField.touched"
+          [dirty]="fileField.dirty">
+        </small>
+      </div>
+    }
   </form>
 }
 

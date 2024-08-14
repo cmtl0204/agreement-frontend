@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
       this.form.patchValue(this.agreementsService.agreementStorage);
 
       if (this.idField.value) {
-        this.activeStep = 2;
+        this.activeStep = 3;
       }
 
       if (this.enabledField.value) {

@@ -167,31 +167,31 @@
     </div>
   </form>
 
-  <form [formGroup]="internalInstitutionForm" class="p-fluid grid">
-    <!-- internalInstitutions/personTypeId -->
-    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-      <label appLabel
-             for="internalPersonType"
-             [label]="InternalInstitutionsFormEnum.personType"
-             [required]="internalInstitutionPersonTypeField">
-      </label>
+<!--  <form [formGroup]="internalInstitutionForm" class="p-fluid grid">-->
+<!--    &lt;!&ndash; internalInstitutions/personTypeId &ndash;&gt;-->
+<!--    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">-->
+<!--      <label appLabel-->
+<!--             for="internalPersonType"-->
+<!--             [label]="InternalInstitutionsFormEnum.personType"-->
+<!--             [required]="internalInstitutionPersonTypeField">-->
+<!--      </label>-->
 
-      <p-listbox
-        id="internalPersonType"
-        [options]="internalPersonTypes"
-        formControlName="personType"
-        optionLabel="name"
-        [filter]="true"
-        [listStyle]="{'max-height': '150px'}"/>
+<!--      <p-listbox-->
+<!--        id="internalPersonType"-->
+<!--        [options]="internalPersonTypes"-->
+<!--        formControlName="personType"-->
+<!--        optionLabel="name"-->
+<!--        [filter]="true"-->
+<!--        [listStyle]="{'max-height': '150px'}"/>-->
 
-      <small
-        appErrorMessage
-        [errors]="internalInstitutionPersonTypeField.errors"
-        [touched]="internalInstitutionPersonTypeField.touched"
-        [dirty]="internalInstitutionPersonTypeField.dirty">
-      </small>
-    </div>
-  </form>
+<!--      <small-->
+<!--        appErrorMessage-->
+<!--        [errors]="internalInstitutionPersonTypeField.errors"-->
+<!--        [touched]="internalInstitutionPersonTypeField.touched"-->
+<!--        [dirty]="internalInstitutionPersonTypeField.dirty">-->
+<!--      </small>-->
+<!--    </div>-->
+<!--  </form>-->
 
   <ng-template pTemplate="footer">
     <p-button
@@ -250,7 +250,6 @@
           [options]="externalPersonTypes"
           formControlName="personType"
           optionLabel="name"
-          [filter]="true"
           [listStyle]="{'max-height': '150px'}"/>
 
         <small
