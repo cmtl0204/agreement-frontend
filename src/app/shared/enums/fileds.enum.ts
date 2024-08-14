@@ -46,6 +46,13 @@ export enum AppearerFormEnum {
 
 export enum AgreementSectionFormEnum {
   basicData = 'Datos Básicos',
+  appearer = 'Comparecientes del convenio',
+  obligation = 'Obligaciones',
+  financing = 'Financiamientod',
+  enablingDocument = 'Documentos Habilitantes',
+  agreementDate = 'Fechas del convenio',
+  administrator = 'Administrador del convenio',
+  addendum = 'Adendas'
 }
 
 export enum InternalInstitutionsFormEnum {
