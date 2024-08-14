@@ -32,6 +32,7 @@ export enum LabelButtonActionEnum {
   UPDATE = 'Editar',
   VIEW = 'Visualizar',
   DELETE = 'Eliminar',
+  DOWNLOAD = 'Descargar',
   DOWNLOADS = 'Descargas',
   SUSPEND = 'Suspender',
   HIDE = 'Ocultar',
@@ -60,6 +61,7 @@ export enum IconButtonActionEnum {
   UPDATE = 'pi pi-pencil',
   CANCEL = 'pi pi-times',
   RETURN = 'pi pi-arrow-left',
+  DOWNLOAD = 'pi pi-download',
   DOWNLOADS = 'pi pi-download',
   SAVE = 'pi pi-save',
   SUSPEND = 'pi pi-ban',
@@ -87,5 +89,6 @@ export enum SeverityButtonActionEnum {
   SYNC = 'info',
   DELETE = 'danger',
   UPDATE = 'warning',
+  DOWNLOAD = 'info',
 }
 

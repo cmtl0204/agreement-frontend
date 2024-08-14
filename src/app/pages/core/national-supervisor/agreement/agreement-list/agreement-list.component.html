@@ -61,7 +61,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
-      
+
       @for (col of columns; track col) {
         <td>
           <!--Objects-->
@@ -114,3 +114,12 @@
                    [enabled]="isButtonActions"
                    (isHide)="isButtonActions=!$event">
 </app-button-action>
+
+<p-dialog
+  header="Convenio"
+  [(visible)]="isVisibleAgreementView"
+  [modal]="true">
+  @if (selectedItem && isVisibleAgreementView) {
+    <app-view [id]="selectedItem.id!"/>
+  }
+</p-dialog>

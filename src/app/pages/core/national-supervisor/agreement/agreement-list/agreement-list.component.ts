@@ -50,6 +50,7 @@ export class AgreementListComponent {
 
   protected selectedItem!: AgreementModel;
   protected items: AgreementModel[] = [];
+  protected isVisibleAgreementView: boolean = false;
 
   constructor() {
     this.breadcrumbService.setItems([{label: BreadcrumbEnum.AGREEMENTS}]);
@@ -99,11 +100,11 @@ export class AgreementListComponent {
   get buildButtonActions(): MenuItem[] {
     return [
       {
-        id: IdButtonActionEnum.UPDATE,
+        id: IdButtonActionEnum.VIEW,
         label: LabelButtonActionEnum.VIEW,
-        icon: IconButtonActionEnum.UPDATE,
+        icon: IconButtonActionEnum.VIEW,
         command: () => {
-          if (this.selectedItem?.id) this.redirectViewAgreement(this.selectedItem.id);
+          this.redirectViewAgreement();
         },
       },
       {
@@ -148,11 +149,11 @@ export class AgreementListComponent {
   }
 
   redirectEditForm(id: string) {
-    this.router.navigate(['/core/international-supervisor/agreements', id]);
+    this.router.navigate(['/core/agreements/update', id]);
   }
 
-  redirectViewAgreement(id: string) {
-    this.router.navigate(['/core/agreements/view', id]);
+  redirectViewAgreement() {
+    this.isVisibleAgreementView = true;
   }
 
   remove(id: string) {

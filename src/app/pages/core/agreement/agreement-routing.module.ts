@@ -7,7 +7,7 @@ const routes: Routes = [
     loadChildren: () => import('./register/register.module').then(m => m.RegisterModule),
   },
   {
-    path: 'update',
+    path: 'update/:id',
     loadChildren: () => import('./update/update.module').then(m => m.UpdateModule),
   },
   {

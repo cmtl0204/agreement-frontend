@@ -1,4 +1,4 @@
-@if (formInput.files.length < types.length) {
+@if (formInput.enablingDocuments.length < types.length) {
     <form [formGroup]="fileForm" class="p-fluid grid">
       <!-- type -->
       <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
@@ -8,7 +8,7 @@
           [label]="FileFormEnum.type"
           [required]="typeField">
         </label>
-  
+
         <p-dropdown
           id="type"
           formControlName="type"
@@ -27,7 +27,7 @@
             </div>
           </ng-template>
         </p-dropdown>
-  
+
         <small
           appErrorMessage
           [errors]="typeField.errors"
@@ -35,14 +35,14 @@
           [dirty]="typeField.dirty">
         </small>
       </div>
-  
+
       <!-- file -->
       <div class="field col-12 xl:col-7 lg:col-7 md:col-7 sm:col-12">
         <label appLabel for="file"
                [label]="FileFormEnum.myFile"
                [required]="fileField">
         </label>
-  
+
         <p-fileUpload
           #uploadFiles
           id="file"
@@ -55,7 +55,7 @@
           [auto]="true"
           [customUpload]="true"
           (uploadHandler)="onUpload($event,uploadFiles)"/>
-  
+
         <small
           appErrorMessage
           [errors]="fileField.errors"
@@ -65,11 +65,11 @@
       </div>
     </form>
   }
-  
-  @if (formInput.files.length > 0) {
+
+  @if (formInput.enablingDocuments.length > 0) {
     <p-table
       styleClass="p-datatable-striped"
-      [value]="formInput.files"
+      [value]="formInput.enablingDocuments"
       [columns]="columns">
       <ng-template pTemplate="header" let-columns>
         <tr>
@@ -78,11 +78,11 @@
               {{ col.header }}
             </th>
           }
-  
+
           <th>{{ TableEnum.ACTIONS }}</th>
         </tr>
       </ng-template>
-  
+
       <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
         <tr>
           <td>{{ item.type.name }}</td>
@@ -98,4 +98,3 @@
       </ng-template>
     </p-table>
   }
-  

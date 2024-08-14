@@ -75,6 +75,7 @@ export class BasicDataComponent implements OnInit {
   }
 
   patchValueForm(){
+    console.log(this.formInput);
     this.form.patchValue(this.formInput);
   }
 

@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AgreementModel, CatalogueModel, ColumnModel, createAgreementModel } from "@models/core";
-import { PrimeIcons } from "primeng/api";
+import {Component, Input, OnInit} from '@angular/core';
+import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel} from "@models/core";
+import {PrimeIcons} from "primeng/api";
 import {
+  AgreementFormEnum, EnablingDocumentFormEnum,
   FileFormEnum,
   IconButtonActionEnum,
   LabelButtonActionEnum,
@@ -15,7 +16,7 @@ import {
   styleUrl: './document.component.scss'
 })
 export class DocumentComponent implements OnInit {
-  @Input({ required: true }) agreement!: AgreementModel;
+  @Input({required: true}) agreement!: AgreementModel;
 
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
@@ -32,9 +33,8 @@ export class DocumentComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    console.log(this.agreement);
   }
-
 
   buildColumns() {
     this.columns = [
@@ -47,5 +47,8 @@ export class DocumentComponent implements OnInit {
     ];
   }
 
+  download(){
 
+  }
+  protected readonly EnablingDocumentFormEnum = EnablingDocumentFormEnum;
 }

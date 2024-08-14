@@ -1,19 +1,20 @@
-import { Component, inject } from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup} from '@angular/forms';
-import { Router } from '@angular/router';
-import { AgreementModel } from '@models/core';
-import { AuthService } from '@servicesApp/auth';
-import { AgreementsService, MessageDialogService } from '@servicesApp/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AgreementModel} from '@models/core';
+import {AuthService} from '@servicesApp/auth';
+import {AgreementsService, MessageDialogService} from '@servicesApp/core';
 import {AgreementsHttpService} from "@servicesHttp/core";
-import { RoleEnum, SeverityButtonActionEnum } from '@shared/enums';
-import { ConfirmationService, PrimeIcons } from 'primeng/api';
+import {RoleEnum, SeverityButtonActionEnum} from '@shared/enums';
+import {ConfirmationService, PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-update',
   templateUrl: './update.component.html',
   styleUrl: './update.component.scss'
 })
-export class UpdateComponent {
+export class UpdateComponent implements OnInit{
+  @Input() id!: string;
   private readonly authService = inject(AuthService);
   private readonly agreementsService = inject(AgreementsService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
@@ -37,13 +38,15 @@ export class UpdateComponent {
 
   constructor() {
     this.buildForm();
+  }
 
+  ngOnInit() {
     this.findAgreement();
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      id: [null],
+      id: [null,Validators.required],
       agreementState: [null],
       name: [null],
       internalNumber: [null],
@@ -65,13 +68,13 @@ export class UpdateComponent {
       obligations: [[]],
       isFinancing: [null],
       financings: [[]],
-      files: [[]],
+      enablingDocuments: [[]],
       enabled: [null],
     });
   }
 
   findAgreement() {
-    this.agreementsHttpService.findOne('636693c7-1fc0-49cd-bbc3-33012828901b').subscribe(agreement => {
+    this.agreementsHttpService.findOne(this.id).subscribe(agreement => {
       this.form.patchValue(agreement);
     });
   }
@@ -158,7 +161,7 @@ export class UpdateComponent {
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
-        this.agreementsHttpService.update('',this.form.value).subscribe(response => {
+        this.agreementsHttpService.update('', this.form.value).subscribe(response => {
           this.form.patchValue(response);
           nextCallback.emit();
         });
@@ -178,7 +181,7 @@ export class UpdateComponent {
       accept: () => {
         const formData = new FormData();
 
-        for (const myFile of this.filesField.value) {
+        for (const myFile of this.enablingDocumentsField.value) {
           formData.append('typeIds', myFile.type.id);
           formData.append('files', myFile.file);
         }
@@ -207,20 +210,12 @@ export class UpdateComponent {
     }
   }
 
-  get externalInstitutionsField(): FormArray {
-    return this.form.controls['externalInstitutions'] as FormArray;
-  }
-
-  get internalInstitutionsField(): FormArray {
-    return this.form.controls['internalInstitutions'] as FormArray;
-  }
-
   get idField(): AbstractControl {
     return this.form.controls['id'];
   }
 
-  get filesField(): AbstractControl {
-    return this.form.controls['files'];
+  get enablingDocumentsField(): AbstractControl {
+    return this.form.controls['enablingDocuments'];
   }
 
   get enabledField(): AbstractControl {

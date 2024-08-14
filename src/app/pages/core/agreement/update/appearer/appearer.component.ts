@@ -39,11 +39,11 @@ export class AppearerComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
 
-  /** Form **/ 
+  /** Form **/
   @Input({required: true}) formInput: AgreementModel = createAgreementModel();
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
- 
+
 
   protected id: string = RoutesEnum.NEW
   protected form!: FormGroup;
@@ -60,7 +60,7 @@ export class AppearerComponent implements OnInit {
   protected index: number = -1;
   protected isEditing: boolean = false;
   protected isEditingDetail: boolean =false;
-  protected detailIndex: number = -1;;
+  protected detailIndex: number = -1;
 
   /** Foreign Keys **/
   protected internalPersonTypes: CatalogueModel[] = [];
@@ -307,7 +307,7 @@ export class AppearerComponent implements OnInit {
       this.formInput.externalInstitutions.splice(indexExternalInstitution, 1);
     }
   }
-  
+
  /** edit array **/
   editExternalInstitution(index: number) {
     if (
@@ -321,7 +321,7 @@ export class AppearerComponent implements OnInit {
           name: institutionToEdit.name,
           personType: institutionToEdit.personType,
         });
-        
+
         this.index = index;
         this.isEditing= true
         this.isVisibleExternalInstitutionForm=true
@@ -330,24 +330,24 @@ export class AppearerComponent implements OnInit {
       console.error('no vale');
     }
   }
- 
+
   updateExternalInstitution() {
-  
+
     if (
       this.formInput.externalInstitutions &&
       Array.isArray(this.formInput.externalInstitutions) &&
       this.index >= 0 &&
       this.index < this.formInput.externalInstitutions.length
     ) {
-     
+
       this.formInput.externalInstitutions[this.index] = {
         ...this.formInput.externalInstitutions[this.index],
         ...this.externalInstitutionForm.value
       };
-  
+
       this.externalInstitutionForm.reset();
       this.isEditing= false
-    
+
       this.isVisibleExternalInstitutionForm=false
       this.form.patchValue(this.formInput);
     } else {
@@ -364,14 +364,14 @@ export class AppearerComponent implements OnInit {
   }
 
   editExternalInstitutionDetail(externalInstitutionIndex: number, detailIndex: number) {
-   
+
     if (this.formInput?.externalInstitutions &&
         externalInstitutionIndex >= 0 &&
         externalInstitutionIndex < this.formInput.externalInstitutions.length &&
         this.formInput.externalInstitutions[externalInstitutionIndex]?.externalInstitutionDetails &&
         detailIndex >= 0 &&
         detailIndex < this.formInput.externalInstitutions[externalInstitutionIndex].externalInstitutionDetails.length) {
-  
+
       const detailToEdit = this.formInput.externalInstitutions[externalInstitutionIndex].externalInstitutionDetails[detailIndex];
 
       this.externalInstitutionDetailForm.patchValue(detailToEdit);
@@ -379,7 +379,7 @@ export class AppearerComponent implements OnInit {
       this.index = externalInstitutionIndex;
       this.detailIndex = detailIndex;
       this.isEditingDetail =true;
-   
+
       this.isVisibleExternalInstitutionDetailForm = true;
     } else {
       console.error('no vale');
@@ -394,13 +394,13 @@ export class AppearerComponent implements OnInit {
       this.formInput.externalInstitutions[this.index]?.externalInstitutionDetails
     ) {
       const detailsArray = this.formInput.externalInstitutions[this.index].externalInstitutionDetails;
-  
+
       if (this.detailIndex >= 0 && this.detailIndex < detailsArray.length) {
         detailsArray[this.detailIndex] = this.externalInstitutionDetailForm.value;
         this.form.patchValue(this.formInput);
-        
-        
-      } 
+
+
+      }
       this.isEditingDetail =false;
       this.isVisibleExternalInstitutionDetailForm = false;
       this.externalInstitutionDetailForm.reset();
@@ -413,7 +413,7 @@ export class AppearerComponent implements OnInit {
     this.isVisibleExternalInstitutionDetailForm = false;
     this.externalInstitutionDetailForm.reset();
   }
-  
+
   validateExternalInstitutionForm(): boolean {
     this.formErrors = [];
 

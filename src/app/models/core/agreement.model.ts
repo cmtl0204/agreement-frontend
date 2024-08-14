@@ -6,6 +6,7 @@ import {
   FinancingModel,
   InternalInstitutionModel, ObligationModel
 } from "@models/core";
+import {EnablingDocumentFormEnum} from "@shared/enums";
 
 export interface AgreementModel {
   id?: string;
@@ -36,8 +37,8 @@ export interface AgreementModel {
   internalInstitutions: InternalInstitutionModel[];
   financings: FinancingModel[];
   obligations: ObligationModel[];
-  files: FileModel[];
   addendums: AddendumModel[];
+  enablingDocuments: FileModel[];
 }
 
 export function createAgreementModel(): AgreementModel {
@@ -46,7 +47,7 @@ export function createAgreementModel(): AgreementModel {
     internalInstitutions: [],
     financings: [],
     obligations: [],
-    files: [],
     addendums: [],
+    enablingDocuments: [],
   }
 }

@@ -100,7 +100,7 @@ export class DocumentComponent implements OnInit {
   validateForm() {
     this.formErrors = [];
 
-    if (this.formInput.files.length < 2)
+    if (this.formInput.enablingDocuments.length < 2)
       this.formErrors.push(`Debe cargar los ${this.types.length} tipos de archivos`);
 
     this.formErrorsOutput.emit(this.formErrors);
@@ -111,7 +111,7 @@ export class DocumentComponent implements OnInit {
 
     if (this.typeField.invalid) this.formErrors.push(FileFormEnum.type);
 
-    if (this.formInput.files.findIndex(item => item.type?.id === this.typeField.value?.id) > -1)
+    if (this.formInput.enablingDocuments.findIndex(item => item.type?.id === this.typeField.value?.id) > -1)
       this.formErrors.push(`${this.typeField.value.name} ya se encuentra cargado`);
 
     return this.formErrors.length === 0
@@ -121,7 +121,7 @@ export class DocumentComponent implements OnInit {
     if (this.validateFileForm()) {
       const file = event.files[0];
 
-      this.formInput.files.push({
+      this.formInput.enablingDocuments.push({
         type: this.typeField.value,
         name: file.name,
         file
@@ -137,9 +137,9 @@ export class DocumentComponent implements OnInit {
   }
 
   removeFile(index: number) {
-    this.formInput.files.splice(index, 1);
+    this.formInput.enablingDocuments.splice(index, 1);
 
-    this.form.patchValue(this.formInput.files);
+    this.form.patchValue(this.formInput.enablingDocuments);
   }
 
   get typeField(): AbstractControl {

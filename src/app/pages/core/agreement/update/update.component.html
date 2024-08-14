@@ -1,4 +1,4 @@
-@if (form.value) {
+@if (form.valid) {
   <p-stepper orientation="horizontal" [linear]="false" [activeStep]="activeStep">
     <p-stepperPanel header="Convenio">
       <ng-template pTemplate="content" let-nextCallback="nextCallback">
@@ -27,7 +27,7 @@
               [formInput]="form.value"
               (formErrorsOutput)="basicDataErrors=$event"
               (formOutput)="save($event)"/>
-            </p-panel>
+          </p-panel>
 
           <p-panel header="Fechas del Convenio" class="col-12">
             <app-agreement-date
@@ -124,7 +124,7 @@
 
         <app-financing
           [formInput]="form.value"
-          (formOutput)="save($event)" 
+          (formOutput)="save($event)"
           (formErrorsOutput)="financingErrors=$event"/>
       </ng-template>
     </p-stepperPanel>
@@ -150,7 +150,7 @@
         </p-toolbar>
 
         <p-divider/>
-        
+
         <app-document
           [formInput]="form.value"
           (formOutput)="save($event)"

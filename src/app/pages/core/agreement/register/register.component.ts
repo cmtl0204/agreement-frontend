@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit {
       financings: [[]],
       isAddendum: [false],
       addendums: [[]],
-      files: [[]],
+      enablingDocuments: [[]],
       enabled: [false],
     });
   }
@@ -193,7 +193,7 @@ export class RegisterComponent implements OnInit {
       accept: () => {
         const formData = new FormData();
 
-        for (const myFile of this.filesField.value) {
+        for (const myFile of this.enablingDocumentsField.value) {
           formData.append('typeIds', myFile.type.id);
           formData.append('files', myFile.file);
         }
@@ -234,8 +234,8 @@ export class RegisterComponent implements OnInit {
     return this.form.controls['id'];
   }
 
-  get filesField(): AbstractControl {
-    return this.form.controls['files'];
+  get enablingDocumentsField(): AbstractControl {
+    return this.form.controls['enablingDocuments'];
   }
 
   get enabledField(): AbstractControl {

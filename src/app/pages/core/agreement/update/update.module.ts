@@ -36,6 +36,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {InputSwitchModule} from "primeng/inputswitch";
 
 @NgModule({
     declarations: [
@@ -51,40 +52,41 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     exports: [
         AgreementDateComponent
     ],
-    imports: [
-        CommonModule,
-        UpdateRoutingModule,
-        ReactiveFormsModule,
-        FormsModule,
-        SharedModule,
-        ButtonModule,
-        CardModule,
-        CheckboxModule,
-        DividerModule,
-        InputTextModule,
-        PasswordModule,
-        RippleModule,
-        DropdownModule,
-        NgOptimizedImage,
-        MessageModule,
-        PanelModule,
-        AvatarModule,
-        ToolbarModule,
-        OverlayPanelModule,
-        InputNumberModule,
-        ToggleButtonModule,
-        CalendarModule,
-        RadioButtonModule,
-        StepperModule,
-        FileUploadModule,
-        TableModule,
-        InputTextareaModule,
-        MultiSelectModule,
-        DialogModule,
-        MultiSelectModule,
-        DialogModule,
-        ListboxModule,
-        ConfirmDialogModule
-    ]
+  imports: [
+    CommonModule,
+    UpdateRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SharedModule,
+    ButtonModule,
+    CardModule,
+    CheckboxModule,
+    DividerModule,
+    InputTextModule,
+    PasswordModule,
+    RippleModule,
+    DropdownModule,
+    NgOptimizedImage,
+    MessageModule,
+    PanelModule,
+    AvatarModule,
+    ToolbarModule,
+    OverlayPanelModule,
+    InputNumberModule,
+    ToggleButtonModule,
+    CalendarModule,
+    RadioButtonModule,
+    StepperModule,
+    FileUploadModule,
+    TableModule,
+    InputTextareaModule,
+    MultiSelectModule,
+    DialogModule,
+    MultiSelectModule,
+    DialogModule,
+    ListboxModule,
+    ConfirmDialogModule,
+    InputSwitchModule
+  ]
 })
 export class UpdateModule { }

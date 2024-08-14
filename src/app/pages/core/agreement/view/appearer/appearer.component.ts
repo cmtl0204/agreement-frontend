@@ -32,9 +32,6 @@ export class AppearerComponent {
         field: 'name', header: InternalInstitutionsFormEnum.name
       },
       {
-        field: 'unit', header: InternalInstitutionsFormEnum.unit
-      },
-      {
         field: 'position', header: InternalInstitutionsFormEnum.position
       },
       {

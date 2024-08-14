@@ -70,6 +70,7 @@ export class FinancingComponent implements OnInit {
   }
 
   patchValueForm() {
+    console.log(this.formInput);
     this.form.patchValue(this.formInput);
   }
 
