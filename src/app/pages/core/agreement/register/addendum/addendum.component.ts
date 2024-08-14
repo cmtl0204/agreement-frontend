@@ -173,8 +173,6 @@ export class AddendumComponent implements OnInit {
       formData.append('typeId', this.fileField.value.type.id);
       formData.append('description', this.descriptionField.value);
 
-      console.log(this.formInput.id);
-
       this.agreementsHttpService.uploadAddendum(this.formInput.id!, formData).subscribe(response => {
         this.formInput.addendums.push({
           id: response.id,

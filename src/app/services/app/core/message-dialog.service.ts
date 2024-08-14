@@ -35,7 +35,6 @@ export class MessageDialogService {
   public modalResult$: Observable<boolean> = this._modalResult.asObservable();
 
   accept(): void {
-    console.log('accept component')
     this._modalResult.next(true);
   }
 
@@ -130,7 +129,6 @@ export class MessageDialogService {
 
   questionOnExit(title = '¿Está seguro de salir?', message = 'Se perderá la información que no haya guardado!') {
     // this._modalResult.next(false);
-    console.log('entro exit');
     this._modalConfirmVisible = true;
     this._modalAcceptSeverity = 'primary';
     this._modalRejectSeverity = 'danger';

@@ -1,49 +1,31 @@
 @if (formInput.enablingDocuments.length < types.length) {
   <form [formGroup]="fileForm" class="p-fluid grid">
     <!-- type -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-      <label
-        appLabel
-        for="type"
-        [label]="FileFormEnum.type"
-        [required]="typeField">
-      </label>
+    @for (type of types; track type.id) {
+      <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+        <label
+          appLabel
+          [label]="FileFormEnum.type"
+          [required]="typeField">
+        </label>
 
-      <p-dropdown
-        id="type"
-        formControlName="type"
-        dataKey="id"
-        [options]="types"
-        placeholder="Seleccione"
-        [filter]="false">
-        <ng-template pTemplate="selectedItem" let-selectedOption>
-          <div class="flex align-items-center gap-2">
-            <div>{{ selectedOption.name }}</div>
-          </div>
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          <div class="flex align-items-center gap-2">
-            <div>{{ item.name }}</div>
-          </div>
-        </ng-template>
-      </p-dropdown>
+        <p-messages severity="info">
+          <ng-template pTemplate>
+            <i [class]="PrimeIcons.FILE_PDF"></i>
+            <div class="ml-2">
+              {{ type.name }}
+            </div>
+          </ng-template>
+        </p-messages>
+      </div>
 
-      <small
-        appErrorMessage
-        [errors]="typeField.errors"
-        [touched]="typeField.touched"
-        [dirty]="typeField.dirty">
-      </small>
-    </div>
-
-    <!-- file -->
-    @if (typeField.value) {
-      <div class="field col-12 xl:col-7 lg:col-7 md:col-7 sm:col-12">
+      <!-- file -->
+      <div class="field col-12 xl:col-2 lg:col-2 md:col-2 sm:col-12">
         <label appLabel for="file"
                [label]="FileFormEnum.myFile"
                [required]="fileField">
         </label>
-
+        <p-divider/>
         <p-fileUpload
           #uploadFiles
           id="file"
@@ -55,7 +37,7 @@
           maxFileSize="1000000"
           [auto]="true"
           [customUpload]="true"
-          (uploadHandler)="onUpload($event,uploadFiles)"/>
+          (uploadHandler)="onUpload($event,uploadFiles,type)"/>
 
         <small
           appErrorMessage

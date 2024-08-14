@@ -33,7 +33,7 @@ export class DocumentComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.agreement);
+
   }
 
   buildColumns() {

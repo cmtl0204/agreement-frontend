@@ -1,11 +1,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {BlankComponent, MainComponent} from "@layout";
+import {RoleGuard, TokenGuard} from "@guards";
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+    canActivate: [TokenGuard],
     children: [
       {
         path: 'admin',

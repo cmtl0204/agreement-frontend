@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {debounceTime, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
 import {ServerResponse} from '@models/http-response';
@@ -30,7 +30,18 @@ export class AgreementsHttpService {
     );
   }
 
-  uploadEnablingDocuments(id:string,formData: FormData): Observable<AgreementModel> {
+  finish(id: string): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}/finish`;
+
+    return this.httpClient.patch<ServerResponse>(url, null).pipe(
+      map(response => {
+        this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
+  uploadEnablingDocuments(id: string, formData: FormData): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/enabling-documents`;
 
     return this.httpClient.post<ServerResponse>(url, formData).pipe(
@@ -41,7 +52,7 @@ export class AgreementsHttpService {
     );
   }
 
-  uploadAddendum(id:string,formData: FormData): Observable<AgreementModel> {
+  uploadAddendum(id: string, formData: FormData): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/addendums`;
 
     return this.httpClient.post<ServerResponse>(url, formData).pipe(
@@ -66,7 +77,6 @@ export class AgreementsHttpService {
     const url = this.API_URL;
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        console.log(response);
         return response.data;
       })
     );
@@ -115,6 +125,17 @@ export class AgreementsHttpService {
     return this.httpClient.delete<ServerResponse>(url).pipe(
       map(response => {
         this.messageService.success(response);
+        return response.data;
+      })
+    );
+  }
+
+  verifyInternalNumber(internalNumber: string): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${internalNumber}/verify-internalnumber`;
+
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      debounceTime(1500),
+      map(response => {
         return response.data;
       })
     );

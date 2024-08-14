@@ -23,6 +23,9 @@ export class RegisterComponent implements OnInit {
   protected readonly router = inject(Router);
 
   protected form!: FormGroup;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly PrimeIcons = PrimeIcons;
+
   protected formErrors: string[] = [];
   protected basicDataErrors: string[] = [];
   protected agreementDateErrors: string[] = [];
@@ -31,7 +34,6 @@ export class RegisterComponent implements OnInit {
   protected obligationErrors: string[] = [];
   protected financingErrors: string[] = [];
   protected documentErrors: string[] = [];
-  protected addendumErrors: string[] = [];
   protected activeStep: number = 0;
 
   constructor() {
@@ -211,15 +213,17 @@ export class RegisterComponent implements OnInit {
   }
 
   finish() {
-    this.agreementsService.clearAgreement();
+    this.agreementsHttpService.finish(this.idField.value).subscribe(response => {
+      this.agreementsService.clearAgreement();
 
-    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
-      this.router.navigate(['/core/national-supervisor/agreement-list']);
-    }
+      if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+        this.router.navigate(['/core/national-supervisor/agreement-list']);
+      }
 
-    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
-      this.router.navigate(['/core/international-supervisor/agreement-list']);
-    }
+      if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+        this.router.navigate(['/core/international-supervisor/agreement-list']);
+      }
+    });
   }
 
   redirectAgreementList() {
@@ -241,7 +245,4 @@ export class RegisterComponent implements OnInit {
   get enabledField(): AbstractControl {
     return this.form.controls['enabled'];
   }
-
-  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
-  protected readonly PrimeIcons = PrimeIcons;
 }

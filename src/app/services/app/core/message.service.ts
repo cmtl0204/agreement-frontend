@@ -10,7 +10,6 @@ export class MessageService {
   }
 
   error(error: ServerResponse) {
-    console.log('error', error);
     return {};
   }
 

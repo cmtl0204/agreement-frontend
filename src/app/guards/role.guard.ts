@@ -16,8 +16,6 @@ export const RoleGuard: CanActivateFn = (route, state) => {
 
   if (authRole) {
     for (const role of route.data['roles']) {
-      console.log(role.toUpperCase());
-      console.log(authRole.code.toUpperCase());
       if (role.toUpperCase() === authRole.code.toUpperCase()) return true;
     }
   }

@@ -59,16 +59,15 @@ export class AgreementListComponent {
   findAgreements() {
     this.agreementsHttpService.findNationalAgreementsByOrigin()
       .subscribe((response) => {
-        console.log(response)
         // this.paginator = response.pagination!;
         this.items = response;
       });
   }
-  
+
   findOne(id: string) {
     this.agreementsHttpService.findOne(id)
     .subscribe((response) => {
-        console.log(response)
+
         // this.selectedItem = response;
       });
   }

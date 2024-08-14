@@ -16,7 +16,7 @@ export class BasicDataComponent {
   protected readonly AgreementStateEnum = AgreementStateEnum;
 
   constructor() {
-    console.log(this.agreement);
+
   }
 
   protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;

@@ -34,7 +34,7 @@ export class ErrorMessageDirective {
 
   setErrorMessage() {
     let text = '';
-
+    console.log(this._errors);
     if ((this._touched || this._dirty) && this._errors) {
       if (this._errors['required']) {
         text = this.fieldRequired;
@@ -86,6 +86,9 @@ export class ErrorMessageDirective {
       }
       if (this._errors['dateMin']) {
         text = this.fieldDateMin(this._errors);
+      }
+      if (this._errors['agreementExists']) {
+        text = this.fieldAgreementExists;
       }
 
       this.renderer.addClass(this.elementRef.nativeElement, 'p-error');
@@ -156,5 +159,9 @@ export class ErrorMessageDirective {
 
   private get fieldPhoneNotAvailable(): string {
     return 'Este teléfono no está disponible.';
+  }
+
+  private get fieldAgreementExists(): string {
+    return 'El número interno de convenio ya se encuentra registrado.';
   }
 }
