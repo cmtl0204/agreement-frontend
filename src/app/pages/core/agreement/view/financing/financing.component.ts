@@ -1,7 +1,7 @@
 import {Component, inject, Input} from '@angular/core';
 import {CoreService, MessageDialogService} from "@servicesApp/core";
 import {AgreementModel} from '@models/core';
-import {FinancingsFormEnum, ObligationForEnum} from "@shared/enums";
+import {AgreementSectionFormEnum, FinancingsFormEnum, ObligationForEnum} from "@shared/enums";
 import { AgreementFormEnum } from '@shared/enums';
 
 @Component({
@@ -20,5 +20,7 @@ export class FinancingComponent {
   /** Enums **/
   protected readonly FinancingsFormEnum = FinancingsFormEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
-  protected readonly ObligationForEnum = ObligationForEnum;
+  protected readonly ObligationForEnum = ObligationForEnum
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
+
 }

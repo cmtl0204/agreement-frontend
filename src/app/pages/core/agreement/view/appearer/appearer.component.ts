@@ -2,6 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { AgreementModel, ColumnModel } from '@models/core';
 import { CoreService } from "@servicesApp/core";
 import {
+  AgreementSectionFormEnum,
   ExternalInstitutionsFormEnum,
   InternalInstitutionsFormEnum
 } from '@shared/enums';
@@ -19,6 +20,9 @@ export class AppearerComponent {
   @Input({required: true}) agreement!: AgreementModel;
   protected externalInstitutionsColumns: ColumnModel[] = [];
   protected internalInstitutionColumns: ColumnModel[] = [];
+
+  /** Enums */
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 
   constructor() {
     this.buildExternalInstitutionsColumns();

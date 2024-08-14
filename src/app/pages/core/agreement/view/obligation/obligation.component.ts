@@ -1,7 +1,7 @@
 import {Component, inject, Input} from '@angular/core';
 import {AgreementModel} from '@models/core';
 import {CoreService} from "@servicesApp/core";
-import {FinancingsFormEnum, ObligationDetailForEnum, ObligationForEnum} from "@shared/enums";
+import {AgreementSectionFormEnum, FinancingsFormEnum, ObligationDetailForEnum, ObligationForEnum} from "@shared/enums";
 
 @Component({
   selector: 'app-obligation',
@@ -11,6 +11,7 @@ import {FinancingsFormEnum, ObligationDetailForEnum, ObligationForEnum} from "@s
 export class ObligationComponent {
   /** Services **/
   protected readonly coreService = inject(CoreService);
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 
   /** Form **/
   @Input({required: true}) agreement!: AgreementModel;

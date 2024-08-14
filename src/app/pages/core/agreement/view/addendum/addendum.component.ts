@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { AgreementModel, ColumnModel } from '@models/core';
 import { CoreService } from '@servicesApp/core';
-import { AddendumEnum, AgreementFormEnum } from '@shared/enums';
+import { AddendumEnum, AgreementFormEnum, AgreementSectionFormEnum } from '@shared/enums';
 
 @Component({
   selector: 'app-addendum',
@@ -12,6 +12,7 @@ export class AddendumComponent{
 
   /** Services **/
   protected readonly coreService = inject(CoreService);
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 
 
   /** Form **/

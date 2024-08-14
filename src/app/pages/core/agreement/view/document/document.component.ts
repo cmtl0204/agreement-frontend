@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel} from "@models/core";
 import {PrimeIcons} from "primeng/api";
 import {
-  AgreementFormEnum, EnablingDocumentFormEnum,
+  AgreementFormEnum, AgreementSectionFormEnum, EnablingDocumentFormEnum,
   FileFormEnum,
   IconButtonActionEnum,
   LabelButtonActionEnum,
@@ -24,6 +24,7 @@ export class DocumentComponent implements OnInit {
   protected readonly TableEnum = TableEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 
   protected types: CatalogueModel[] = [];
   protected columns: ColumnModel[] = [];

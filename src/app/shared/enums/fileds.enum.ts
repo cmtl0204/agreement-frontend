@@ -48,7 +48,7 @@ export enum AgreementSectionFormEnum {
   basicData = 'Datos Básicos',
   appearer = 'Comparecientes del convenio',
   obligation = 'Obligaciones',
-  financing = 'Financiamientod',
+  financing = 'Financiamiento',
   enablingDocument = 'Documentos Habilitantes',
   agreementDate = 'Fechas del convenio',
   administrator = 'Administrador del convenio',

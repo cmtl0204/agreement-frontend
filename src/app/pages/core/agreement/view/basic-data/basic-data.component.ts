@@ -14,10 +14,10 @@ export class BasicDataComponent {
   /** Enums **/
   protected readonly AgreementFormEnum = AgreementFormEnum;
   protected readonly AgreementStateEnum = AgreementStateEnum;
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 
   constructor() {
 
   }
 
-  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 }
