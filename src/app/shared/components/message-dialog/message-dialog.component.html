@@ -8,7 +8,8 @@
 
   <ng-template pTemplate="content">
     <div class="text-center">
-      <i [class]="PrimeIcons.TIMES_CIRCLE" style="font-size: 3rem;color:red"></i>
+      <i [class]="messageDialogService.modalIcon"
+         [style]="{'font-size': '3rem','color':messageDialogService.modalIconColor}"></i>
     </div>
 
     @if (Array.isArray(messageDialogService.modalMessage)) {

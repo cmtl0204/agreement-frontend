@@ -280,16 +280,17 @@ export class RoutesService {
   }
 
   dashboardAdministrator() {
-    this.router.navigateByUrl(`/core/dashboards/administrator`);
+    this.router.navigateByUrl(`/core/dashboards/agreement-administrator`);
   }
 
   dashboardNationalSupervisor() {
     // this.router.navigateByUrl(`/core/dashboards/national-supervisor`);
-    this.router.navigateByUrl(`/core/agreements/register`);
+    this.router.navigateByUrl(`/core/national-supervisor/agreement-list`);
   }
 
   dashboardInternationalSupervisor() {
-    this.router.navigateByUrl(`/core/dashboards/international-supervisor`);
+    // this.router.navigateByUrl(`/core/dashboards/international-supervisor`);
+    this.router.navigateByUrl(`/core/international-supervisor/agreement-list`);
   }
 
 

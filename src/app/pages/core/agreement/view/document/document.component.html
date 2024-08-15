@@ -1,0 +1,38 @@
+<p-panel>
+  <ng-template pTemplate="header">
+    <h2>{{ AgreementSectionFormEnum.enablingDocument }}</h2>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <p-table
+      styleClass="p-datatable-striped"
+      [value]="agreement.enablingDocuments"
+      [columns]="columns">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          @for (col of columns; track col.field) {
+            <th [pSortableColumn]="col.field">
+              {{ col.header }}
+            </th>
+          }
+
+          <th>{{ TableEnum.ACTIONS }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ item.type.name }}</td>
+          <td>{{ item.name }}</td>
+          <td>
+            <p-button
+              [icon]="IconButtonActionEnum.DOWNLOAD"
+              [pTooltip]="LabelButtonActionEnum.DOWNLOAD"
+              [severity]="SeverityButtonActionEnum.DOWNLOAD"
+              (click)="download()"/>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</p-panel>

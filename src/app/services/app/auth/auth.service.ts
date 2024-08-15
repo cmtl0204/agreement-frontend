@@ -95,14 +95,14 @@ export class AuthService {
   }
 
   selectDashboard() {
-    this.messageDialogService.successCustom('Bienvenido', 'Ingreso Correcto');
+    this.messageDialogService.successCustom(`Bienvenido, ${this.auth.name} ${this.auth.lastname}`, 'Ingreso Correcto');
 
     switch (this.role.code) {
       case RoleEnum.ADMIN: {
         this.routesService.dashboardAdmin();
         break;
       }
-      case RoleEnum.ADMINISTRATOR: {
+      case RoleEnum.AGREEMENT_ADMINISTRATOR: {
         this.routesService.dashboardAdministrator();
         break;
       }

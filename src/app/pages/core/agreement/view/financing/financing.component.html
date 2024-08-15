@@ -1,9 +1,9 @@
 @if (agreement.financings) {
   <p-panel>
     <ng-template pTemplate="header">
-      Financiamiento
+      <h2>{{AgreementSectionFormEnum.financing}}</h2>
     </ng-template>
-
+  
     <ng-template pTemplate="content">
       <p-table
         [value]="agreement.financings"
@@ -11,10 +11,10 @@
         [tableStyle]="{'min-width': '50rem'}">
         <ng-template pTemplate="header">
           <tr>
+            <th>{{ ObligationForEnum.institutionName }}</th>
             <th>{{ FinancingsFormEnum.budget }}</th>
-            <th>Presupuesto y Financiamiento</th>
-            <th>Método de Pago</th>
-            <th>Fuente de Financiamiento</th>
+            <th>{{ FinancingsFormEnum.paymentMethod }}</th>
+            <th>{{ FinancingsFormEnum.source }}</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>

@@ -1,7 +1,7 @@
 @if (agreement.obligations) {
   <p-panel>
     <ng-template pTemplate="header">
-      Obligaciones
+      <h2>{{AgreementSectionFormEnum.obligation}}</h2>
     </ng-template>
 
     <ng-template pTemplate="content">
@@ -11,10 +11,9 @@
         [tableStyle]="{'min-width': '50rem'}">
         <ng-template pTemplate="header">
           <tr>
-            <th>{{ ObligationForEnum.type }}</th>
-            <th>Presupuesto y Financiamiento</th>
-            <th>Método de Pago</th>
-            <th>Fuente de Financiamiento</th>
+            <th>{{ObligationForEnum.institutionName}}</th>
+            <th>{{ObligationForEnum.type}}</th>
+            <th>{{ObligationDetailForEnum.description}}</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>

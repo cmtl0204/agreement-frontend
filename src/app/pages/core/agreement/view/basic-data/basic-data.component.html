@@ -1,12 +1,12 @@
 <p-panel>
   <ng-template pTemplate="header">
-    <h2>Datos Básicos</h2>
+    <h2>{{AgreementSectionFormEnum.basicData}}</h2>
   </ng-template>
 
   <ng-template pTemplate="content">
     <div class="p-fluid grid">
       <!-- Number -->
-      <div class="field col-8 xl:col-4 lg:col-4">
+      <div class="field col-8 xl:col-4 lg:col-4 md:col-4 sm:col-12">
         <label
           appLabel
           for="number"
@@ -15,7 +15,7 @@
       </div>
 
       <!-- Name -->
-      <div class="field col-4 xl:col-8">
+      <div class="field col-4 xl:col-8 lg:col-4 md:col-8 sm:col-12">
         <label
           appLabel
           for="name"
@@ -71,7 +71,7 @@
       }
 
       <!-- Object -->
-      <div class="field col-12">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
           for="objective"

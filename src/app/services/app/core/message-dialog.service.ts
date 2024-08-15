@@ -35,7 +35,6 @@ export class MessageDialogService {
   public modalResult$: Observable<boolean> = this._modalResult.asObservable();
 
   accept(): void {
-    console.log('accept component')
     this._modalResult.next(true);
   }
 
@@ -51,6 +50,8 @@ export class MessageDialogService {
 
     this._modalVisible = true;
     this._modalAcceptSeverity = 'danger';
+    this._modalIcon = PrimeIcons.TIMES_CIRCLE;
+    this._modalIconColor = 'var(--red-500)';
     this._modalTitle = error.error;
     this._modalMessage = error.status;
   }
@@ -60,6 +61,8 @@ export class MessageDialogService {
 
     this._modalVisible = true;
     this._modalAcceptSeverity = 'danger';
+    this._modalIcon = PrimeIcons.TIMES_CIRCLE;
+    this._modalIconColor = 'var(--red-500)';
     this._modalTitle = title;
     this._modalMessage = message;
   }
@@ -68,7 +71,9 @@ export class MessageDialogService {
     if (Array.isArray(message)) message.sort();
 
     this._modalVisible = true;
-    this._modalAcceptSeverity = 'danger';
+    this._modalAcceptSeverity = 'primary';
+    this._modalIcon = PrimeIcons.INFO_CIRCLE;
+    this._modalIconColor = 'var(--primary-color)';
     this._modalTitle = title;
     this._modalMessage = message;
   }
@@ -77,7 +82,9 @@ export class MessageDialogService {
     if (Array.isArray(serverResponse.message)) serverResponse.message.sort();
 
     this._modalVisible = true;
-    this._modalAcceptSeverity = 'danger';
+    this._modalAcceptSeverity = 'primary';
+    this._modalIcon = PrimeIcons.INFO_CIRCLE;
+    this._modalIconColor = 'var(--primary-color)';
     this._modalTitle = serverResponse.message;
     this._modalMessage = serverResponse.detail;
   }
@@ -122,7 +129,6 @@ export class MessageDialogService {
 
   questionOnExit(title = '¿Está seguro de salir?', message = 'Se perderá la información que no haya guardado!') {
     // this._modalResult.next(false);
-    console.log('entro exit');
     this._modalConfirmVisible = true;
     this._modalAcceptSeverity = 'primary';
     this._modalRejectSeverity = 'danger';

@@ -12,6 +12,8 @@ import { TagModule } from 'primeng/tag';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { NationalSupervisorRoutingModule } from './national-supervisor-routing.module';
+import {DialogModule} from "primeng/dialog";
+import {ViewModule} from "../agreement/view/view.module";
 
 
 
@@ -19,18 +21,20 @@ import { NationalSupervisorRoutingModule } from './national-supervisor-routing.m
   declarations: [
     AgreementListComponent
   ],
-  imports: [
-    CommonModule,
-    NationalSupervisorRoutingModule,
-    SharedModule,
-    ToolbarModule,
-    ButtonModule,
-    PaginatorModule,
-    TableModule,
-    InputGroupModule,
-    TagModule,
-    ReactiveFormsModule,
-    InputTextModule,
-  ]
+    imports: [
+        CommonModule,
+        NationalSupervisorRoutingModule,
+        SharedModule,
+        ToolbarModule,
+        ButtonModule,
+        PaginatorModule,
+        TableModule,
+        InputGroupModule,
+        TagModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        DialogModule,
+        ViewModule,
+    ]
 })
 export class NationalSupervisorModule { }

@@ -100,29 +100,30 @@ export class DocumentComponent implements OnInit {
   validateForm() {
     this.formErrors = [];
 
-    if (this.formInput.files.length < 2)
+    if (this.formInput.enablingDocuments.length < 2)
       this.formErrors.push(`Debe cargar los ${this.types.length} tipos de archivos`);
 
     this.formErrorsOutput.emit(this.formErrors);
   }
 
-  validateFileForm() {
+  validateFileForm(file:FileModel,type:CatalogueModel) {
     this.formErrors = [];
 
-    if (this.typeField.invalid) this.formErrors.push(FileFormEnum.type);
+    if (this.formInput.enablingDocuments.findIndex(item => item.type?.id === type.id) > -1)
+      this.formErrors.push(`${type.name} ya se encuentra cargado`);
 
-    if (this.formInput.files.findIndex(item => item.type?.id === this.typeField.value?.id) > -1)
-      this.formErrors.push(`${this.typeField.value.name} ya se encuentra cargado`);
+    if (this.formInput.enablingDocuments.findIndex(item => item.name === file.name) > -1)
+      this.formErrors.push(`${file.name} ya se encuentra cargado`);
 
     return this.formErrors.length === 0
   }
 
-  onUpload(event: any, uploadFiles: any) {
-    if (this.validateFileForm()) {
-      const file = event.files[0];
+  onUpload(event: any, uploadFiles: any,type:CatalogueModel) {
+    const file = event.files[0];
 
-      this.formInput.files.push({
-        type: this.typeField.value,
+    if (this.validateFileForm(file,type)) {
+      this.formInput.enablingDocuments.push({
+        type,
         name: file.name,
         file
       });
@@ -137,9 +138,9 @@ export class DocumentComponent implements OnInit {
   }
 
   removeFile(index: number) {
-    this.formInput.files.splice(index, 1);
+    this.formInput.enablingDocuments.splice(index, 1);
 
-    this.form.patchValue(this.formInput.files);
+    this.form.patchValue(this.formInput.enablingDocuments);
   }
 
   get typeField(): AbstractControl {

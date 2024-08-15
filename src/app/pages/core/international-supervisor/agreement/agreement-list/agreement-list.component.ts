@@ -71,9 +71,8 @@ export class AgreementListComponent {
   }
 
   findAgreements() {
-    this.agreementsHttpService.findNationalAgreementsByOrigin()
+    this.agreementsHttpService.findInternationalAgreementsByOrigin()
       .subscribe((response) => {
-        console.log(response)
         // this.paginator = response.pagination!;
         this.items = response;
       });
@@ -82,7 +81,6 @@ export class AgreementListComponent {
   findOne(id: string) {
     this.agreementsHttpService.findOne(id)
       .subscribe((response) => {
-        console.log(response)
         // this.selectedItem = response;
       });
   }
@@ -145,7 +143,7 @@ export class AgreementListComponent {
   }
 
   redirectCreateForm() {
-    this.router.navigate(['/core/international-supervisor/agreements', 'new']);
+    this.router.navigate(['/core/agreements', 'register']);
   }
 
   redirectEditForm(id: string) {

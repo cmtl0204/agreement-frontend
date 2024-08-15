@@ -1,16 +1,17 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PrimeIcons} from 'primeng/api';
 import {AgreementModel, CatalogueModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
-import {CataloguesHttpService} from '@servicesHttp/core';
+import {AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
 import {
   AgreementFormEnum,
   SkeletonEnum,
   CatalogueTypeEnum,
   CatalogueAgreementsTypeEnum,
-  AgreementStateEnum
+  AgreementStateEnum, RoleEnum, CatalogueAgreementsOriginEnum
 } from '@shared/enums';
+import {AuthService} from "@servicesApp/auth";
+import {verifyAgreementInternalNumber} from "@shared/validators";
 
 @Component({
   selector: 'app-basic-data',
@@ -19,10 +20,12 @@ import {
 })
 export class BasicDataComponent implements OnInit {
   /** Services **/
-  protected readonly cataloguesHttpService = inject(CataloguesHttpService)
-  protected readonly coreService = inject(CoreService)
-  protected readonly formBuilder = inject(FormBuilder)
-  protected readonly messageDialogService = inject(MessageDialogService)
+  protected readonly authService = inject(AuthService);
+  protected readonly agreementsHttpService = inject(AgreementsHttpService);
+  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly coreService = inject(CoreService);
+  protected readonly formBuilder = inject(FormBuilder);
+  protected readonly messageDialogService = inject(MessageDialogService);
 
   /** Input Output **/
   protected readonly Validators = Validators;
@@ -64,7 +67,10 @@ export class BasicDataComponent implements OnInit {
     this.form = this.formBuilder.group({
       agreementState: this.agreementStateForm,
       name: [null, [Validators.required]],
-      internalNumber: [null, [Validators.required]],
+      internalNumber: [null, {
+        validators: Validators.required,
+        asyncValidators: verifyAgreementInternalNumber(this.agreementsHttpService)
+      }],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
       origin: [null, [Validators.required]],
@@ -106,6 +112,7 @@ export class BasicDataComponent implements OnInit {
   validateForm() {
     this.formErrors = [];
 
+    console.log(this.internalNumberField.valid);
     if (this.stateField.invalid) this.formErrors.push(AgreementStateEnum.state);
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
@@ -125,6 +132,14 @@ export class BasicDataComponent implements OnInit {
 
   loadOrigins() {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
+
+    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+      this.origins = this.origins.filter(origin => origin.code === CatalogueAgreementsOriginEnum.NATIONAL);
+    }
+
+    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+      this.origins = this.origins.filter(origin => origin.code === CatalogueAgreementsOriginEnum.INTERNATIONAL);
+    }
   };
 
   loadTypes() {

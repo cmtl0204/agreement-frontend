@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {PrimeIcons} from "primeng/api";
 import {AgreementModel} from '@models/core';
-import {AdministratorFormEnum, SkeletonEnum} from '@shared/enums';
+import {AdministratorFormEnum, AgreementSectionFormEnum, SkeletonEnum} from '@shared/enums';
 
 @Component({
   selector: 'app-agreement-administrator',
@@ -14,6 +14,7 @@ export class AgreementAdministratorComponent implements OnInit {
 
   /** Form **/
   protected readonly AdministratorFormEnum = AdministratorFormEnum;
+  protected readonly AgreementSectionFormEnum = AgreementSectionFormEnum;
 
   /** Attributes **/
   protected userName!: string;

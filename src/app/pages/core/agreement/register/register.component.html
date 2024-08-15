@@ -13,8 +13,9 @@
             <app-form-button-action
               labelSubmitButton="Siguiente"
               (submit)="validateFormAgreement(nextCallback)"
+              (cancel)="redirectAgreementList()"
               [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-              [isVisibleCancelButton]="false"
+              [isVisibleCancelButton]="true"
             />
           </div>
         </p-toolbar>

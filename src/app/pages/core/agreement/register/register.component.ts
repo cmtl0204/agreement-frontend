@@ -23,6 +23,9 @@ export class RegisterComponent implements OnInit {
   protected readonly router = inject(Router);
 
   protected form!: FormGroup;
+  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
+  protected readonly PrimeIcons = PrimeIcons;
+
   protected formErrors: string[] = [];
   protected basicDataErrors: string[] = [];
   protected agreementDateErrors: string[] = [];
@@ -31,7 +34,6 @@ export class RegisterComponent implements OnInit {
   protected obligationErrors: string[] = [];
   protected financingErrors: string[] = [];
   protected documentErrors: string[] = [];
-  protected addendumErrors: string[] = [];
   protected activeStep: number = 0;
 
   constructor() {
@@ -43,7 +45,7 @@ export class RegisterComponent implements OnInit {
       this.form.patchValue(this.agreementsService.agreementStorage);
 
       if (this.idField.value) {
-        this.activeStep = 2;
+        this.activeStep = 3;
       }
 
       if (this.enabledField.value) {
@@ -79,7 +81,7 @@ export class RegisterComponent implements OnInit {
       financings: [[]],
       isAddendum: [false],
       addendums: [[]],
-      files: [[]],
+      enablingDocuments: [[]],
       enabled: [false],
     });
   }
@@ -193,7 +195,7 @@ export class RegisterComponent implements OnInit {
       accept: () => {
         const formData = new FormData();
 
-        for (const myFile of this.filesField.value) {
+        for (const myFile of this.enablingDocumentsField.value) {
           formData.append('typeIds', myFile.type.id);
           formData.append('files', myFile.file);
         }
@@ -211,29 +213,36 @@ export class RegisterComponent implements OnInit {
   }
 
   finish() {
-    // this.agreementsService.clearAgreement();
+    this.agreementsHttpService.finish(this.idField.value).subscribe(response => {
+      this.agreementsService.clearAgreement();
 
-    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+      if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+        this.router.navigate(['/core/national-supervisor/agreement-list']);
+      }
+
+      if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+        this.router.navigate(['/core/international-supervisor/agreement-list']);
+      }
+    });
+  }
+
+  redirectAgreementList() {
+    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR)
       this.router.navigate(['/core/national-supervisor/agreement-list']);
-    }
 
-    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR)
       this.router.navigate(['/core/international-supervisor/agreement-list']);
-    }
   }
 
   get idField(): AbstractControl {
     return this.form.controls['id'];
   }
 
-  get filesField(): AbstractControl {
-    return this.form.controls['files'];
+  get enablingDocumentsField(): AbstractControl {
+    return this.form.controls['enablingDocuments'];
   }
 
   get enabledField(): AbstractControl {
     return this.form.controls['enabled'];
   }
-
-  protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
-  protected readonly PrimeIcons = PrimeIcons;
 }

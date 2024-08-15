@@ -1,6 +1,6 @@
 <p-panel>
   <ng-template pTemplate="header">
-    <h3>Ministerio de Turismo</h3>
+    <h3>{{AgreementSectionFormEnum.appearer}}</h3>
   </ng-template>
 
   @if (agreement.internalInstitutions) {
@@ -22,7 +22,6 @@
           @for (detail of item.internalInstitutionDetails; track detail) {
             <tr>
               <td>{{ item.name }}</td>
-              <td>{{ detail.unit?.name }}</td>
               <td>{{ detail.position?.name }}</td>
               <td>{{ item.personType?.name }}</td>
             </tr>

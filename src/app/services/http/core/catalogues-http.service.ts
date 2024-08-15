@@ -34,7 +34,6 @@ export class CataloguesHttpService {
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        console.log(response);
         sessionStorage.setItem('catalogues', JSON.stringify(response.data));
         return response.data;
       })

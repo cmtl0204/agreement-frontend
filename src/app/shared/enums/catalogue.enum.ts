@@ -37,6 +37,11 @@ export enum CatalogueAgreementsTypeEnum {
   SPECIAL = 'SPECIAL',
 }
 
+export enum CatalogueAgreementsOriginEnum {
+  NATIONAL = 'NATIONAL',
+  INTERNATIONAL = 'INTERNATIONAL',
+}
+
 export enum CatalogueObligationsTypeEnum {
   INTERNAL = 'INTERNAL',
   EXTERNAL = 'EXTERNAL',
