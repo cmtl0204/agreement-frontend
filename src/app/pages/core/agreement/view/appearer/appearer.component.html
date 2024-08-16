@@ -1,41 +1,34 @@
-<p-panel>
-  <ng-template pTemplate="header">
-    <h3>{{AgreementSectionFormEnum.appearer}}</h3>
-  </ng-template>
-
-  @if (agreement.internalInstitutions) {
-    <ng-template pTemplate="content">
-      <p-table
-        [value]="agreement.internalInstitutions"
-        styleClass="p-datatable-striped"
-        [tableStyle]="{'width':'100%'}">
-        <ng-template pTemplate="header">
-          <tr>
-            <th *ngFor="let col of internalInstitutionColumns" [pSortableColumn]="col.field">
+<p-panel header="Comparecientes - MINTUR">
+  <ng-template pTemplate="content">
+    <p-table
+      [value]="agreement.internalInstitutions"
+      styleClass="p-datatable-striped"
+      [tableStyle]="{'width':'100%'}">
+      <ng-template pTemplate="header">
+        <tr>
+          @for (col of internalInstitutionColumns; track col) {
+            <th [pSortableColumn]="col.field">
               {{ col.header }}
               <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-item>
-          @for (detail of item.internalInstitutionDetails; track detail) {
-            <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ detail.position?.name }}</td>
-              <td>{{ item.personType?.name }}</td>
-            </tr>
           }
-        </ng-template>
-      </p-table>
-    </ng-template>
-  }
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item>
+        @for (detail of item.internalInstitutionDetails; track detail) {
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ detail.position?.name }}</td>
+            <td>{{ item.personType?.name }}</td>
+          </tr>
+        }
+      </ng-template>
+    </p-table>
+  </ng-template>
 </p-panel>
 
-<p-panel>
-  <ng-template pTemplate="header">
-    <h3>Comparecientes</h3>
-  </ng-template>
+<p-panel header="Comparecientes - Contraparte">
   @if (agreement.externalInstitutions) {
 
     <ng-template pTemplate="content">
@@ -45,23 +38,27 @@
         [tableStyle]="{'width':'100%'}">
         <ng-template pTemplate="header">
           <tr>
-            <th *ngFor="let col of externalInstitutionsColumns" [pSortableColumn]="col.field">
-              {{ col.header }}
-              <p-sortIcon [field]="col.field"></p-sortIcon>
-            </th>
+            @for (col of externalInstitutionsColumns; track col) {
+              <th [pSortableColumn]="col.field">
+                {{ col.header }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            }
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-item>
-          <tr *ngFor="let detail of item.externalInstitutionDetails">
-            <td>{{ item.name }}</td>
-            <td>{{ detail.position }}</td>
-            <td>{{ detail.unit }}</td>
-            <td>{{ item.personType?.name }}</td>
-          </tr>
+          @for (detail of item.externalInstitutionDetails; track detail) {
+            <tr>
+              <td>{{ item.name }}</td>
+              <td>{{ detail.position }}</td>
+              <td>{{ detail.unit }}</td>
+              <td>{{ item.personType?.name }}</td>
+            </tr>
+          }
         </ng-template>
       </p-table>
     </ng-template>
-        }
+  }
 </p-panel>
 

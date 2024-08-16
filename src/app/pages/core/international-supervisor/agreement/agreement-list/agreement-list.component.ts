@@ -1,8 +1,14 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ColumnModel, AgreementModel} from '@models/core';
-import {CoreService, BreadcrumbService, MessageService} from '@servicesApp/core';
+import {
+  CoreService,
+  BreadcrumbService,
+  MessageService,
+  AgreementsService,
+  MessageDialogService
+} from '@servicesApp/core';
 import {AgreementsHttpService} from '@servicesHttp/core';
 import {
   IconButtonActionEnum,
@@ -23,11 +29,12 @@ import {debounceTime} from 'rxjs';
   templateUrl: './agreement-list.component.html',
   styleUrl: './agreement-list.component.scss'
 })
-export class AgreementListComponent {
+export class AgreementListComponent implements OnInit{
 
   // Services
   protected readonly coreService = inject(CoreService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly agreementsService = inject(AgreementsService);
   private readonly router = inject(Router);
   private readonly breadcrumbService = inject(BreadcrumbService);
 
@@ -38,26 +45,26 @@ export class AgreementListComponent {
   protected readonly BreadcrumbEnum = BreadcrumbEnum;
   protected readonly TableEnum = TableEnum;
   // protected paginator: PaginatorModel;
-  protected readonly messageService = inject(MessageService)
+  protected readonly messageDialogService = inject(MessageDialogService)
+  protected readonly messageService = inject(MessageService);
 
   protected buttonActions: MenuItem[] = [];
   protected isButtonActions: boolean = false;
 
-  protected columns: ColumnModel[] = this.buildColumns;
+  protected columns: ColumnModel[] = [];
 
   protected search: FormControl = new FormControl('');
 
   protected selectedItem!: AgreementModel;
   protected items: AgreementModel[] = [];
-
   protected isVisibleAgreementView: boolean = false;
-
 
   constructor() {
     this.breadcrumbService.setItems([{label: BreadcrumbEnum.AGREEMENTS}]);
 
-    // this.paginator = this.coreService.paginator;
     this.buildButtonActions();
+    this.buildColumns();
+    // this.paginator = this.coreService.paginator;
 
     this.search.valueChanges.pipe(
       debounceTime(500)
@@ -78,21 +85,15 @@ export class AgreementListComponent {
       });
   }
 
-  findOne(id: string) {
-    this.agreementsHttpService.findOne(id)
-      .subscribe((response) => {
-        // this.selectedItem = response;
-      });
-  }
-
-  get buildColumns(): ColumnModel[] {
-    return [
+  buildColumns() {
+    this.columns = [
       {field: 'name', header: AgreementFormEnum.name},
       {field: 'internalNumber', header: AgreementFormEnum.internalNumber},
       {field: 'number', header: AgreementFormEnum.number},
       {field: 'administrator', header: AdministratorFormEnum.unit},
       {field: 'endedAt', header: AgreementFormEnum.endedAt},
-      {field: 'agreementState', header: AgreementStateEnum.state}
+      {field: 'agreementState', header: AgreementStateEnum.state},
+      {field: 'enabled', header: AgreementFormEnum.enabled}
     ];
   }
 
@@ -104,54 +105,61 @@ export class AgreementListComponent {
         label: LabelButtonActionEnum.VIEW,
         icon: IconButtonActionEnum.VIEW,
         command: () => {
-          if (this.selectedItem?.id) this.redirectViewAgreement(this.selectedItem.id);
+          this.redirectViewAgreement();
         },
       },
       {
-        id: IdButtonActionEnum.UPDATE,
-        label: LabelButtonActionEnum.UPDATE,
-        icon: IconButtonActionEnum.UPDATE,
+        id: IdButtonActionEnum.COMPLETE,
+        label: LabelButtonActionEnum.COMPLETE,
+        icon: IconButtonActionEnum.COMPLETE,
         command: () => {
-          if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
+          if (this.selectedItem?.id) this.redirectCompleteForm(this.selectedItem);
         },
       },
-      {
-        id: IdButtonActionEnum.DELETE,
-        label: LabelButtonActionEnum.DELETE,
-        icon: IconButtonActionEnum.DELETE,
-        command: () => {
-          if (this.selectedItem?.id) this.remove(this.selectedItem.id);
-        },
-      },
-      {
-        id: IdButtonActionEnum.SUSPEND,
-        label: LabelButtonActionEnum.SUSPEND,
-        icon: IconButtonActionEnum.SUSPEND,
-        command: () => {
-          if (this.selectedItem?.id) this.suspend(this.selectedItem.id);
-        },
-      },
-      {
-        id: IdButtonActionEnum.REACTIVATE,
-        label: LabelButtonActionEnum.REACTIVATE,
-        icon: IconButtonActionEnum.REACTIVATE,
-        command: () => {
-          if (this.selectedItem?.id) this.reactivate(this.selectedItem.id);
-        },
-      },
+      // {
+      //   id: IdButtonActionEnum.DELETE,
+      //   label: LabelButtonActionEnum.DELETE,
+      //   icon: IconButtonActionEnum.DELETE,
+      //   command: () => {
+      //     if (this.selectedItem?.id) this.remove(this.selectedItem.id);
+      //   },
+      // },
+      // {
+      //   id: IdButtonActionEnum.SUSPEND,
+      //   label: LabelButtonActionEnum.SUSPEND,
+      //   icon: IconButtonActionEnum.SUSPEND,
+      //   command: () => {
+      //     if (this.selectedItem?.id) this.suspend(this.selectedItem.id);
+      //   },
+      // },
+      // {
+      //   id: IdButtonActionEnum.REACTIVATE,
+      //   label: LabelButtonActionEnum.REACTIVATE,
+      //   icon: IconButtonActionEnum.REACTIVATE,
+      //   command: () => {
+      //     if (this.selectedItem?.id) this.reactivate(this.selectedItem.id);
+      //   },
+      // },
     ];
   }
 
   redirectCreateForm() {
+    this.agreementsService.clearAgreement();
+
+    this.router.navigate(['/core/agreements', 'register']);
+  }
+
+  redirectCompleteForm(item:AgreementModel) {
     this.router.navigate(['/core/agreements', 'register']);
   }
 
   redirectEditForm(id: string) {
-    this.router.navigate(['/core/international-supervisor/agreements', id]);
+    this.router.navigate(['/core/agreements/update', id]);
   }
 
-  redirectViewAgreement(id: string) {
-    // this.router.navigate(['/core/agreements/view']); //review
+  redirectViewAgreement() {
+    this.messageDialogService.successCustom('Sitio en construcción', 'Pronto estará disponibel');
+    return;
     this.isVisibleAgreementView = true;
   }
 
@@ -167,26 +175,16 @@ export class AgreementListComponent {
     //   });
   }
 
-  suspend(id: string) {
-    // this.agreementsHttpService.suspend(id).subscribe(user => {
-    //   const index = this.items.findIndex(user => user.id === id);
-    //   this.items[index] = user;
-    // });
-  }
-
-  reactivate(id: string) {
-    // this.agreementsHttpService.reactivate(id).subscribe(user => {
-    //   const index = this.items.findIndex(user => user.id === id);
-    //   this.items[index] = user;
-    // });
-  }
-
   validateButtonActions(item: AgreementModel): void {
-    //   this.buttonActions = this.buildButtonActions;
+    this.buildButtonActions();
 
-    //   if (item.suspendedAt) {
-    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.SUSPEND), 1);
-    //   }
+    if (item.enabled) {
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
+    }
+
+    if (!item.enabled) {
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.VIEW), 1);
+    }
 
     //   if (!item.suspendedAt) {
     //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
@@ -198,8 +196,11 @@ export class AgreementListComponent {
   }
 
   selectItem(item: AgreementModel) {
-    this.isButtonActions = true;
-    this.selectedItem = item;
-    this.validateButtonActions(item);
+    this.agreementsHttpService.findOne(item.id!).subscribe(agreement => {
+      this.isButtonActions = true;
+      this.selectedItem = item;
+      this.validateButtonActions(item);
+      this.agreementsService.agreement = agreement;
+    });
   }
 }

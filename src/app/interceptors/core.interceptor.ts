@@ -27,7 +27,7 @@ export class CoreInterceptor implements HttpInterceptor {
 
     // flag = request.headers.getAll('Content-Type')?.some(header => header === 'multipart/form-data');
 
-    headers = headers.append('Accept', 'application/json')
+    // headers = headers.append('Accept', 'application/json')
 
     // if (!flag) {
     //   headers = headers.append('Content-Type', 'application/json');
@@ -36,6 +36,7 @@ export class CoreInterceptor implements HttpInterceptor {
     // }
 
     this.coreService.isLoading = true;
+
     return next.handle(request.clone({headers, params})).pipe(
       tap(value => {
         this.coreService.isLoading = false;

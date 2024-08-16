@@ -27,32 +27,17 @@ export class TopbarComponent {
 
   constructor() {
     if (this.authService.auth) {
-      this.nickname = `${this.authService.auth.name} ${this.authService.auth.lastname} - ${this.authService.role.name}`;
+      this.nickname = `${this.authService.auth.name} ${this.authService.auth.lastname}`;
     }
 
-    // this.home = {label: 'Home', icon: PrimeIcons.HOME, routerLink: `/core/dashboards/${this.authService.role?.code}`};
+    this.home = {label: 'Home', icon: PrimeIcons.HOME, routerLink: `/core/dashboards/${this.authService.role?.code}`};
 
     this.menu = {label: 'Menú', icon: PrimeIcons.LIST, command: () => this.coreService.sidebarVisible = true};
 
     this.items.push(this.menu);
-
-    this.items.push(
-      {
-        label: this.nickname,
-        icon: PrimeIcons.USER,
-        routerLink: [this.routesService.profile]
-      },
-      {
-        label: 'Cerrar Sesión',
-        icon: PrimeIcons.POWER_OFF,
-        command: () => {
-          this.authHttpService.signOut();
-        }
-      },
-    )
   }
 
-  updateSystem() {
-    this.coreService.updateSystem();
+  signOut() {
+    this.authHttpService.signOut();
   }
 }

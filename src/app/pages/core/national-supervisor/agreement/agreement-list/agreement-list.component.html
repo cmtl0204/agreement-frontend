@@ -29,8 +29,10 @@
   styleClass="p-datatable-striped"
   [value]="items"
   [columns]="columns"
-  [loading]="coreService.isLoading"
- >
+  [paginator]="true"
+  [rows]="10"
+  paginatorPosition="both"
+  [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <div class="flex">
       <h1>{{ BreadcrumbEnum.AGREEMENTS }}</h1>
@@ -60,8 +62,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
-
+    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [ngClass]="{'enabled':!rowData.enabled}">
       @for (col of columns; track col) {
         <td>
           <!--Objects-->
@@ -85,6 +86,13 @@
               @case ('isFinancing') {
                 @if (rowData.suspendedAt) {
                   <p-tag severity="danger" value="Suspendido" class="mr-1"></p-tag>
+                }
+              }
+              @case ('enabled') {
+                @if (rowData.enabled) {
+                  <p-tag severity="info" value="Registrado"/>
+                } @else{
+                  <p-tag severity="danger" value="En Proceso"/>
                 }
               }
             }

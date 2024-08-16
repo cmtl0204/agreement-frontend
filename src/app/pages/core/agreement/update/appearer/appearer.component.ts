@@ -122,9 +122,9 @@ export class AppearerComponent implements OnInit {
   validateForm() {
     this.formErrors = [];
 
-    if (this.formInput.internalInstitutions?.length === 0) this.formErrors.push('Comparecientes - Mintur');//review
+    if (this.formInput.internalInstitutions?.length === 0) this.formErrors.push('Comparecientes - Mintur');//review dejar asi o ponerle en un enum
 
-    if (this.formInput.externalInstitutions?.length === 0) this.formErrors.push('Comparecientes - Contraparte');//review
+    if (this.formInput.externalInstitutions?.length === 0) this.formErrors.push('Comparecientes - Contraparte');//review dejar asi o ponerle en un enum
 
     this.formErrorsOutput.emit(this.formErrors);
   }

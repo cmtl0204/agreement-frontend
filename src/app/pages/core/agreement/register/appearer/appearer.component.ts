@@ -181,6 +181,9 @@ export class AppearerComponent implements OnInit {
 
   /** add array **/
   addInternalInstitution() {
+    this.internalInstitutionPersonTypeField.patchValue(this.internalPersonTypes.find(item => item.code === CatalogueInternalInstitutionsPersonTypeEnum.PUBLIC));
+    this.internalInstitutionNameField.patchValue( 'Ministerio de Turismo');
+
     if (this.validateInternalInstitutionForm() && this.validateInternalInstitutionDetailForm()) {
       this.formInput.internalInstitutions.push(this.internalInstitutionForm.value);
 
@@ -190,7 +193,7 @@ export class AppearerComponent implements OnInit {
 
       this.addInternalInstitutionDetail();
 
-      this.internalInstitutionPersonTypeField.reset();
+      this.internalInstitutionForm.reset();
 
       this.isVisibleInternalInstitutionForm = false;
     } else {
@@ -348,6 +351,7 @@ export class AppearerComponent implements OnInit {
   /** Load Foreign Keys  **/
   loadInternalPersonTypes() {
     this.internalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_PERSON_TYPE);
+    this.internalInstitutionPersonTypeField.patchValue(this.internalPersonTypes.find(item => item.code === CatalogueInternalInstitutionsPersonTypeEnum.PUBLIC));
   }
 
   loadExternalPersonTypes() {
@@ -356,7 +360,6 @@ export class AppearerComponent implements OnInit {
 
   loadPositions() {
     this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION);
-    this.internalInstitutionPersonTypeField.patchValue(this.internalPersonTypes.find(item => item.code === CatalogueInternalInstitutionsPersonTypeEnum.PUBLIC));
   }
 
   /** Form Actions **/
@@ -374,51 +377,39 @@ export class AppearerComponent implements OnInit {
   }
 
   /** Getters Form**/
-  get internalInstitutionsField()
-    :
-    FormArray {
+  get internalInstitutionsField(): FormArray {
     return this.form.get('internalInstitutions') as FormArray;
   }
 
-  get externalInstitutionsField()
-    :
-    FormArray {
+  get externalInstitutionsField(): FormArray {
     return this.form.get('externalInstitutions') as FormArray;
   }
 
-  get internalInstitutionPersonTypeField()
-    :
-    AbstractControl {
+  get internalInstitutionNameField(): AbstractControl {
+    return this.internalInstitutionForm.controls['name'];
+  }
+
+  get internalInstitutionPersonTypeField(): AbstractControl {
     return this.internalInstitutionForm.controls['personType'];
   }
 
-  get internalInstitutionDetailPositionField()
-    :
-    AbstractControl {
+  get internalInstitutionDetailPositionField(): AbstractControl {
     return this.internalInstitutionDetailForm.controls['position'];
   }
 
-  get externalInstitutionNameField()
-    :
-    AbstractControl {
+  get externalInstitutionNameField(): AbstractControl {
     return this.externalInstitutionForm.controls['name'];
   }
 
-  get externalInstitutionPersonTypeField()
-    :
-    AbstractControl {
+  get externalInstitutionPersonTypeField(): AbstractControl {
     return this.externalInstitutionForm.controls['personType'];
   }
 
-  get externalInstitutionDetailUnitField()
-    :
-    AbstractControl {
+  get externalInstitutionDetailUnitField(): AbstractControl {
     return this.externalInstitutionDetailForm.controls['unit'];
   }
 
-  get externalInstitutionDetailPositionField()
-    :
-    AbstractControl {
+  get externalInstitutionDetailPositionField(): AbstractControl {
     return this.externalInstitutionDetailForm.controls['position'];
   }
 }

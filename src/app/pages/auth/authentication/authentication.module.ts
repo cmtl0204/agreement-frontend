@@ -22,30 +22,34 @@ import {MessageModule} from "primeng/message";
 import {PanelModule} from "primeng/panel";
 import {AvatarModule} from "primeng/avatar";
 import {ListboxModule} from "primeng/listbox";
+import {InputGroupModule} from "primeng/inputgroup";
+import {InputGroupAddonModule} from "primeng/inputgroupaddon";
 
 
 @NgModule({
   declarations: [LoginComponent, PasswordChangeComponent, PasswordResetComponent, RoleSelectComponent],
   exports: [PasswordChangeComponent],
-    imports: [
-        CommonModule,
-        AuthenticationRoutingModule,
-        ReactiveFormsModule,
-        SharedModule,
-        ButtonModule,
-        CardModule,
-        CheckboxModule,
-        DividerModule,
-        InputTextModule,
-        PasswordModule,
-        RippleModule,
-        DropdownModule,
-        NgOptimizedImage,
-        MessageModule,
-        PanelModule,
-        AvatarModule,
-        ListboxModule,
-    ]
+  imports: [
+    CommonModule,
+    AuthenticationRoutingModule,
+    ReactiveFormsModule,
+    SharedModule,
+    ButtonModule,
+    CardModule,
+    CheckboxModule,
+    DividerModule,
+    InputTextModule,
+    PasswordModule,
+    RippleModule,
+    DropdownModule,
+    NgOptimizedImage,
+    MessageModule,
+    PanelModule,
+    AvatarModule,
+    ListboxModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+  ]
 })
 export class AuthenticationModule {
 }

@@ -2,11 +2,11 @@ import {Component, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
-import {AgreementModel} from "@models/core";
+import {AgreementModel, FileModel} from "@models/core";
 import {AuthService} from "@servicesApp/auth";
-import {AgreementsService, MessageDialogService} from "@servicesApp/core";
+import {AgreementsService, BreadcrumbService, MessageDialogService} from "@servicesApp/core";
 import {AgreementsHttpService} from "@servicesHttp/core";
-import {RoleEnum, SeverityButtonActionEnum} from "@shared/enums";
+import {BreadcrumbEnum, RoleEnum, SeverityButtonActionEnum} from "@shared/enums";
 
 @Component({
   selector: 'app-register',
@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly agreementsService = inject(AgreementsService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly formBuilder = inject(FormBuilder);
   protected readonly messageDialogService = inject(MessageDialogService);
@@ -37,6 +38,11 @@ export class RegisterComponent implements OnInit {
   protected activeStep: number = 0;
 
   constructor() {
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENTS_REGISTER},
+    ]);
+
     this.buildForm();
   }
 
@@ -48,8 +54,10 @@ export class RegisterComponent implements OnInit {
         this.activeStep = 3;
       }
 
-      if (this.enabledField.value) {
-        this.activeStep = 4;
+      if (this.enablingDocumentsField.value.length == 2) {
+        if (this.enablingDocumentsField.value.every((item: FileModel) => item.id)) {
+          this.activeStep = 4;
+        }
       }
     }
   }
@@ -68,7 +76,7 @@ export class RegisterComponent implements OnInit {
       externalInstitutions: [[]],
       subscribedAt: [new Date()],
       startedAt: [new Date()],
-      isFinishDate: [null],
+      isFinishDate: [true],
       endedAt: [null],
       endedReason: [null],
       yearTerm: [null],
@@ -152,7 +160,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmitDocuments(nextCallback: any) {
     if (this.validateFormDocument) {
-      this.registerDocuments(nextCallback);
+      nextCallback.emit();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
@@ -202,8 +210,8 @@ export class RegisterComponent implements OnInit {
 
         if (this.idField.valid) {
           this.agreementsHttpService.uploadEnablingDocuments(this.idField.value, formData).subscribe(response => {
-            this.enabledField.setValue(true);
-            this.agreementsService.agreement = this.form.value;
+            this.form.patchValue(response);
+            this.agreementsService.agreement = response;
 
             nextCallback.emit();
           });

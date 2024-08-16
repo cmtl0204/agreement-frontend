@@ -1,8 +1,4 @@
-<p-panel>
-  <ng-template pTemplate="header">
-    <h2>{{AgreementSectionFormEnum.basicData}}</h2>
-  </ng-template>
-
+<p-panel [header]="AgreementSectionFormEnum.basicData">
   <ng-template pTemplate="content">
     <div class="p-fluid grid">
       <!-- Number -->
@@ -78,8 +74,6 @@
           [label]="AgreementFormEnum.objective">
         </label>
         <textarea
-          rows="10"
-          cols="30"
           pInputTextarea
           id="objective"
           [value]="agreement.objective"

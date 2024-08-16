@@ -58,7 +58,11 @@
           <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
             <tr>
               <td>{{ item.description }}</td>
-              <td>{{ item.file.name }}</td>
+              <td>
+                @for(file of item.files;track file){
+                  {{file.name}}
+                }
+              </td>
               <td>
                 <p-button
                   [icon]="IconButtonActionEnum.DELETE"
@@ -73,6 +77,7 @@
     </ng-template>
   </p-panel>
 }
+
 <p-dialog
   [(visible)]="isVisibleAddendumForm"
   [modal]="true"
@@ -115,7 +120,7 @@
           maxFileSize="1000000"
           [auto]="true"
           [customUpload]="true"
-          (uploadHandler)="addAddendumFile($event,uploadFiles)"/>
+          (uploadHandler)="uploadAddendumFile($event,uploadFiles)"/>
         <small
           appErrorMessage
           [errors]="fileField.errors"

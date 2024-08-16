@@ -44,7 +44,6 @@ export class AddendumComponent implements OnInit {
 
   protected types: CatalogueModel[] = [];
   protected columns: ColumnModel[] = [];
-  protected file!: FileModel;
 
   protected isVisibleAddendumForm: boolean = false;
   protected yesNo: any[] = []
@@ -152,15 +151,12 @@ export class AddendumComponent implements OnInit {
     return this.formErrors.length === 0
   }
 
-  addAddendumFile(event: any, uploadFiles: any) {
+  uploadAddendumFile(event: any, uploadFiles: any) {
     this.fileField.patchValue({
       file: event.files[0],
       name: event.files[0].name,
       type: this.types[0]
     });
-
-    this.file = {file: event.files[0]};
-    this.file.type = this.types[0];
 
     uploadFiles.clear();
   }
@@ -177,10 +173,10 @@ export class AddendumComponent implements OnInit {
         this.formInput.addendums.push({
           id: response.id,
           description: this.descriptionField.value,
-          file: {
+          files: [{
             file: this.fileField.value.file,
             name: this.fileField.value.name,
-          },
+          }],
         });
 
         this.form.patchValue(this.formInput);

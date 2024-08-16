@@ -7,7 +7,6 @@ import {debounceTime, delay} from "rxjs";
 export const verifyAgreementInternalNumber = (agreementsHttpService: AgreementsHttpService): AsyncValidatorFn => {
   return (control) => {
     return agreementsHttpService.verifyInternalNumber(control.value).pipe(
-      debounceTime(1500),
       map((response) => {
         return response ? {agreementExists: true} : null;
       })

@@ -36,7 +36,8 @@ export class BreadcrumbComponent {
       this.items = response as MenuItem[];
     });
 
-    this.home = {icon: PrimeIcons.HOME, routerLink: `/core/dashboards/${this.authService.role?.code}`};
+    // this.home = {icon: PrimeIcons.HOME, routerLink: `/core/dashboards/${this.authService.role?.code}`};
+    this.home = {icon: PrimeIcons.HOME};
   }
 
 

@@ -4,11 +4,18 @@
 
 @if (agreement) {
   <app-basic-data [agreement]="agreement"></app-basic-data>
+  <p-divider/>
   <app-agreement-date [agreement]="agreement"></app-agreement-date>
+  <p-divider/>
   <app-agreement-administrator [agreement]="agreement"></app-agreement-administrator>
+  <p-divider/>
   <app-appearer [agreement]="agreement"></app-appearer>
+  <p-divider/>
   <app-obligation [agreement]="agreement"></app-obligation>
+  <p-divider/>
   <app-financing [agreement]="agreement"></app-financing>
+  <p-divider/>
   <app-document [agreement]="agreement"></app-document>
+  <p-divider/>
   <app-addendum [agreement]="agreement"></app-addendum>
 }

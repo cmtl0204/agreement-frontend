@@ -42,6 +42,7 @@ import {SelectButtonModule} from "primeng/selectbutton";
 import {InputSwitchModule} from "primeng/inputswitch";
 import {TagModule} from "primeng/tag";
 import {ListboxModule} from "primeng/listbox";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
 
 @NgModule({
   declarations: [
@@ -59,43 +60,44 @@ import {ListboxModule} from "primeng/listbox";
   exports: [
     ObligationComponent
   ],
-  imports: [
-    CommonModule,
-    RegisterRoutingModule,
-    ReactiveFormsModule,
-    SharedModule,
-    ButtonModule,
-    CardModule,
-    CheckboxModule,
-    DividerModule,
-    InputTextModule,
-    PasswordModule,
-    RippleModule,
-    DropdownModule,
-    NgOptimizedImage,
-    MessageModule,
-    PanelModule,
-    AvatarModule,
-    ToolbarModule,
-    OverlayPanelModule,
-    InputNumberModule,
-    ToggleButtonModule,
-    CalendarModule,
-    RadioButtonModule,
-    StepperModule,
-    TabViewModule,
-    FileUploadModule,
-    InputTextareaModule,
-    MultiSelectModule,
-    FormsModule,
-    TableModule,
-    DialogModule,
-    ConfirmDialogModule,
-    SelectButtonModule,
-    InputSwitchModule,
-    TagModule,
-    ListboxModule
-  ]
+    imports: [
+        CommonModule,
+        RegisterRoutingModule,
+        ReactiveFormsModule,
+        SharedModule,
+        ButtonModule,
+        CardModule,
+        CheckboxModule,
+        DividerModule,
+        InputTextModule,
+        PasswordModule,
+        RippleModule,
+        DropdownModule,
+        NgOptimizedImage,
+        MessageModule,
+        PanelModule,
+        AvatarModule,
+        ToolbarModule,
+        OverlayPanelModule,
+        InputNumberModule,
+        ToggleButtonModule,
+        CalendarModule,
+        RadioButtonModule,
+        StepperModule,
+        TabViewModule,
+        FileUploadModule,
+        InputTextareaModule,
+        MultiSelectModule,
+        FormsModule,
+        TableModule,
+        DialogModule,
+        ConfirmDialogModule,
+        SelectButtonModule,
+        InputSwitchModule,
+        TagModule,
+        ListboxModule,
+        ConfirmPopupModule
+    ]
 })
 export class RegisterModule {
 }

@@ -52,8 +52,8 @@ export class MessageDialogService {
     this._modalAcceptSeverity = 'danger';
     this._modalIcon = PrimeIcons.TIMES_CIRCLE;
     this._modalIconColor = 'var(--red-500)';
-    this._modalTitle = error.error;
-    this._modalMessage = error.status;
+    this._modalTitle = error.message;
+    this._modalMessage = error.detail;
   }
 
   errorCustom(title: string, message: string | string[]) {

@@ -2,7 +2,9 @@ import {Component, inject, OnInit} from '@angular/core';
 import {MenuItem, PrimeIcons} from 'primeng/api';
 import {AuthHttpService, AuthService, MenusHttpService} from "@servicesApp/auth";
 import {MenuModel} from "@models/auth";
-import {CoreService, MessageService, RoutesService} from "@servicesApp/core";
+import {AgreementsService, CoreService, MessageService, RoutesService} from "@servicesApp/core";
+import {AgreementsHttpService} from "@servicesHttp/core";
+import {format} from "date-fns";
 
 @Component({
   selector: 'app-sidebar',
@@ -20,15 +22,18 @@ export class SidebarComponent implements OnInit {
   protected readonly coreService = inject(CoreService);
   private readonly menusHttpService = inject(MenusHttpService);
   private readonly authHttpService = inject(AuthHttpService);
+  private readonly agreementsService = inject(AgreementsService);
   protected readonly authService = inject(AuthService);
   protected readonly messageService = inject(MessageService);
-  protected readonly routes = inject(RoutesService);
+  protected readonly routesService = inject(RoutesService);
+  protected currentYear: string;
 
   constructor() {
+    this.currentYear = format(new Date(), 'yyyy');
   }
 
   ngOnInit(): void {
-    // this.getMenus();
+    this.getMenus();
   }
 
   showSubMenu(id: number = 0) {
@@ -43,26 +48,30 @@ export class SidebarComponent implements OnInit {
       this.menusHttpService.getMenusByRole(this.authService.role.id!).subscribe(
         menus => {
           this.menus = menus.map(menu => {
-            const items = menu.children.map(item => {
-              return {
-                label: item.label,
-                icon: item.icon,
-                routerLink: [item.routerLink],
-                command: () => {
-                  this.coreService.sidebarVisible = false;
-                }
-              }
-            });
-
             return {
               label: menu.label,
-              items,
+              routerLink: [menu.routerLink],
+              icon: menu.icon,
+              command: () => {
+                this.agreementsService.clearAgreement();
+                this.coreService.sidebarVisible = false;
+              }
             }
           });
+
+          this.menus.push({
+            label: 'Cerrar Sesión',
+            icon: PrimeIcons.POWER_OFF,
+            command: () => {
+              this.coreService.sidebarVisible = false;
+              this.authHttpService.signOut();
+            }
+          });
+
         }
       );
     } else {
-      this.routes.login();
+      this.routesService.login();
     }
   }
 

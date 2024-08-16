@@ -1,38 +1,32 @@
-@if (agreement.obligations) {
-  <p-panel>
-    <ng-template pTemplate="header">
-      <h2>{{AgreementSectionFormEnum.obligation}}</h2>
-    </ng-template>
+<p-panel [header]="AgreementSectionFormEnum.obligation">
+  <ng-template pTemplate="content">
+    <p-table
+      [value]="agreement.obligations"
+      styleClass="p-datatable-striped"
+      [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ ObligationForEnum.institutionName }}</th>
+          <th>{{ ObligationForEnum.type }}</th>
+          <th>{{ ObligationDetailForEnum.description }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.institutionName }}</td>
+          <td>{{ item.type.name }}</td>
+          <td>
+            <ul>
+              @for (obligationDetail of item.obligationDetails; track obligationDetail.id) {
 
-    <ng-template pTemplate="content">
-      <p-table
-        [value]="agreement.obligations"
-        styleClass="p-datatable-striped"
-        [tableStyle]="{'min-width': '50rem'}">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>{{ObligationForEnum.institutionName}}</th>
-            <th>{{ObligationForEnum.type}}</th>
-            <th>{{ObligationDetailForEnum.description}}</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr>
-            <td>{{ item.institutionName }}</td>
-            <td>{{ item.type.name }}</td>
-            <td>
-              <ul>
-                @for (obligationDetail of item.obligationDetails; track obligationDetail.id) {
-
-                  <li>
-                    {{ obligationDetail.description }}
-                  </li>
-                }
-              </ul>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </ng-template>
-  </p-panel>
-}
+                <li>
+                  {{ obligationDetail.description }}
+                </li>
+              }
+            </ul>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</p-panel>

@@ -1,8 +1,4 @@
-<p-panel>
-  <ng-template pTemplate="header">
-    <h2>{{AgreementSectionFormEnum.agreementDate}}</h2>
-  </ng-template>
-
+<p-panel [header]="AgreementSectionFormEnum.agreementDate">
   <ng-template pTemplate="content">
     <div class="p-fluid grid">
       <!-- subscriptionAt -->
@@ -45,39 +41,45 @@
       </div>
 
       <!-- endedAt-->
-      <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label appLabel [label]="AgreementFormEnum.endedAt"></label>
-        <input pInputText [value]="agreement.endedAt | date" [readOnly]="true"/>
-      </div>
+      @if (agreement.isFinishDate) {
+        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.endedAt"></label>
+          <input pInputText [value]="agreement.endedAt | date" [readOnly]="true"/>
+        </div>
+      }
 
       <!--endedReason-->
-      <div *ngIf="!agreement.isFinishDate" class="field col-12">
-        <label appLabel [label]="AgreementFormEnum.endedReason"></label>
-        <textarea pInputTextarea [value]="agreement.endedReason" [autoResize]="true" [readOnly]="true"></textarea>
-      </div>
+      @if (!agreement.isFinishDate) {
+        <div class="field col-12">
+          <label appLabel [label]="AgreementFormEnum.endedReason"></label>
+          <textarea pInputTextarea [value]="agreement.endedReason" [readOnly]="true"></textarea>
+        </div>
+      }
 
       <!-- isFinishDate -->
-      <div *ngIf="agreement.isFinishDate" class="field col-12">
-        <label>Plazo total del convenio:</label>
-      </div>
+      @if (agreement.isFinishDate) {
+        <div class="field col-12">
+          <label>Plazo total del convenio:</label>
+        </div>
 
-      <!-- yearTerm -->
-      <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-        <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
-        <input pInputText [value]="agreement.yearTerm" [readOnly]="true"/>
-      </div>
+        <!-- yearTerm -->
+        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
+          <input pInputText [value]="agreement.yearTerm" [readOnly]="true"/>
+        </div>
 
-      <!-- monthTerm -->
-      <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-        <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
-        <input pInputText [value]="agreement.monthTerm" [readOnly]="true"/>
-      </div>
+        <!-- monthTerm -->
+        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
+          <input pInputText [value]="agreement.monthTerm" [readOnly]="true"/>
+        </div>
 
-      <!-- dayTerm -->
-      <div *ngIf="agreement.isFinishDate" class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-        <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
-        <input pInputText [value]="agreement.dayTerm" [readOnly]="true"/>
-      </div>
+        <!-- dayTerm -->
+        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
+          <input pInputText [value]="agreement.dayTerm" [readOnly]="true"/>
+        </div>
+      }
     </div>
   </ng-template>
 </p-panel>

@@ -4,6 +4,7 @@ import {PrimeIcons} from "primeng/api";
 import {AuthHttpService, AuthService} from '@servicesApp/auth';
 import {CoreService, MessageService, RoutesService} from '@servicesApp/core';
 import {LoginFormEnum} from "@shared/enums";
+import {userName} from "@shared/regular-expresions";
 
 @Component({
   selector: 'app-login',
@@ -29,15 +30,16 @@ export class LoginComponent {
   protected readonly LoginFormEnum = LoginFormEnum;
 
   constructor() {
+    this.authService.removeLogin();
     this.buildForm();
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      username: ['juan.perez', [Validators.required]],
-      // username: [null, [Validators.required]],
-      password: ['123', [Validators.required]],
-      // password: [null, [Validators.required]],
+      // username: ['juan.perez', [Validators.required,Validators.pattern(userName())]],
+      username: [null, [Validators.required, Validators.pattern(userName())]],
+      // password: ['123', [Validators.required]],
+      password: [null, [Validators.required]],
     });
   }
 
@@ -64,15 +66,6 @@ export class LoginComponent {
 
           this.routesService.roleSelect();
         });
-  }
-
-  /** Redirects **/
-  redirectPasswordReset() {
-    this.routesService.passwordReset();
-  }
-
-  redirectRegistration() {
-    this.routesService.registration();
   }
 
   /** Getters **/

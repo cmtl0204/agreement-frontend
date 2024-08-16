@@ -4,9 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
 import {ServerResponse} from '@models/http-response';
-import {MessageService} from '@servicesApp/core';
-import {AgreementModel, CatalogueModel} from '@models/core';
-import {CatalogueTypeEnum} from "@shared/enums";
+import {MessageDialogService, MessageService} from '@servicesApp/core';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +12,7 @@ import {CatalogueTypeEnum} from "@shared/enums";
 export class AddendumsHttpService {
   private readonly API_URL = `${environment.API_URL}/addendums`;
   private readonly httpClient = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
+  private readonly messageDialogService = inject(MessageDialogService);
 
   constructor() {
   }
@@ -24,7 +22,7 @@ export class AddendumsHttpService {
 
     return this.httpClient.delete<ServerResponse>(url).pipe(
       map(response => {
-        this.messageService.success(response);
+        this.messageDialogService.successHttp(response);
 
         return response.data;
       })

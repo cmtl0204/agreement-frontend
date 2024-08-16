@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel} from "@models/core";
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from "@models/core";
 import {PrimeIcons} from "primeng/api";
 import {
   AgreementFormEnum, AgreementSectionFormEnum, EnablingDocumentFormEnum,
@@ -9,6 +9,8 @@ import {
   SeverityButtonActionEnum,
   TableEnum
 } from "@shared/enums";
+import {CoreService} from "@servicesApp/core";
+import {FilesHttpService} from "@servicesHttp/core";
 
 @Component({
   selector: 'app-document',
@@ -17,10 +19,9 @@ import {
 })
 export class DocumentComponent implements OnInit {
   @Input({required: true}) agreement!: AgreementModel;
-
+  private readonly filesHttpService = inject(FilesHttpService);
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
-  protected readonly FileFormEnum = FileFormEnum;
   protected readonly TableEnum = TableEnum;
   protected readonly SeverityButtonActionEnum = SeverityButtonActionEnum;
   protected readonly PrimeIcons = PrimeIcons;
@@ -48,8 +49,7 @@ export class DocumentComponent implements OnInit {
     ];
   }
 
-  download(){
-
+  download(file: FileModel) {
+    this.filesHttpService.downloadFile(file);
   }
-  protected readonly EnablingDocumentFormEnum = EnablingDocumentFormEnum;
 }

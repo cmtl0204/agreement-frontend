@@ -61,7 +61,6 @@ export class MenusHttpService {
   getMenusByRole(roleId:string): Observable<MenuModel[]> {
     const url = `${this.API_URL}/roles/${roleId}`;
 
-
     return this.httpClient.get<ServerResponse>(url).pipe(
       map((response) => {
         return response.data;

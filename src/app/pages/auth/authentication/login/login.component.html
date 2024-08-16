@@ -15,8 +15,15 @@
         </div>
 
         <div class="field col-12">
-          <label for="username" appLabel [label]="LoginFormEnum.username" [required]="usernameField"></label>
-          <input pInputText id="username" formControlName="username">
+          <label
+            for="username"
+            appLabel [label]="LoginFormEnum.username"
+            [required]="usernameField"></label>
+          <p-inputGroup>
+            <input pInputText id="username" formControlName="username">
+            <p-inputGroupAddon>&#64;turismo.gob.ec</p-inputGroupAddon>
+          </p-inputGroup>
+
           <small appErrorMessage
                  [errors]="usernameField.errors"
                  [touched]="usernameField.touched"

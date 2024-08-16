@@ -1,8 +1,4 @@
-<p-panel>
-  <ng-template pTemplate="header">
-    <h2>{{ AgreementSectionFormEnum.enablingDocument }}</h2>
-  </ng-template>
-
+<p-panel [header]="AgreementSectionFormEnum.enablingDocument">
   <ng-template pTemplate="content">
     <p-table
       styleClass="p-datatable-striped"
@@ -29,7 +25,7 @@
               [icon]="IconButtonActionEnum.DOWNLOAD"
               [pTooltip]="LabelButtonActionEnum.DOWNLOAD"
               [severity]="SeverityButtonActionEnum.DOWNLOAD"
-              (click)="download()"/>
+              (click)="download(item)"/>
           </td>
         </tr>
       </ng-template>

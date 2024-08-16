@@ -1,5 +1,6 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthService} from "@servicesApp/auth";
 
 export enum AppRoutesEnum {
   CORE = '/core',
@@ -11,8 +12,9 @@ export enum AppRoutesEnum {
   providedIn: 'root'
 })
 export class RoutesService {
+  private readonly router = inject(Router);
 
-  constructor(private router: Router) {
+  constructor() {
   }
 
   get core(): string {
@@ -29,7 +31,7 @@ export class RoutesService {
   }
 
   /** Planner Role **/
-  academicFormationList(){
+  academicFormationList() {
     this.router.navigate([this.core + 'professionals/1/academic-formations']);
   }
 

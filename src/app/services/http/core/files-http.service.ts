@@ -91,7 +91,6 @@ export class FilesHttpService {
     );
   }
 
-
   remove(id: string): Observable<FileModel> {
     const url = `${this.API_URL}/${id}`;
 
@@ -99,15 +98,8 @@ export class FilesHttpService {
 
     return this.httpClient.delete<ServerResponse>(url).pipe(
       map((response) => {
-        this.messageServicePn.clear();
-
-        this.messageServicePn.add({
-          key: CoreMessageEnum.APP_TOAST,
-          severity: 'info',
-          summary: response.title,
-          detail: response.message
-        });
         this.coreService.isProcessing = false;
+        this.messageDialogService.successHttp(response);
         return response.data;
       })
     );
@@ -115,16 +107,23 @@ export class FilesHttpService {
 
   downloadFile(file: FileModel) {
     const url = `${this.API_URL}/${file.id}/download`;
+
     this.coreService.isProcessing = true;
+
     this.httpClient.get<BlobPart>(url, {responseType: 'blob' as 'json'})
       .subscribe(response => {
-        // const filePath = URL.createObjectURL(new Blob(binaryData, {type: file.extension}));
         const filePath = URL.createObjectURL(new Blob([response]));
+
         const downloadLink = document.createElement('a');
+
         downloadLink.href = filePath;
+
         downloadLink.setAttribute('download', file.name!);
+
         document.body.appendChild(downloadLink);
+
         downloadLink.click();
+
         this.coreService.isProcessing = false;
       });
   }

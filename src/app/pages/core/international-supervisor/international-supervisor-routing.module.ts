@@ -1,20 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AgreementListComponent } from './agreement/agreement-list/agreement-list.component';
+import {AgreementListComponent} from "../national-supervisor/agreement/agreement-list/agreement-list.component";
+
 
 const routes: Routes = [
   {
     path: 'agreement-list',
     component: AgreementListComponent
   },
-  {
-    path: 'agreement-update/:id',
-    component: AgreementListComponent
-  },
-  {
-    path: 'agreement-view/:id',
-    component: AgreementListComponent
-  }
 ];
 
 @NgModule({

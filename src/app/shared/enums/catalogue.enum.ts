@@ -64,3 +64,9 @@ export enum CatalogueExternalInstitutionsPersonTypeEnum {
   PRIVATE_NATURAL = 'PRIVATE_NATURAL',
   PRIVATE_LEGAL = 'PRIVATE_LEGAL',
 }
+
+export enum CatalogueAgreementStatesStateEnum {
+  CURRENT = 'CURRENT',
+  CLOSING_PROCESS = 'CLOSING_PROCESS',
+  CLOSED = 'CLOSED',
+}

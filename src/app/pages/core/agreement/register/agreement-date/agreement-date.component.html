@@ -47,38 +47,14 @@
   </div>
 
   <!-- isFinishDate -->
-  <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+  <div class="field xl:col-12 lg:col-12 md:col-12 sm:col-12">
     <label
       appLabel
       for="isFinishDate"
       [label]="AgreementFormEnum.isFinishDate"
       [required]="isFinishDateField"></label>
 
-    <div class="flex gap-3">
-      <div class="flex align-items-center">
-        <p-radioButton
-          id="isFinishDate"
-          formControlName="isFinishDate"
-          name="isFinishDate"
-          [value]="true"/>
-
-        <label for="isFinishDate" class="ml-2">
-          Si
-        </label>
-      </div>
-
-      <div class="flex align-items-center">
-        <p-radioButton
-          id="no"
-          formControlName="isFinishDate"
-          name="isFinishDate"
-          [value]="false"/>
-
-        <label for="no" class="ml-2">
-          No
-        </label>
-      </div>
-    </div>
+    <p-inputSwitch id="isFinishDate" formControlName="isFinishDate" class="ml-2"/>
 
     <small
       appErrorMessage
@@ -90,7 +66,12 @@
 
   <!-- endedAt -->
   @if (isFinishDateField.value) {
-    <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+    <div class="field col-12">
+      <label>Plazo total del convenio:</label>
+    </div>
+
+    <!-- endedAt -->
+    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">
       <label appLabel for="endedAt"
              [label]="AgreementFormEnum.endedAt"
              [required]="endedAtField"></label>
@@ -111,12 +92,8 @@
       </small>
     </div>
 
-    <div class="field col-12">
-      <label>Plazo total del convenio:</label>
-    </div>
-
     <!-- yearTerm -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">
       <label
         appLabel
         for="yearTerm"
@@ -139,7 +116,7 @@
     </div>
 
     <!-- monthTerm -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">
       <label
         appLabel
         for="monthTerm"
@@ -162,7 +139,7 @@
     </div>
 
     <!-- dayTerm -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">
       <label
         appLabel
         for="dayTerm"

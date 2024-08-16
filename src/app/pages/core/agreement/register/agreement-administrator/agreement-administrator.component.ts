@@ -92,7 +92,7 @@ export class AgreementAdministratorComponent implements OnInit {
 
   /** Load Foreign Keys  **/
   loadPositions() {
-    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.INTERNAL_INSTITUTIONS_POSITION);
+    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
   }
 
   loadUnits() {

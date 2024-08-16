@@ -1,7 +1,6 @@
 export const environment = {
   production: true,
-  API_URL: 'https://apisiaaw.uaw.edu.ec/api/v1',
-  HOST_URL: 'https://apisiaaw.uaw.edu.ec/',
-  APP_NAME:'Sistema de Gestión Académica - SIAAW',
-  APP_SHORT_NAME:'SIAAW',
+  API_URL: 'http://192.168.20.42:8082',
+  APP_NAME:'Sistema Informático de Convenios',
+  APP_SHORT_NAME:'SIC'
 };

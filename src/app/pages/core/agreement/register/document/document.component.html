@@ -1,54 +1,53 @@
-@if (formInput.enablingDocuments.length < types.length) {
-  <form [formGroup]="fileForm" class="p-fluid grid">
-    <!-- type -->
-    @for (type of types; track type.id) {
-      <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-        <label
-          appLabel
-          [label]="FileFormEnum.type"
-          [required]="typeField">
-        </label>
+<form [formGroup]="fileForm" class="p-fluid grid">
+  <!-- type -->
+  @for (type of types; track type.id) {
+    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+      <label
+        appLabel
+        [label]="FileFormEnum.type"
+        [required]="typeField">
+      </label>
 
-        <p-messages severity="info">
-          <ng-template pTemplate>
-            <i [class]="PrimeIcons.FILE_PDF"></i>
-            <div class="ml-2">
-              {{ type.name }}
-            </div>
-          </ng-template>
-        </p-messages>
-      </div>
+      <p-messages severity="info">
+        <ng-template pTemplate>
+          <i [class]="PrimeIcons.FILE_PDF"></i>
+          <div class="ml-2">
+            {{ type.name }}
+          </div>
+        </ng-template>
+      </p-messages>
+    </div>
 
-      <!-- file -->
-      <div class="field col-12 xl:col-2 lg:col-2 md:col-2 sm:col-12">
-        <label appLabel for="file"
-               [label]="FileFormEnum.myFile"
-               [required]="fileField">
-        </label>
-        <p-divider/>
-        <p-fileUpload
-          #uploadFiles
-          id="file"
-          mode="basic"
-          chooseLabel="Cargar"
-          [chooseIcon]="PrimeIcons.UPLOAD"
-          name="files[]"
-          accept=".pdf"
-          maxFileSize="1000000"
-          [auto]="true"
-          [customUpload]="true"
-          (uploadHandler)="onUpload($event,uploadFiles,type)"/>
+    <!-- file -->
+    <div class="field col-12 xl:col-2 lg:col-2 md:col-2 sm:col-12">
+      <label
+        appLabel for="file"
+        [label]="FileFormEnum.myFile"
+        [required]="fileField">
+      </label>
+      <p-divider/>
+      <p-fileUpload
+        #uploadFiles
+        id="file"
+        mode="basic"
+        chooseLabel="Cargar"
+        [chooseIcon]="PrimeIcons.UPLOAD"
+        name="files[]"
+        accept=".pdf"
+        maxFileSize="1000000"
+        [auto]="true"
+        [customUpload]="true"
+        (uploadHandler)="uploadFile($event,uploadFiles,type)"/>
 
-        <small
-          appErrorMessage
-          [errors]="fileField.errors"
-          [touched]="fileField.touched"
-          [dirty]="fileField.dirty">
-        </small>
-      </div>
-    }
-  </form>
-}
+      <small
+        appErrorMessage
+        [errors]="fileField.errors"
+        [touched]="fileField.touched"
+        [dirty]="fileField.dirty">
+      </small>
+    </div>
+  }
+</form>
 
 @if (formInput.enablingDocuments.length > 0) {
   <p-table
@@ -76,7 +75,7 @@
             [icon]="IconButtonActionEnum.DELETE"
             [pTooltip]="LabelButtonActionEnum.DELETE"
             [severity]="SeverityButtonActionEnum.DELETE"
-            (click)="removeFile(rowIndex)"/>
+            (click)="removeFile(rowIndex,item)"/>
         </td>
       </tr>
     </ng-template>

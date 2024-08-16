@@ -11,3 +11,7 @@ export class Expressions {
     return '^https?:\\/\\/[\\w\\-]+(\\.[\\w\\-]+)+[/#?]?.*$';
   }
 }
+
+export const userName = () => {
+  return '[\\w\\-]+(\\.[\\w\\-]+)';
+}

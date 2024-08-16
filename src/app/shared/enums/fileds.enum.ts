@@ -1,5 +1,5 @@
 export enum LoginFormEnum {
-  username = 'Usuario',
+  username = 'Correo electrónico instuticional',
   password = 'Contraseña',
   passwordNew = 'Nueva contraseña',
   passwordConfirmation = 'Repita la contraseña',
@@ -21,7 +21,7 @@ export enum UsersFormEnum {
 }
 
 export enum FileFormEnum {
-  type = 'Tipo de archivo',
+  type = 'Tipo de documento',
   myFile = 'Archivo',
   name = 'Nombre del archivo',
 }
@@ -56,16 +56,16 @@ export enum AgreementSectionFormEnum {
 }
 
 export enum InternalInstitutionsFormEnum {
-  name = 'Nombre entidad/institución contraparte que firma el convenio',
-  unit = 'Unidad a la que pertenece la contraparte',
-  position = 'Cargo del funcionario Ministerio de Turismo',
+  name = 'Nombre entidad',
+  unit = 'Unidad',
+  position = 'Cargo del funcionario',
   personType = 'Entidad',
 }
 
 export enum ExternalInstitutionsFormEnum {
-  name = 'Nombre entidad/institución contraparte que firma el convenio',
-  position = 'Cargo de la contraparte',
-  unit = 'Unidad a la que pertenece la contraparte',
+  name = 'Nombre entidad',
+  position = 'Cargo',
+  unit = 'Unidad',
   personType = 'Entidad',
 }
 
@@ -103,8 +103,9 @@ export enum AgreementDateFormEnum {
 
 export enum AgreementFormEnum {
   header = 'Datos Básicos',
-  subscribedAt = 'Fecha suscripción de convenio',
-  startedAt = 'Fecha inicio de convenio',
+  enabled = 'Estado de Registro',
+  subscribedAt = 'Fecha suscripción del convenio',
+  startedAt = 'Fecha inicio del convenio',
   isFinishDate = '¿El convenio cuenta con fecha de terminación?',
   endedAt = 'Fecha de terminación del Convenio',
   endedReason = 'Razón de terminación del convenio',
@@ -115,12 +116,12 @@ export enum AgreementFormEnum {
   dayTerm = 'Días',
   objective = 'Objeto del convenio',
   name = 'Nombre del convenio',
-  internalNumber = 'Numero interno de convenio',
-  number = 'Numero de convenio',
+  internalNumber = 'Número interno de convenio',
+  number = 'Número de convenio',
   origin = 'Origen del convenio',
   type = 'Tipo del convenio',
   isFinancing = '¿Registra Financiamiento?',
-  specialType = 'Tipo especifico del convenio',
+  specialType = 'Tipo específico del convenio',
 }
 
 export enum AgreementStateEnum {
@@ -129,13 +130,13 @@ export enum AgreementStateEnum {
 
 export enum AdministratorFormEnum {
   header = 'Administrador del convenio',
-  position = 'Cargo del funcionario',
+  position = 'Administrador del convenio',
   unit = 'Unidad Administrativa',
-  user = 'Administrador del convenio',
+  user = 'Responsable del convenio',
 }
 
 export enum AddendumEnum {
   header = 'Adendas',
-  description = 'Información de la Adenda',
-  file = 'Documento de adenda o modificatorio',
+  description = 'Descripción',
+  file = 'Documento',
 }
