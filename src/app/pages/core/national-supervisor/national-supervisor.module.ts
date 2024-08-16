@@ -14,6 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { NationalSupervisorRoutingModule } from './national-supervisor-routing.module';
 import {DialogModule} from "primeng/dialog";
 import {ViewModule} from "../agreement/view/view.module";
+import {IconFieldModule} from "primeng/iconfield";
+import {InputIconModule} from "primeng/inputicon";
 
 
 
@@ -21,20 +23,22 @@ import {ViewModule} from "../agreement/view/view.module";
   declarations: [
     AgreementListComponent
   ],
-    imports: [
-        CommonModule,
-        NationalSupervisorRoutingModule,
-        SharedModule,
-        ToolbarModule,
-        ButtonModule,
-        PaginatorModule,
-        TableModule,
-        InputGroupModule,
-        TagModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        DialogModule,
-        ViewModule,
-    ]
+  imports: [
+    CommonModule,
+    NationalSupervisorRoutingModule,
+    SharedModule,
+    ToolbarModule,
+    ButtonModule,
+    PaginatorModule,
+    TableModule,
+    InputGroupModule,
+    TagModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    DialogModule,
+    ViewModule,
+    IconFieldModule,
+    InputIconModule,
+  ]
 })
 export class NationalSupervisorModule { }

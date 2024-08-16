@@ -25,6 +25,7 @@
   (onPageChange)="paginate($event)"></p-paginator>
  -->
 <p-table
+  #dt
   dataKey="id"
   styleClass="p-datatable-striped"
   [value]="items"
@@ -36,16 +37,6 @@
   <ng-template pTemplate="caption">
     <div class="flex">
       <h1>{{ BreadcrumbEnum.AGREEMENTS }}</h1>
-      <div class="p-input-icon-right ml-auto">
-        <p-inputGroup>
-          <p-button
-            [icon]="PrimeIcons.SEARCH"></p-button>
-          <input type="text"
-                 pInputText
-                 [formControl]="search"
-                 placeholder="Buscar...">
-        </p-inputGroup>
-      </div>
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
