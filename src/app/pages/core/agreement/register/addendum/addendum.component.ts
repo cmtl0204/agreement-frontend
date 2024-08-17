@@ -184,11 +184,11 @@ export class AddendumComponent implements OnInit {
         this.addendumForm.reset();
 
         this.isVisibleAddendumForm = false;
-      });
 
-      if (this.formInput.addendums.length > 0) {
-        this.isAddendumField.disable();
-      }
+        if (this.formInput.addendums.length > 0) {
+          this.isAddendumField.disable();
+        }
+      });
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
       this.form.markAllAsTouched();
