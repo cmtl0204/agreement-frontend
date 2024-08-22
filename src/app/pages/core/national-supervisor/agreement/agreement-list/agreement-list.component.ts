@@ -171,7 +171,7 @@ export class AgreementListComponent implements OnInit {
   }
 
   redirectViewAgreement() {
-    this.messageDialogService.successCustom('Sitio en construcción', 'Pronto estará disponibel');
+    this.messageDialogService.successCustom('Sitio en construcción', 'Pronto estará disponible');
     return;
 
     this.isVisibleAgreementView = true;

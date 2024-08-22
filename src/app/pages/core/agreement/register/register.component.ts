@@ -177,7 +177,7 @@ export class RegisterComponent implements OnInit {
       key: 'confirmDialog',
       message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
       header: '¿Está seguro de guardar?',
-      icon: PrimeIcons.TIMES_CIRCLE,
+      icon: PrimeIcons.QUESTION_CIRCLE,
       acceptLabel: "Si",
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",
