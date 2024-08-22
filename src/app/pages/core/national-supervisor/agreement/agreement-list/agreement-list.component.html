@@ -75,7 +75,7 @@
                 {{ rowData[col.field] }}
               }
               @case ('endedAt') {
-                {{ col.field | date }}
+                {{ rowData.endedAt | date }}
               }
               @case ('isFinancing') {
                 @if (rowData.suspendedAt) {
