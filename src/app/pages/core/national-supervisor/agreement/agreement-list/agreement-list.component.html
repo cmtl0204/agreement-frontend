@@ -48,7 +48,7 @@
         </th>
       }
       <th class="text-center">
-        {{TableEnum.ACTIONS}}
+        {{ TableEnum.ACTIONS }}
       </th>
     </tr>
   </ng-template>
@@ -74,6 +74,9 @@
               @default {
                 {{ rowData[col.field] }}
               }
+              @case ('endedAt') {
+                {{ col.field | date }}
+              }
               @case ('isFinancing') {
                 @if (rowData.suspendedAt) {
                   <p-tag severity="danger" value="Suspendido" class="mr-1"></p-tag>
@@ -82,7 +85,7 @@
               @case ('enabled') {
                 @if (rowData.enabled) {
                   <p-tag severity="info" value="Registrado"/>
-                } @else{
+                } @else {
                   <p-tag severity="danger" value="En Proceso"/>
                 }
               }
@@ -92,8 +95,8 @@
       }
       <td class="text-center">
         <p-button
-            [icon]="PrimeIcons.ELLIPSIS_V"
-            (click)="selectItem(rowData)"></p-button>
+          [icon]="PrimeIcons.ELLIPSIS_V"
+          (click)="selectItem(rowData)"></p-button>
       </td>
     </tr>
   </ng-template>
