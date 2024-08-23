@@ -9,8 +9,12 @@
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid grid">
         <div class="field col-12 text-center">
-          <h2 class="p-error">
-            Pruebas Ingreso al Sistema {{ authService.systemShortName }}
+          @if (!environment.production) {
+            <h2>PRUEBAS</h2>
+          }
+
+          <h2 [ngClass]="{'p-error':!environment.production}">
+            Ingreso al Sistema {{ authService.systemShortName }}
           </h2>
         </div>
 

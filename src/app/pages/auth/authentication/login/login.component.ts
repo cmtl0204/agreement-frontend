@@ -5,6 +5,7 @@ import {AuthHttpService, AuthService} from '@servicesApp/auth';
 import {CoreService, MessageService, RoutesService} from '@servicesApp/core';
 import {LoginFormEnum} from "@shared/enums";
 import {userName} from "@shared/regular-expresions";
+import {environment} from "@env/environment";
 
 @Component({
   selector: 'app-login',
@@ -76,4 +77,6 @@ export class LoginComponent {
   get passwordField(): AbstractControl {
     return this.form.controls['password'];
   }
+
+  protected readonly environment = environment;
 }
