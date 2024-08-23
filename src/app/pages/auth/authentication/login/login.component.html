@@ -2,15 +2,15 @@
   <p-panel class="col-12 xl:col-4 lg:col-4 md:col-6 sm:col-12">
     <ng-template pTemplate="header">
       <div class="flex align-items-center gap-2">
-        <span class="font-bold">{{ authService.system }}</span>
+        <span class="font-bold p-error">{{ authService.system }}</span>
       </div>
     </ng-template>
 
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid grid">
         <div class="field col-12 text-center">
-          <h2>
-            Ingreso al Sistema {{ authService.systemShortName }}
+          <h2 class="p-error">
+            Pruebas Ingreso al Sistema {{ authService.systemShortName }}
           </h2>
         </div>
 

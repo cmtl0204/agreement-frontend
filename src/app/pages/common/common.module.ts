@@ -9,6 +9,7 @@ import {ForbiddenComponent} from './forbidden/forbidden.component';
 import {ServiceUnavailableComponent} from './service-unavailable/service-unavailable.component';
 import {UnauthorizedComponent} from './unauthorized/unauthorized.component';
 import {InternalServerErrorComponent} from './internal-server-error/internal-server-error.component';
+import {DividerModule} from "primeng/divider";
 
 @NgModule({
   declarations: [
@@ -18,13 +19,14 @@ import {InternalServerErrorComponent} from './internal-server-error/internal-ser
     UnauthorizedComponent,
     InternalServerErrorComponent
   ],
-  imports: [
-    NgCommonModule,
-    CommonRoutingModule,
-    ButtonModule,
-    RippleModule,
-    MessageModule
-  ]
+    imports: [
+        NgCommonModule,
+        CommonRoutingModule,
+        ButtonModule,
+        RippleModule,
+        MessageModule,
+        DividerModule
+    ]
 })
 export class CommonModule {
 }

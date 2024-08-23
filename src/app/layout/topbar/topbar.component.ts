@@ -40,4 +40,6 @@ export class TopbarComponent {
   signOut() {
     this.authHttpService.signOut();
   }
+
+  protected readonly environment = environment;
 }
