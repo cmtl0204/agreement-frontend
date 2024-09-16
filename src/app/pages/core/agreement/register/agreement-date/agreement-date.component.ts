@@ -35,6 +35,18 @@ export class AgreementDateComponent implements OnInit {
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
 
+  esLocale = {
+    firstDayOfWeek: 1,
+    dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+    dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+    monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+    monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+    today: 'Hoy',
+    clear: 'Limpiar',
+    dateFormat:'dd/mm/yy'
+  };
+
   constructor() {
     this.buildForm();
   }
@@ -55,6 +67,7 @@ export class AgreementDateComponent implements OnInit {
       yearTerm: [null],
       monthTerm: [null],
       dayTerm: [null],
+      totalTerm: [null],
     });
 
     this.checkValueChanges();
@@ -90,6 +103,7 @@ export class AgreementDateComponent implements OnInit {
         this.yearTermField.setValidators(Validators.required);
         this.monthTermField.setValidators(Validators.required);
         this.dayTermField.setValidators(Validators.required);
+        this.totalTermField.setValidators(Validators.required);
         this.endedReasonField.clearValidators();
         this.endedReasonField.reset();
       } else if (value === false) {
@@ -98,10 +112,13 @@ export class AgreementDateComponent implements OnInit {
         this.monthTermField.clearValidators();
         this.dayTermField.clearValidators();
         this.endedAtField.clearValidators();
+        this.totalTermField.clearValidators();
+
         this.endedAtField.reset();
         this.yearTermField.reset();
         this.monthTermField.reset();
         this.dayTermField.reset();
+        this.totalTermField.reset();
       }
 
       this.endedReasonField.updateValueAndValidity();
@@ -109,6 +126,7 @@ export class AgreementDateComponent implements OnInit {
       this.yearTermField.updateValueAndValidity();
       this.monthTermField.updateValueAndValidity();
       this.dayTermField.updateValueAndValidity();
+      this.totalTermField.updateValueAndValidity();
     });
   }
 
@@ -123,6 +141,7 @@ export class AgreementDateComponent implements OnInit {
     if (this.yearTermField.invalid) this.formErrors.push(AgreementFormEnum.yearTerm);
     if (this.monthTermField.invalid) this.formErrors.push(AgreementFormEnum.monthTerm);
     if (this.dayTermField.invalid) this.formErrors.push(AgreementFormEnum.dayTerm);
+    if (this.totalTermField.invalid) this.formErrors.push(AgreementFormEnum.totalTerm);
 
     this.formErrorsOutput.emit(this.formErrors);
   }
@@ -158,5 +177,9 @@ export class AgreementDateComponent implements OnInit {
 
   get dayTermField(): AbstractControl {
     return this.form.controls['dayTerm'];
+  }
+
+  get totalTermField(): AbstractControl {
+    return this.form.controls['totalTerm'];
   }
 }

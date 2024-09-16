@@ -40,6 +40,7 @@ import {SidebarModule} from "primeng/sidebar";
 import {BadgeModule} from "primeng/badge";
 import {PanelMenuModule} from "primeng/panelmenu";
 import {ThemeComponent} from "./layout/theme/theme.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 registerLocaleData(localEs, 'es');
 
@@ -60,6 +61,7 @@ registerLocaleData(localEs, 'es');
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    TranslateModule.forRoot(),
     SharedModule,
     BreadcrumbModule,
     MenubarModule,

@@ -79,6 +79,7 @@ export class RegisterComponent implements OnInit {
       isFinishDate: [true],
       endedAt: [null],
       endedReason: [null],
+      totalTerm: [null],
       yearTerm: [null],
       monthTerm: [null],
       dayTerm: [null],

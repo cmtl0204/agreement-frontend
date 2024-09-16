@@ -33,6 +33,7 @@ export interface AgreementModel {
   origin?: CatalogueModel;
   type?: CatalogueModel;
   specialType?: CatalogueModel;
+  totalTerm?: string;
   externalInstitutions: ExternalInstitutionModel[];
   internalInstitutions: InternalInstitutionModel[];
   financings: FinancingModel[];
