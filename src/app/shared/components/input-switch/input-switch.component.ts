@@ -33,7 +33,6 @@ export class InputSwitchComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value: boolean): void {
-    console.log(value);
     if (value) this.value.patchValue(value);
   }
 }
