@@ -5,6 +5,7 @@ import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {SkeletonEnum, AgreementFormEnum} from '@shared/enums';
 import {getFormattedDate} from '@shared/helpers';
+import {CustomFormatDatePipe} from "@shared/pipes";
 
 @Component({
   selector: 'app-agreement-date',
@@ -17,6 +18,7 @@ export class AgreementDateComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
+  //protected readonly customFormatDatePipe = inject(CustomFormatDatePipe);
 
   /** Form **/
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();

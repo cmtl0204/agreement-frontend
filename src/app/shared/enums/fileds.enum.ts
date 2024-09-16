@@ -130,8 +130,8 @@ export enum AgreementStateEnum {
 
 export enum AdministratorFormEnum {
   header = 'Administrador del convenio',
-  position = 'Administrador del convenio',
-  unit = 'Unidad Administrativa',
+  position = 'Cargo del funcionario Ministerio de Turismo',
+  unit = 'Unidad Administrativa del Ministerio de Turismo',
   user = 'Responsable del convenio',
 }
 

@@ -43,6 +43,7 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import {TagModule} from "primeng/tag";
 import {ListboxModule} from "primeng/listbox";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {CustomFormatDatePipe} from "@shared/pipes";
 
 @NgModule({
   declarations: [
@@ -97,7 +98,9 @@ import {ConfirmPopupModule} from "primeng/confirmpopup";
         TagModule,
         ListboxModule,
         ConfirmPopupModule
-    ]
+    ],
+  providers: [CustomFormatDatePipe,
+  ]
 })
 export class RegisterModule {
 }
