@@ -1,4 +1,4 @@
-import {NgModule,} from '@angular/core';
+import {forwardRef, NgModule,} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RolesPermissionsDirective} from '@shared/directives/roles-permissions.directive';
 import {ErrorMessageDirective} from '@shared/directives/error-message.directive';
@@ -21,7 +21,7 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {DividerModule} from "primeng/divider";
 import {CardModule} from "primeng/card";
 import {OverlayPanelModule} from "primeng/overlaypanel";
-import {ReactiveFormsModule} from "@angular/forms";
+import {NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
 import {SearchComponent} from './components/search/search.component';
 import {
   ActivePipe,
@@ -56,12 +56,14 @@ import {VisibleComponent} from './components/visible/visible.component';
 import {DialogModule} from "primeng/dialog";
 import {ButtonActionComponent} from './components/button-action/button-action.component';
 import {MapComponent} from './components/map/map.component';
-import { MenuModule } from 'primeng/menu';
-import { MessageDialogComponent } from './components/message-dialog/message-dialog.component';
-import { MessageConfirmDialogComponent } from './components/message-confirm-dialog/message-confirm-dialog.component';
+import {MenuModule} from 'primeng/menu';
+import {MessageDialogComponent} from './components/message-dialog/message-dialog.component';
+import {MessageConfirmDialogComponent} from './components/message-confirm-dialog/message-confirm-dialog.component';
 import {ToastModule} from "primeng/toast";
-import { FormButtonActionComponent } from './components/form-button-action/form-button-action.component';
-import { FormHelpFieldComponent } from './components/form-help-field/form-help-field.component';
+import {FormButtonActionComponent} from './components/form-button-action/form-button-action.component';
+import {FormHelpFieldComponent} from './components/form-help-field/form-help-field.component';
+import {InputSwitchComponent} from './components/input-switch/input-switch.component';
+import {InputSwitchModule} from "primeng/inputswitch";
 
 @NgModule({
   declarations: [
@@ -99,6 +101,7 @@ import { FormHelpFieldComponent } from './components/form-help-field/form-help-f
     FormButtonActionComponent,
     FormHelpFieldComponent,
     CustomFormatDatePipe,
+    InputSwitchComponent,
   ],
   exports: [
     SkeletonComponent,
@@ -135,37 +138,39 @@ import { FormHelpFieldComponent } from './components/form-help-field/form-help-f
     MessageConfirmDialogComponent,
     FormButtonActionComponent,
     FormHelpFieldComponent,
-    CustomFormatDatePipe
+    CustomFormatDatePipe,
+    InputSwitchComponent
   ],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        SkeletonModule,
-        TableModule,
-        ProgressBarModule,
-        PaginatorModule,
-        ToolbarModule,
-        ButtonModule,
-        RippleModule,
-        InputTextModule,
-        TooltipModule,
-        FileUploadModule,
-        MessageModule,
-        InputTextareaModule,
-        DividerModule,
-        CardModule,
-        OverlayPanelModule,
-        TagModule,
-        PanelMenuModule,
-        SidebarModule,
-        SpeedDialModule,
-        ConfirmPopupModule,
-        ConfirmDialogModule,
-        PanelModule,
-        DialogModule,
-        MenuModule,
-        ToastModule
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SkeletonModule,
+    TableModule,
+    ProgressBarModule,
+    PaginatorModule,
+    ToolbarModule,
+    ButtonModule,
+    RippleModule,
+    InputTextModule,
+    TooltipModule,
+    FileUploadModule,
+    MessageModule,
+    InputTextareaModule,
+    DividerModule,
+    CardModule,
+    OverlayPanelModule,
+    TagModule,
+    PanelMenuModule,
+    SidebarModule,
+    SpeedDialModule,
+    ConfirmPopupModule,
+    ConfirmDialogModule,
+    PanelModule,
+    DialogModule,
+    MenuModule,
+    ToastModule,
+    InputSwitchModule
+  ],
   providers: [ConfirmationService]
 })
 export class SharedModule {
