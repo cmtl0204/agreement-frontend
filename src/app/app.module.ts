@@ -4,7 +4,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {AppComponent} from './app.component';
 import {HttpInterceptorProviders} from './interceptors';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {
   FooterComponent,
   TopbarComponent,
@@ -40,9 +40,14 @@ import {SidebarModule} from "primeng/sidebar";
 import {BadgeModule} from "primeng/badge";
 import {PanelMenuModule} from "primeng/panelmenu";
 import {ThemeComponent} from "./layout/theme/theme.component";
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
 registerLocaleData(localEs, 'es');
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, './i18n/', '.json')
+}
 
 @NgModule({
   declarations: [
@@ -61,7 +66,14 @@ registerLocaleData(localEs, 'es');
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      defaultLanguage: 'es',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      }
+    }),
     SharedModule,
     BreadcrumbModule,
     MenubarModule,
