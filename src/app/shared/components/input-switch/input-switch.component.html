@@ -1,0 +1,9 @@
+<p-inputSwitch [formControl]="value"/>
+
+<span class="ml-2">
+@if (value.value) {
+  {{ selected }}
+} @else {
+  {{ unselected }}
+}
+</span>
