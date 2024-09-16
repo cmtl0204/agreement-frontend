@@ -3,7 +3,7 @@
     <p-button
       (click)="redirectCreateForm()"
       [icon]="IconButtonActionEnum.CREATE"
-      [label]="LabelButtonActionEnum.CREATE"
+      [label]="LabelButtonActionEnum.CREATE_AGREEMENT"
       [loading]="coreService.isLoading"
       [severity]="SeverityButtonActionEnum.CREATE"></p-button>
     <p-button
@@ -74,15 +74,20 @@
               @default {
                 {{ rowData[col.field] }}
               }
+              @case ('subscribedAt') {
+                @if (rowData.subscribedAt) {
+                  {{ rowData.subscribedAt | customFormatDate }}
+                }
+              }
               @case ('endedAt') {
                 @if (rowData.endedAt) {
-                  {{ rowData.endedAt | date }}
+                  {{ rowData.endedAt | customFormatDate}}
+                } @else {
+                  Indefinido
                 }
               }
               @case ('isFinancing') {
-                @if (rowData.suspendedAt) {
-                  <p-tag severity="danger" value="Suspendido" class="mr-1"></p-tag>
-                }
+                {{ rowData.isFinancing | yesNo }}
               }
               @case ('enabled') {
                 @if (rowData.enabled) {
@@ -95,6 +100,7 @@
           }
         </td>
       }
+
       <td class="text-center">
         <p-button
           [icon]="PrimeIcons.ELLIPSIS_V"

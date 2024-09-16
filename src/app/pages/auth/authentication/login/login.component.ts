@@ -42,9 +42,17 @@ export class LoginComponent {
       // password: ['123', [Validators.required]],
       password: [null, [Validators.required]],
     });
+
+    this.checkValueChanges();
+  }
+
+  checkValueChanges() {
+
   }
 
   onSubmit() {
+    if (this.usernameField.value) this.usernameField.patchValue(this.usernameField.value.trim());
+
     if (this.form.valid) {
       this.login();
     } else {

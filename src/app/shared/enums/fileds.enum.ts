@@ -58,15 +58,15 @@ export enum AgreementSectionFormEnum {
 export enum InternalInstitutionsFormEnum {
   name = 'Nombre entidad',
   unit = 'Unidad',
-  position = 'Cargo del funcionario',
+  position = 'Cargo del funcionario Ministerio de Turismo',
   personType = 'Entidad',
 }
 
 export enum ExternalInstitutionsFormEnum {
-  name = 'Nombre entidad',
-  position = 'Cargo',
-  unit = 'Unidad',
-  personType = 'Entidad',
+  name = 'Nombre entidad/institución contraparte que firma el convenio',
+  position = 'Cargo de la contraparte',
+  unit = 'Unidad a la que pertenece la contraparte',
+  personType = 'Entidad de la contraparte',
 }
 
 export enum ObligationsMintur {
@@ -104,7 +104,7 @@ export enum AgreementDateFormEnum {
 export enum AgreementFormEnum {
   header = 'Datos Básicos',
   enabled = 'Estado de Registro',
-  subscribedAt = 'Fecha suscripción del convenio',
+  subscribedAt = 'Fecha suscripción de convenio',
   startedAt = 'Fecha inicio del convenio',
   isFinishDate = '¿El convenio cuenta con fecha de terminación?',
   endedAt = 'Fecha de terminación del Convenio',
@@ -120,7 +120,7 @@ export enum AgreementFormEnum {
   number = 'Número de convenio',
   origin = 'Origen del convenio',
   type = 'Tipo del convenio',
-  isFinancing = '¿Registra Financiamiento?',
+  isFinancing = 'Financiamiento',
   specialType = 'Tipo específico del convenio',
 }
 

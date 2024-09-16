@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'international-supervisor',
-    loadChildren: () => import('./international-supervisor/international-supervisor.module').then(m => m.InternationalSupervisorModule),
+    loadChildren: () => import('./national-supervisor/national-supervisor.module').then(m => m.NationalSupervisorModule),
     canActivate: [RoleGuard],
     data: {roles: [RoleEnum.INTERNATIONAL_SUPERVISOR]}
   },

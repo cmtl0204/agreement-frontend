@@ -100,12 +100,14 @@ export class AgreementListComponent implements OnInit {
 
   buildColumns() {
     this.columns = [
-      {field: 'name', header: AgreementFormEnum.name},
-      {field: 'internalNumber', header: AgreementFormEnum.internalNumber},
       {field: 'number', header: AgreementFormEnum.number},
-      {field: 'administrator', header: AdministratorFormEnum.unit},
-      {field: 'endedAt', header: AgreementFormEnum.endedAt},
+      {field: 'internalNumber', header: AgreementFormEnum.internalNumber},
+      {field: 'name', header: AgreementFormEnum.name},
+      {field: 'administrator', header: AdministratorFormEnum.header},
       {field: 'agreementState', header: AgreementStateEnum.state},
+      {field: 'subscribedAt', header: AgreementFormEnum.subscribedAt},
+      {field: 'endedAt', header: AgreementFormEnum.endedAt},
+      {field: 'isFinancing', header: AgreementFormEnum.isFinancing},
       {field: 'enabled', header: AgreementFormEnum.enabled}
     ];
   }

@@ -25,7 +25,6 @@
                 {{ col.header }}
               </th>
             }
-            <th>{{ TableEnum.ACTIONS }}</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-internalInstitution let-rowIndex="rowIndex">
@@ -35,18 +34,16 @@
             <td>
               @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
                 <ul>
+                  <p-button
+                    class="ml-1"
+                    [icon]="IconButtonActionEnum.DELETE"
+                    [severity]="SeverityButtonActionEnum.DELETE"
+                    [pTooltip]="'Eliminar Cargo'"
+                    (click)="deleteInternalInstitutionDetail(rowIndex,index)">
+                  </p-button>
                   {{ internalInstitutionDetail.position.name }}
                 </ul>
               }
-            </td>
-            <td>
-              <div class="button-group">
-                <p-button
-                  [icon]="PrimeIcons.TRASH"
-                  [severity]="SeverityButtonActionEnum.DELETE"
-                  (click)="deleteInternalInstitution(rowIndex)">
-                </p-button>
-              </div>
             </td>
           </tr>
         </ng-template>
@@ -84,8 +81,6 @@
                 {{ col.header }}
               </th>
             }
-
-            <th>{{ TableEnum.ACTIONS }}</th>
           </tr>
         </ng-template>
 
@@ -95,7 +90,7 @@
               <p-button
                 [icon]="IconButtonActionEnum.DELETE"
                 [severity]="SeverityButtonActionEnum.DELETE"
-                [pTooltip]="LabelButtonActionEnum.DELETE"
+                [pTooltip]="'Eliminar Compareciente'"
                 (click)="deleteExternalInstitution(rowIndex)"/>
             </td>
             <td>{{ item.personType.name }}</td>
@@ -108,7 +103,7 @@
                       class="ml-1"
                       [icon]="IconButtonActionEnum.DELETE"
                       [severity]="SeverityButtonActionEnum.DELETE"
-                      [pTooltip]="LabelButtonActionEnum.DELETE"
+                      [pTooltip]="'Eliminar Cargo'"
                       (click)="deleteExternalInstitutionDetail(rowIndex,index)">
                     </p-button>
 
@@ -117,13 +112,6 @@
                   </li>
                 }
               </ul>
-            </td>
-            <td>
-              <p-button
-                [icon]="IconButtonActionEnum.ADD"
-                [severity]="SeverityButtonActionEnum.ADD"
-                [pTooltip]="LabelButtonActionEnum.ADD"
-                (click)="showExternalInstitutionDetailModal(rowIndex)"/>
             </td>
           </tr>
         </ng-template>

@@ -182,14 +182,16 @@ export class AppearerComponent implements OnInit {
   /** add array **/
   addInternalInstitution() {
     this.internalInstitutionPersonTypeField.patchValue(this.internalPersonTypes.find(item => item.code === CatalogueInternalInstitutionsPersonTypeEnum.PUBLIC));
-    this.internalInstitutionNameField.patchValue( 'Ministerio de Turismo');
+    this.internalInstitutionNameField.patchValue('Ministerio de Turismo');
 
     if (this.validateInternalInstitutionForm() && this.validateInternalInstitutionDetailForm()) {
-      this.formInput.internalInstitutions.push(this.internalInstitutionForm.value);
+      if (this.formInput.internalInstitutions.length === 0) {
+        this.formInput.internalInstitutions.push(this.internalInstitutionForm.value);
+      }
+
+      this.index = 0;
 
       this.form.patchValue(this.formInput);
-
-      this.index = this.formInput.internalInstitutions.length - 1;
 
       this.addInternalInstitutionDetail();
 
@@ -223,11 +225,20 @@ export class AppearerComponent implements OnInit {
 
   addExternalInstitution() {
     if (this.validateExternalInstitutionForm() && this.validateExternalInstitutionDetailForm()) {
-      this.formInput.externalInstitutions.push(this.externalInstitutionForm.value);
+      if (this.formInput.externalInstitutions.length === 0) {
+        this.formInput.externalInstitutions.push(this.externalInstitutionForm.value);
+        this.index = 0;
+      } else {
+        this.index = this.formInput.externalInstitutions.findIndex(item => item.name.toLowerCase() === this.externalInstitutionNameField.value.toLowerCase());
+
+        if (this.index === -1) {
+          this.formInput.externalInstitutions.push(this.externalInstitutionForm.value);
+
+          this.index = this.formInput.externalInstitutions.length - 1;
+        }
+      }
 
       this.form.patchValue(this.formInput);
-
-      this.index = this.formInput.externalInstitutions.length - 1;
 
       this.addExternalInstitutionDetail();
 
@@ -290,6 +301,9 @@ export class AppearerComponent implements OnInit {
 
   deleteInternalInstitutionDetail(indexInternalInstitution: number, indexInternalInstitutionDetail: number) {
     this.formInput.internalInstitutions[indexInternalInstitution].internalInstitutionDetails.splice(indexInternalInstitutionDetail, 1);
+    if (this.formInput.internalInstitutions[indexInternalInstitution].internalInstitutionDetails.length === 0) {
+      this.formInput.internalInstitutions.splice(indexInternalInstitution, 1);
+    }
   }
 
   deleteInternalInstitution(index: number) {
@@ -313,12 +327,6 @@ export class AppearerComponent implements OnInit {
     if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
     if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
     if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
-
-    if (this.formInput.externalInstitutions) {
-      if (this.formInput.externalInstitutions?.findIndex(item => item.name === this.externalInstitutionNameField.value) > -1) {
-        this.formErrors.push('Ya existe la institución');
-      }
-    }
 
     return this.formErrors.length === 0;
   }
@@ -368,11 +376,6 @@ export class AppearerComponent implements OnInit {
   }
 
   showInternalInstitutionModal() {
-    if (this.formInput.internalInstitutions.length > 0) {
-      this.messageDialogService.errorCustom('No puede agregar', 'Solo se puede agregar 1 cargo');
-      return;
-    }
-
     this.isVisibleInternalInstitutionForm = true;
   }
 

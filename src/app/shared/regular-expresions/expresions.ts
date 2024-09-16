@@ -13,5 +13,5 @@ export class Expressions {
 }
 
 export const userName = () => {
-  return '[\\w\\-]+(\\.[\\w\\-]+)';
+  return '[\\w\\-]+(\\.[\\w \\-]+)';
 }

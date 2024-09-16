@@ -27,6 +27,7 @@ export enum LabelButtonActionEnum {
   ADD = 'Agregar',
   ACTIONS = 'Acciones',
   CREATE = 'Crear',
+  CREATE_AGREEMENT = 'CREAR CONVENIO',
   CANCEL = 'Cancelar',
   RETURN = 'Regresar',
   SAVE = 'Guardar',
