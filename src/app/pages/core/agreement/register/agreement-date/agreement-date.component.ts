@@ -5,7 +5,6 @@ import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {SkeletonEnum, AgreementFormEnum} from '@shared/enums';
 import {getFormattedDate} from '@shared/helpers';
-import {CustomFormatDatePipe} from "@shared/pipes";
 
 @Component({
   selector: 'app-agreement-date',
@@ -34,18 +33,6 @@ export class AgreementDateComponent implements OnInit {
   /** Enums **/
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementFormEnum = AgreementFormEnum;
-
-  esLocale = {
-    firstDayOfWeek: 1,
-    dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
-    dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
-    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-    monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
-    monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
-    today: 'Hoy',
-    clear: 'Limpiar',
-    dateFormat:'dd/mm/yy'
-  };
 
   constructor() {
     this.buildForm();
