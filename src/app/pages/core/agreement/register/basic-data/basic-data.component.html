@@ -7,7 +7,7 @@
       [label]="AgreementFormEnum.internalNumber"
       [required]="internalNumberField"></label>
 
-    <p-inputNumber id="number" [useGrouping]="false" formControlName="internalNumber"/>
+    <p-inputNumber inputId="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
 
     <small
       appErrorMessage
@@ -28,7 +28,7 @@
     <app-form-help-field
       [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"></app-form-help-field>
 
-    <input pInputText id="internalNumber" formControlName="number"/>
+    <input pInputText id="number" formControlName="number"/>
 
     <small
       appErrorMessage
