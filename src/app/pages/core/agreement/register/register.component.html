@@ -37,12 +37,19 @@
               (formOutput)="save($event)"/>
           </p-panel>
 
-          <p-panel header="Administrador del Convenio" class="col-12">
-            <app-agreement-administrator
-              class="col-12"
-              [formInput]="form.value"
-              (formErrorsOutput)="agreementAdministratorErrors=$event"
-              (formOutput)="save($event)"/>
+          <p-panel class="col-12">
+            <ng-template pTemplate="header">
+              <h3>Administrador del Convenio</h3>
+              <app-form-help-field content="Registrar conforme señala convenio o designación"></app-form-help-field>
+            </ng-template>
+
+            <ng-template pTemplate="content">
+              <app-agreement-administrator
+                class="col-12"
+                [formInput]="form.value"
+                (formErrorsOutput)="agreementAdministratorErrors=$event"
+                (formOutput)="save($event)"/>
+            </ng-template>
           </p-panel>
 
           <p-panel header="Comparecientes" class="col-12">
@@ -139,7 +146,7 @@
       </ng-template>
     </p-stepperPanel>
 
-    <p-stepperPanel header="Documentos Habilitantes">
+    <p-stepperPanel header="Documentación">
       <ng-template
         pTemplate="content"
         let-nextCallback="nextCallback">
@@ -169,7 +176,7 @@
       </ng-template>
     </p-stepperPanel>
 
-    <p-stepperPanel header="Adendas">
+    <p-stepperPanel header="Registro de adendas o modificatorios">
       <ng-template pTemplate="content">
         <p-toolbar>
           <div class="p-toolbar-group-left">

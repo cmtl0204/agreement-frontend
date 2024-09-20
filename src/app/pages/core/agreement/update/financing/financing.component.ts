@@ -14,7 +14,7 @@ import {
   TableEnum
 } from '@shared/enums';
 import {onlyLetters} from '@shared/helpers';
-import {PrimeIcons} from 'primeng/api';
+import {MessageService, PrimeIcons} from 'primeng/api';
 
 @Component({
   selector: 'app-financing',
@@ -27,7 +27,8 @@ export class FinancingComponent implements OnInit {
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
-  public readonly messageDialogService = inject(MessageDialogService);
+  protected readonly messageDialogService = inject(MessageDialogService);
+  private readonly messageService = inject(MessageService);
 
   /** variables **/
   protected form!: FormGroup;
@@ -120,6 +121,7 @@ export class FinancingComponent implements OnInit {
       this.formInput.financings.push(this.financingForm.value);
 
       this.form.patchValue(this.formInput);
+      // this.messageService.add({key:'toastMsg', severity: 'success', summary: 'Correcto', detail: 'Agregado'});
 
       this.financingForm.reset();
       this.isVisibleFinancingForm = false;

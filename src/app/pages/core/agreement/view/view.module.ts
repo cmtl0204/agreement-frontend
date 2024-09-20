@@ -51,7 +51,8 @@ import { DocumentComponent } from './document/document.component';
         DocumentComponent
     ],
     exports: [
-        ViewComponent
+        ViewComponent,
+        ObligationComponent
     ],
     imports: [
         CommonModule,

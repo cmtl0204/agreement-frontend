@@ -14,6 +14,7 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
 export class InputSwitchComponent implements OnInit, ControlValueAccessor {
   @Input() selected: string = 'Si';
   @Input() unselected: string = 'No';
+  @Input() disabled: boolean = false;
 
   protected value: FormControl = new FormControl(false);
   private _onChanged: Function = (_value: boolean) => {
@@ -23,6 +24,9 @@ export class InputSwitchComponent implements OnInit, ControlValueAccessor {
     this.value.valueChanges.subscribe(value => {
       this._onChanged(value);
     });
+    if(this.disabled) {
+      this.value.disable();
+    }
   }
 
   registerOnChange(fn: Function): void {

@@ -1,17 +1,33 @@
 <form [formGroup]="form" class="p-fluid grid">
+  <!-- internalNumber -->
+  <div class="field col-12 xl:col-3 lg:col-3 md:col-6 sm:col-12">
+    <label
+      appLabel
+      for="internalNumber"
+      [label]="AgreementFormEnum.internalNumber"
+      [required]="internalNumberField"></label>
+    <app-form-help-field content="Colocar número asignado por la unidad de seguimiento"></app-form-help-field>
+    <p-inputNumber inputId="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
+
+    <small
+      appErrorMessage
+      [errors]="internalNumberField.errors"
+      [touched]="internalNumberField.touched"
+      [dirty]="internalNumberField.dirty">
+    </small>
+  </div>
 
   <!-- number -->
-  <div class="field col-8 xl:col-4">
+  <div class="field col-12 xl:col-3 lg:col-3 md:col-6 sm:col-12">
     <label
       appLabel
       for="number"
       [label]="AgreementFormEnum.number"
       [required]="numberField"></label>
 
-    <app-form-help-field
-      [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"/>
+    <app-form-help-field content="Colocar numeración detallada en el convenio"></app-form-help-field>
 
-    <input pInputText id="internalNumber" formControlName="number"/>
+    <input pInputText id="number" formControlName="number"/>
 
     <small
       appErrorMessage
@@ -22,14 +38,14 @@
   </div>
 
   <!-- name -->
-  <div class="field col-4 xl:col-8">
+  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
     <label
       appLabel
       for="name"
       [label]="AgreementFormEnum.name"
       [required]="nameField"></label>
 
-    <app-form-help-field content="Esto es un mensaje de prueba"/>
+    <app-form-help-field content="Registrar textualmente el nombre del convenio - tipo oración"></app-form-help-field>
 
     <input pInputText id="name" formControlName="name"/>
 
@@ -41,74 +57,13 @@
     </small>
   </div>
 
-  <!-- internalNumber -->
-  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-    <label
-      appLabel
-      for="internalNumber"
-      [label]="AgreementFormEnum.internalNumber"
-      [required]="internalNumberField"></label>
-
-    <app-form-help-field
-      [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"/>
-
-    <p-inputNumber id="number" [useGrouping]="false" formControlName="internalNumber"/>
-
-    <small
-      appErrorMessage
-      [errors]="internalNumberField.errors"
-      [touched]="internalNumberField.touched"
-      [dirty]="internalNumberField.dirty">
-    </small>
-  </div>
-
-  <!-- state -->
-  <div formGroupName="agreementState" class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-    <label
-      appLabel
-      for="state"
-      [label]="AgreementStateEnum.state"
-      [required]="stateField"></label>
-
-    <app-form-help-field
-      [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"/>
-
-    <p-dropdown
-      id="state"
-      formControlName="state"
-      dataKey="id"
-      [options]="states"
-      placeholder="Seleccione">
-      <ng-template pTemplate="selectedItem" let-selectedItem>
-        <div class="flex align-items-center gap-2">
-          <div>{{ selectedItem.name }}</div>
-        </div>
-      </ng-template>
-      <ng-template let-item pTemplate="item">
-        <div class="flex align-items-center gap-2">
-          <div>{{ item.name }}</div>
-        </div>
-      </ng-template>
-    </p-dropdown>
-
-    <small
-      appErrorMessage
-      [errors]="stateField.errors"
-      [touched]="stateField.touched"
-      [dirty]="stateField.dirty">
-    </small>
-  </div>
-
   <!-- origin -->
-  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+  <div class="field col-12 xl:col-4 lg:col-4 md:col-6 sm:col-12">
     <label
       appLabel
       for="origin"
       [label]="AgreementFormEnum.origin"
       [required]="originField"></label>
-
-    <app-form-help-field
-      [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"/>
 
     <p-dropdown
       id="origin"
@@ -136,16 +91,49 @@
     </small>
   </div>
 
+  <!-- state -->
+  <div class="field col-12 xl:col-4 lg:col-4 md:col-6 sm:col-12" formGroupName="agreementState">
+    <label
+      appLabel
+      for="state"
+      [label]="AgreementStateEnum.state"
+      [required]="stateField"></label>
+
+    <app-form-help-field content="Escoger opción del estado actual del convenio"></app-form-help-field>
+
+    <p-dropdown
+      id="state"
+      formControlName="state"
+      dataKey="id"
+      [options]="states"
+      placeholder="Seleccione">
+      <ng-template pTemplate="selectedItem" let-selectedItem>
+        <div class="flex align-items-center gap-2">
+          <div>{{ selectedItem.name }}</div>
+        </div>
+      </ng-template>
+      <ng-template let-item pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <div>{{ item.name }}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+
+    <small
+      appErrorMessage
+      [errors]="stateField.errors"
+      [touched]="stateField.touched"
+      [dirty]="stateField.dirty">
+    </small>
+  </div>
+
   <!-- type -->
-  <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+  <div class="field col-12 xl:col-4 lg:col-4 md:col-6 sm:col-12">
     <label
       appLabel
       for="type"
       [label]="AgreementFormEnum.type"
       [required]="typeField"></label>
-
-    <app-form-help-field
-      [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"/>
 
     <p-dropdown
       id="type"
@@ -175,15 +163,15 @@
 
   <!-- SpecialType -->
   @if (specialTypeField.hasValidator(Validators.required)) {
-    <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+    <div class="field col-12 xl:col-4 lg:col-4 md:col-6 sm:col-12 xl:col-offset-8">
       <label
         appLabel
         for="specialType"
         [label]="AgreementFormEnum.specialType"
         [required]="specialTypeField"></label>
 
-      <app-form-help-field
-        [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"/>
+<!--      <app-form-help-field-->
+<!--        [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>-->
 
       <p-dropdown
         id="specialType"
@@ -191,9 +179,9 @@
         dataKey="id"
         [options]="specialTypes"
         placeholder="Selecione">
-        <ng-template pTemplate="selectedItem" let-selectedOption>
+        <ng-template pTemplate="selectedItem" let-selectedItem>
           <div class="flex align-items-center gap-2">
-            <div>{{ selectedOption.name }}</div>
+            <div>{{ selectedItem.name }}</div>
           </div>
         </ng-template>
         <ng-template let-item pTemplate="item">
@@ -220,13 +208,11 @@
       [label]="AgreementFormEnum.objective"
       [required]="objectiveField"></label>
 
-    <app-form-help-field content="Esto es un mensaje de prueba"/>
-
     <textarea
       pInputTextarea
       id="objective"
       formControlName="objective"
-      rows="10"
+      rows="6"
       cols="30"
     ></textarea>
 

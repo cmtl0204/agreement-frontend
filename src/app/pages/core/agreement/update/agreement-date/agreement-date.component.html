@@ -6,13 +6,13 @@
       for="subscribedAt"
       [label]="AgreementFormEnum.subscribedAt"
       [required]="subscribedAtField"></label>
-
+    <app-form-help-field content="Fecha que consta en convenio"></app-form-help-field>
     <p-calendar
       id="subscribedAt"
       formControlName="subscribedAt"
       [iconDisplay]="'input'"
       [showIcon]="true"
-      dateFormat="yy-mm-dd"/>
+      dateFormat="dd/mm/yy"/>
 
     <small
       appErrorMessage
@@ -36,7 +36,7 @@
       [iconDisplay]="'input'"
       [showIcon]="true"
       [minDate]="subscribedAtField.value"
-      dateFormat="yy-mm-dd"/>
+      dateFormat="dd/mm/yy"/>
 
     <small
       appErrorMessage
@@ -47,38 +47,14 @@
   </div>
 
   <!-- isFinishDate -->
-  <div class="field xl:col-6 lg:col-6 md:col-6 sm:col-12">
+  <div class="field xl:col-12 lg:col-12 md:col-12 sm:col-12">
     <label
       appLabel
       for="isFinishDate"
       [label]="AgreementFormEnum.isFinishDate"
       [required]="isFinishDateField"></label>
 
-    <div class="flex gap-3">
-      <div class="flex align-items-center">
-        <p-radioButton
-          id="isFinishDate"
-          formControlName="isFinishDate"
-          name="isFinishDate"
-          [value]="true"/>
-
-        <label for="isFinishDate" class="ml-2">
-          Si
-        </label>
-      </div>
-
-      <div class="flex align-items-center">
-        <p-radioButton
-          id="no"
-          formControlName="isFinishDate"
-          name="isFinishDate"
-          [value]="false"/>
-
-        <label for="no" class="ml-2">
-          No
-        </label>
-      </div>
-    </div>
+    <app-input-switch id="isFinishDate" formControlName="isFinishDate" class="ml-2" [disabled]="true"/>
 
     <small
       appErrorMessage
@@ -89,19 +65,23 @@
   </div>
 
   <!-- endedAt -->
+  <div class="field col-12">
+    <label>Plazo total del convenio:</label>
+  </div>
   @if (isFinishDateField.value) {
-    <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+    <!-- endedAt -->
+    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">
       <label appLabel for="endedAt"
              [label]="AgreementFormEnum.endedAt"
              [required]="endedAtField"></label>
-      <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+      <app-form-help-field content="Registrar conforme señala convenio"></app-form-help-field>
       <p-calendar
         id="endedAt"
         formControlName="endedAt"
         [iconDisplay]="'input'"
         [showIcon]="true"
         [minDate]="startedAtField.value"
-        dateFormat="yy-mm-dd"
+        dateFormat="dd/mm/yy"
       />
       <small
         appErrorMessage
@@ -111,77 +91,93 @@
       </small>
     </div>
 
-    <div class="field col-12">
-      <label>Plazo total del convenio:</label>
+    <div class="field col-12 xl:col-9 lg:col-9 md:col-9 sm:col-12">
+      <label
+        appLabel
+        for="totalTerm"
+        [label]="AgreementFormEnum.totalTerm"
+        [required]="totalTermField">
+      </label>
+
+      <app-form-help-field content="Plazo del convenio"/>
+
+      <input pInputText id="totalTerm" formControlName="totalTerm"/>
+
+      <small
+        appErrorMessage
+        [errors]="totalTermField.errors"
+        [touched]="totalTermField.touched"
+        [dirty]="totalTermField.dirty">
+      </small>
     </div>
 
     <!-- yearTerm -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-      <label
-        appLabel
-        for="yearTerm"
-        [label]="AgreementFormEnum.yearTerm"
-        [required]="yearTermField"></label>
+<!--    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">-->
+<!--      <label-->
+<!--        appLabel-->
+<!--        for="yearTerm"-->
+<!--        [label]="AgreementFormEnum.yearTerm"-->
+<!--        [required]="yearTermField"></label>-->
 
-      <p-inputNumber
-        id="yearTerm"
-        formControlName="yearTerm"
-        [showButtons]="true"
-        [min]="0"
-        [useGrouping]="false"/>
+<!--      <p-inputNumber-->
+<!--        id="yearTerm"-->
+<!--        formControlName="yearTerm"-->
+<!--        [showButtons]="true"-->
+<!--        [min]="0"-->
+<!--        [useGrouping]="false"/>-->
 
-      <small
-        appErrorMessage
-        [errors]="yearTermField.errors"
-        [touched]="yearTermField.touched"
-        [dirty]="yearTermField.dirty">
-      </small>
-    </div>
+<!--      <small-->
+<!--        appErrorMessage-->
+<!--        [errors]="yearTermField.errors"-->
+<!--        [touched]="yearTermField.touched"-->
+<!--        [dirty]="yearTermField.dirty">-->
+<!--      </small>-->
+<!--    </div>-->
 
     <!-- monthTerm -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-      <label
-        appLabel
-        for="monthTerm"
-        [label]="AgreementFormEnum.monthTerm"
-        [required]="monthTermField"></label>
+<!--    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">-->
+<!--      <label-->
+<!--        appLabel-->
+<!--        for="monthTerm"-->
+<!--        [label]="AgreementFormEnum.monthTerm"-->
+<!--        [required]="monthTermField"></label>-->
 
-      <p-inputNumber
-        id="monthTerm"
-        formControlName="monthTerm"
-        [showButtons]="true"
-        [min]="0"
-      />
+<!--      <p-inputNumber-->
+<!--        id="monthTerm"-->
+<!--        formControlName="monthTerm"-->
+<!--        [showButtons]="true"-->
+<!--        [min]="0"-->
+<!--      />-->
 
-      <small
-        appErrorMessage
-        [errors]="monthTermField.errors"
-        [touched]="monthTermField.touched"
-        [dirty]="monthTermField.dirty">
-      </small>
-    </div>
+<!--      <small-->
+<!--        appErrorMessage-->
+<!--        [errors]="monthTermField.errors"-->
+<!--        [touched]="monthTermField.touched"-->
+<!--        [dirty]="monthTermField.dirty">-->
+<!--      </small>-->
+<!--    </div>-->
 
     <!-- dayTerm -->
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-      <label
-        appLabel
-        for="dayTerm"
-        [label]="AgreementFormEnum.dayTerm"
-        [required]="dayTermField"></label>
+<!--    <div class="field col-12 xl:col-3 lg:col-3 md:col-3 sm:col-12">-->
+<!--      <label-->
+<!--        appLabel-->
+<!--        for="dayTerm"-->
+<!--        [label]="AgreementFormEnum.dayTerm"-->
+<!--        [required]="dayTermField"></label>-->
 
-      <p-inputNumber
-        id="dayTerm"
-        formControlName="dayTerm"
-        [showButtons]="true"
-        [min]="0"/>
+<!--      <p-inputNumber-->
+<!--        id="dayTerm"-->
+<!--        formControlName="dayTerm"-->
+<!--        [showButtons]="true"-->
+<!--        [min]="0"/>-->
 
-      <small
-        appErrorMessage
-        [errors]="dayTermField.errors"
-        [touched]="dayTermField.touched"
-        [dirty]="dayTermField.dirty">
-      </small>
-    </div>
+<!--      <small-->
+<!--        appErrorMessage-->
+<!--        [errors]="dayTermField.errors"-->
+<!--        [touched]="dayTermField.touched"-->
+<!--        [dirty]="dayTermField.dirty">-->
+<!--      </small>-->
+<!--    </div>-->
   }
 
   <!-- endedReason -->

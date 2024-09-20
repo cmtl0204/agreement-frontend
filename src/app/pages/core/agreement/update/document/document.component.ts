@@ -1,6 +1,6 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from "@models/core";
-import {PrimeIcons} from "primeng/api";
+import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {
   CatalogueTypeEnum,
   FileFormEnum,
@@ -9,8 +9,8 @@ import {
   SeverityButtonActionEnum,
   TableEnum
 } from "@shared/enums";
-import {CataloguesHttpService, FilesHttpService} from "@servicesHttp/core";
-import {AgreementsService, MessageDialogService} from "@servicesApp/core";
+import {AgreementsHttpService, CataloguesHttpService, FilesHttpService} from "@servicesHttp/core";
+import {MessageDialogService} from "@servicesApp/core";
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -23,9 +23,12 @@ export class DocumentComponent implements OnInit {
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
 
-  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  protected readonly messageDialogService = inject(MessageDialogService);
-  protected readonly formBuilder = inject(FormBuilder);
+  private readonly cataloguesHttpService = inject(CataloguesHttpService);
+  private readonly messageDialogService = inject(MessageDialogService);
+  private readonly filesHttpService = inject(FilesHttpService);
+  private readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly confirmationService = inject(ConfirmationService);
+  private readonly formBuilder = inject(FormBuilder);
 
   protected form!: FormGroup;
   protected fileForm!: FormGroup;
@@ -38,6 +41,7 @@ export class DocumentComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
 
   protected types: CatalogueModel[] = [];
+  protected typesClone: CatalogueModel[] = [];
   protected columns: ColumnModel[] = [];
 
   constructor() {
@@ -95,6 +99,11 @@ export class DocumentComponent implements OnInit {
 
   loadTypes() {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ENABLING_DOCUMENT);
+    this.typesClone = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ENABLING_DOCUMENT);
+    for (let i = 0; i < this.formInput.enablingDocuments.length; i++) {
+      const index = this.types.findIndex(item => item.id === this.formInput.enablingDocuments[i].type?.id);
+      this.types.splice(index, 1);
+    }
   }
 
   validateForm() {
@@ -106,28 +115,39 @@ export class DocumentComponent implements OnInit {
     this.formErrorsOutput.emit(this.formErrors);
   }
 
-  validateFileForm() {
+  validateFileForm(file: FileModel, type: CatalogueModel) {
     this.formErrors = [];
 
-    if (this.typeField.invalid) this.formErrors.push(FileFormEnum.type);
+    if (this.formInput.enablingDocuments.findIndex(item => item.type?.id === type.id) > -1)
+      this.formErrors.push(`${type.name} ya se encuentra cargado`);
 
-    if (this.formInput.enablingDocuments.findIndex(item => item.type?.id === this.typeField.value?.id) > -1)
-      this.formErrors.push(`${this.typeField.value.name} ya se encuentra cargado`);
+    if (this.formInput.enablingDocuments.findIndex(item => item.name === file.name) > -1)
+      this.formErrors.push(`El archivo ${file.name} ya se encuentra cargado`);
 
     return this.formErrors.length === 0
   }
 
-  onUpload(event: any, uploadFiles: any) {
-    if (this.validateFileForm()) {
-      const file = event.files[0];
+  uploadFile(event: any, uploadFiles: any, type: CatalogueModel) {
+    const file = event.files[0];
 
-      this.formInput.enablingDocuments.push({
-        type: this.typeField.value,
-        name: file.name,
-        file
+    if (this.validateFileForm(file, type)) {
+      const formData = new FormData();
+
+      formData.append('file', file);
+      formData.append('typeId', type.id!);
+
+      this.agreementsHttpService.uploadEnablingDocument(this.formInput.id!, formData).subscribe(response => {
+        this.formInput.enablingDocuments.push({
+          id: response.id,
+          name: file.name,
+          type,
+        });
+
+        const index = this.types.findIndex(item => item.id === type.id);
+        this.types.splice(index, 1);
+
+        this.form.patchValue(this.formInput);
       });
-
-      this.form.patchValue(this.formInput);
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
       this.form.markAllAsTouched();
@@ -136,10 +156,14 @@ export class DocumentComponent implements OnInit {
     uploadFiles.clear();
   }
 
-  removeFile(index: number) {
-    this.formInput.enablingDocuments.splice(index, 1);
+  removeFile(index: number, item: FileModel) {
+    this.filesHttpService.remove(item.id!).subscribe(response => {
+      this.formInput.enablingDocuments.splice(index, 1);
+      this.types.push(item.type!);
 
-    this.form.patchValue(this.formInput.enablingDocuments);
+      this.form.patchValue(this.formInput.enablingDocuments);
+    });
+
   }
 
   get typeField(): AbstractControl {

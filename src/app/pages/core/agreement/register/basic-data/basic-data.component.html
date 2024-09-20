@@ -6,7 +6,7 @@
       for="internalNumber"
       [label]="AgreementFormEnum.internalNumber"
       [required]="internalNumberField"></label>
-
+    <app-form-help-field content="Colocar número asignado por la unidad de seguimiento"></app-form-help-field>
     <p-inputNumber inputId="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
 
     <small
@@ -25,8 +25,7 @@
       [label]="AgreementFormEnum.number"
       [required]="numberField"></label>
 
-    <app-form-help-field
-      [content]="['Esto es un listado 1','Esto es un listado 2','Esto es un listado 3']"></app-form-help-field>
+    <app-form-help-field content="Colocar numeración detallada en el convenio"></app-form-help-field>
 
     <input pInputText id="number" formControlName="number"/>
 
@@ -46,7 +45,7 @@
       [label]="AgreementFormEnum.name"
       [required]="nameField"></label>
 
-    <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+    <app-form-help-field content="Registrar textualmente el nombre del convenio - tipo oración"></app-form-help-field>
 
     <input pInputText id="name" formControlName="name"/>
 
@@ -65,9 +64,6 @@
       for="origin"
       [label]="AgreementFormEnum.origin"
       [required]="originField"></label>
-
-    <app-form-help-field
-      [content]="['Ayuda 1']"></app-form-help-field>
 
     <p-dropdown
       id="origin"
@@ -103,8 +99,7 @@
       [label]="AgreementStateEnum.state"
       [required]="stateField"></label>
 
-    <app-form-help-field
-      [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
+    <app-form-help-field content="Escoger opción del estado actual del convenio"></app-form-help-field>
 
     <p-dropdown
       id="state"
@@ -139,9 +134,6 @@
       for="type"
       [label]="AgreementFormEnum.type"
       [required]="typeField"></label>
-
-    <app-form-help-field
-      [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
 
     <p-dropdown
       id="type"
@@ -178,8 +170,8 @@
         [label]="AgreementFormEnum.specialType"
         [required]="specialTypeField"></label>
 
-      <app-form-help-field
-        [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>
+<!--      <app-form-help-field-->
+<!--        [content]="['Ayuda 1','Ayuda 2','Ayuda 3']"></app-form-help-field>-->
 
       <p-dropdown
         id="specialType"
@@ -215,8 +207,6 @@
       for="objective"
       [label]="AgreementFormEnum.objective"
       [required]="objectiveField"></label>
-
-    <app-form-help-field content="Esto es un mensaje de prueba"/>
 
     <textarea
       pInputTextarea

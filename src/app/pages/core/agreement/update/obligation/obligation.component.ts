@@ -1,13 +1,17 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl} from '@angular/forms';
-import {AgreementModel, CatalogueModel, ColumnModel} from '@models/core';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {
-  SkeletonEnum,
+  CatalogueObligationsTypeEnum,
+  CatalogueTypeEnum,
+  IconButtonActionEnum,
+  LabelButtonActionEnum,
+  ObligationDetailForEnum,
+  ObligationForEnum,
   SeverityButtonActionEnum,
-  CatalogueTypeEnum, IconButtonActionEnum,
-  ObligationForEnum, ObligationDetailForEnum, LabelButtonActionEnum, CatalogueObligationsTypeEnum
+  SkeletonEnum, TableEnum
 } from '@shared/enums';
 import {PrimeIcons} from 'primeng/api';
 
@@ -20,11 +24,9 @@ export class ObligationComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
 
+  @Input({required: true}) formInput: AgreementModel = createAgreementModel();
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter();
-  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
-  @Output() nextOutput: EventEmitter<boolean> = new EventEmitter();
-  @Output() prevOutput: EventEmitter<boolean> = new EventEmitter();
-  @Input({required: true}) formInput!: AgreementModel;
+  @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter();
 
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
@@ -38,9 +40,11 @@ export class ObligationComponent implements OnInit {
   private formErrors: string[] = [];
   protected obligationForm!: FormGroup;
   protected obligationDetailForm!: FormGroup;
-  protected agreement!: AgreementModel;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected readonly CatalogueObligationsTypeEnum = CatalogueObligationsTypeEnum;
+  protected readonly TableEnum = TableEnum;
+  protected isVisibleObligationForm: boolean = false;
   protected isVisibleObligationDetailForm: boolean = false;
   protected readonly ObligationForEnum = ObligationForEnum;
   protected readonly ObligationDetailForEnum = ObligationDetailForEnum;
@@ -59,19 +63,22 @@ export class ObligationComponent implements OnInit {
   ngOnInit(): void {
     this.loadObligationTypes();
     this.loadInstitutions();
+
     this.patchValueForm();
+    this.validateForm();
   }
 
   buildColumns() {
     this.columns = [
-      {field: 'institutionName', header: ObligationForEnum.institutionName},
       {field: 'type', header: ObligationForEnum.type},
+      {field: 'institutionName', header: ObligationForEnum.institutionResponsible},
+      {field: 'obligations', header: ObligationDetailForEnum.description},
     ];
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      obligations: this.formBuilder.array([])
+      obligations: this.formBuilder.array([], Validators.required)
     });
   }
 
@@ -89,21 +96,31 @@ export class ObligationComponent implements OnInit {
   }
 
   patchValueForm() {
-    this.agreement = this.formInput;
-    this.form.patchValue(this.agreement);
+    this.form.patchValue(this.formInput);
   }
 
   checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
-      this.formOutput.emit(this.agreement);
+      this.formOutput.emit(this.formInput);
+      this.validateForm();
     });
 
     this.obligationTypeField.valueChanges.subscribe(value => {
+      this.obligationInstitutionNameField.reset();
+
       if (value && value.code === CatalogueObligationsTypeEnum.INTERNAL) {
         if (this.formInput.internalInstitutions)
           this.obligationInstitutionNameField.setValue(this.formInput.internalInstitutions[0].name);
       }
     });
+  }
+
+  validateForm() {
+    this.formErrors = [];
+
+    if (this.formInput.obligations?.length === 0) this.formErrors.push('Obligaciones');
+
+    this.formErrorsOutput.emit(this.formErrors);
   }
 
   validateObligationForm(): boolean {
@@ -131,35 +148,52 @@ export class ObligationComponent implements OnInit {
   loadInstitutions() {
     this.institutions = [];
 
-    if (this.formInput.internalInstitutions) this.institutions = this.formInput.internalInstitutions;
+    let internalInstitutions: string[] = [];
+    let externalInstitutions: string[] = [];
 
+    if (this.formInput.internalInstitutions) {
+      internalInstitutions = this.formInput.internalInstitutions.map(internalInstitution =>
+        internalInstitution.name);
+    }
 
-    if (this.formInput.externalInstitutions) this.institutions = this.formInput.externalInstitutions;
+    if (this.formInput.externalInstitutions) {
+      externalInstitutions = this.formInput.externalInstitutions.map(externalInstitution =>
+        externalInstitution.name);
+    }
+
+    this.institutions = internalInstitutions.concat(externalInstitutions);
   }
 
   addObligation() {
     if (this.validateObligationForm()) {
       const obligation = this.obligationForm.value;
-
+      console.log(obligation);
+      if(Array.isArray(obligation.institutionName))
+      obligation.institutionName.sort();
+      obligation.institutionName = obligation.institutionName.toString();
+      obligation.institutionName = obligation.institutionName.replace(',',', ');
       obligation.obligationDetails = [this.obligationDetailForm.value];
 
-      if (!this.agreement.obligations) {
-        this.agreement.obligations = [];
-      } else {
-        if (this.agreement.obligations.findIndex(item => {
-          item.institutionName === obligation.institutionName.toString()
-        }) > -1) {
-          this.messageDialogService.errorCustom('La entidad ya está registrada', 'Intente con otra por favor');
-          return;
-        }
+      if (this.obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN && this.obligationInstitutionNameField.value.length < 2) {
+        this.messageDialogService.errorCustom('Mínimo requerido', 'Debe seleccionar al menos 2 (dos) Instituciones');
+        return;
       }
 
-      this.agreement.obligations.push(obligation);
+      if (this.formInput.obligations.findIndex(item => {
+        return item.institutionName === obligation.institutionName;
+      }) > -1) {
+        this.messageDialogService.errorCustom('Duplicado', 'La Institución ya está registrada, intente con otra por favor');
+        return;
+      }
 
-      this.form.patchValue({obligations: this.agreement.obligations});
+      this.formInput.obligations.push(obligation);
+
+      this.form.patchValue(this.formInput);
 
       this.obligationForm.reset();
       this.obligationDetailForm.reset();
+
+      this.isVisibleObligationForm = false;
     } else {
       this.obligationForm.markAllAsTouched();
       this.obligationDetailForm.markAllAsTouched();
@@ -169,18 +203,17 @@ export class ObligationComponent implements OnInit {
 
   addObligationDetail() {
     if (this.validateObligationDetailForm()) {
-      if (this.agreement.obligations) {
-        if (this.agreement.obligations[this.index].obligationDetails) {
-          this.agreement.obligations[this.index].obligationDetails?.push(this.obligationDetailDescriptionField.value);
+      if (this.formInput.obligations) {
+        if (this.formInput.obligations[this.index].obligationDetails) {
+          this.formInput.obligations[this.index].obligationDetails?.push(this.obligationDetailForm.value);
         } else {
-          this.agreement.obligations[this.index].obligationDetails = [this.obligationDetailDescriptionField.value];
+          this.formInput.obligations[this.index].obligationDetails = [this.obligationDetailForm.value];
         }
       }
 
-      this.form.patchValue(this.agreement);
+      this.form.patchValue(this.formInput);
 
-      this.obligationForm.reset();
-      this.obligationDetailDescriptionField.reset();
+      this.obligationDetailForm.reset();
 
       this.isVisibleObligationDetailForm = false;
     } else {
@@ -190,11 +223,23 @@ export class ObligationComponent implements OnInit {
   }
 
   deleteObligation(index: number) {
-    const obligationsArray = this.form.get('obligations') as FormArray;
-    obligationsArray.removeAt(index);
+    this.formInput.obligations?.splice(index, 1);
+    this.form.patchValue(this.formInput);
+  }
 
-    this.agreement.obligations?.splice(index, 1);
-    this.form.patchValue({obligations: this.agreement.obligations});
+  deleteObligationDetail(indexObligation: number, index: number) {
+    this.formInput.obligations[indexObligation].obligationDetails?.splice(index, 1);
+
+
+    if (this.formInput.obligations[indexObligation].obligationDetails.length === 0) {
+      this.formInput.obligations.splice(indexObligation, 1);
+    }
+
+    this.form.patchValue(this.formInput);
+  }
+
+  showObligationModal() {
+    this.isVisibleObligationForm = true;
   }
 
   showObligationDetailModal(index: number) {
@@ -213,6 +258,4 @@ export class ObligationComponent implements OnInit {
   get obligationDetailDescriptionField(): AbstractControl {
     return this.obligationDetailForm.controls['description'];
   }
-
-  protected readonly CatalogueObligationsTypeEnum = CatalogueObligationsTypeEnum;
 }

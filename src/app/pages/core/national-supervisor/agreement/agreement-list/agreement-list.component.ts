@@ -131,14 +131,14 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectCompleteForm(this.selectedItem);
         },
       },
-      // {
-      //   id: IdButtonActionEnum.DELETE,
-      //   label: LabelButtonActionEnum.DELETE,
-      //   icon: IconButtonActionEnum.DELETE,
-      //   command: () => {
-      //     if (this.selectedItem?.id) this.remove(this.selectedItem.id);
-      //   },
-      // },
+      {
+        id: IdButtonActionEnum.UPDATE,
+        label: LabelButtonActionEnum.UPDATE,
+        icon: IconButtonActionEnum.UPDATE,
+        command: () => {
+          if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
+        },
+      },
       // {
       //   id: IdButtonActionEnum.SUSPEND,
       //   label: LabelButtonActionEnum.SUSPEND,

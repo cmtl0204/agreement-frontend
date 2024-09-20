@@ -70,10 +70,58 @@
 <p-dialog
   [(visible)]="isVisibleFinancingForm"
   [modal]="true"
-  [style]="{width: '50rem'}"
-  header="Agregar">
+  [style]="{width: '50rem', height: '50rem'}">
+
+  <ng-template pTemplate="header">
+    <h3>Agregar</h3>
+    <app-form-help-field content="Llenar campos conforme señala convenio."></app-form-help-field>
+  </ng-template>
+
   <ng-template pTemplate="content">
     <form [formGroup]="financingForm" class="p-fluid grid">
+
+      <!-- institutionName  -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="combinedInstitution"
+          [label]="FinancingsFormEnum.institutionName"
+          [required]="institutionNameField">
+        </label>
+
+<!--        <p-listbox-->
+<!--          id="combinedInstitution"-->
+<!--          [options]="combinedInstitutions"-->
+<!--          formControlName="institutionName"-->
+<!--          [filter]="true"-->
+<!--          [listStyle]="{'max-height': '150px'}"/>-->
+
+        <p-dropdown
+          id="combinedInstitution"
+          formControlName="institutionName"
+          [options]="combinedInstitutions"
+          placeholder="Selecione">
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem}}</div>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item }}</div>
+            </div>
+          </ng-template>
+
+        </p-dropdown>
+
+        <small
+          appErrorMessage
+          [errors]="institutionNameField.errors"
+          [touched]="institutionNameField.touched"
+          [dirty]="institutionNameField.dirty">
+        </small>
+      </div>
+
       <!-- budget  -->
       <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
         <label
@@ -139,30 +187,6 @@
           [errors]="sourceField.errors"
           [touched]="sourceField.touched"
           [dirty]="sourceField.dirty">
-        </small>
-      </div>
-
-      <!-- institutionName  -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-        <label
-          appLabel
-          for="combinedInstitution"
-          [label]="FinancingsFormEnum.institutionName"
-          [required]="institutionNameField">
-        </label>
-
-        <p-listbox
-          id="combinedInstitution"
-          [options]="combinedInstitutions"
-          formControlName="institutionName"
-          [filter]="true"
-          [listStyle]="{'max-height': '150px'}"/>
-
-        <small
-          appErrorMessage
-          [errors]="institutionNameField.errors"
-          [touched]="institutionNameField.touched"
-          [dirty]="institutionNameField.dirty">
         </small>
       </div>
     </form>

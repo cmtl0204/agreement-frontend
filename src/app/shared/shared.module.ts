@@ -64,6 +64,7 @@ import {FormButtonActionComponent} from './components/form-button-action/form-bu
 import {FormHelpFieldComponent} from './components/form-help-field/form-help-field.component';
 import {InputSwitchComponent} from './components/input-switch/input-switch.component';
 import {InputSwitchModule} from "primeng/inputswitch";
+import {BadgeModule} from "primeng/badge";
 
 @NgModule({
   declarations: [
@@ -141,36 +142,37 @@ import {InputSwitchModule} from "primeng/inputswitch";
     CustomFormatDatePipe,
     InputSwitchComponent
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    SkeletonModule,
-    TableModule,
-    ProgressBarModule,
-    PaginatorModule,
-    ToolbarModule,
-    ButtonModule,
-    RippleModule,
-    InputTextModule,
-    TooltipModule,
-    FileUploadModule,
-    MessageModule,
-    InputTextareaModule,
-    DividerModule,
-    CardModule,
-    OverlayPanelModule,
-    TagModule,
-    PanelMenuModule,
-    SidebarModule,
-    SpeedDialModule,
-    ConfirmPopupModule,
-    ConfirmDialogModule,
-    PanelModule,
-    DialogModule,
-    MenuModule,
-    ToastModule,
-    InputSwitchModule
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        SkeletonModule,
+        TableModule,
+        ProgressBarModule,
+        PaginatorModule,
+        ToolbarModule,
+        ButtonModule,
+        RippleModule,
+        InputTextModule,
+        TooltipModule,
+        FileUploadModule,
+        MessageModule,
+        InputTextareaModule,
+        DividerModule,
+        CardModule,
+        OverlayPanelModule,
+        TagModule,
+        PanelMenuModule,
+        SidebarModule,
+        SpeedDialModule,
+        ConfirmPopupModule,
+        ConfirmDialogModule,
+        PanelModule,
+        DialogModule,
+        MenuModule,
+        ToastModule,
+        InputSwitchModule,
+        BadgeModule
+    ],
   providers: [ConfirmationService]
 })
 export class SharedModule {

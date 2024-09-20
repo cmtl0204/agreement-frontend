@@ -28,8 +28,8 @@ export enum FileFormEnum {
 
 export enum FinancingsFormEnum {
   header = 'Financiamientos',
-  institutionName = 'Comparecientes del convenio',
-  budget = 'Presupusesto y financiamiento',
+  institutionName = 'Compareciente',
+  budget = 'Presupuesto y financiamiento',
   paymentMethod = 'Forma de pago',
   source = 'Fuente de financiamiento',
 }
@@ -81,8 +81,9 @@ export enum ExternalInstitutionsObligations {
 
 export enum ObligationForEnum {
   header = 'Obligaciones',
-  institutionName = 'Nombre de la Institución',
-  type = 'Tipo de obligación',
+  institutionName = 'Nombre entidad/institución contraparte',
+  institutionResponsible = 'Responsable de Obligación',
+  type = 'Tipo de obligaciones',
 }
 
 export enum ObligationDetailForEnum {
@@ -109,7 +110,7 @@ export enum AgreementFormEnum {
   isFinishDate = '¿El convenio cuenta con fecha de terminación?',
   endedAt = 'Fecha de terminación del Convenio',
   endedReason = 'Razón de terminación del convenio',
-  isAddendum = '¿Registra Adendas?',
+  isAddendum = 'Registrar adenda o modificatorio',
   totalTerm = 'Plazo total del convenio',
   yearTerm = 'Años',
   monthTerm = 'Meses',
@@ -132,11 +133,11 @@ export enum AdministratorFormEnum {
   header = 'Administrador del convenio',
   position = 'Cargo del funcionario Ministerio de Turismo',
   unit = 'Unidad Administrativa del Ministerio de Turismo',
-  user = 'Responsable del convenio',
+  user = 'Nombres y apellidos / Correo electrónico institucional',
 }
 
 export enum AddendumEnum {
   header = 'Adendas',
-  description = 'Descripción',
-  file = 'Documento',
+  description = 'Información de la adenda o modificatorio',
+  file = 'Documento de adenda o modificatorio',
 }

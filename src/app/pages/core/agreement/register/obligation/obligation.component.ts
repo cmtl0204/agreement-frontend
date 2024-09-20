@@ -70,8 +70,8 @@ export class ObligationComponent implements OnInit {
 
   buildColumns() {
     this.columns = [
-      {field: 'institutionName', header: ObligationForEnum.institutionName},
       {field: 'type', header: ObligationForEnum.type},
+      {field: 'institutionName', header: ObligationForEnum.institutionResponsible},
       {field: 'obligations', header: ObligationDetailForEnum.description},
     ];
   }
@@ -167,8 +167,11 @@ export class ObligationComponent implements OnInit {
   addObligation() {
     if (this.validateObligationForm()) {
       const obligation = this.obligationForm.value;
-
+      console.log(obligation);
+      if(Array.isArray(obligation.institutionName))
+      obligation.institutionName.sort();
       obligation.institutionName = obligation.institutionName.toString();
+      obligation.institutionName = obligation.institutionName.replace(',',', ');
       obligation.obligationDetails = [this.obligationDetailForm.value];
 
       if (this.obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN && this.obligationInstitutionNameField.value.length < 2) {

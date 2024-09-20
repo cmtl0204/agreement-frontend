@@ -1,15 +1,17 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AgreementModel, CatalogueModel} from '@models/core';
-import { CoreService, MessageDialogService } from '@servicesApp/core';
-import { CataloguesHttpService } from '@servicesHttp/core';
+import {CoreService, MessageDialogService} from '@servicesApp/core';
+import {AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
 import {
   AgreementFormEnum,
   SkeletonEnum,
   CatalogueTypeEnum,
   CatalogueAgreementsTypeEnum,
-  AgreementStateEnum
+  AgreementStateEnum, RoleEnum, CatalogueAgreementsOriginEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
+import {AuthService} from "@servicesApp/auth";
+import {verifyAgreementInternalNumber} from "@shared/validators";
 
 @Component({
   selector: 'app-basic-data',
@@ -18,12 +20,14 @@ import {
 })
 export class BasicDataComponent implements OnInit {
   /** Services **/
-  protected readonly coreService = inject(CoreService )
-  protected readonly cataloguesHttpService = inject(CataloguesHttpService)
-  protected readonly formBuilder = inject(FormBuilder)
-  protected readonly messageDialogService = inject(MessageDialogService)
+  protected readonly authService = inject(AuthService);
+  protected readonly agreementsHttpService = inject(AgreementsHttpService);
+  protected readonly cataloguesHttpService = inject(CataloguesHttpService);
+  protected readonly coreService = inject(CoreService);
+  protected readonly formBuilder = inject(FormBuilder);
+  protected readonly messageDialogService = inject(MessageDialogService);
 
-  /** Form && Output **/
+  /** Input Output **/
   protected readonly Validators = Validators;
   @Output() formOutput: EventEmitter<AgreementModel> = new EventEmitter()
   @Output() formErrorsOutput: EventEmitter<string[]> = new EventEmitter()
@@ -35,7 +39,7 @@ export class BasicDataComponent implements OnInit {
 
   /** Foreign Keys **/
   protected origins: CatalogueModel[] = [];
-  protected specialTypes: CatalogueModel[]=[]
+  protected specialTypes: CatalogueModel[] = []
   protected states: CatalogueModel[] = [];
   protected types: CatalogueModel[] = [];
 
@@ -48,7 +52,7 @@ export class BasicDataComponent implements OnInit {
     this.buildForm();
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadStates();
     this.loadOrigins();
     this.loadTypes();
@@ -58,15 +62,19 @@ export class BasicDataComponent implements OnInit {
     this.validateForm();
   }
 
-  /** Form Builder & Validates **/
+  /* Form Builder & Validates */
   buildForm() {
     this.form = this.formBuilder.group({
       agreementState: this.agreementStateForm,
-      name : [null, [Validators.required]],
-      internalNumber: [null, [Validators.required]],
+      name: [null, [Validators.required]],
+      internalNumber: [null, {
+        validators: Validators.required,
+        asyncValidators: verifyAgreementInternalNumber(this.agreementsHttpService),
+        updateOn: 'blur'
+      }],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
-      origin: [{value:null, disabled:true}, [Validators.required]],
+      origin: [{value:null,disabled:true }],
       specialType: [null],
       type: [null, [Validators.required]],
     });
@@ -74,32 +82,32 @@ export class BasicDataComponent implements OnInit {
     this.checkValueChanges();
   }
 
-  patchValueForm(){
+  patchValueForm() {
     this.form.patchValue(this.formInput);
   }
 
-  get agreementStateForm(){
+  get agreementStateForm() {
     return this.formBuilder.group({
-      state: [{value:null, disabled:true}, [Validators.required]]
-    })
+      state: [{value: null, disabled: true}],
+    });
   }
 
-  checkValueChanges(){
+  checkValueChanges() {
     this.form.valueChanges.subscribe(value => {
       this.formOutput.emit(value);
       this.validateForm();
     });
 
     this.typeField.valueChanges.subscribe((value) => {
-      if(value && value.code === CatalogueAgreementsTypeEnum.SPECIAL) {
+      if (value && value.code === CatalogueAgreementsTypeEnum.SPECIAL) {
         this.specialTypeField.setValidators(Validators.required);
-      }else{
+      } else {
         this.specialTypeField.clearValidators();
       }
 
       this.specialTypeField.reset();
       this.specialTypeField.updateValueAndValidity();
-    })
+    });
   }
 
   validateForm() {
@@ -108,6 +116,7 @@ export class BasicDataComponent implements OnInit {
     if (this.stateField.invalid) this.formErrors.push(AgreementStateEnum.state);
     if (this.nameField.invalid) this.formErrors.push(AgreementFormEnum.name);
     if (this.internalNumberField.invalid) this.formErrors.push(AgreementFormEnum.internalNumber);
+    if (this.internalNumberField.hasError('agreementExists')) this.messageDialogService.errorCustom('Convenio ya existe', 'El número interno de convenio ya se encuentra registrado');
     if (this.numberField.invalid) this.formErrors.push(AgreementFormEnum.number);
     if (this.objectiveField.invalid) this.formErrors.push(AgreementFormEnum.objective);
     if (this.originField.invalid) this.formErrors.push(AgreementFormEnum.origin);
@@ -117,24 +126,34 @@ export class BasicDataComponent implements OnInit {
     this.formErrorsOutput.emit(this.formErrors);
   }
 
-  /** Load Foreign Keys  **/
+  /* Load Foreign Keys  */
   loadStates() {
-    this.states =  this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
+    this.states = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
+
+    this.states = this.states.filter(item => item.code === CatalogueAgreementStatesStateEnum.CURRENT); //review Quitar cuando esten todos los estados, ahora solo por pruebas de registro
   };
 
   loadOrigins() {
     this.origins = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ORIGIN);
+
+    // if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
+    //   this.origins = this.origins.filter(origin => origin.code === CatalogueAgreementsOriginEnum.NATIONAL);
+    // }
+    //
+    // if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
+    //   this.origins = this.origins.filter(origin => origin.code === CatalogueAgreementsOriginEnum.INTERNATIONAL);
+    // }
   };
 
   loadTypes() {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_TYPE);
   };
 
-  loadSpecialTypes(){
+  loadSpecialTypes() {
     this.specialTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_SPECIAL_TYPE);
   }
 
-  /** Getters Form **/
+  /* Getters Form*/
   get agreementStateFormField(): FormGroup {
     return this.form.controls['agreementState'] as FormGroup;
   }

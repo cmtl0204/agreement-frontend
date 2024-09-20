@@ -1,0 +1,116 @@
+<form [formGroup]="form" class="p-fluid grid">
+  <div formGroupName="administrator" class="col-12">
+    <div class="grid">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="unit"
+          [label]="AdministratorFormEnum.unit"
+          [required]="unitField"></label>
+
+        <p-dropdown
+          id="unit"
+          formControlName="unit"
+          dataKey="id"
+          [options]="units"
+          placeholder="Seleccione"
+          [filter]="true"
+          filterBy="name">
+
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <small
+          appErrorMessage
+          [errors]="unitField.errors"
+          [touched]="unitField.touched"
+          [dirty]="unitField.dirty">
+        </small>
+      </div>
+
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="position"
+          [label]="AdministratorFormEnum.position"
+          [required]="positionField"></label>
+
+        <p-dropdown
+          id="position"
+          formControlName="position"
+          dataKey="id"
+          [options]="positions"
+          [filter]="true"
+          filterBy="name"
+          placeholder="Seleccione">
+
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <small
+          appErrorMessage
+          [errors]="positionField.errors"
+          [touched]="positionField.touched"
+          [dirty]="positionField.dirty">
+        </small>
+      </div>
+
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="user"
+          [label]="AdministratorFormEnum.user"
+          [required]="userField"></label>
+
+        <p-dropdown
+          id="user"
+          formControlName="user"
+          dataKey="email"
+          [options]="users"
+          placeholder="Seleccione"
+          [filter]="true"
+          filterBy="email,lastname,name">
+
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }} {{ selectedItem.lastname }} ({{ selectedItem.email }})</div>
+            </div>
+          </ng-template>
+
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }} {{ item.lastname }} ({{ item.email }})</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <small
+          appErrorMessage
+          [errors]="userField.errors"
+          [touched]="userField.touched"
+          [dirty]="userField.dirty">
+        </small>
+      </div>
+    </div>
+  </div>
+</form>

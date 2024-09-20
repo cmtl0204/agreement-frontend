@@ -87,24 +87,24 @@ export class AgreementDateComponent implements OnInit {
     this.isFinishDateField.valueChanges.subscribe(value => {
       if (value) {
         this.endedAtField.setValidators(Validators.required);
-        this.yearTermField.setValidators(Validators.required);
-        this.monthTermField.setValidators(Validators.required);
-        this.dayTermField.setValidators(Validators.required);
+        // this.yearTermField.setValidators(Validators.required);
+        // this.monthTermField.setValidators(Validators.required);
+        // this.dayTermField.setValidators(Validators.required);
         this.totalTermField.setValidators(Validators.required);
         this.endedReasonField.clearValidators();
         this.endedReasonField.reset();
       } else if (value === false) {
         this.endedReasonField.setValidators(Validators.required);
-        this.yearTermField.clearValidators();
-        this.monthTermField.clearValidators();
-        this.dayTermField.clearValidators();
+        // this.yearTermField.clearValidators();
+        // this.monthTermField.clearValidators();
+        // this.dayTermField.clearValidators();
         this.endedAtField.clearValidators();
         this.totalTermField.clearValidators();
 
         this.endedAtField.reset();
-        this.yearTermField.reset();
-        this.monthTermField.reset();
-        this.dayTermField.reset();
+        // this.yearTermField.reset();
+        // this.monthTermField.reset();
+        // this.dayTermField.reset();
         this.totalTermField.reset();
       }
 

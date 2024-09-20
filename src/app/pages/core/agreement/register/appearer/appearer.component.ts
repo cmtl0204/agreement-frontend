@@ -153,12 +153,12 @@ export class AppearerComponent implements OnInit {
 
   buildInternalInstitutionsColumns() {
     this.internalInstitutionsColumns = [
-      {
-        field: 'personType', header: InternalInstitutionsFormEnum.personType
-      },
-      {
-        field: 'name', header: InternalInstitutionsFormEnum.name
-      },
+      // {
+      //   field: 'personType', header: InternalInstitutionsFormEnum.personType
+      // },
+      // {
+      //   field: 'name', header: InternalInstitutionsFormEnum.name
+      // },
       {
         field: 'position', header: InternalInstitutionsFormEnum.position
       },

@@ -37,18 +37,27 @@ import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {InputSwitchModule} from "primeng/inputswitch";
+import {AgreementAdministratorComponent} from "./agreement-administrator/agreement-administrator.component";
+import {AddendumComponent} from "./addendum/addendum.component";
+import {TabViewModule} from "primeng/tabview";
+import {SelectButtonModule} from "primeng/selectbutton";
+import {TagModule} from "primeng/tag";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
+
 
 @NgModule({
-    declarations: [
-        UpdateComponent,
-        AgreementDateComponent,
-        BasicDataComponent,
-        AppearerComponent,
-        AgreementDateComponent,
-        ObligationComponent,
-        FinancingComponent,
-        DocumentComponent,
-    ],
+  declarations: [
+    UpdateComponent,
+    AgreementDateComponent,
+    BasicDataComponent,
+    AppearerComponent,
+    AgreementDateComponent,
+    ObligationComponent,
+    FinancingComponent,
+    DocumentComponent,
+    AgreementAdministratorComponent,
+    AddendumComponent,
+  ],
     exports: [
         AgreementDateComponent
     ],
@@ -77,16 +86,19 @@ import {InputSwitchModule} from "primeng/inputswitch";
     CalendarModule,
     RadioButtonModule,
     StepperModule,
+    TabViewModule,
     FileUploadModule,
-    TableModule,
     InputTextareaModule,
     MultiSelectModule,
+    FormsModule,
+    TableModule,
     DialogModule,
-    MultiSelectModule,
-    DialogModule,
-    ListboxModule,
     ConfirmDialogModule,
-    InputSwitchModule
+    SelectButtonModule,
+    InputSwitchModule,
+    TagModule,
+    ListboxModule,
+    ConfirmPopupModule
   ]
 })
 export class UpdateModule { }

@@ -6,7 +6,7 @@
       for="subscribedAt"
       [label]="AgreementFormEnum.subscribedAt"
       [required]="subscribedAtField"></label>
-
+    <app-form-help-field content="Fecha que consta en convenio"></app-form-help-field>
     <p-calendar
       id="subscribedAt"
       formControlName="subscribedAt"
@@ -74,7 +74,7 @@
       <label appLabel for="endedAt"
              [label]="AgreementFormEnum.endedAt"
              [required]="endedAtField"></label>
-      <app-form-help-field content="Esto es un mensaje de prueba"></app-form-help-field>
+      <app-form-help-field content="Registrar conforme señala convenio"></app-form-help-field>
       <p-calendar
         id="endedAt"
         formControlName="endedAt"
