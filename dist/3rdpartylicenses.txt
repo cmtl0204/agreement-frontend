@@ -36,6 +36,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 --------------------------------------------------------------------------------
+Package: @ngx-translate/core
+License: "SEE LICENSE IN LICENSE"
+
+
+--------------------------------------------------------------------------------
 Package: @angular/animations
 License: "MIT"
 
@@ -48,6 +53,11 @@ License: "MIT"
 --------------------------------------------------------------------------------
 Package: @angular/common
 License: "MIT"
+
+
+--------------------------------------------------------------------------------
+Package: @ngx-translate/http-loader
+License: "SEE LICENSE IN LICENSE"
 
 
 --------------------------------------------------------------------------------
