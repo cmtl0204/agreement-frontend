@@ -167,11 +167,12 @@ export class ObligationComponent implements OnInit {
   addObligation() {
     if (this.validateObligationForm()) {
       const obligation = this.obligationForm.value;
-      console.log(obligation);
-      if(Array.isArray(obligation.institutionName))
-      obligation.institutionName.sort();
+
+      if (Array.isArray(obligation.institutionName))
+        obligation.institutionName.sort();
+
       obligation.institutionName = obligation.institutionName.toString();
-      obligation.institutionName = obligation.institutionName.replace(',',', ');
+      obligation.institutionName = obligation.institutionName.replace(',', ', ');
       obligation.obligationDetails = [this.obligationDetailForm.value];
 
       if (this.obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN && this.obligationInstitutionNameField.value.length < 2) {
