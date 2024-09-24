@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
 import {
   AgreementModel,
@@ -146,6 +146,7 @@ export class AppearerComponent implements OnInit {
 
   buildExternalInstitutionDetailForm() {
     this.externalInstitutionDetailForm = this.formBuilder.group({
+      id: [null],
       position: [null, [Validators.required]],
       unit: [null, [Validators.required, Validators.pattern(onlyLetters())]],
     });
@@ -174,7 +175,10 @@ export class AppearerComponent implements OnInit {
         field: 'name', header: ExternalInstitutionsFormEnum.name
       },
       {
-        field: 'position', header: `${ExternalInstitutionsFormEnum.unit} / ${ExternalInstitutionsFormEnum.position}`
+        field: 'position', header: ExternalInstitutionsFormEnum.unit
+      },
+      {
+        field: 'position', header: ExternalInstitutionsFormEnum.position
       },
     ];
   }
@@ -252,6 +256,31 @@ export class AppearerComponent implements OnInit {
     }
   }
 
+  updateExternalInstitution() {
+    if (this.validateExternalInstitutionForm() && this.validateExternalInstitutionDetailForm()) {
+      this.index = this.formInput.externalInstitutions.findIndex(item => item.name.toLowerCase() === this.externalInstitutionNameField.value.toLowerCase());
+
+      if (this.index === -1) {
+        this.formInput.externalInstitutions.push(this.externalInstitutionForm.value);
+
+        this.index = this.formInput.externalInstitutions.length - 1;
+      }
+
+
+      this.form.patchValue(this.formInput);
+
+      this.addExternalInstitutionDetail();
+
+      this.externalInstitutionForm.reset();
+
+      this.isVisibleExternalInstitutionForm = false;
+    } else {
+      this.externalInstitutionForm.markAllAsTouched();
+      this.externalInstitutionDetailForm.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
   addExternalInstitutionDetail() {
     if (this.validateExternalInstitutionDetailForm()) {
       if (this.formInput?.externalInstitutions) {
@@ -310,6 +339,11 @@ export class AppearerComponent implements OnInit {
   }
 
   deleteExternalInstitutionDetail(indexExternalInstitution: number, indexExternalInstitutionDetail: number) {
+    if (this.formInput.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.length === 1) {
+      this.messageDialogService.errorCustom('No se puede elminar', 'Debe haber al menos un campo');
+      return;
+    }
+
     this.formInput.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.splice(indexExternalInstitutionDetail, 1);
   }
 
@@ -399,6 +433,10 @@ export class AppearerComponent implements OnInit {
 
   get externalInstitutionPersonTypeField(): AbstractControl {
     return this.externalInstitutionForm.controls['personType'];
+  }
+
+  get externalInstitutionDetailIdField(): AbstractControl {
+    return this.externalInstitutionDetailForm.controls['id'];
   }
 
   get externalInstitutionDetailUnitField(): AbstractControl {

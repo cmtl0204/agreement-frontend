@@ -31,6 +31,17 @@ export class AgreementsHttpService {
     );
   }
 
+  update(payload: AgreementModel): Observable<AgreementModel> {
+    const url = `${this.API_URL}`;
+
+    return this.httpClient.put<ServerResponse>(url, payload).pipe(
+      map(response => {
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
+
   finish(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/finish`;
 
@@ -98,16 +109,6 @@ export class AgreementsHttpService {
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
-        return response.data;
-      })
-    );
-  }
-
-  update(id: string, payload: CatalogueModel): Observable<CatalogueModel> {
-    const url = `${this.API_URL}/${id}`;
-    return this.httpClient.put<ServerResponse>(url, payload).pipe(
-      map(response => {
-        this.messageService.success(response);
         return response.data;
       })
     );

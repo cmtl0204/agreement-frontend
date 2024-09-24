@@ -48,10 +48,40 @@
 
           <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
             <tr>
-              <td>{{ item.institutionName }}</td>
-              <td>{{ item.budget }}</td>
-              <td>{{ item.paymentMethod }}</td>
-              <td>{{ item.source }}</td>
+              <td>
+                <p-dropdown
+                  id="institutionName"
+                  [(ngModel)]="item.institutionName"
+                  [options]="combinedInstitutions"
+                  (onChange)="formOutput.emit(this.formInput)"
+                  placeholder="Selecione"
+                  appendTo="body">
+                  <ng-template pTemplate="selectedItem" let-selectedItem>
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ selectedItem}}</div>
+                    </div>
+                  </ng-template>
+                  <ng-template let-item pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ item }}</div>
+                    </div>
+                  </ng-template>
+
+                </p-dropdown>
+              </td>
+              <td>
+                <p-inputNumber
+                  [(ngModel)]="item.budget"
+                  mode="decimal"
+                  [minFractionDigits]="2"
+                  [maxFractionDigits]="2"/>
+              </td>
+              <td>
+                <input pInputText [(ngModel)]="item.paymentMethod">
+              </td>
+              <td>
+                <input pInputText [(ngModel)]="item.source">
+              </td>
               <td>
                 <p-button
                   [icon]="IconButtonActionEnum.DELETE"

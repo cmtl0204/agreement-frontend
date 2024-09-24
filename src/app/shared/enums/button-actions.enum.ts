@@ -62,6 +62,7 @@ export enum IconButtonActionEnum {
   CREATE = 'pi pi-plus',
   SYNC = 'pi pi-sync',
   UPDATE = 'pi pi-pencil',
+  EDIT = 'pi pi-pencil',
   COMPLETE = 'pi pi-pencil',
   CANCEL = 'pi pi-times',
   RETURN = 'pi pi-arrow-left',
@@ -71,6 +72,7 @@ export enum IconButtonActionEnum {
   SUSPEND = 'pi pi-ban',
   PARALLEL_CAPACITY = 'pi pi-list',
   DELETE = 'pi pi-trash',
+  REMOVE = 'pi pi-minus-circle',
   HIDE = 'pi pi-eye-slash',
   SELECT = 'pi pi-check',
   ENABLE = 'pi pi-eye',
@@ -93,6 +95,7 @@ export enum SeverityButtonActionEnum {
   SYNC = 'info',
   DELETE = 'danger',
   UPDATE = 'warning',
+  EDIT = 'warning',
   DOWNLOAD = 'info',
 }
 

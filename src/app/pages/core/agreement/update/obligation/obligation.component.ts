@@ -228,6 +228,11 @@ export class ObligationComponent implements OnInit {
   }
 
   deleteObligationDetail(indexObligation: number, index: number) {
+    if (this.formInput.obligations[indexObligation].obligationDetails.length === 1) {
+      this.messageDialogService.errorCustom('No se puede elminar', 'Debe haber al menos un campo');
+      return;
+    }
+
     this.formInput.obligations[indexObligation].obligationDetails?.splice(index, 1);
 
 

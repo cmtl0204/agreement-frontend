@@ -20,6 +20,10 @@
         [columns]="internalInstitutionsColumns">
         <ng-template pTemplate="header">
           <tr>
+            <th style="width:5%">
+              {{ TableEnum.ACTIONS }}
+            </th>
+
             @for (col of internalInstitutionsColumns; track col.field) {
               <th [pSortableColumn]="col.field">
                 {{ col.header }}
@@ -27,22 +31,42 @@
             }
           </tr>
         </ng-template>
+
         <ng-template pTemplate="body" let-internalInstitution let-rowIndex="rowIndex">
           <tr>
-<!--            <td>{{ internalInstitution.personType.name }}</td>-->
-<!--            <td>{{ internalInstitution.name }}</td>-->
             <td>
               @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
-                <ul>
-                  <p-button
-                    class="ml-1"
-                    [icon]="IconButtonActionEnum.DELETE"
-                    [severity]="SeverityButtonActionEnum.DELETE"
-                    [pTooltip]="'Eliminar Cargo'"
-                    (click)="deleteInternalInstitutionDetail(rowIndex,index)">
-                  </p-button>
-                  {{ internalInstitutionDetail.position.name }}
-                </ul>
+                <p-button
+                  class="ml-1"
+                  [icon]="IconButtonActionEnum.DELETE"
+                  [severity]="SeverityButtonActionEnum.DELETE"
+                  [pTooltip]="'Eliminar Cargo'"
+                  (click)="deleteInternalInstitutionDetail(rowIndex,index)">
+                </p-button>
+              }
+            </td>
+
+            <td>
+              @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
+                <p-dropdown
+                  [id]="internalInstitutionDetail.position"
+                  dataKey="id"
+                  [(ngModel)]="internalInstitutionDetail.position"
+                  (onChange)="formOutput.emit(this.formInput)"
+                  [options]="positions"
+                  placeholder="Selecione"
+                  appendTo="body">
+                  <ng-template pTemplate="selectedItem" let-selectedItem>
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ selectedItem.name }}</div>
+                    </div>
+                  </ng-template>
+                  <ng-template let-item pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ item.name }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
               }
             </td>
           </tr>
@@ -81,6 +105,10 @@
                 {{ col.header }}
               </th>
             }
+
+            <th>
+              {{ TableEnum.ACTIONS }}
+            </th>
           </tr>
         </ng-template>
 
@@ -93,25 +121,56 @@
                 [pTooltip]="'Eliminar Compareciente'"
                 (click)="deleteExternalInstitution(rowIndex)"/>
             </td>
-            <td>{{ item.personType.name }}</td>
-            <td>{{ item.name }}</td>
             <td>
-              <ul>
-                @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
-                  <li class="mt-1">
-                    <p-button
-                      class="ml-1"
-                      [icon]="IconButtonActionEnum.DELETE"
-                      [severity]="SeverityButtonActionEnum.DELETE"
-                      [pTooltip]="'Eliminar Cargo'"
-                      (click)="deleteExternalInstitutionDetail(rowIndex,index)">
-                    </p-button>
+              <p-dropdown
+                [id]="item.personType.id"
+                dataKey="id"
+                [(ngModel)]="item.personType"
+                (onChange)="formOutput.emit(this.formInput)"
+                [options]="externalPersonTypes"
+                placeholder="Selecione"
+                appendTo="body">
+                <ng-template pTemplate="selectedItem" let-selectedItem>
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ selectedItem.name }}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-item pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ item.name }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </td>
+            <td>
+              <input pInputText [(ngModel)]="item.name" (keyup)="formOutput.emit(this.formInput)">
+            </td>
+            <td>
+              @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+                <input pInputText [(ngModel)]="externalInstitutionDetail.position"
+                       (keyup)="formOutput.emit(this.formInput)">
+              }
+            </td>
 
-                    {{ externalInstitutionDetail.position }} /
-                    {{ externalInstitutionDetail.unit }}
-                  </li>
-                }
-              </ul>
+            <td>
+              @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+                <input pInputText [(ngModel)]="externalInstitutionDetail.unit"
+                       (keyup)="formOutput.emit(this.formInput)">
+              }
+            </td>
+
+            <td>
+              @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+                <p-button
+                  [icon]="IconButtonActionEnum.REMOVE"
+                  [severity]="SeverityButtonActionEnum.DELETE"
+                  [text]="true"
+                  [pTooltip]="'Eliminar Cargo'"
+                  (click)="deleteExternalInstitutionDetail(rowIndex,index)">
+                </p-button>
+
+                <br>
+              }
             </td>
           </tr>
         </ng-template>
@@ -138,13 +197,13 @@
 
       <app-form-help-field content="Registrar conforme se detalla en el convenio"></app-form-help-field>
 
-<!--      <p-listbox-->
-<!--        id="internalPosition"-->
-<!--        [options]="positions"-->
-<!--        formControlName="position"-->
-<!--        optionLabel="name"-->
-<!--        [filter]="true"-->
-<!--        [listStyle]="{'max-height': '300px'}"/>-->
+      <!--      <p-listbox-->
+      <!--        id="internalPosition"-->
+      <!--        [options]="positions"-->
+      <!--        formControlName="position"-->
+      <!--        optionLabel="name"-->
+      <!--        [filter]="true"-->
+      <!--        [listStyle]="{'max-height': '300px'}"/>-->
 
       <p-dropdown
         id="internalPosition"
@@ -227,12 +286,12 @@
           [required]="externalInstitutionPersonTypeField">
         </label>
 
-<!--        <p-listbox-->
-<!--          id="externalPersonType"-->
-<!--          [options]="externalPersonTypes"-->
-<!--          formControlName="personType"-->
-<!--          optionLabel="name"-->
-<!--          [listStyle]="{'max-height': '150px'}"/>-->
+        <!--        <p-listbox-->
+        <!--          id="externalPersonType"-->
+        <!--          [options]="externalPersonTypes"-->
+        <!--          formControlName="personType"-->
+        <!--          optionLabel="name"-->
+        <!--          [listStyle]="{'max-height': '150px'}"/>-->
 
         <p-dropdown
           id="externalPersonType"
@@ -316,11 +375,20 @@
       [severity]="SeverityButtonActionEnum.CANCEL"
       (click)="isVisibleExternalInstitutionForm=false"/>
 
-    <p-button
-      [icon]="IconButtonActionEnum.ADD"
-      [severity]="SeverityButtonActionEnum.ADD"
-      [label]="LabelButtonActionEnum.ADD"
-      (click)="addExternalInstitution()"/>
+    @if (externalInstitutionDetailIdField.value) {
+      <p-button
+        [icon]="IconButtonActionEnum.UPDATE"
+        [severity]="SeverityButtonActionEnum.UPDATE"
+        [label]="LabelButtonActionEnum.UPDATE"
+        (click)="updateExternalInstitution()"/>
+    } @else {
+      <p-button
+        [icon]="IconButtonActionEnum.ADD"
+        [severity]="SeverityButtonActionEnum.ADD"
+        [label]="LabelButtonActionEnum.ADD"
+        (click)="addExternalInstitution()"/>
+    }
+
   </ng-template>
 </p-dialog>
 
@@ -376,6 +444,7 @@
       </div>
     </form>
   </ng-template>
+
   <ng-template pTemplate="footer">
     <p-button
       [label]="LabelButtonActionEnum.CANCEL"

@@ -1,111 +1,111 @@
 @if (form.valid) {
-<p-panel>
-  <ng-template pTemplate="content">
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form
-          label="Registro"
-          [icon]="PrimeIcons.PENCIL"/>
-      </div>
+  <p-panel>
+    <ng-template pTemplate="content">
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
 
-      <div class="p-toolbar-group-right">
-        <app-form-button-action
-          labelSubmitButton="Siguiente"
-          (submit)="validateFormAgreement()"
-          (cancel)="redirectAgreementList()"
-          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-          [isVisibleCancelButton]="true"
-        />
-      </div>
-    </p-toolbar>
+        <div class="p-toolbar-group-right">
+          <app-form-button-action
+            labelSubmitButton="Guardar"
+            (submit)="validateFormAgreement()"
+            (cancel)="redirectAgreementList()"
+            [iconSubmitButton]="PrimeIcons.SAVE"
+            [isVisibleCancelButton]="true"
+          />
+        </div>
+      </p-toolbar>
 
-    <p-divider/>
+      <p-divider/>
 
-    <div class="p-fluid grid">
-      <p-panel header="Datos Básicos" class="col-12">
-        <app-basic-data
-          [formInput]="form.value"
-          (formErrorsOutput)="basicDataErrors=$event"
-          (formOutput)="save($event)"/>
-      </p-panel>
-
-      <p-panel header="Fechas del Convenio" class="col-12">
-        <app-agreement-date
-          [formInput]="form.value"
-          (formErrorsOutput)="agreementDateErrors=$event"
-          (formOutput)="save($event)"/>
-      </p-panel>
-
-      <p-panel class="col-12">
-        <ng-template pTemplate="header">
-          <h3>Administrador del Convenio</h3>
-          <app-form-help-field content="Registrar conforme señala convenio o designación"></app-form-help-field>
-        </ng-template>
-
-        <ng-template pTemplate="content">
-          <app-agreement-administrator
-            class="col-12"
+      <div class="p-fluid grid">
+        <p-panel header="Datos Básicos" class="col-12">
+          <app-basic-data
             [formInput]="form.value"
-            (formErrorsOutput)="agreementAdministratorErrors=$event"
+            (formErrorsOutput)="basicDataErrors=$event"
             (formOutput)="save($event)"/>
-        </ng-template>
-      </p-panel>
+        </p-panel>
 
-      <p-panel header="Comparecientes" class="col-12">
-        <app-appearer
-          [formInput]="form.value"
-          (formErrorsOutput)="appearerErrors=$event"
-          (formOutput)="save($event)"/>
-      </p-panel>
+        <p-panel header="Fechas del Convenio" class="col-12">
+          <app-agreement-date
+            [formInput]="form.value"
+            (formErrorsOutput)="agreementDateErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
 
-      <p-panel header="Obligaciones" class="col-12">
-        <app-obligation
-          [formInput]="form.value"
-          (formErrorsOutput)="obligationErrors=$event"
-          (formOutput)="save($event)"/>
-      </p-panel>
+        <p-panel class="col-12">
+          <ng-template pTemplate="header">
+            <h3>Administrador del Convenio</h3>
+            <app-form-help-field content="Registrar conforme señala convenio o designación"></app-form-help-field>
+          </ng-template>
 
-      <p-panel header="Financiamiento" class="col-12">
-        <app-financing
-          [formInput]="form.value"
-          (formOutput)="save($event)"
-          (formErrorsOutput)="financingErrors=$event"/>
-      </p-panel>
+          <ng-template pTemplate="content">
+            <app-agreement-administrator
+              class="col-12"
+              [formInput]="form.value"
+              (formErrorsOutput)="agreementAdministratorErrors=$event"
+              (formOutput)="save($event)"/>
+          </ng-template>
+        </p-panel>
 
-      <p-panel header="Documentación" class="col-12">
-        <app-document
-          [formInput]="form.value"
-          (formOutput)="save($event)"
-          (formErrorsOutput)="documentErrors=$event"/>
-      </p-panel>
+        <p-panel header="Comparecientes" class="col-12">
+          <app-appearer
+            [formInput]="form.value"
+            (formErrorsOutput)="appearerErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
 
-      <p-panel header="Registro de adendas o modificatorios" class="col-12">
-        <app-addendum
-          [formInput]="form.value"
-          (formOutput)="save($event)"
-          (formErrorsOutput)="documentErrors=$event"/>
-      </p-panel>
+        <p-panel header="Obligaciones" class="col-12">
+          <app-obligation
+            [formInput]="form.value"
+            (formErrorsOutput)="obligationErrors=$event"
+            (formOutput)="save($event)"/>
+        </p-panel>
 
-    </div>
+        <p-panel header="Financiamiento" class="col-12">
+          <app-financing
+            [formInput]="form.value"
+            (formOutput)="save($event)"
+            (formErrorsOutput)="financingErrors=$event"/>
+        </p-panel>
 
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form
-          label="Registro"
-          [icon]="PrimeIcons.PENCIL"/>
+        <p-panel header="Documentación" class="col-12">
+          <app-document
+            [formInput]="form.value"
+            (formOutput)="save($event)"
+            (formErrorsOutput)="documentErrors=$event"/>
+        </p-panel>
+
+        <p-panel header="Registro de adendas o modificatorios" class="col-12">
+          <app-addendum
+            [formInput]="form.value"
+            (formOutput)="save($event)"
+            (formErrorsOutput)="documentErrors=$event"/>
+        </p-panel>
+
       </div>
 
-      <div class="p-toolbar-group-right">
-        <app-form-button-action
-          labelSubmitButton="Siguiente"
-          (submit)="validateFormAgreement()"
-          [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
-          [isVisibleCancelButton]="false"
-        />
-      </div>
-    </p-toolbar>
-  </ng-template>
-</p-panel>
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <app-form-button-action
+            labelSubmitButton="Guardar"
+            (submit)="validateFormAgreement()"
+            [iconSubmitButton]="PrimeIcons.ARROW_RIGHT"
+            [isVisibleCancelButton]="false"
+          />
+        </div>
+      </p-toolbar>
+    </ng-template>
+  </p-panel>
 }
 
 <p-confirmDialog key="confirmDialog"/>

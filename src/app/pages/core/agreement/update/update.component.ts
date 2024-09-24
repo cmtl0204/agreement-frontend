@@ -7,13 +7,14 @@ import {AgreementsService, BreadcrumbService, MessageDialogService} from '@servi
 import {AgreementsHttpService} from "@servicesHttp/core";
 import {BreadcrumbEnum, RoleEnum, SeverityButtonActionEnum} from '@shared/enums';
 import {ConfirmationService, PrimeIcons} from 'primeng/api';
+import {update} from "@angular-devkit/build-angular/src/tools/esbuild/angular/compilation/parallel-worker";
 
 @Component({
   selector: 'app-update',
   templateUrl: './update.component.html',
   styleUrl: './update.component.scss'
 })
-export class UpdateComponent implements OnInit{
+export class UpdateComponent implements OnInit {
   @Input() id!: string;
   private readonly authService = inject(AuthService);
   private readonly agreementsService = inject(AgreementsService);
@@ -40,7 +41,7 @@ export class UpdateComponent implements OnInit{
 
   constructor() {
     this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
       {label: BreadcrumbEnum.AGREEMENTS_REGISTER},
     ]);
 
@@ -96,24 +97,6 @@ export class UpdateComponent implements OnInit{
     });
   }
 
-  get validateForms(): boolean {
-    this.formErrors = [];
-
-    this.formErrors = this.formErrors.concat(this.basicDataErrors);
-
-    this.formErrors = this.formErrors.concat(this.agreementDateErrors);
-
-    this.formErrors = this.formErrors.concat(this.agreementAdministratorErrors);
-
-    this.formErrors = this.formErrors.concat(this.appearerErrors);
-
-    this.formErrors = this.formErrors.concat(this.obligationErrors);
-
-    this.formErrors = this.formErrors.concat(this.financingErrors);
-
-    return this.formErrors.length === 0;
-  }
-
   validateFormAgreement() {
     this.formErrors = [];
 
@@ -126,43 +109,7 @@ export class UpdateComponent implements OnInit{
     this.formErrors = this.formErrors.concat(this.appearerErrors);
 
     if (this.formErrors.length === 0) {
-
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  validateFormObligation(nextCallback: any) {
-    this.formErrors = [];
-
-    this.formErrors = this.formErrors.concat(this.obligationErrors);
-
-    if (this.formErrors.length === 0) {
-      nextCallback.emit();
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  get validateFormDocument(): boolean {
-    this.formErrors = [];
-
-    this.formErrors = this.formErrors.concat(this.documentErrors);
-
-    return this.formErrors.length === 0
-  }
-
-  onSubmitAgreement(nextCallback: any) {
-    if (this.validateForms) {
-      this.register(nextCallback);
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
-  onSubmitDocuments(nextCallback: any) {
-    if (this.validateFormDocument) {
-      nextCallback.emit();
+      this.update();
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }
@@ -174,7 +121,7 @@ export class UpdateComponent implements OnInit{
     this.agreementsService.agreement = this.form.value;
   }
 
-  register(nextCallback: any) {
+  update() {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
@@ -184,54 +131,9 @@ export class UpdateComponent implements OnInit{
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
-        this.agreementsHttpService.register(this.agreementsService.agreement).subscribe(response => {
-          this.agreementsService.agreement = response; //review
-          this.form.patchValue(response);
-          nextCallback.emit();
+        this.agreementsHttpService.update(this.agreementsService.agreement).subscribe(response => {
+          this.redirectAgreementList();
         });
-      }
-    });
-  }
-
-  registerDocuments(nextCallback: any) {
-    this.confirmationService.confirm({
-      key: 'confirmDialog',
-      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
-      header: '¿Está seguro de guardar?',
-      icon: PrimeIcons.TIMES_CIRCLE,
-      acceptLabel: "Si",
-      rejectLabel: "No",
-      rejectButtonStyleClass: "p-button-text",
-      accept: () => {
-        const formData = new FormData();
-
-        for (const myFile of this.enablingDocumentsField.value) {
-          formData.append('typeIds', myFile.type.id);
-          formData.append('files', myFile.file);
-        }
-
-        if (this.idField.valid) {
-          this.agreementsHttpService.uploadEnablingDocuments(this.idField.value, formData).subscribe(response => {
-            this.form.patchValue(response);
-            this.agreementsService.agreement = response;
-
-            nextCallback.emit();
-          });
-        }
-      }
-    });
-  }
-
-  finish() {
-    this.agreementsHttpService.finish(this.idField.value).subscribe(response => {
-      this.agreementsService.clearAgreement();
-
-      if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
-        this.router.navigate(['/core/national-supervisor/agreement-list']);
-      }
-
-      if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
-        this.router.navigate(['/core/international-supervisor/agreement-list']);
       }
     });
   }
@@ -250,9 +152,5 @@ export class UpdateComponent implements OnInit{
 
   get enablingDocumentsField(): AbstractControl {
     return this.form.controls['enablingDocuments'];
-  }
-
-  get enabledField(): AbstractControl {
-    return this.form.controls['enabled'];
   }
 }

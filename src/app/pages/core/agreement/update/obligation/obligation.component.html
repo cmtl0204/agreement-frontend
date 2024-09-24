@@ -47,28 +47,21 @@
             <td>{{ item.institutionName }}</td>
             <td>{{ item.type?.name }}</td>
             <td>
-              <ul>
-                @for (item of item.obligationDetails; track item; let index = $index) {
-                  <li class="mt-1">
-                    <p-button
-                      [icon]="IconButtonActionEnum.DELETE"
-                      [severity]="SeverityButtonActionEnum.DELETE"
-                      size="small"
-                      [pTooltip]="LabelButtonActionEnum.DELETE"
-                      (click)="deleteObligationDetail(rowIndex,index)"/>
-                    {{ item.description }}
-                  </li>
-                }
-              </ul>
+              @for (item of item.obligationDetails; track item; let index = $index) {
+                <input pInputText [(ngModel)]="item.description">
+              }
             </td>
             <td>
-              <div class="button-group">
+              @for (item of item.obligationDetails; track item; let index = $index) {
                 <p-button
-                  [icon]="IconButtonActionEnum.ADD"
-                  [severity]="SeverityButtonActionEnum.ADD"
-                  [pTooltip]="'2. Agregar obligaciones'"
-                  (click)="showObligationDetailModal(rowIndex)"/>
-              </div>
+                  [icon]="IconButtonActionEnum.REMOVE"
+                  [severity]="SeverityButtonActionEnum.DELETE"
+                  size="small"
+                  [text]="true"
+                  [pTooltip]="LabelButtonActionEnum.DELETE"
+                  (click)="deleteObligationDetail(rowIndex,index)"/>
+                <br>
+              }
             </td>
           </tr>
         </ng-template>
@@ -94,12 +87,12 @@
           [required]="obligationTypeField">
         </label>
 
-<!--        <p-listbox-->
-<!--          id="type"-->
-<!--          [options]="obligationTypes"-->
-<!--          formControlName="type"-->
-<!--          optionLabel="name"-->
-<!--          [listStyle]="{'max-height': '150px'}"/>-->
+        <!--        <p-listbox-->
+        <!--          id="type"-->
+        <!--          [options]="obligationTypes"-->
+        <!--          formControlName="type"-->
+        <!--          optionLabel="name"-->
+        <!--          [listStyle]="{'max-height': '150px'}"/>-->
 
         <p-dropdown
           id="type"
@@ -140,13 +133,13 @@
           </label>
 
           @if (obligationTypeField.value.code === CatalogueObligationsTypeEnum.EXTERNAL) {
-<!--            <p-listbox-->
-<!--              id="institutionName"-->
-<!--              formControlName="institutionName"-->
-<!--              [options]="formInput.externalInstitutions"-->
-<!--              optionLabel="name"-->
-<!--              optionValue="name"-->
-<!--              [listStyle]="{'max-height': '150px'}"/>-->
+            <!--            <p-listbox-->
+              <!--              id="institutionName"-->
+              <!--              formControlName="institutionName"-->
+              <!--              [options]="formInput.externalInstitutions"-->
+              <!--              optionLabel="name"-->
+              <!--              optionValue="name"-->
+              <!--              [listStyle]="{'max-height': '150px'}"/>-->
 
             <p-dropdown
               id="institutionName"
@@ -168,11 +161,11 @@
           }
 
           @if (obligationTypeField.value.code === CatalogueObligationsTypeEnum.JOIN) {
-<!--            <p-listbox-->
-<!--              formControlName="institutionName"-->
-<!--              [options]="institutions"-->
-<!--              [multiple]="true"-->
-<!--              [listStyle]="{'max-height': '150px'}"/>-->
+            <!--            <p-listbox-->
+              <!--              formControlName="institutionName"-->
+              <!--              [options]="institutions"-->
+              <!--              [multiple]="true"-->
+              <!--              [listStyle]="{'max-height': '150px'}"/>-->
 
             <p-multiSelect
               formControlName="institutionName"
