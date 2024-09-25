@@ -31,8 +31,8 @@ export class AgreementsHttpService {
     );
   }
 
-  update(payload: AgreementModel): Observable<AgreementModel> {
-    const url = `${this.API_URL}`;
+  update(id: string, payload: AgreementModel): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}`;
 
     return this.httpClient.put<ServerResponse>(url, payload).pipe(
       map(response => {

@@ -131,7 +131,7 @@ export class UpdateComponent implements OnInit {
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
-        this.agreementsHttpService.update(this.agreementsService.agreement).subscribe(response => {
+        this.agreementsHttpService.update(this.idField.value, this.agreementsService.agreement).subscribe(response => {
           this.redirectAgreementList();
         });
       }
