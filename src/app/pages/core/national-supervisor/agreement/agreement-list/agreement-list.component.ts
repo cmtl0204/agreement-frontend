@@ -80,7 +80,7 @@ export class AgreementListComponent implements OnInit {
   }
 
   findAgreements() {
-    if(this.authService.role.code===RoleEnum.NATIONAL_SUPERVISOR){
+    if (this.authService.role.code === RoleEnum.NATIONAL_SUPERVISOR) {
       this.agreementsHttpService.findNationalAgreementsByOrigin()
         .subscribe((response) => {
           // this.paginator = response.pagination!;
@@ -88,7 +88,7 @@ export class AgreementListComponent implements OnInit {
         });
     }
 
-    if(this.authService.role.code===RoleEnum.INTERNATIONAL_SUPERVISOR){
+    if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR) {
       this.agreementsHttpService.findInternationalAgreementsByOrigin()
         .subscribe((response) => {
           // this.paginator = response.pagination!;
@@ -132,9 +132,9 @@ export class AgreementListComponent implements OnInit {
         },
       },
       {
-        id: IdButtonActionEnum.UPDATE,
+        id: IdButtonActionEnum.EDIT,
         label: LabelButtonActionEnum.UPDATE,
-        icon: IconButtonActionEnum.UPDATE,
+        icon: IconButtonActionEnum.EDIT,
         command: () => {
           if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
         },
@@ -164,7 +164,7 @@ export class AgreementListComponent implements OnInit {
     this.router.navigate(['/core/agreements', 'register']);
   }
 
-  redirectCompleteForm(item:AgreementModel) {
+  redirectCompleteForm(item: AgreementModel) {
     this.router.navigate(['/core/agreements', 'register']);
   }
 
@@ -192,14 +192,15 @@ export class AgreementListComponent implements OnInit {
   }
 
   validateButtonActions(item: AgreementModel): void {
-      this.buildButtonActions();
+    this.buildButtonActions();
 
-      if (item.enabled) {
-        this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
-      }
+    if (item.enabled) {
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
+    }
 
     if (!item.enabled) {
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.VIEW), 1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.EDIT), 1);
     }
 
     //   if (!item.suspendedAt) {
