@@ -50,8 +50,9 @@ export class UpdateComponent implements OnInit {
 
   ngOnInit() {
     if (this.agreementsService.agreementStorage) {
+      console.log(this.agreementsService.agreementStorage);
       this.form.patchValue(this.agreementsService.agreementStorage);
-
+      console.log(this.form.value);
       if (this.idField.value) {
         this.activeStep = 3;
       }

@@ -43,6 +43,7 @@ export class AgreementAdministratorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.formInput);
     this.loadPositions();
     this.loadUnits();
     this.loadUsers();
