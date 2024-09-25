@@ -74,6 +74,7 @@ export class AgreementAdministratorComponent implements OnInit {
 
   get administratorForm() {
     return this.formBuilder.group({
+      id: [null],
       unit: [null, Validators.required],
       position: [null, Validators.required],
       user: [null, Validators.required],
