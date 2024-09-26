@@ -16,7 +16,7 @@
         <p-card [header]="event.status" [subheader]="event.date">
           @for (agreementLogDetail of event.agreementLogDetails; track agreementLogDetail.id) {
 <!--            <b>Campo:</b> {{ agreementLogDetail.description }}-->
-            <b>Campo:</b> {{ agreementLogDetail.property }}
+            <b>Campo:</b> {{ agreementLogDetail.path }}
 
             <br>
             <b>Valor anterior:</b> {{ agreementLogDetail.oldValue }}
