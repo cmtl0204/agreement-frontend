@@ -13,3 +13,13 @@ export const verifyAgreementInternalNumber = (agreementsHttpService: AgreementsH
     )
   }
 }
+
+export const verifyAgreementInternalNumberUpdate = (agreementsHttpService: AgreementsHttpService,agreementId:string): AsyncValidatorFn => {
+  return (control) => {
+    return agreementsHttpService.verifyInternalNumberUpdate(control.value,agreementId).pipe(
+      map((response) => {
+        return response ? {agreementExists: true} : null;
+      })
+    )
+  }
+}

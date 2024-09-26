@@ -64,12 +64,12 @@ export class AgreementsHttpService {
     );
   }
 
-  uploadAddendum(id: string, formData: FormData,isEdit = false): Observable<AgreementModel> {
+  uploadAddendum(id: string, formData: FormData, isEdit = false): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/addendums`;
 
     const params = new HttpParams().append('edit', isEdit);
 
-    return this.httpClient.post<ServerResponse>(url, formData,{params}).pipe(
+    return this.httpClient.post<ServerResponse>(url, formData, {params}).pipe(
       map(response => {
         this.messageDialogService.successHttp(response);
         return response.data;
@@ -132,6 +132,18 @@ export class AgreementsHttpService {
     const url = `${this.API_URL}/${internalNumber}/verify-internalnumber`;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
+  verifyInternalNumberUpdate(internalNumber: string, agreementId: string): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${internalNumber}/update-verify-internalnumber`;
+
+    const params = new HttpParams().append('agreementId', agreementId);
+
+    return this.httpClient.get<ServerResponse>(url, {params}).pipe(
       map(response => {
         return response.data;
       })

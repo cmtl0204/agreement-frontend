@@ -8,10 +8,10 @@ import {
   SkeletonEnum,
   CatalogueTypeEnum,
   CatalogueAgreementsTypeEnum,
-  AgreementStateEnum, RoleEnum, CatalogueAgreementsOriginEnum, CatalogueAgreementStatesStateEnum
+  AgreementStateEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
-import {verifyAgreementInternalNumber} from "@shared/validators";
+import {verifyAgreementInternalNumber, verifyAgreementInternalNumberUpdate} from "@shared/validators";
 
 @Component({
   selector: 'app-basic-data',
@@ -49,7 +49,7 @@ export class BasicDataComponent implements OnInit {
   protected readonly SkeletonEnum = SkeletonEnum;
 
   constructor() {
-    this.buildForm();
+
   }
 
   ngOnInit() {
@@ -58,6 +58,7 @@ export class BasicDataComponent implements OnInit {
     this.loadTypes();
     this.loadSpecialTypes();
 
+    this.buildForm();
     this.patchValueForm();
     this.validateForm();
   }
@@ -69,12 +70,12 @@ export class BasicDataComponent implements OnInit {
       name: [null, [Validators.required]],
       internalNumber: [null, {
         validators: Validators.required,
-        asyncValidators: verifyAgreementInternalNumber(this.agreementsHttpService),
+        asyncValidators: verifyAgreementInternalNumberUpdate(this.agreementsHttpService, this.formInput.id!),
         updateOn: 'blur'
       }],
       number: [null, [Validators.required]],
       objective: [null, [Validators.required]],
-      origin: [{value:null,disabled:true }],
+      origin: [{value: null, disabled: true}],
       specialType: [null],
       type: [null, [Validators.required]],
     });

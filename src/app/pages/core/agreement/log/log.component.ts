@@ -74,7 +74,10 @@ export class LogComponent implements OnInit {
   protected isVisibleAgreementView: boolean = false;
 
   constructor() {
-    this.breadcrumbService.setItems([{label: BreadcrumbEnum.AGREEMENTS}]);
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS},
+      {label: BreadcrumbEnum.AGREEMENTS_LOG},
+    ]);
 
     this.buildButtonActions();
     this.buildColumns();
@@ -94,7 +97,7 @@ export class LogComponent implements OnInit {
           date: format(item.registeredAt!, 'MM-dd-yyyy hh:mm:ss'),
           icon: PrimeIcons.ARROW_DOWN,
           color: 'var(--primary-color)',
-          agreementLogDetails:item.agreementLogDetails
+          agreementLogDetails: item.agreementLogDetails
         }
       });
     });
@@ -154,4 +157,5 @@ export class LogComponent implements OnInit {
   }
 
   protected readonly SkeletonEnum = SkeletonEnum;
+  protected readonly AgreementLogEnum = AgreementLogEnum;
 }

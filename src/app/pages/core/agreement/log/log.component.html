@@ -3,7 +3,7 @@
 }
 
 @if (!coreService.isLoading) {
-  <div class="card">
+  <p-panel [header]="AgreementLogEnum.header">
     <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
       <ng-template pTemplate="marker" let-event>
             <span
@@ -14,24 +14,20 @@
       </ng-template>
       <ng-template pTemplate="content" let-event>
         <p-card [header]="event.status" [subheader]="event.date">
-          <ul>
-            @for (agreementLogDetail of event.agreementLogDetails; track agreementLogDetail.id) {
-              <li>
-                <b>Campo:</b> {{ agreementLogDetail.description }}
-              </li>
-              <li>
-                <b>Valor anterior:</b> {{ agreementLogDetail.oldValue }}
-              </li>
-              <li>
-                <b>Nuevo Valor:</b> {{ agreementLogDetail.newValue }}
-              </li>
+          @for (agreementLogDetail of event.agreementLogDetails; track agreementLogDetail.id) {
+            <b>Campo:</b> {{ agreementLogDetail.description }}
 
-              <p-divider/>
-            }
-          </ul>
+            <br>
+            <b>Valor anterior:</b> {{ agreementLogDetail.oldValue }}
+
+            <br>
+            <b>Nuevo Valor:</b> {{ agreementLogDetail.newValue }}
+
+            <p-divider/>
+          }
           <!--        <p-button label="Ver Detalle" [text]="true"/>-->
         </p-card>
       </ng-template>
     </p-timeline>
-  </div>
+  </p-panel>
 }
