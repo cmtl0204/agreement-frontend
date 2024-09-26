@@ -3,6 +3,20 @@
 }
 
 @if (!coreService.isLoading) {
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <p-button
+        (click)="redirectCreateForm()"
+        [icon]="IconButtonActionEnum.DOWNLOAD"
+        [label]="LabelButtonActionEnum.DOWNLOAD"
+        [loading]="coreService.isLoading"
+        [severity]="SeverityButtonActionEnum.DOWNLOAD"></p-button>
+    </div>
+    <div class="p-toolbar-group-right">
+
+    </div>
+  </p-toolbar>
+
   <p-panel [header]="AgreementLogEnum.header">
     <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
       <ng-template pTemplate="marker" let-event>
