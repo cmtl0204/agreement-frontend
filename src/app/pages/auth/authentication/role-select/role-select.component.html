@@ -15,18 +15,26 @@
         <div class="field col-12">
           <label for="role" appLabel [label]="LoginFormEnum.roleSelect" [required]="roleField"></label>
 
-          <p-listbox
+          <p-dropdown
             id="role"
             formControlName="role"
+            dataKey="id"
             [options]="roles"
-            optionLabel="name"
-            [listStyle]="{'max-height': '200px'}"/>
+            placeholder="Seleccione"
+          appendTo="body">
 
-          <small appErrorMessage
-                 [errors]="roleField.errors"
-                 [touched]="roleField.touched"
-                 [dirty]="roleField.dirty">
-          </small>
+            <ng-template pTemplate="selectedItem" let-selectedItem>
+              <div class="flex align-items-center gap-2">
+                <div>{{ selectedItem.name }}</div>
+              </div>
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ item.name }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
 
         <div class="field col-12">
