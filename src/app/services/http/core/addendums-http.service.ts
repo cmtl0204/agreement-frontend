@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
@@ -17,10 +17,14 @@ export class AddendumsHttpService {
   constructor() {
   }
 
-  remove(id: string): Observable<boolean> {
+  remove(id: string, isEdit = false, agreementId = ''): Observable<boolean> {
     const url = `${this.API_URL}/${id}`;
 
-    return this.httpClient.delete<ServerResponse>(url).pipe(
+    const params = new HttpParams()
+      .append('agreementId', agreementId)
+      .append('edit', isEdit);
+
+    return this.httpClient.delete<ServerResponse>(url, {params}).pipe(
       map(response => {
         this.messageDialogService.successHttp(response);
 

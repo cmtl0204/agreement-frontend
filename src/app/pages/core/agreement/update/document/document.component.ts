@@ -157,7 +157,7 @@ export class DocumentComponent implements OnInit {
   }
 
   removeFile(index: number, item: FileModel) {
-    this.filesHttpService.remove(item.id!, true).subscribe(response => {
+    this.filesHttpService.remove(item.id!, true,this.formInput.id!).subscribe(response => {
       this.formInput.enablingDocuments.splice(index, 1);
       this.types.push(item.type!);
 

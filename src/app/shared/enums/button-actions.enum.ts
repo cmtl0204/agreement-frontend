@@ -20,6 +20,7 @@ export enum IdButtonActionEnum {
   FILE_LIST = 'file_list',
   SUBJECT_REQUIREMENTS = 'subject_requirements',
   SUSPEND = 'suspend',
+  AGREEMENT_LOG = 'agreement_log',
   REACTIVATE = 'reactivate',
   VIEW = 'view'
 }
@@ -40,6 +41,7 @@ export enum LabelButtonActionEnum {
   DOWNLOAD = 'Descargar',
   DOWNLOADS = 'Descargas',
   SUSPEND = 'Suspender',
+  AGREEMENT_LOG = 'Bítacora',
   HIDE = 'Ocultar',
   SELECT = 'Seleccionar',
   ENABLE = 'Habilitar',
@@ -72,6 +74,7 @@ export enum IconButtonActionEnum {
   DOWNLOADS = 'pi pi-download',
   SAVE = 'pi pi-save',
   SUSPEND = 'pi pi-ban',
+  AGREEMENT_LOG = 'pi pi-book',
   PARALLEL_CAPACITY = 'pi pi-list',
   DELETE = 'pi pi-trash',
   REMOVE = 'pi pi-minus-circle',

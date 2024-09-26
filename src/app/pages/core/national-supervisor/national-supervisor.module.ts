@@ -16,12 +16,14 @@ import {DialogModule} from "primeng/dialog";
 import {ViewModule} from "../agreement/view/view.module";
 import {IconFieldModule} from "primeng/iconfield";
 import {InputIconModule} from "primeng/inputicon";
+import { AgreementLogListComponent } from './agreement/agreement-log-list/agreement-log-list.component';
 
 
 
 @NgModule({
   declarations: [
-    AgreementListComponent
+    AgreementListComponent,
+    AgreementLogListComponent
   ],
   imports: [
     CommonModule,

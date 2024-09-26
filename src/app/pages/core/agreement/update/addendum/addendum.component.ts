@@ -169,7 +169,7 @@ export class AddendumComponent implements OnInit {
       formData.append('typeId', this.fileField.value.type.id);
       formData.append('description', this.descriptionField.value);
 
-      this.agreementsHttpService.uploadAddendum(this.formInput.id!, formData).subscribe(response => {
+      this.agreementsHttpService.uploadAddendum(this.formInput.id!, formData,true).subscribe(response => {
         this.formInput.addendums.push({
           id: response.id,
           description: this.descriptionField.value,
@@ -201,7 +201,7 @@ export class AddendumComponent implements OnInit {
   }
 
   deleteAddendum(id: string) {
-    this.addendumsHttpService.remove(id).subscribe(response => {
+    this.addendumsHttpService.remove(id,true,this.formInput.id!).subscribe(response => {
       const index = this.formInput.addendums.findIndex(item => item.id === id);
 
       this.formInput.addendums.splice(index, 1);

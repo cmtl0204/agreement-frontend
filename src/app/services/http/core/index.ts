@@ -3,3 +3,4 @@ export {FilesHttpService} from './files-http.service';
 export {LocationsHttpService} from './locations-http.service';
 export {AgreementsHttpService} from './agreements-http.service';
 export {AddendumsHttpService} from './addendums-http.service';
+export {AgreementLogsHttpService} from './agreement-logs-http.service';

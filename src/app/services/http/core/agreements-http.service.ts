@@ -64,10 +64,12 @@ export class AgreementsHttpService {
     );
   }
 
-  uploadAddendum(id: string, formData: FormData): Observable<AgreementModel> {
+  uploadAddendum(id: string, formData: FormData,isEdit = false): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/addendums`;
 
-    return this.httpClient.post<ServerResponse>(url, formData).pipe(
+    const params = new HttpParams().append('edit', isEdit);
+
+    return this.httpClient.post<ServerResponse>(url, formData,{params}).pipe(
       map(response => {
         this.messageDialogService.successHttp(response);
         return response.data;
