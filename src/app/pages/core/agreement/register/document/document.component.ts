@@ -163,7 +163,6 @@ export class DocumentComponent implements OnInit {
 
       this.form.patchValue(this.formInput.enablingDocuments);
     });
-
   }
 
   get typeField(): AbstractControl {

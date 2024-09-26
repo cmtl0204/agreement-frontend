@@ -91,12 +91,14 @@ export class FilesHttpService {
     );
   }
 
-  remove(id: string): Observable<FileModel> {
+  remove(id: string,isEdit=false): Observable<FileModel> {
     const url = `${this.API_URL}/${id}`;
 
     this.coreService.isProcessing = true;
 
-    return this.httpClient.delete<ServerResponse>(url).pipe(
+    const params = new HttpParams().append('edit', isEdit);
+
+    return this.httpClient.delete<ServerResponse>(url,{params}).pipe(
       map((response) => {
         this.coreService.isProcessing = false;
         this.messageDialogService.successHttp(response);

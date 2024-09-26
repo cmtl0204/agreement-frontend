@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {debounceTime, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
@@ -75,10 +75,12 @@ export class AgreementsHttpService {
     );
   }
 
-  uploadEnablingDocument(id: string, formData: FormData): Observable<AgreementModel> {
+  uploadEnablingDocument(id: string, formData: FormData, isEdit = false): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/enabling-documents`;
 
-    return this.httpClient.post<ServerResponse>(url, formData).pipe(
+    const params = new HttpParams().append('edit', isEdit);
+
+    return this.httpClient.post<ServerResponse>(url, formData, {params}).pipe(
       map(response => {
         this.messageDialogService.successHttp(response);
         return response.data;

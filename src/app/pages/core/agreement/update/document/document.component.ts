@@ -136,7 +136,7 @@ export class DocumentComponent implements OnInit {
       formData.append('file', file);
       formData.append('typeId', type.id!);
 
-      this.agreementsHttpService.uploadEnablingDocument(this.formInput.id!, formData).subscribe(response => {
+      this.agreementsHttpService.uploadEnablingDocument(this.formInput.id!, formData, true).subscribe(response => {
         this.formInput.enablingDocuments.push({
           id: response.id,
           name: file.name,
@@ -157,13 +157,12 @@ export class DocumentComponent implements OnInit {
   }
 
   removeFile(index: number, item: FileModel) {
-    this.filesHttpService.remove(item.id!).subscribe(response => {
+    this.filesHttpService.remove(item.id!, true).subscribe(response => {
       this.formInput.enablingDocuments.splice(index, 1);
       this.types.push(item.type!);
 
       this.form.patchValue(this.formInput.enablingDocuments);
     });
-
   }
 
   get typeField(): AbstractControl {
