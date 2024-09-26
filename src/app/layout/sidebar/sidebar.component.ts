@@ -5,6 +5,7 @@ import {MenuModel} from "@models/auth";
 import {AgreementsService, CoreService, MessageService, RoutesService} from "@servicesApp/core";
 import {AgreementsHttpService} from "@servicesHttp/core";
 import {format} from "date-fns";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sidebar',
@@ -26,6 +27,7 @@ export class SidebarComponent implements OnInit {
   protected readonly authService = inject(AuthService);
   protected readonly messageService = inject(MessageService);
   protected readonly routesService = inject(RoutesService);
+  protected readonly router = inject(Router);
   protected currentYear: string;
 
   constructor() {
@@ -50,11 +52,11 @@ export class SidebarComponent implements OnInit {
           this.menus = menus.map(menu => {
             return {
               label: menu.label,
-              routerLink: [menu.routerLink],
               icon: menu.icon,
               command: () => {
                 this.agreementsService.clearAgreement();
                 this.coreService.sidebarVisible = false;
+                this.router.navigate([menu.routerLink])
               }
             }
           });

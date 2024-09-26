@@ -48,6 +48,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     if (this.agreementsService.agreementStorage) {
+      console.log("Ingreso")
+      console.log(this.agreementsService.agreementStorage)
       this.form.patchValue(this.agreementsService.agreementStorage);
 
       if (this.idField.value) {
