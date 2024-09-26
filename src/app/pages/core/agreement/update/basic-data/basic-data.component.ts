@@ -49,7 +49,7 @@ export class BasicDataComponent implements OnInit {
   protected readonly SkeletonEnum = SkeletonEnum;
 
   constructor() {
-
+    this.buildForm();
   }
 
   ngOnInit() {
@@ -58,7 +58,6 @@ export class BasicDataComponent implements OnInit {
     this.loadTypes();
     this.loadSpecialTypes();
 
-    this.buildForm();
     this.patchValueForm();
     this.validateForm();
   }
@@ -70,7 +69,7 @@ export class BasicDataComponent implements OnInit {
       name: [null, [Validators.required]],
       internalNumber: [null, {
         validators: Validators.required,
-        asyncValidators: verifyAgreementInternalNumberUpdate(this.agreementsHttpService, this.formInput.id!),
+        asyncValidators: verifyAgreementInternalNumberUpdate(this.agreementsHttpService, this.formInput?.id),
         updateOn: 'blur'
       }],
       number: [null, [Validators.required]],
