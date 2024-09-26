@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ColumnModel, AgreementModel, AgreementLogModel} from '@models/core';
+import {ColumnModel, AgreementModel, AgreementLogModel, AgreementLogDetailModel} from '@models/core';
 import {
   CoreService,
   BreadcrumbService,
@@ -19,19 +19,28 @@ import {
   TableEnum,
   AgreementFormEnum,
   AgreementStateEnum,
-  AdministratorFormEnum, RoleEnum
+  AdministratorFormEnum, RoleEnum, AgreementLogEnum, SkeletonEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
-import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
+import {getFormattedDate} from "@shared/helpers";
+import {format} from "date-fns";
+
+interface EventItem {
+  status?: string;
+  date?: string;
+  icon?: string;
+  color?: string;
+  agreementLogDetails?: AgreementLogDetailModel[];
+}
 
 @Component({
-  selector: 'app-agreement-log-list',
-  templateUrl: './agreement-log-list.component.html',
-  styleUrl: './agreement-log-list.component.scss'
+  selector: 'app-log',
+  templateUrl: './log.component.html',
+  styleUrl: './log.component.scss'
 })
-export class AgreementLogListComponent implements OnInit {
-  @Input() agreementId!: string;
+export class LogComponent implements OnInit {
+  @Input() id!: string;
 
   // Services
   protected readonly authService = inject(AuthService);
@@ -61,6 +70,7 @@ export class AgreementLogListComponent implements OnInit {
 
   protected selectedItem!: AgreementModel;
   protected items: AgreementLogModel[] = [];
+  protected events: EventItem[] = [];
   protected isVisibleAgreementView: boolean = false;
 
   constructor() {
@@ -75,22 +85,25 @@ export class AgreementLogListComponent implements OnInit {
   }
 
   findAgreementLogsByAgreement() {
-    this.agreementLogsHttpService.findAgreementLogsByAgreement(this.agreementId).subscribe(response => {
+    this.agreementLogsHttpService.findAgreementLogsByAgreement(this.id).subscribe(response => {
       this.items = response;
+
+      this.events = this.items.map(item => {
+        return {
+          status: `${item.user.name} ${item.user.lastname}`,
+          date: format(item.registeredAt!, 'MM-dd-yyyy hh:mm:ss'),
+          icon: PrimeIcons.ARROW_DOWN,
+          color: 'var(--primary-color)',
+          agreementLogDetails:item.agreementLogDetails
+        }
+      });
     });
   }
 
   buildColumns() {
     this.columns = [
-      {field: 'number', header: AgreementFormEnum.number},
-      {field: 'internalNumber', header: AgreementFormEnum.internalNumber},
-      {field: 'name', header: AgreementFormEnum.name},
-      {field: 'administrator', header: AdministratorFormEnum.header},
-      {field: 'agreementState', header: AgreementStateEnum.state},
-      {field: 'subscribedAt', header: AgreementFormEnum.subscribedAt},
-      {field: 'endedAt', header: AgreementFormEnum.endedAt},
-      {field: 'isFinancing', header: AgreementFormEnum.isFinancing},
-      {field: 'enabled', header: AgreementFormEnum.enabled}
+      {field: 'registeredAt', header: AgreementLogEnum.registeredAt},
+      {field: 'user', header: AgreementLogEnum.user},
     ];
   }
 
@@ -102,7 +115,7 @@ export class AgreementLogListComponent implements OnInit {
         label: LabelButtonActionEnum.VIEW,
         icon: IconButtonActionEnum.VIEW,
         command: () => {
-          this.redirectViewAgreement();
+          this.redirectCreateForm();
         },
       },
     ];
@@ -112,33 +125,6 @@ export class AgreementLogListComponent implements OnInit {
     this.agreementsService.clearAgreement();
 
     this.router.navigate(['/core/agreements', 'register']);
-  }
-
-  redirectCompleteForm(item: AgreementModel) {
-    this.router.navigate(['/core/agreements', 'register']);
-  }
-
-  redirectEditForm(id: string) {
-    this.router.navigate(['/core/agreements/update', id]);
-  }
-
-  redirectViewAgreement() {
-    this.messageDialogService.successCustom('Sitio en construcción', 'Pronto estará disponible');
-    return;
-
-    this.isVisibleAgreementView = true;
-  }
-
-  remove(id: string) {
-    // this.messageService.questionDelete()
-    //   .then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.agreementsHttpService.remove(id).subscribe((user) => {
-    //         this.items = this.items.filter(item => item.id !== user.id);
-    //         this.paginator.totalItems--;
-    //       });
-    //     }
-    //   });
   }
 
   validateButtonActions(item: AgreementModel): void {
@@ -158,10 +144,6 @@ export class AgreementLogListComponent implements OnInit {
     //   }
   }
 
-  paginate(event: any) {
-    // this.findAgreements(event.page);
-  }
-
   selectItem(item: AgreementModel) {
     this.agreementsHttpService.findOne(item.id!).subscribe(agreement => {
       this.isButtonActions = true;
@@ -170,4 +152,6 @@ export class AgreementLogListComponent implements OnInit {
       this.agreementsService.agreement = agreement;
     });
   }
+
+  protected readonly SkeletonEnum = SkeletonEnum;
 }

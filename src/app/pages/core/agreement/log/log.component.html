@@ -1,0 +1,37 @@
+@if (coreService.isLoading) {
+  <app-skeleton [type]="SkeletonEnum.CARD"></app-skeleton>
+}
+
+@if (!coreService.isLoading) {
+  <div class="card">
+    <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+      <ng-template pTemplate="marker" let-event>
+            <span
+              class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
+              [style]="{ 'background-color': event.color }">
+                    <i [class]="event.icon"></i>
+            </span>
+      </ng-template>
+      <ng-template pTemplate="content" let-event>
+        <p-card [header]="event.status" [subheader]="event.date">
+          <ul>
+            @for (agreementLogDetail of event.agreementLogDetails; track agreementLogDetail.id) {
+              <li>
+                <b>Campo:</b> {{ agreementLogDetail.description }}
+              </li>
+              <li>
+                <b>Valor anterior:</b> {{ agreementLogDetail.oldValue }}
+              </li>
+              <li>
+                <b>Nuevo Valor:</b> {{ agreementLogDetail.newValue }}
+              </li>
+
+              <p-divider/>
+            }
+          </ul>
+          <!--        <p-button label="Ver Detalle" [text]="true"/>-->
+        </p-card>
+      </ng-template>
+    </p-timeline>
+  </div>
+}

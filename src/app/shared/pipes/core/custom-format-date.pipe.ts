@@ -10,6 +10,7 @@ export class CustomFormatDatePipe implements PipeTransform {
     if (value ) {
       return format(value,'dd/MM/yyyy');
     }
+
     return '';
   }
 

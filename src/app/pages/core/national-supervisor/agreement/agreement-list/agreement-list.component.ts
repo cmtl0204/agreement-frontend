@@ -139,14 +139,14 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
         },
       },
-      // {
-      //   id: IdButtonActionEnum.SUSPEND,
-      //   label: LabelButtonActionEnum.SUSPEND,
-      //   icon: IconButtonActionEnum.SUSPEND,
-      //   command: () => {
-      //     if (this.selectedItem?.id) this.suspend(this.selectedItem.id);
-      //   },
-      // },
+      {
+        id: IdButtonActionEnum.AGREEMENT_LOG,
+        label: LabelButtonActionEnum.AGREEMENT_LOG,
+        icon: IconButtonActionEnum.AGREEMENT_LOG,
+        command: () => {
+          if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
+        },
+      },
       // {
       //   id: IdButtonActionEnum.REACTIVATE,
       //   label: LabelButtonActionEnum.REACTIVATE,
@@ -177,6 +177,10 @@ export class AgreementListComponent implements OnInit {
     return;
 
     this.isVisibleAgreementView = true;
+  }
+
+  redirectAgreementLogForm(id: string) {
+    this.router.navigate(['/core/agreements/log', id]);
   }
 
   remove(id: string) {

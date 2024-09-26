@@ -129,6 +129,12 @@ export enum AgreementStateEnum {
   state = 'Estado del convenio',
 }
 
+export enum AgreementLogEnum {
+  header = 'Bitácora del convenio',
+  registeredAt = 'Fecha de registro',
+  user = 'Usuario',
+}
+
 export enum AdministratorFormEnum {
   header = 'Administrador del convenio',
   position = 'Cargo del funcionario Ministerio de Turismo',

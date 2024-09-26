@@ -32,4 +32,4 @@ export * from './obligation.model';
 export * from './period.model';
 export * from './tracking-log.model';
 export * from './agreement-log.model';
-export * from './agreement-detail-log.model';
+export * from './agreement-log-detail.model';

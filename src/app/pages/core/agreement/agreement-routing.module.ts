@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'view/:id',
     loadChildren: () => import('./view/view.module').then(m => m.ViewModule),
+  },
+  {
+    path: 'log/:id',
+    loadChildren: () => import('./log/log.module').then(m => m.LogModule),
   }
 ];
 

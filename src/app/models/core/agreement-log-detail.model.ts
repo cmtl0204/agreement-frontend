@@ -8,7 +8,7 @@ import {
 } from "@models/core";
 import {EnablingDocumentFormEnum} from "@shared/enums";
 
-export interface AgreementDetailLogModel {
+export interface AgreementLogDetailModel {
   id?: string;
   agreementLog?: AgreementLogModel;
 }
