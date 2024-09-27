@@ -50,9 +50,9 @@ export class UpdateComponent implements OnInit {
 
   ngOnInit() {
     if (this.agreementsService.agreementStorage) {
-      console.log(this.agreementsService.agreementStorage);
+
       this.form.patchValue(this.agreementsService.agreementStorage);
-      console.log(this.form.value);
+
       if (this.idField.value) {
         this.activeStep = 3;
       }
@@ -125,9 +125,9 @@ export class UpdateComponent implements OnInit {
   update() {
     this.confirmationService.confirm({
       key: 'confirmDialog',
-      message: 'Después de guardar, no podrá realizar cambios en la información del convenio',
+      message: '',
       header: '¿Está seguro de guardar?',
-      icon: PrimeIcons.QUESTION_CIRCLE,
+      // icon: PrimeIcons.QUESTION_CIRCLE,
       acceptLabel: "Si",
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",

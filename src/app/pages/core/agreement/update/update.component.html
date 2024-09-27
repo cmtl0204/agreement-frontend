@@ -9,9 +9,9 @@
 
           <div class="p-toolbar-group-right">
             <app-form-button-action
-              labelSubmitButton="Guardar"
+              labelSubmitButton="Actualizar"
               (cancel)="redirectAgreementList()"
-              [iconSubmitButton]="PrimeIcons.SAVE"
+              [iconSubmitButton]="PrimeIcons.SYNC"
               [isVisibleCancelButton]="true"
               [isVisibleSubmitButton]="false"
             />
@@ -101,10 +101,10 @@
 
               <div class="p-toolbar-group-right">
                 <app-form-button-action
-                  labelSubmitButton="Guardar"
+                  labelSubmitButton="Actualizar"
                   (submit)="validateFormAgreement()"
                   (cancel)="redirectAgreementList()"
-                  [iconSubmitButton]="PrimeIcons.SAVE"
+                  [iconSubmitButton]="PrimeIcons.SYNC"
                   [isVisibleCancelButton]="false"
                 />
               </div>
