@@ -22,8 +22,8 @@
       <p-divider/>
 
       <div class="p-fluid grid">
-        <p-accordion [activeIndex]="0">
-          <p-accordionTab header="Header I">
+        <p-accordion>
+          <p-accordionTab header="Ficha de Convenio">
             <p-panel header="Datos Básicos" class="col-12">
               <app-basic-data
                 [formInput]="form.value"
@@ -74,7 +74,7 @@
                 (formErrorsOutput)="financingErrors=$event"/>
             </p-panel>
           </p-accordionTab>
-          <p-accordionTab header="Header II">
+          <p-accordionTab header="Documentación">
             <p-panel header="Documentación" class="col-12">
               <app-document
                 [formInput]="form.value"
@@ -82,7 +82,7 @@
                 (formErrorsOutput)="documentErrors=$event"/>
             </p-panel>
           </p-accordionTab>
-          <p-accordionTab header="Header III">
+          <p-accordionTab header="Registro de adendas o modificatorios">
             <p-panel header="Registro de adendas o modificatorios" class="col-12">
               <app-addendum
                 [formInput]="form.value"
