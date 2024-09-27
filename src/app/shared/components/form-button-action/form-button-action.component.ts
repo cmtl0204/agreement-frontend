@@ -17,6 +17,7 @@ export class FormButtonActionComponent {
   @Input() severitySubmitButton = SeverityButtonActionEnum.SAVE;
   @Input() severityCancelButton = SeverityButtonActionEnum.RETURN;
   @Input() isVisibleCancelButton = true;
+  @Input() isVisibleSubmitButton = true;
 
   protected readonly coreService = inject(CoreService);
 

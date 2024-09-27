@@ -11,12 +11,14 @@
     <p-divider layout="vertical"></p-divider>
   }
 
-  <p-button
-    iconPos="right"
-    [icon]="iconSubmitButton"
-    [label]="labelSubmitButton"
-    [loading]="coreService.isLoading"
-    [severity]="severitySubmitButton"
-    (click)="submit.emit($event)">
-  </p-button>
+  @if (isVisibleSubmitButton) {
+    <p-button
+      iconPos="right"
+      [icon]="iconSubmitButton"
+      [label]="labelSubmitButton"
+      [loading]="coreService.isLoading"
+      [severity]="severitySubmitButton"
+      (click)="submit.emit($event)">
+    </p-button>
+  }
 </div>

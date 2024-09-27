@@ -2,6 +2,22 @@
   <p-panel>
     <ng-template pTemplate="content">
       <div class="p-fluid grid">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+
+          </div>
+
+          <div class="p-toolbar-group-right">
+            <app-form-button-action
+              labelSubmitButton="Guardar"
+              (cancel)="redirectAgreementList()"
+              [iconSubmitButton]="PrimeIcons.SAVE"
+              [isVisibleCancelButton]="true"
+              [isVisibleSubmitButton]="false"
+            />
+          </div>
+        </p-toolbar>
+
         <p-accordion>
           <p-accordionTab>
             <p-toolbar>
