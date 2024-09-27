@@ -126,7 +126,7 @@ export class UpdateComponent implements OnInit {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       message: '',
-      header: '¿Está seguro de guardar?',
+      header: '¿Está seguro de actualizar?',
       // icon: PrimeIcons.QUESTION_CIRCLE,
       acceptLabel: "Si",
       rejectLabel: "No",
