@@ -43,6 +43,7 @@ import {TabViewModule} from "primeng/tabview";
 import {SelectButtonModule} from "primeng/selectbutton";
 import {TagModule} from "primeng/tag";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {AccordionModule} from "primeng/accordion";
 
 
 @NgModule({
@@ -61,44 +62,45 @@ import {ConfirmPopupModule} from "primeng/confirmpopup";
     exports: [
         AgreementDateComponent
     ],
-  imports: [
-    CommonModule,
-    UpdateRoutingModule,
-    ReactiveFormsModule,
-    FormsModule,
-    SharedModule,
-    ButtonModule,
-    CardModule,
-    CheckboxModule,
-    DividerModule,
-    InputTextModule,
-    PasswordModule,
-    RippleModule,
-    DropdownModule,
-    NgOptimizedImage,
-    MessageModule,
-    PanelModule,
-    AvatarModule,
-    ToolbarModule,
-    OverlayPanelModule,
-    InputNumberModule,
-    ToggleButtonModule,
-    CalendarModule,
-    RadioButtonModule,
-    StepperModule,
-    TabViewModule,
-    FileUploadModule,
-    InputTextareaModule,
-    MultiSelectModule,
-    FormsModule,
-    TableModule,
-    DialogModule,
-    ConfirmDialogModule,
-    SelectButtonModule,
-    InputSwitchModule,
-    TagModule,
-    ListboxModule,
-    ConfirmPopupModule
-  ]
+    imports: [
+        CommonModule,
+        UpdateRoutingModule,
+        ReactiveFormsModule,
+        FormsModule,
+        SharedModule,
+        ButtonModule,
+        CardModule,
+        CheckboxModule,
+        DividerModule,
+        InputTextModule,
+        PasswordModule,
+        RippleModule,
+        DropdownModule,
+        NgOptimizedImage,
+        MessageModule,
+        PanelModule,
+        AvatarModule,
+        ToolbarModule,
+        OverlayPanelModule,
+        InputNumberModule,
+        ToggleButtonModule,
+        CalendarModule,
+        RadioButtonModule,
+        StepperModule,
+        TabViewModule,
+        FileUploadModule,
+        InputTextareaModule,
+        MultiSelectModule,
+        FormsModule,
+        TableModule,
+        DialogModule,
+        ConfirmDialogModule,
+        SelectButtonModule,
+        InputSwitchModule,
+        TagModule,
+        ListboxModule,
+        ConfirmPopupModule,
+        AccordionModule
+    ]
 })
 export class UpdateModule { }
