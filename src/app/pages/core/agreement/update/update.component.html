@@ -27,6 +27,7 @@
             <ng-template pTemplate="header">
               <h3>Ficha de Convenio</h3>
             </ng-template>
+
             <p-panel header="Datos Básicos" class="col-12">
               <app-basic-data
                 [formInput]="form.value"
@@ -78,9 +79,9 @@
             </p-panel>
           </p-accordionTab>
 
-          <p-accordionTab header="Documentación">
+          <p-accordionTab>
             <ng-template pTemplate="header">
-              <h3>Ficha de Convenio</h3>
+              <h3>Documentación</h3>
             </ng-template>
 
             <p-panel class="col-12">
@@ -90,17 +91,18 @@
                 (formErrorsOutput)="documentErrors=$event"/>
             </p-panel>
           </p-accordionTab>
-          <p-accordionTab header="Registro de adendas o modificatorios">
+
+          <p-accordionTab>
             <ng-template pTemplate="header">
-              <h3>Ficha de Convenio</h3>
+              <h3>Registro de adendas o modificatorios</h3>
             </ng-template>
+
             <p-panel class="col-12">
               <app-addendum
                 [formInput]="form.value"
                 (formOutput)="save($event)"
                 (formErrorsOutput)="documentErrors=$event"/>
             </p-panel>
-
           </p-accordionTab>
         </p-accordion>
       </div>
