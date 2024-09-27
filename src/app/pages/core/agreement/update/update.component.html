@@ -23,7 +23,10 @@
 
       <div class="p-fluid grid">
         <p-accordion>
-          <p-accordionTab header="Ficha de Convenio">
+          <p-accordionTab>
+            <ng-template pTemplate="header">
+              <h3>Ficha de Convenio</h3>
+            </ng-template>
             <p-panel header="Datos Básicos" class="col-12">
               <app-basic-data
                 [formInput]="form.value"
@@ -74,8 +77,13 @@
                 (formErrorsOutput)="financingErrors=$event"/>
             </p-panel>
           </p-accordionTab>
+
           <p-accordionTab header="Documentación">
-            <p-panel header="Documentación" class="col-12">
+            <ng-template pTemplate="header">
+              <h3>Ficha de Convenio</h3>
+            </ng-template>
+
+            <p-panel class="col-12">
               <app-document
                 [formInput]="form.value"
                 (formOutput)="save($event)"
@@ -83,7 +91,10 @@
             </p-panel>
           </p-accordionTab>
           <p-accordionTab header="Registro de adendas o modificatorios">
-            <p-panel header="Registro de adendas o modificatorios" class="col-12">
+            <ng-template pTemplate="header">
+              <h3>Ficha de Convenio</h3>
+            </ng-template>
+            <p-panel class="col-12">
               <app-addendum
                 [formInput]="form.value"
                 (formOutput)="save($event)"
