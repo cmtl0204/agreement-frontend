@@ -9,7 +9,9 @@
         [icon]="IconButtonActionEnum.DOWNLOAD"
         [label]="LabelButtonActionEnum.DOWNLOAD"
         [loading]="coreService.isLoading"
-        [severity]="SeverityButtonActionEnum.DOWNLOAD"></p-button>
+        [severity]="SeverityButtonActionEnum.DOWNLOAD"
+        (click)="downloadLogsByAgreement()"/>
+
     </div>
     <div class="p-toolbar-group-right">
 
@@ -28,7 +30,7 @@
       <ng-template pTemplate="content" let-event>
         <p-card [header]="event.status" [subheader]="event.date">
           @for (agreementLogDetail of event.agreementLogDetails; track agreementLogDetail.id) {
-<!--            <b>Campo:</b> {{ agreementLogDetail.description }}-->
+            <!--            <b>Campo:</b> {{ agreementLogDetail.description }}-->
             <b>Campo:</b> {{ agreementLogDetail.path }}
 
             <br>
