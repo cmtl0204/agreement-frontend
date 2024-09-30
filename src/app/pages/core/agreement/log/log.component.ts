@@ -158,4 +158,8 @@ export class LogComponent implements OnInit {
 
   protected readonly SkeletonEnum = SkeletonEnum;
   protected readonly AgreementLogEnum = AgreementLogEnum;
+
+  downloadLogsByAgreement() {
+    this.agreementLogsHttpService.downloadLogsByAgreement(this.id);
+  }
 }
