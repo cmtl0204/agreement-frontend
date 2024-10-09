@@ -11,8 +11,8 @@ const routes: Routes = [
     data: {roles: [RoleEnum.NATIONAL_SUPERVISOR, RoleEnum.INTERNATIONAL_SUPERVISOR]}
   },
   {
-    path: 'manager',
-    loadChildren: () => import('./manager/manager.module').then(m => m.ManagerModule),
+    path: 'agreement-administrator',
+    loadChildren: () => import('./agreement-administrator/agreement-administrator.module').then(m => m.AgreementAdministratorModule),
     canActivate: [RoleGuard],
     data: {roles: [RoleEnum.AGREEMENT_ADMINISTRATOR]}
   },

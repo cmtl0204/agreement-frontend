@@ -147,6 +147,14 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
         },
       },
+      {
+        id: IdButtonActionEnum.AGREEMENT_PERIOD,
+        label: LabelButtonActionEnum.AGREEMENT_PERIOD,
+        icon: IconButtonActionEnum.AGREEMENT_PERIOD,
+        command: () => {
+          if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
+        },
+      },
       // {
       //   id: IdButtonActionEnum.REACTIVATE,
       //   label: LabelButtonActionEnum.REACTIVATE,
@@ -156,6 +164,24 @@ export class AgreementListComponent implements OnInit {
       //   },
       // },
     ];
+  }
+
+  validateButtonActions(item: AgreementModel) {
+    this.buildButtonActions();
+
+    if (item.enabled) {
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
+    }
+
+    if (!item.enabled) {
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.VIEW), 1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.EDIT), 1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_LOG),1);
+    }
+
+    //   if (!item.suspendedAt) {
+    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
+    //   }
   }
 
   redirectCreateForm() {
@@ -173,14 +199,15 @@ export class AgreementListComponent implements OnInit {
   }
 
   redirectViewAgreement() {
-    this.messageDialogService.successCustom('Sitio en construcción', 'Pronto estará disponible');
-    return;
-
     this.isVisibleAgreementView = true;
   }
 
   redirectAgreementLogForm(id: string) {
     this.router.navigate(['/core/agreements/log', id]);
+  }
+
+  redirectTrackingLogList(id: string) {
+    this.router.navigate(['/core/national-supervisor/period-list', id]);
   }
 
   remove(id: string) {
@@ -193,23 +220,6 @@ export class AgreementListComponent implements OnInit {
     //       });
     //     }
     //   });
-  }
-
-  validateButtonActions(item: AgreementModel): void {
-    this.buildButtonActions();
-
-    if (item.enabled) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
-    }
-
-    if (!item.enabled) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.VIEW), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.EDIT), 1);
-    }
-
-    //   if (!item.suspendedAt) {
-    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
-    //   }
   }
 
   paginate(event: any) {

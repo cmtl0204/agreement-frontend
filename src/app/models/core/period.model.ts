@@ -1,4 +1,4 @@
-import { AgreementModel } from "@models/core";
+import {AgreementModel, TrackingLogModel} from "@models/core";
 
 export interface PeriodModel {
   id: string;
@@ -8,4 +8,5 @@ export interface PeriodModel {
   startedAt: Date;
   endedAt: Date;
   documentName: string;
+  trackingLogs: TrackingLogModel[];
 }

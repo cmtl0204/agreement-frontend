@@ -16,10 +16,15 @@ import {DialogModule} from "primeng/dialog";
 import {ViewModule} from "../agreement/view/view.module";
 import {IconFieldModule} from "primeng/iconfield";
 import {InputIconModule} from "primeng/inputicon";
+import {PeriodListComponent} from "./agreement/period-list/period-list.component";
+import {TrackingLogListComponent} from "./agreement/tracking-log-list/tracking-log-list.component";
+import {FileUploadModule} from "primeng/fileupload";
 
 @NgModule({
   declarations: [
     AgreementListComponent,
+    PeriodListComponent,
+    TrackingLogListComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +42,7 @@ import {InputIconModule} from "primeng/inputicon";
     ViewModule,
     IconFieldModule,
     InputIconModule,
+    FileUploadModule
   ]
 })
 export class NationalSupervisorModule { }

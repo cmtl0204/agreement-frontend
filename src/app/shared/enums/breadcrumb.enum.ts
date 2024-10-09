@@ -2,7 +2,8 @@ export enum BreadcrumbEnum {
   FORM = 'Formulario',
   PROFILE = 'Mi Perfil',
   USERS = 'Usuarios',
-  AGREEMENTS = 'LISTA DE CONVENIOS REGISTRADOS',
+  AGREEMENTS = 'Lista de Convenios Registrados',
   AGREEMENTS_REGISTER = 'Registrar Convenio',
-  AGREEMENTS_LOG = 'Bitácora del convenio'
+  AGREEMENTS_LOG = 'Bitácora del convenio',
+  TRACKING_LOGS = 'Bitácora del periodo'
   }

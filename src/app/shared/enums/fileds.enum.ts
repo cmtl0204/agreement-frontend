@@ -147,3 +147,26 @@ export enum AddendumEnum {
   description = 'Información de la adenda o modificatorio',
   file = 'Documento de adenda o modificatorio',
 }
+
+export enum PeriodEnum {
+  header = 'Periodos',
+  documentName = 'Documento',
+  endedAt = 'Fecha de finalización',
+  name = 'Informe',
+  startedAt = 'Documento de adenda o modificatorio',
+  uploadedAt = 'Fecha de carga',
+  type = 'Documento de adenda o modificatorio',
+  reportPeriod = 'Periodo reporte',
+  reportFile = 'Informe',
+  evidenceFile = 'Evidencias',
+  trafficLight = 'Semáforo',
+  user = 'Modificado por',
+  state = 'Estado',
+}
+
+export enum TrackingLogEnum {
+  header = 'Bitácora',
+  state = 'Estado',
+  user = 'Modificado por ',
+  registeredAt = 'Fecha y hora de estado',
+}

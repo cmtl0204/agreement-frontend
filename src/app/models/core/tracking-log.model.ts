@@ -9,6 +9,6 @@ export interface TrackingLogModel {
   state?: CatalogueModel;
   observation: string;
   isCurrent: boolean;
-  uploadedAt: Date;
+  registeredAt: Date;
   userId: string;
 }

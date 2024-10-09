@@ -282,7 +282,7 @@ export class RoutesService {
   }
 
   dashboardAdministrator() {
-    this.router.navigateByUrl(`/core/dashboards/agreement-administrator`);
+    this.router.navigateByUrl(`/core/agreement-administrator/agreement-list`);
   }
 
   dashboardNationalSupervisor() {
