@@ -25,10 +25,10 @@
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <div class="flex">
-      <h2>{{ period.name }} </h2>
-    </div>
-    <div class="flex">
-      <h3>{{ period.startedAt | customFormatDate}} - {{ period.endedAt | customFormatDate }}</h3>
+      <h2>
+        {{ period.name }}:
+        {{ period.startedAt | customFormatDate}} - {{ period.endedAt | customFormatDate }}
+      </h2>
     </div>
   </ng-template>
 
@@ -67,7 +67,7 @@
               }
               @case ('registeredAt') {
                 @if (rowData.registeredAt) {
-                  {{ rowData.registeredAt | date:'dd/MM/yy - hh:mm' }}
+                  {{ rowData.registeredAt | date:'dd/MM/yy - HH:mm' }}
                 }
               }
             }

@@ -37,6 +37,12 @@ export enum CatalogueAgreementsTypeEnum {
   SPECIAL = 'SPECIAL',
 }
 
+export enum CatalogueTrackingLogsStateEnum {
+  REPORTED = 'REPORTED',
+  ACCEPTED = 'ACCEPTED',
+  REFUSED = 'REFUSED',
+}
+
 export enum CatalogueAgreementsOriginEnum {
   NATIONAL = 'NATIONAL',
   INTERNATIONAL = 'INTERNATIONAL',

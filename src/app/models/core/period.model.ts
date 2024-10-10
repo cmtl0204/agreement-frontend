@@ -9,4 +9,5 @@ export interface PeriodModel {
   endedAt: Date;
   documentName: string;
   trackingLogs: TrackingLogModel[];
+  trackingLog: TrackingLogModel;
 }

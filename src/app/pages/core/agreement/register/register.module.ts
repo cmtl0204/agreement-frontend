@@ -99,8 +99,7 @@ import {CustomFormatDatePipe} from "@shared/pipes";
         ListboxModule,
         ConfirmPopupModule
     ],
-  providers: [CustomFormatDatePipe,
-  ]
+  providers: [CustomFormatDatePipe]
 })
 export class RegisterModule {
 }

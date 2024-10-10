@@ -11,7 +11,7 @@ import {
 } from '@servicesApp/core';
 import {
   AgreementsHttpService,
-  CataloguesHttpService,
+  CataloguesHttpService, FilesHttpService,
   PeriodsHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
@@ -24,7 +24,7 @@ import {
   TableEnum,
   AgreementFormEnum,
   AgreementStateEnum,
-  AdministratorFormEnum, RoleEnum, AddendumEnum, CatalogueTypeEnum, PeriodEnum
+  AdministratorFormEnum, RoleEnum, AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -41,9 +41,9 @@ export class PeriodListComponent implements OnInit {
   protected readonly authService = inject(AuthService);
   protected readonly coreService = inject(CoreService);
   protected readonly formBuilder = inject(FormBuilder);
-  private readonly agreementsHttpService = inject(AgreementsHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
+  private readonly filesHttpService = inject(FilesHttpService);
   private readonly agreementsService = inject(AgreementsService);
   private readonly router = inject(Router);
   private readonly breadcrumbService = inject(BreadcrumbService);
@@ -76,7 +76,10 @@ export class PeriodListComponent implements OnInit {
   protected readonly AddendumEnum = AddendumEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([{label: BreadcrumbEnum.AGREEMENTS}]);
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink:['/core/agreement-administrator/agreement-list']},
+      {label: BreadcrumbEnum.PERIODS},
+    ]);
 
     this.buildForm();
     this.buildButtonActions();
@@ -114,7 +117,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   createPeriod() {
-    this.trackingLogsHttpService.create(this.agreementId)
+    this.trackingLogsHttpService.createPeriod(this.agreementId)
       .subscribe((response) => {
         this.findPeriodsByAgreement();
       });
@@ -136,19 +139,11 @@ export class PeriodListComponent implements OnInit {
   buildButtonActions() {
     this.buttonActions = [
       {
-        id: IdButtonActionEnum.EDIT,
-        label: LabelButtonActionEnum.UPDATE,
-        icon: IconButtonActionEnum.EDIT,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
-        },
-      },
-      {
         id: IdButtonActionEnum.TRACKING_LOG,
         label: LabelButtonActionEnum.TRACKING_LOG,
         icon: IconButtonActionEnum.TRACKING_LOG,
         command: () => {
-          this.isVisibleTrackingLogModal=true;
+          this.isVisibleTrackingLogModal = true;
         },
       },
     ];
@@ -157,24 +152,6 @@ export class PeriodListComponent implements OnInit {
   validateButtonActions(item: PeriodModel) {
     this.buildButtonActions();
 
-  }
-
-  redirectCreateForm() {
-    this.agreementsService.clearAgreement();
-
-    this.router.navigate(['/core/agreements', 'register']);
-  }
-
-  redirectCompleteForm(item: AgreementModel) {
-    this.router.navigate(['/core/agreements', 'register']);
-  }
-
-  redirectEditForm(id: string) {
-    this.router.navigate(['/core/agreements/update', id]);
-  }
-
-  redirectAgreementLogForm(id: string) {
-    this.router.navigate(['/core/agreements/log', id]);
   }
 
   remove(id: string) {
@@ -204,6 +181,10 @@ export class PeriodListComponent implements OnInit {
     this.isVisibleFilesModal = true;
   }
 
+  downloadFile(file: FileModel) {
+    this.filesHttpService.downloadFile(file);
+  }
+
   onUpload() {
     if (this.validateFilesForm()) {
       const formData = new FormData();
@@ -212,7 +193,10 @@ export class PeriodListComponent implements OnInit {
       formData.append('evidence', this.evidenceFileField.value);
 
       this.trackingLogsHttpService.createTrackingLog(this.selectedItem.id!, formData).subscribe(response => {
-
+        this.findPeriodsByAgreement();
+        this.isVisibleFilesModal = false;
+        this.reportFileField.setValue(null);
+        this.evidenceFileField.setValue(null);
       });
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -247,4 +231,7 @@ export class PeriodListComponent implements OnInit {
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
   }
+
+  protected readonly CatalogueTrackingLogsStateEnum = CatalogueTrackingLogsStateEnum;
+  protected readonly PeriodEnum = PeriodEnum;
 }

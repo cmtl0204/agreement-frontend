@@ -157,7 +157,7 @@ export enum PeriodEnum {
   uploadedAt = 'Fecha de carga',
   type = 'Documento de adenda o modificatorio',
   reportPeriod = 'Periodo reporte',
-  reportFile = 'Informe',
+  reportFile = 'Archivo',
   evidenceFile = 'Evidencias',
   trafficLight = 'Semáforo',
   user = 'Modificado por',
@@ -169,4 +169,15 @@ export enum TrackingLogEnum {
   state = 'Estado',
   user = 'Modificado por ',
   registeredAt = 'Fecha y hora de estado',
+}
+
+export enum AdditionalDocumentEnum {
+  header = 'Reporte adicional al convenio',
+  name = 'Informe',
+  detail = 'Motivo',
+  additionalDocuments = 'Documento',
+  uploadedAt = 'Fecha de carga',
+  user = 'Modificado por',
+  reportFile = 'Archivo',
+  evidenceFile = 'Evidencias',
 }

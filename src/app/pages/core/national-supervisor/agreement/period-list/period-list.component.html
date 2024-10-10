@@ -1,12 +1,6 @@
 <p-toolbar>
   <div class="p-toolbar-group-left">
     <p-button
-      (click)="createPeriod()"
-      [icon]="IconButtonActionEnum.CREATE"
-      [label]="LabelButtonActionEnum.CREATE_PERIOD"
-      [loading]="coreService.isLoading"
-      [severity]="SeverityButtonActionEnum.CREATE"/>
-    <p-button
       class="ml-2"
       (click)="findPeriodsByAgreement()"
       [icon]="IconButtonActionEnum.SYNC"
@@ -19,11 +13,6 @@
   </div>
 </p-toolbar>
 
-<!-- <p-paginator
-  [rows]="paginator.limit"
-  [totalRecords]="paginator.totalItems"
-  (onPageChange)="paginate($event)"></p-paginator>
- -->
 <p-table
   #dt
   dataKey="id"
@@ -36,7 +25,7 @@
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <div class="flex">
-      <h1>{{ BreadcrumbEnum.AGREEMENTS }}</h1>
+      <h1>{{ BreadcrumbEnum.PERIODS }}</h1>
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
@@ -72,13 +61,18 @@
                 {{ rowData[col.field] }}
               }
               @case ('files') {
-                @if (true) {
+                @for (item of rowData?.trackingLogDocuments; track item) {
+                  <span>{{ item.type.name }}: </span>
+
                   <p-button
                     class="ml-2"
-                    [icon]="IconButtonActionEnum.ADD"
-                    [pTooltip]="LabelButtonActionEnum.ADD"
-                    [severity]="SeverityButtonActionEnum.ADD"
-                    (click)="showFilesModal(rowData)"/>
+                    [icon]="IconButtonActionEnum.DOWNLOAD"
+                    [label]="item.name"
+                    [text]="true"
+                    [severity]="SeverityButtonActionEnum.DOWNLOAD"
+                    (click)="downloadFile(item)"/>
+
+                  <p-divider/>
                 }
               }
               @case ('trafficLight') {
@@ -101,14 +95,14 @@
                 {{ rowData.endedAt | date:'d MMMM y' }}
               }
               @case ('uploadedAt') {
-                {{ rowData.uploadedAt | date:'dd/MM/y - hh:mm' }}
+                {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
               }
               @case ('state') {
-                {{ rowData.trackingLog?.state?.name}}
+                {{ rowData.trackingLog?.state?.name }}
               }
               @case ('user') {
-                @if (rowData.trackingLog.user) {
-                 {{rowData.trackingLog.user.name}} {{rowData.trackingLog.user.lastname}}
+                @if (rowData.trackingLog?.user) {
+                  {{ rowData.trackingLog.user.name }} {{ rowData.trackingLog.user.lastname }}
                 }
               }
             }
@@ -240,5 +234,53 @@
       [label]="LabelButtonActionEnum.ADD"
       [severity]="SeverityButtonActionEnum.ADD"
       (click)="onUpload()"/>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="isVisibleTrackingLogModal"
+  [modal]="true"
+  [style]="{width: '100%'}"
+  header="Bitácora">
+  @if (isVisibleTrackingLogModal) {
+    <app-tracking-log-list [period]="selectedItem"/>
+  }
+</p-dialog>
+
+<p-dialog
+  header="Header"
+  [(visible)]="isVisibleRefusedModal"
+  [modal]="true"
+  [style]="{ width: '35rem' }">
+  <ng-template pTemplate="header">
+    <h3>¿Está seguro de rechazar, no podrá cambiar esta opción?</h3>
+  </ng-template>
+
+  <div class="grid p-fluid">
+    <div class=" field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <label
+        appLabel
+        for="observation"
+        label="Observación">
+      </label>
+
+      <textarea pInputTextarea id="observation" [(ngModel)]="observation"></textarea>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="isVisibleRefusedModal = false"/>
+
+    <p-button
+      [label]="LabelButtonActionEnum.REFUSED"
+      [icon]="IconButtonActionEnum.REFUSED"
+      [severity]="SeverityButtonActionEnum.REFUSED"
+      (click)="refuseTrackingLogDocuments()"
+    />
   </ng-template>
 </p-dialog>

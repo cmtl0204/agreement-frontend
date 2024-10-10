@@ -1,5 +1,5 @@
-import { UserModel } from "@models/auth";
-import { AgreementModel,CatalogueModel } from "@models/core";
+import {AgreementModel, CatalogueModel} from "@models/core";
+import {UserModel} from "@models/auth";
 
 
 export interface AdditionalDocumentModel {
@@ -13,6 +13,6 @@ export interface AdditionalDocumentModel {
   uploadedAt: Date;
   type: 'tracking' | 'closing';
   userId: string;
-  
+  user: UserModel;
 }
 

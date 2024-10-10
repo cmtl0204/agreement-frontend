@@ -1,14 +1,14 @@
 <p-toolbar>
   <div class="p-toolbar-group-left">
     <p-button
-      (click)="createPeriod()"
+      (click)="showFilesModal()"
       [icon]="IconButtonActionEnum.CREATE"
-      [label]="LabelButtonActionEnum.CREATE_PERIOD"
+      [label]="LabelButtonActionEnum.CREATE_ADDITIONAL_DOCUMENT"
       [loading]="coreService.isLoading"
       [severity]="SeverityButtonActionEnum.CREATE"/>
     <p-button
       class="ml-2"
-      (click)="findPeriodsByAgreement()"
+      (click)="findAdditionalDocumentsByAgreement()"
       [icon]="IconButtonActionEnum.SYNC"
       [label]="LabelButtonActionEnum.SYNC"
       [loading]="coreService.isLoading"
@@ -36,7 +36,7 @@
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <div class="flex">
-      <h2>{{ BreadcrumbEnum.PERIODS }}</h2>
+      <h2>{{ BreadcrumbEnum.ADDITIONAL_DOCUMENTS }}</h2>
     </div>
   </ng-template>
 
@@ -48,6 +48,7 @@
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
       }
+
       <th class="text-center">
         {{ TableEnum.ACTIONS }}
       </th>
@@ -61,8 +62,10 @@
           <!--Objects-->
           @if (rowData[col.field]?.id) {
             @switch (col.field) {
-              @case ('administrator') {
-                {{ rowData[col.field].unit.name }}
+              @case ('user') {
+                @if (rowData?.user) {
+                  {{ rowData.user.name }} {{ rowData.user.lastname }}
+                }
               }
             }
           }
@@ -73,69 +76,35 @@
               @default {
                 {{ rowData[col.field] }}
               }
-              @case ('files') {
-                @if (!rowData?.trackingLog || rowData.trackingLog.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
+              @case ('additionalDocuments') {
+                @for (item of rowData?.additionalDocuments; track item) {
+                  <span>{{item.type.name}}: </span>
                   <p-button
                     class="ml-2"
-                    [icon]="IconButtonActionEnum.ADD"
-                    [pTooltip]="LabelButtonActionEnum.ADD"
-                    [severity]="SeverityButtonActionEnum.ADD"
-                    (click)="showFilesModal(rowData)"/>
-                } @else {
-                  @for (item of rowData?.trackingLogDocuments; track item) {
-                    <span>{{item.type.name}}: </span>
+                    [icon]="IconButtonActionEnum.DOWNLOAD"
+                    [label]="item.name"
+                    [text]="true"
+                    [severity]="SeverityButtonActionEnum.DOWNLOAD"
+                    (click)="downloadFile(item)"/>
 
-                    <p-button
-                      class="ml-2"
-                      [icon]="IconButtonActionEnum.DOWNLOAD"
-                      [label]="item.name"
-                      [text]="true"
-                      [severity]="SeverityButtonActionEnum.DOWNLOAD"
-                      (click)="downloadFile(item)"/>
-
-                    <p-divider/>
-                  }
-                }
-              }
-              @case ('trafficLight') {
-                @if (rowData.trackingLog) {
-                  @if (rowData.trackingLog.state.code === 'REPORTED' || rowData.trackingLog.state.code === 'ACCEPTED') {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 1.5rem"></i>
-                  } @else {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
-                  }
-                } @else {
-                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
+                  <p-divider/>
                 }
               }
               @case ('name') {
-                {{ rowData.name }}
-                <br>
-                {{ rowData.startedAt | date:'d MMMM y' }}
-                -
-                <br>
-                {{ rowData.endedAt | date:'d MMMM y' }}
+                {{ rowData.name }}  {{ rowData.sequence }}
               }
               @case ('uploadedAt') {
                 {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
-              }
-              @case ('state') {
-                {{ rowData.trackingLog?.state?.name }}
-              }
-              @case ('user') {
-                @if (rowData.trackingLog?.user) {
-                  {{ rowData.trackingLog.user.name }} {{ rowData.trackingLog.user.lastname }}
-                }
               }
             }
           }
         </td>
       }
-
       <td class="text-center">
         <p-button
-          [icon]="PrimeIcons.ELLIPSIS_V"
-          (click)="selectItem(rowData)"></p-button>
+          [icon]="PrimeIcons.TRASH"
+          severity="danger"
+          (click)="remove(rowData.id)"/>
       </td>
     </tr>
   </ng-template>
@@ -153,8 +122,6 @@
   </ng-template>
 </p-table>
 
-<app-additional-document-list [agreementId]="agreementId"/>
-
 <app-button-action [buttonActions]="buttonActions"
                    [enabled]="isButtonActions"
                    (isHide)="isButtonActions=!$event">
@@ -164,14 +131,14 @@
   [(visible)]="isVisibleFilesModal"
   [modal]="true"
   [style]="{width: '50rem'}"
-  header="Subir Archivos">
+  header="Subir archivos">
   <ng-template pTemplate="content">
-    <div class="p-fluid grid">
+    <form [formGroup]="form" class="p-fluid grid">
       <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="report"
-          [label]="PeriodEnum.reportFile"
+          [label]="AdditionalDocumentEnum.reportFile"
           [required]="reportFileField"></label>
 
         <p-fileUpload
@@ -210,7 +177,7 @@
         <label
           appLabel
           for="evidence"
-          [label]="PeriodEnum.evidenceFile"
+          [label]="AdditionalDocumentEnum.evidenceFile"
           [required]="evidenceFileField"></label>
 
         <p-fileUpload
@@ -244,7 +211,24 @@
           </p-messages>
         </div>
       }
-    </div>
+
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="detail"
+          [label]="AdditionalDocumentEnum.detail"
+          [required]="detailField"></label>
+
+        <textarea pInputTextarea id="detail" formControlName="detail"></textarea>
+
+        <small
+          appErrorMessage
+          [errors]="detailField.errors"
+          [touched]="detailField.touched"
+          [dirty]="detailField.dirty">
+        </small>
+      </div>
+    </form>
   </ng-template>
 
   <ng-template pTemplate="footer">
@@ -256,19 +240,11 @@
       (click)="isVisibleFilesModal=false"/>
 
     <p-button
-      [icon]="IconButtonActionEnum.UPLOAD"
-      [label]="LabelButtonActionEnum.UPLOAD"
-      [severity]="SeverityButtonActionEnum.UPLOAD"
+      [icon]="IconButtonActionEnum.REPORT"
+      [label]="LabelButtonActionEnum.REPORT"
+      [severity]="SeverityButtonActionEnum.REPORT"
       (click)="onUpload()"/>
   </ng-template>
 </p-dialog>
 
-<p-dialog
-  [(visible)]="isVisibleTrackingLogModal"
-  [modal]="true"
-  [style]="{width: '100%'}"
-  header="Bitácora">
-  @if (isVisibleTrackingLogModal) {
-    <app-tracking-log-list [period]="selectedItem"/>
-  }
-</p-dialog>
+<p-confirmDialog key="confirmDialog"/>

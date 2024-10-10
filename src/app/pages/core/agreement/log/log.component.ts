@@ -94,7 +94,7 @@ export class LogComponent implements OnInit {
       this.events = this.items.map(item => {
         return {
           status: `${item.user.name} ${item.user.lastname}`,
-          date: format(item.registeredAt!, 'MM-dd-yyyy hh:mm:ss'),
+          date: format(item.registeredAt!, 'MM-dd-yyyy HH:mm:ss'),
           icon: PrimeIcons.ARROW_DOWN,
           color: 'var(--primary-color)',
           agreementLogDetails: item.agreementLogDetails

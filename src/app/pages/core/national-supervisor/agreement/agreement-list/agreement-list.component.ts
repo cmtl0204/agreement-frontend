@@ -207,7 +207,7 @@ export class AgreementListComponent implements OnInit {
   }
 
   redirectTrackingLogList(id: string) {
-    this.router.navigate(['/core/national-supervisor/period-list', id]);
+    this.router.navigate([`/core/${this.authService.role.code}/period-list`, id]);
   }
 
   remove(id: string) {

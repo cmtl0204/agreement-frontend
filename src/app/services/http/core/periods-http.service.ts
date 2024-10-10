@@ -20,35 +20,4 @@ export class PeriodsHttpService {
   constructor() {
   }
 
-  create(agreementId: string): Observable<PeriodModel> {
-    const url = `${this.API_URL}/${agreementId}/tracking`;
-
-    return this.httpClient.post<ServerResponse>(url, null).pipe(
-      map(response => {
-        this.messageDialogService.successHttp(response);
-        return response.data;
-      })
-    );
-  }
-
-  findPeriodsByAgreement(id: string): Observable<PeriodModel[]> {
-    const url = `${this.API_URL}/${id}/tracking`;
-
-    return this.httpClient.get<ServerResponse>(url).pipe(
-      map(response => {
-        return response.data;
-      })
-    );
-  }
-
-  createTrackingLog(id: string, formData: FormData): Observable<AgreementModel> {
-    const url = `${this.API_URL}/${id}/tracking-logs`;
-
-    return this.httpClient.post<ServerResponse>(url, formData).pipe(
-      map(response => {
-        this.messageDialogService.successHttp(response);
-        return response.data;
-      })
-    );
-  }
 }

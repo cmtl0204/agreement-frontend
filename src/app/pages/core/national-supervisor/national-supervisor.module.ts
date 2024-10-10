@@ -19,6 +19,8 @@ import {InputIconModule} from "primeng/inputicon";
 import {PeriodListComponent} from "./agreement/period-list/period-list.component";
 import {TrackingLogListComponent} from "./agreement/tracking-log-list/tracking-log-list.component";
 import {FileUploadModule} from "primeng/fileupload";
+import {DividerModule} from "primeng/divider";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @NgModule({
   declarations: [
@@ -26,23 +28,25 @@ import {FileUploadModule} from "primeng/fileupload";
     PeriodListComponent,
     TrackingLogListComponent
   ],
-  imports: [
-    CommonModule,
-    NationalSupervisorRoutingModule,
-    SharedModule,
-    ToolbarModule,
-    ButtonModule,
-    PaginatorModule,
-    TableModule,
-    InputGroupModule,
-    TagModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    DialogModule,
-    ViewModule,
-    IconFieldModule,
-    InputIconModule,
-    FileUploadModule
-  ]
+    imports: [
+        CommonModule,
+        NationalSupervisorRoutingModule,
+        SharedModule,
+        ToolbarModule,
+        ButtonModule,
+        PaginatorModule,
+        TableModule,
+        InputGroupModule,
+        TagModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        DialogModule,
+        ViewModule,
+        IconFieldModule,
+        InputIconModule,
+        FileUploadModule,
+        DividerModule,
+        InputTextareaModule
+    ]
 })
 export class NationalSupervisorModule { }

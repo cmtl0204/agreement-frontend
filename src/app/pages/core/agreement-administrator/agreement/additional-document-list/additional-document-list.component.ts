@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ColumnModel, AgreementModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
+import {ColumnModel, CatalogueModel, FileModel, PeriodModel, AdditionalDocumentModel} from '@models/core';
 import {
   CoreService,
   BreadcrumbService,
@@ -10,9 +10,8 @@ import {
   MessageDialogService
 } from '@servicesApp/core';
 import {
-  AgreementsHttpService,
-  CataloguesHttpService, FilesHttpService,
-  PeriodsHttpService,
+  CataloguesHttpService,
+  FilesHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
 import {
@@ -22,27 +21,18 @@ import {
   BreadcrumbEnum,
   IdButtonActionEnum,
   TableEnum,
-  AgreementFormEnum,
-  AgreementStateEnum,
-  AdministratorFormEnum,
-  RoleEnum,
-  AddendumEnum,
-  CatalogueTypeEnum,
-  PeriodEnum,
-  CatalogueAgreementsTypeEnum,
-  CatalogueTrackingLogsStateEnum
+  AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum, AdditionalDocumentEnum
 } from '@shared/enums';
-import {PrimeIcons, MenuItem} from 'primeng/api';
+import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
-import {ConsoleLogger} from "@angular/compiler-cli";
 
 @Component({
-  selector: 'app-agreement-list',
-  templateUrl: './period-list.component.html',
-  styleUrl: './period-list.component.scss'
+  selector: 'app-additional-document-list',
+  templateUrl: './additional-document-list.component.html',
+  styleUrl: './additional-document-list.component.scss'
 })
-export class PeriodListComponent implements OnInit {
+export class AdditionalDocumentListComponent implements OnInit {
   @Input() agreementId!: string;
   // Services
   protected readonly authService = inject(AuthService);
@@ -51,6 +41,7 @@ export class PeriodListComponent implements OnInit {
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly breadcrumbService = inject(BreadcrumbService);
 
   protected readonly PrimeIcons = PrimeIcons;
@@ -59,7 +50,6 @@ export class PeriodListComponent implements OnInit {
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
   protected readonly BreadcrumbEnum = BreadcrumbEnum;
   protected readonly TableEnum = TableEnum;
-
   protected readonly messageService = inject(MessageService);
   protected readonly messageDialogService = inject(MessageDialogService);
 
@@ -70,22 +60,20 @@ export class PeriodListComponent implements OnInit {
 
   protected search: FormControl = new FormControl('');
 
-  protected selectedItem!: PeriodModel;
-  protected items: PeriodModel[] = [];
+  protected selectedItem!: AdditionalDocumentModel;
+  protected items: AdditionalDocumentModel[] = [];
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
 
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
-  protected isVisibleRefusedModal: boolean = false;
   protected readonly AddendumEnum = AddendumEnum;
-  protected observation!: string;
 
   constructor() {
     this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS}
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
+      {label: BreadcrumbEnum.PERIODS},
     ]);
 
     this.buildForm();
@@ -95,24 +83,25 @@ export class PeriodListComponent implements OnInit {
     this.search.valueChanges.pipe(
       debounceTime(500)
     ).subscribe(value => {
-      this.findPeriodsByAgreement();
+      this.findAdditionalDocumentsByAgreement();
     });
   }
 
   ngOnInit() {
-    this.findPeriodsByAgreement();
+    this.findAdditionalDocumentsByAgreement();
     this.loadTypes();
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      reportFile: [null, Validators.required],
+      reportFile: [null],
       evidenceFile: [null],
+      detail: [null, Validators.required],
     })
   }
 
-  findPeriodsByAgreement() {
-    this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId)
+  findAdditionalDocumentsByAgreement() {
+    this.trackingLogsHttpService.findAdditionalDocumentsByAgreement(this.agreementId)
       .subscribe((response) => {
         this.items = response;
       });
@@ -124,13 +113,11 @@ export class PeriodListComponent implements OnInit {
 
   buildColumns() {
     this.columns = [
-      {field: 'name', header: PeriodEnum.reportPeriod},
-      {field: 'documentName', header: PeriodEnum.name},
-      {field: 'files', header: PeriodEnum.documentName},
-      {field: 'trafficLight', header: PeriodEnum.trafficLight},
-      {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
-      {field: 'user', header: PeriodEnum.user},
-      {field: 'state', header: PeriodEnum.state},
+      {field: 'name', header: AdditionalDocumentEnum.name},
+      {field: 'detail', header: AdditionalDocumentEnum.detail},
+      {field: 'additionalDocuments', header: AdditionalDocumentEnum.additionalDocuments},
+      {field: 'uploadedAt', header: AdditionalDocumentEnum.uploadedAt},
+      {field: 'user', header: AdditionalDocumentEnum.user},
     ];
   }
 
@@ -145,43 +132,39 @@ export class PeriodListComponent implements OnInit {
           this.isVisibleTrackingLogModal = true;
         },
       },
-      {
-        id: IdButtonActionEnum.ACCEPTED,
-        label: LabelButtonActionEnum.ACCEPTED,
-        icon: IconButtonActionEnum.ACCEPTED,
-        command: () => {
-          this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, true, 'ACEPTADO').subscribe(() => {
-            this.findPeriodsByAgreement();
-          });
-        },
-      },
-      {
-        id: IdButtonActionEnum.REFUSED,
-        label: LabelButtonActionEnum.REFUSED,
-        icon: IconButtonActionEnum.REFUSED,
-        command: () => {
-          this.isVisibleRefusedModal = true;
-        },
-      },
     ];
   }
 
-  validateButtonActions(item: PeriodModel) {
+  validateButtonActions(item: AdditionalDocumentModel) {
     this.buildButtonActions();
 
-    if (!item.trackingLog
-      || item.trackingLog.state?.code === CatalogueTrackingLogsStateEnum.ACCEPTED
-      || item.trackingLog.state?.code === CatalogueTrackingLogsStateEnum.REFUSED) {
-      console.log('asd');
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.ACCEPTED), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REFUSED), 1);
-    }
   }
 
-  selectItem(item: PeriodModel) {
+  remove(id: string) {
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'No se podrá recuperar la información',
+      header: '¿Está seguro de eliminar?',
+      icon: PrimeIcons.TRASH,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.trackingLogsHttpService.deleteAdditionalDocument(id).subscribe(response => {
+          this.findAdditionalDocumentsByAgreement();
+        });
+      }
+    });
+  }
+
+  selectItem(item: AdditionalDocumentModel) {
     this.isButtonActions = true;
     this.selectedItem = item;
     this.validateButtonActions(item);
+  }
+
+  showFilesModal() {
+    this.isVisibleFilesModal = true;
   }
 
   downloadFile(file: FileModel) {
@@ -194,9 +177,11 @@ export class PeriodListComponent implements OnInit {
 
       formData.append('report', this.reportFileField.value);
       formData.append('evidence', this.evidenceFileField.value);
+      formData.append('detail', this.detailField.value);
 
-      this.trackingLogsHttpService.createTrackingLog(this.selectedItem.id!, formData).subscribe(response => {
-
+      this.trackingLogsHttpService.createAdditionalDocument(this.agreementId, formData).subscribe(response => {
+        this.findAdditionalDocumentsByAgreement();
+        this.isVisibleFilesModal = false;
       });
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -224,14 +209,6 @@ export class PeriodListComponent implements OnInit {
     uploadFiles.clear();
   }
 
-  refuseTrackingLogDocuments() {
-    this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observation).subscribe(() => {
-      this.findPeriodsByAgreement();
-      this.isVisibleRefusedModal = false;
-      this.observation = '';
-    });
-  }
-
   get reportFileField(): AbstractControl {
     return this.form.controls['reportFile'];
   }
@@ -239,4 +216,11 @@ export class PeriodListComponent implements OnInit {
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
   }
+
+  get detailField(): AbstractControl {
+    return this.form.controls['detail'];
+  }
+
+  protected readonly CatalogueTrackingLogsStateEnum = CatalogueTrackingLogsStateEnum;
+  protected readonly AdditionalDocumentEnum = AdditionalDocumentEnum;
 }
