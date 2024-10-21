@@ -20,6 +20,7 @@
         [columns]="internalInstitutionsColumns">
         <ng-template pTemplate="header">
           <tr>
+            <th>{{TableEnum.ACTIONS}}</th>
             @for (col of internalInstitutionsColumns; track col.field) {
               <th [pSortableColumn]="col.field">
                 {{ col.header }}
@@ -27,22 +28,25 @@
             }
           </tr>
         </ng-template>
+
         <ng-template pTemplate="body" let-internalInstitution let-rowIndex="rowIndex">
           <tr>
-<!--            <td>{{ internalInstitution.personType.name }}</td>-->
-<!--            <td>{{ internalInstitution.name }}</td>-->
+            <!--            <td>{{ internalInstitution.personType.name }}</td>-->
+            <!--            <td>{{ internalInstitution.name }}</td>-->
             <td>
               @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
-                <ul>
-                  <p-button
-                    class="ml-1"
-                    [icon]="IconButtonActionEnum.DELETE"
-                    [severity]="SeverityButtonActionEnum.DELETE"
-                    [pTooltip]="'Eliminar Cargo'"
-                    (click)="deleteInternalInstitutionDetail(rowIndex,index)">
-                  </p-button>
-                  {{ internalInstitutionDetail.position.name }}
-                </ul>
+                <p-button
+                  class="ml-1"
+                  [icon]="IconButtonActionEnum.DELETE"
+                  [severity]="SeverityButtonActionEnum.DELETE"
+                  [pTooltip]="'Eliminar Cargo'"
+                  (click)="deleteInternalInstitutionDetail(rowIndex,index)">
+                </p-button>
+              }
+            </td>
+            <td>
+              @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
+                {{ internalInstitutionDetail.position.name }}
               }
             </td>
           </tr>
@@ -81,6 +85,8 @@
                 {{ col.header }}
               </th>
             }
+
+            <th>{{ TableEnum.ACTIONS }}</th>
           </tr>
         </ng-template>
 
@@ -96,22 +102,30 @@
             <td>{{ item.personType.name }}</td>
             <td>{{ item.name }}</td>
             <td>
-              <ul>
-                @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
-                  <li class="mt-1">
-                    <p-button
-                      class="ml-1"
-                      [icon]="IconButtonActionEnum.DELETE"
-                      [severity]="SeverityButtonActionEnum.DELETE"
-                      [pTooltip]="'Eliminar Cargo'"
-                      (click)="deleteExternalInstitutionDetail(rowIndex,index)">
-                    </p-button>
+              @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+                <p-button
+                  [text]="true"
+                  [icon]="IconButtonActionEnum.REMOVE"
+                  [severity]="SeverityButtonActionEnum.DELETE"
+                  [pTooltip]="'Eliminar Cargo'"
+                  (click)="deleteExternalInstitutionDetail(rowIndex,index)">
+                </p-button>
 
-                    {{ externalInstitutionDetail.position }} /
-                    {{ externalInstitutionDetail.unit }}
-                  </li>
-                }
-              </ul>
+                <span>
+                  {{ externalInstitutionDetail.position }} /
+                  {{ externalInstitutionDetail.unit }}
+                </span>
+
+                <br>
+              }
+            </td>
+            <td>
+              <p-button
+                [rounded]="true"
+                [icon]="IconButtonActionEnum.ADD"
+                [severity]="SeverityButtonActionEnum.ADD"
+                pTooltip="Agregar Cargo"
+                (click)="showExternalInstitutionDetailModal(rowIndex)"/>
             </td>
           </tr>
         </ng-template>
@@ -123,7 +137,6 @@
 <p-dialog
   [(visible)]="isVisibleInternalInstitutionForm"
   [modal]="true"
-  [style]="{width: '50rem', height: '50rem'}"
   [maximizable]="true"
   header="Agregar">
   <form [formGroup]="internalInstitutionDetailForm" class="p-fluid grid">
@@ -138,20 +151,21 @@
 
       <app-form-help-field content="Registrar conforme se detalla en el convenio"></app-form-help-field>
 
-<!--      <p-listbox-->
-<!--        id="internalPosition"-->
-<!--        [options]="positions"-->
-<!--        formControlName="position"-->
-<!--        optionLabel="name"-->
-<!--        [filter]="true"-->
-<!--        [listStyle]="{'max-height': '300px'}"/>-->
+      <!--      <p-listbox-->
+      <!--        id="internalPosition"-->
+      <!--        [options]="positions"-->
+      <!--        formControlName="position"-->
+      <!--        optionLabel="name"-->
+      <!--        [filter]="true"-->
+      <!--        [listStyle]="{'max-height': '300px'}"/>-->
 
       <p-dropdown
         id="internalPosition"
         formControlName="position"
         dataKey="id"
         [options]="positions"
-        placeholder="Selecione">
+        placeholder="Selecione"
+        appendTo="body">
         <ng-template pTemplate="selectedItem" let-selectedItem>
           <div class="flex align-items-center gap-2">
             <div>{{ selectedItem.name }}</div>
@@ -227,12 +241,12 @@
           [required]="externalInstitutionPersonTypeField">
         </label>
 
-<!--        <p-listbox-->
-<!--          id="externalPersonType"-->
-<!--          [options]="externalPersonTypes"-->
-<!--          formControlName="personType"-->
-<!--          optionLabel="name"-->
-<!--          [listStyle]="{'max-height': '150px'}"/>-->
+        <!--        <p-listbox-->
+        <!--          id="externalPersonType"-->
+        <!--          [options]="externalPersonTypes"-->
+        <!--          formControlName="personType"-->
+        <!--          optionLabel="name"-->
+        <!--          [listStyle]="{'max-height': '150px'}"/>-->
 
         <p-dropdown
           id="externalPersonType"

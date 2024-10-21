@@ -35,9 +35,16 @@
   paginatorPosition="both"
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
-    <div class="flex">
-      <h2>{{ BreadcrumbEnum.PERIODS }}</h2>
-    </div>
+    <h2>{{ BreadcrumbEnum.PERIODS }}</h2>
+
+    <h3>Descargue aquí el Formato de Informe de avance semestral del convenio:</h3>
+
+    <a
+      pButton
+      [label]="LabelButtonActionEnum.DOWNLOAD"
+      [icon]="IconButtonActionEnum.DOWNLOAD"
+      target="_blank"
+      href="assets/files/informe_periodo.pdf"></a>
   </ng-template>
 
   <ng-template pTemplate="header" let-columns>
@@ -83,7 +90,7 @@
                     (click)="showFilesModal(rowData)"/>
                 } @else {
                   @for (item of rowData?.trackingLogDocuments; track item) {
-                    <span>{{item.type.name}}: </span>
+                    <span>{{ item.type.name }}: </span>
 
                     <p-button
                       class="ml-2"

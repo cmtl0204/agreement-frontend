@@ -116,14 +116,6 @@ export class AgreementListComponent implements OnInit {
   buildButtonActions() {
     this.buttonActions = [
       {
-        id: IdButtonActionEnum.VIEW,
-        label: LabelButtonActionEnum.VIEW,
-        icon: IconButtonActionEnum.VIEW,
-        command: () => {
-          this.redirectViewAgreement();
-        },
-      },
-      {
         id: IdButtonActionEnum.COMPLETE,
         label: LabelButtonActionEnum.COMPLETE,
         icon: IconButtonActionEnum.COMPLETE,
@@ -132,9 +124,9 @@ export class AgreementListComponent implements OnInit {
         },
       },
       {
-        id: IdButtonActionEnum.EDIT,
-        label: LabelButtonActionEnum.UPDATE,
-        icon: IconButtonActionEnum.EDIT,
+        id: IdButtonActionEnum.AGREEMENT,
+        label: LabelButtonActionEnum.AGREEMENT,
+        icon: IconButtonActionEnum.AGREEMENT,
         command: () => {
           if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
         },

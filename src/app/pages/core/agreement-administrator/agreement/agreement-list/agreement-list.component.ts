@@ -106,9 +106,9 @@ export class AgreementListComponent implements OnInit {
   buildButtonActions() {
     this.buttonActions = [
       {
-        id: IdButtonActionEnum.VIEW,
-        label: LabelButtonActionEnum.VIEW,
-        icon: IconButtonActionEnum.VIEW,
+        id: IdButtonActionEnum.AGREEMENT,
+        label: LabelButtonActionEnum.AGREEMENT,
+        icon: IconButtonActionEnum.AGREEMENT,
         command: () => {
           this.redirectViewAgreement();
         },

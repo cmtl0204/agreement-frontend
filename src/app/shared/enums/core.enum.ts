@@ -5,6 +5,6 @@ export enum CoreMessageEnum {
 }
 
 export enum TableEnum {
-  ACTIONS = 'Acciones',
+  ACTIONS = 'Detalle',
   SEARCH = 'Buscar...',
 }

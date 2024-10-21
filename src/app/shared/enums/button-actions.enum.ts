@@ -25,7 +25,8 @@ export enum IdButtonActionEnum {
   AGREEMENT_PERIOD = 'agreement_log',
   TRACKING_LOG = 'tracking_log',
   REACTIVATE = 'reactivate',
-  VIEW = 'view'
+  VIEW = 'view',
+  AGREEMENT = 'agreement'
 }
 
 export enum LabelButtonActionEnum {
@@ -44,6 +45,7 @@ export enum LabelButtonActionEnum {
   EDIT = 'Editar',
   COMPLETE = 'Completar Registro',
   VIEW = 'Visualizar',
+  AGREEMENT = 'Ficha del Convenio',
   DELETE = 'Eliminar',
   DOWNLOAD = 'Descargar',
   DOWNLOADS = 'Descargas',
@@ -105,7 +107,8 @@ export enum IconButtonActionEnum {
   FILE_LIST = 'pi pi-file',
   SUBJECT_REQUIREMENTS = 'Pre y Co Requisitos',
   REACTIVATE = 'Reactivar',
-  VIEW = 'pi pi-eye'
+  VIEW = 'pi pi-eye',
+  AGREEMENT = 'pi pi-book'
 }
 
 export enum SeverityButtonActionEnum {

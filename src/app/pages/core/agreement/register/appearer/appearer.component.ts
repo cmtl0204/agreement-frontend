@@ -315,9 +315,11 @@ export class AppearerComponent implements OnInit {
   deleteExternalInstitutionDetail(indexExternalInstitution: number, indexExternalInstitutionDetail: number) {
     this.formInput.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.splice(indexExternalInstitutionDetail, 1);
 
-    if (this.formInput.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.length === 0) {
-      this.formInput.externalInstitutions.splice(indexExternalInstitution, 1);
-    }
+    // if (this.formInput.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.length === 0) {
+    //   this.formInput.externalInstitutions.splice(indexExternalInstitution, 1);
+    // }
+
+    this.form.updateValueAndValidity();
   }
 
   validateExternalInstitutionForm(): boolean {
@@ -327,6 +329,12 @@ export class AppearerComponent implements OnInit {
     if (this.externalInstitutionPersonTypeField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.personType);
     if (this.externalInstitutionDetailUnitField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.unit);
     if (this.externalInstitutionDetailPositionField.invalid) this.formErrors.push(ExternalInstitutionsFormEnum.position);
+
+    if (this.formInput.externalInstitutions) {
+      if (this.formInput.externalInstitutions?.findIndex(item => item.name === this.externalInstitutionNameField.value) > -1) {
+        this.formErrors.push('Ya existe la institución');
+      }
+    }
 
     return this.formErrors.length === 0;
   }
