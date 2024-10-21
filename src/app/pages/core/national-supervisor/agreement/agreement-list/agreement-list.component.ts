@@ -140,9 +140,9 @@ export class AgreementListComponent implements OnInit {
         },
       },
       {
-        id: IdButtonActionEnum.AGREEMENT_PERIOD,
-        label: LabelButtonActionEnum.AGREEMENT_PERIOD,
-        icon: IconButtonActionEnum.AGREEMENT_PERIOD,
+        id: IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+        label: LabelButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+        icon: IconButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
         command: () => {
           if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
         },

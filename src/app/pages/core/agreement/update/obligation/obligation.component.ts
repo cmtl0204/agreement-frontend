@@ -188,6 +188,8 @@ export class ObligationComponent implements OnInit {
 
       this.formInput.obligations.push(obligation);
 
+      this.formInput.obligations.sort();
+
       this.form.patchValue(this.formInput);
 
       this.obligationForm.reset();

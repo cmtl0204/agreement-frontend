@@ -340,7 +340,7 @@ export class AppearerComponent implements OnInit {
 
   deleteExternalInstitutionDetail(indexExternalInstitution: number, indexExternalInstitutionDetail: number) {
     if (this.formInput.externalInstitutions[indexExternalInstitution].externalInstitutionDetails.length === 1) {
-      this.messageDialogService.errorCustom('No se puede elminar', 'Debe haber al menos un campo');
+      this.messageDialogService.errorCustom('No se puede elminar', 'Debe contener al menos una unidad y un cargo');
       return;
     }
 
