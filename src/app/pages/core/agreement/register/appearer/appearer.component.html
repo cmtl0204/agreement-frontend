@@ -39,7 +39,7 @@
                   class="ml-1"
                   [icon]="IconButtonActionEnum.DELETE"
                   [severity]="SeverityButtonActionEnum.DELETE"
-                  [pTooltip]="'Eliminar Cargo'"
+                  [pTooltip]="'Eliminar Unidad/Cargo'"
                   (click)="deleteInternalInstitutionDetail(rowIndex,index)">
                 </p-button>
               }
@@ -60,11 +60,12 @@
 <p-panel>
   <ng-template pTemplate="header">
     <h4>Contraparte:</h4>
+    <app-form-help-field content="Agregar nueva institución contraparte"/>
 
     <p-button
       class="ml-2"
       [icon]="IconButtonActionEnum.ADD"
-      [pTooltip]="LabelButtonActionEnum.ADD"
+      pTooltip="Agregar Contraparte"
       [severity]="SeverityButtonActionEnum.ADD"
       (click)="showExternalInstitutionModal()"/>
   </ng-template>
@@ -86,7 +87,10 @@
               </th>
             }
 
-            <th>{{ TableEnum.ACTIONS }}</th>
+            <th>
+              {{ TableEnum.ACTIONS }}
+              <app-form-help-field content="Agregar más contrapartes dentro de institución creada"/>
+            </th>
           </tr>
         </ng-template>
 
@@ -96,7 +100,7 @@
               <p-button
                 [icon]="IconButtonActionEnum.DELETE"
                 [severity]="SeverityButtonActionEnum.DELETE"
-                [pTooltip]="'Eliminar Compareciente'"
+                [pTooltip]="'Eliminar Contraparte'"
                 (click)="deleteExternalInstitution(rowIndex)"/>
             </td>
             <td>{{ item.personType.name }}</td>
@@ -122,9 +126,9 @@
             <td>
               <p-button
                 [text]="true"
-                [icon]="IconButtonActionEnum.ADD"
+                [icon]="PrimeIcons.PLUS_CIRCLE"
                 [severity]="SeverityButtonActionEnum.ADD"
-                pTooltip="Agregar Cargo"
+                pTooltip="Agregar Unidad/Cargo"
                 (click)="showExternalInstitutionDetailModal(rowIndex)"/>
             </td>
           </tr>
