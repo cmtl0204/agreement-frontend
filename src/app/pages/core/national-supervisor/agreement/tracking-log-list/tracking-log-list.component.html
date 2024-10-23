@@ -27,7 +27,7 @@
     <div class="flex">
       <h2>
         {{ period.name }}:
-        {{ period.startedAt | customFormatDate}} - {{ period.endedAt | customFormatDate }}
+        {{ period.startedAt | customFormatDate }} - {{ period.endedAt | customFormatDate }}
       </h2>
     </div>
   </ng-template>
@@ -52,6 +52,10 @@
             @switch (col.field) {
               @case ('user') {
                 {{ rowData.user.name }} {{ rowData.user.lastname }}
+                @if (rowData.observation) {
+                  <br>
+                  <b>Comentario: </b>{{ rowData.observation }}
+                }
               }
               @case ('state') {
                 {{ rowData.state.name }}
@@ -76,6 +80,7 @@
       }
     </tr>
   </ng-template>
+
   <ng-template pTemplate="emptymessage" let-columns>
     <tr>
       <td [attr.colspan]="columns.length">
@@ -83,6 +88,7 @@
       </td>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="summary">
     <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
   </ng-template>

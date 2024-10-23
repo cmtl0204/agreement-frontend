@@ -52,6 +52,10 @@
             @switch (col.field) {
               @case ('user') {
                 {{ rowData.user.name }} {{ rowData.user.lastname }}
+                @if (rowData.observation) {
+                  <br>
+                  <b>Comentario: </b>{{ rowData.observation }}
+                }
               }
               @case ('state') {
                 {{ rowData.state.name }}
