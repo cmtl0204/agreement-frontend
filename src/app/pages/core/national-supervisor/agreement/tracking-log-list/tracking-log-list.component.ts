@@ -18,6 +18,7 @@ import {
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
+import {TrackingLogsHttpService} from "@servicesHttp/core";
 
 @Component({
   selector: 'app-tracking-log-list',
@@ -31,7 +32,7 @@ export class TrackingLogListComponent implements OnInit {
   protected readonly authService = inject(AuthService);
   protected readonly coreService = inject(CoreService);
   private readonly router = inject(Router);
-  private readonly breadcrumbService = inject(BreadcrumbService);
+  private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
 
   protected readonly PrimeIcons = PrimeIcons;
   protected readonly IconButtonActionEnum = IconButtonActionEnum;
@@ -74,6 +75,6 @@ export class TrackingLogListComponent implements OnInit {
   }
 
   downloadLog() {
-
+    this.trackingLogsHttpService.downloadLog(this.period.id);
   }
 }
