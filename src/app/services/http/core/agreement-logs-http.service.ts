@@ -5,7 +5,7 @@ import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
 import {ServerResponse} from '@models/http-response';
 import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
-import {AgreementLogModel, AgreementModel, CatalogueModel} from '@models/core';
+import {AgreementLogDetailModel, AgreementLogModel, AgreementModel, CatalogueModel} from '@models/core';
 import {CatalogueTypeEnum} from "@shared/enums";
 import {format} from "date-fns";
 
@@ -17,7 +17,7 @@ export class AgreementLogsHttpService {
   private readonly coreService = inject(CoreService);
   private readonly httpClient = inject(HttpClient);
 
-  findAgreementLogsByAgreement(agreementId: string): Observable<AgreementLogModel[]> {
+  findAgreementLogsByAgreement(agreementId: string): Observable<AgreementLogDetailModel[]> {
     const url = `${this.API_URL}/agreements/${agreementId}`;
 
     return this.httpClient.get<ServerResponse>(url).pipe(

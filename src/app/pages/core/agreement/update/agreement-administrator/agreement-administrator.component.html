@@ -15,7 +15,8 @@
           [options]="units"
           placeholder="Seleccione"
           [filter]="true"
-          filterBy="name">
+          filterBy="name"
+          appendTo="body">
 
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">
@@ -52,7 +53,8 @@
           [options]="positions"
           [filter]="true"
           filterBy="name"
-          placeholder="Seleccione">
+          placeholder="Seleccione"
+          appendTo="body">
 
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">

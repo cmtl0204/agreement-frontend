@@ -18,32 +18,66 @@
     </div>
   </p-toolbar>
 
-  <p-panel [header]="AgreementLogEnum.header">
-    <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
-      <ng-template pTemplate="marker" let-event>
-            <span
-              class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
-              [style]="{ 'background-color': event.color }">
-                    <i [class]="event.icon"></i>
-            </span>
-      </ng-template>
-      <ng-template pTemplate="content" let-event>
-        <p-card [header]="event.status" [subheader]="event.date">
-          @for (agreementLogDetail of event.agreementLogDetails; track agreementLogDetail.id) {
-            <!--            <b>Campo:</b> {{ agreementLogDetail.description }}-->
-            <b>Campo:</b> {{ agreementLogDetail.path }}
+  <p-panel>
+    <ng-template pTemplate="header">
+      <h3>{{ AgreementLogEnum.header }}</h3>
+    </ng-template>
 
-            <br>
-            <b>Valor anterior:</b> {{ agreementLogDetail.oldValue }}
+    <ng-template pTemplate="content">
+      <p><b>Número Interno Convenio:</b> {{ agreement?.internalNumber }}</p>
+      <p><b>Nombre del Convenio:</b> {{ agreement?.name }}</p>
+      <p>
+        <b>Unidad Administradora:</b>
+        {{ agreement?.administrator?.user?.name }} {{ agreement?.administrator?.user?.lastname }}
+      </p>
+      <p><b>Cargo Unidad Administradora:</b> {{ agreement?.administrator?.position?.name }}</p>
 
-            <br>
-            <b>Nuevo Valor:</b> {{ agreementLogDetail.newValue }}
-
-            <p-divider/>
-          }
-          <!--        <p-button label="Ver Detalle" [text]="true"/>-->
-        </p-card>
-      </ng-template>
-    </p-timeline>
+      <p-table
+        [value]="items"
+        sortField="property"
+        sortMode="single"
+        dataKey="property"
+        rowGroupMode="rowspan"
+        groupRowsBy="property"
+        [tableStyle]="{'min-width': '70rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Campo</th>
+            <th>Descripción</th>
+            <th>Texto Original</th>
+            <th>Texto Actualizado</th>
+            <th>Usuario Responsable</th>
+            <th>Fecha y Hora</th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-customer
+          let-rowIndex="rowIndex"
+          let-rowgroup="rowgroup"
+          let-rowspan="rowspan">
+          <tr>
+            <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+              <span class="font-bold ml-2">{{ customer.property }}</span>
+            </td>
+            <td>
+              {{ customer.description }}
+            </td>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{ customer.oldValue }}</span>
+            </td>
+            <td>
+              {{ customer.newValue }}
+            </td>
+            <td>
+              {{ customer.agreementLog.user.name }} {{ customer.agreementLog.user.lastname }}
+            </td>
+            <td>
+              {{ customer.agreementLog.registeredAt | date:'dd/MM/yyyy HH:mm:ss' }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
   </p-panel>
 }

@@ -59,6 +59,7 @@ export class AppearerComponent implements OnInit {
   /** Foreign Keys **/
   protected internalPersonTypes: CatalogueModel[] = [];
   protected externalPersonTypes: CatalogueModel[] = [];
+  protected externalNames: CatalogueModel[] = [];
   protected positions: CatalogueModel[] = [];
 
   /** Enums **/
@@ -87,6 +88,7 @@ export class AppearerComponent implements OnInit {
   ngOnInit(): void {
     this.loadInternalPersonTypes();
     this.loadExternalPersonTypes();
+    this.loadExternalNames();
     this.loadPositions();
 
     this.patchValueForm();
@@ -372,6 +374,10 @@ export class AppearerComponent implements OnInit {
 
   loadExternalPersonTypes() {
     this.externalPersonTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_PERSON_TYPE);
+  }
+
+  loadExternalNames() {
+    this.externalNames = this.cataloguesHttpService.findByType(CatalogueTypeEnum.EXTERNAL_INSTITUTIONS_NAME);
   }
 
   loadPositions() {

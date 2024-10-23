@@ -68,8 +68,8 @@ export class LogComponent implements OnInit {
 
   protected search: FormControl = new FormControl('');
 
-  protected selectedItem!: AgreementModel;
-  protected items: AgreementLogModel[] = [];
+  protected agreement!: AgreementModel;
+  protected items: AgreementLogDetailModel[] = [];
   protected events: EventItem[] = [];
   protected isVisibleAgreementView: boolean = false;
 
@@ -91,15 +91,10 @@ export class LogComponent implements OnInit {
     this.agreementLogsHttpService.findAgreementLogsByAgreement(this.id).subscribe(response => {
       this.items = response;
 
-      this.events = this.items.map(item => {
-        return {
-          status: `${item.user.name} ${item.user.lastname}`,
-          date: format(item.registeredAt!, 'MM-dd-yyyy HH:mm:ss'),
-          icon: PrimeIcons.ARROW_DOWN,
-          color: 'var(--primary-color)',
-          agreementLogDetails: item.agreementLogDetails
-        }
-      });
+      if (this.items.length > 0) {
+        console.log()
+        this.agreement = this.items[0].agreementLog?.agreement!;
+      }
     });
   }
 
@@ -150,7 +145,7 @@ export class LogComponent implements OnInit {
   selectItem(item: AgreementModel) {
     this.agreementsHttpService.findOne(item.id!).subscribe(agreement => {
       this.isButtonActions = true;
-      this.selectedItem = item;
+      this.agreement = item;
       this.validateButtonActions(item);
       this.agreementsService.agreement = agreement;
     });

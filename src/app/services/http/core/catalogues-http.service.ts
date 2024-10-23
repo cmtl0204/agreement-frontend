@@ -99,7 +99,7 @@ export class CataloguesHttpService {
     const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
 
     if (catalogues) {
-      return catalogues.filter(catalogue => catalogue.parentId === parentId);
+      return catalogues.filter(catalogue => catalogue.parent?.id === parentId);
     }
 
     return [];

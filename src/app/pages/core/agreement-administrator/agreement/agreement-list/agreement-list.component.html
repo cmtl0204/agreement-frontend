@@ -1,18 +1,12 @@
 <p-toolbar>
   <div class="p-toolbar-group-left">
     <p-button
-      (click)="redirectCreateForm()"
-      [icon]="IconButtonActionEnum.CREATE"
-      [label]="LabelButtonActionEnum.CREATE_AGREEMENT"
-      [loading]="coreService.isLoading"
-      [severity]="SeverityButtonActionEnum.CREATE"></p-button>
-    <p-button
       class="ml-2"
       (click)="findAgreements()"
       [icon]="IconButtonActionEnum.SYNC"
       [label]="LabelButtonActionEnum.SYNC"
       [loading]="coreService.isLoading"
-      [severity]="SeverityButtonActionEnum.SYNC"></p-button>
+      [severity]="SeverityButtonActionEnum.SYNC"/>
   </div>
   <div class="p-toolbar-group-right">
 
@@ -81,7 +75,7 @@
               }
               @case ('endedAt') {
                 @if (rowData.endedAt) {
-                  {{ rowData.endedAt | customFormatDate}}
+                  {{ rowData.endedAt | customFormatDate }}
                 } @else {
                   Indefinido
                 }

@@ -221,12 +221,24 @@
                [required]="externalInstitutionNameField">
         </label>
 
-        <app-form-help-field content="Registro texto tipo oración."></app-form-help-field>
-
-        <input
-          pInputText
+        <p-dropdown
           id="name"
-          formControlName="name"/>
+          formControlName="name"
+          dataKey="id"
+          optionValue="name"
+          [options]="externalNames"
+          placeholder="Seleccione">
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
 
         <small
           appErrorMessage

@@ -43,7 +43,7 @@ export class AgreementAdministratorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadPositions();
+    // this.loadPositions();
     this.loadUnits();
     this.loadUsers();
 
@@ -70,6 +70,10 @@ export class AgreementAdministratorComponent implements OnInit {
 
       this.validateForm();
     });
+
+    this.unitField.valueChanges.subscribe(() => {
+      this.loadPositions();
+    });
   }
 
   get administratorForm() {
@@ -92,7 +96,9 @@ export class AgreementAdministratorComponent implements OnInit {
 
   /** Load Foreign Keys  **/
   loadPositions() {
-    this.positions = this.cataloguesHttpService.findByType(CatalogueTypeEnum.ADMINISTRATORS_POSITION);
+    this.positionField.setValue(null);
+
+    this.positions = this.cataloguesHttpService.findByParent(this.unitField.value.id);
   }
 
   loadUnits() {
