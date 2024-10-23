@@ -43,7 +43,7 @@ export class CoreService {
     if (this._isProcessing != value) {
       setTimeout(() => {
         this._isProcessing = value;
-      }, 1);
+      }, 200);
     }
   }
 
