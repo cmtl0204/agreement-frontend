@@ -286,3 +286,29 @@
     />
   </ng-template>
 </p-dialog>
+
+<p-dialog
+  header="Header"
+  [(visible)]="isVisibleAcceptedModal"
+  [modal]="true"
+  [style]="{ width: '35rem' }">
+  <ng-template pTemplate="header">
+    <h3>¿Está seguro de aceptar, no podrá modificar su elección?</h3>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="isVisibleRefusedModal = false"/>
+
+    <p-button
+      [label]="LabelButtonActionEnum.ACCEPTED"
+      [icon]="IconButtonActionEnum.ACCEPTED"
+      [severity]="SeverityButtonActionEnum.REFUSED"
+      (click)="refuseTrackingLogDocuments()"
+    />
+  </ng-template>
+</p-dialog>

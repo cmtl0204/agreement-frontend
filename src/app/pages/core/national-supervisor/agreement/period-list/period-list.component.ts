@@ -70,6 +70,7 @@ export class PeriodListComponent implements OnInit {
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
   protected isVisibleRefusedModal: boolean = false;
+  protected isVisibleAcceptedModal: boolean = false;
   protected readonly AddendumEnum = AddendumEnum;
   protected observation!: string;
 
@@ -141,9 +142,7 @@ export class PeriodListComponent implements OnInit {
         label: LabelButtonActionEnum.ACCEPTED,
         icon: IconButtonActionEnum.ACCEPTED,
         command: () => {
-          this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, true, 'ACEPTADO').subscribe(() => {
-            this.findPeriodsByAgreement();
-          });
+          this.isVisibleAcceptedModal = true;
         },
       },
       {
@@ -220,6 +219,13 @@ export class PeriodListComponent implements OnInit {
       this.findPeriodsByAgreement();
       this.isVisibleRefusedModal = false;
       this.observation = '';
+    });
+  }
+
+  acceptTrackingLogDocuments() {
+    this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, true).subscribe(() => {
+      this.findPeriodsByAgreement();
+      this.isVisibleAcceptedModal = false;
     });
   }
 

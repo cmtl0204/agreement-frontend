@@ -121,6 +121,7 @@ export enum SeverityButtonActionEnum {
   CANCEL = 'danger',
   RETURN = 'warning',
   REFUSED = 'primary',
+  ACCEPTED = 'primary',
   SAVE = 'primary',
   SYNC = 'info',
   DELETE = 'danger',
