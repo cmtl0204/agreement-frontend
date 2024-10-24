@@ -50,17 +50,23 @@
             <td>{{ item.name }}</td>
 
             <td>
-              @for (detail of item.externalInstitutionDetails; track detail) {
-                {{ detail.unit }}
-                <br>
-              }
+              <ul>
+                @for (detail of item.externalInstitutionDetails; track detail) {
+                  <li>
+                    {{ detail.unit }}
+                  </li>
+                }
+              </ul>
             </td>
 
             <td>
-              @for (detail of item.externalInstitutionDetails; track detail) {
-                {{ detail.position }}
-                <br>
-              }
+              <ul>
+                @for (detail of item.externalInstitutionDetails; track detail) {
+                  <li>
+                    {{ detail.position }}
+                  </li>
+                }
+              </ul>
             </td>
 
             <td>{{ item.personType?.name }}</td>
