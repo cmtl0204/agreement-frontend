@@ -58,26 +58,10 @@
 
       <!-- isFinishDate -->
       @if (agreement.isFinishDate) {
-        <div class="field col-12">
-          <label>Plazo total del convenio:</label>
-        </div>
-
-        <!-- yearTerm -->
-        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-          <label appLabel [label]="AgreementFormEnum.yearTerm"></label>
-          <input pInputText [value]="agreement.yearTerm" [readOnly]="true"/>
-        </div>
-
-        <!-- monthTerm -->
-        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-          <label appLabel [label]="AgreementFormEnum.monthTerm"></label>
-          <input pInputText [value]="agreement.monthTerm" [readOnly]="true"/>
-        </div>
-
-        <!-- dayTerm -->
-        <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-          <label appLabel [label]="AgreementFormEnum.dayTerm"></label>
-          <input pInputText [value]="agreement.dayTerm" [readOnly]="true"/>
+        <!-- totalTerm -->
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label appLabel [label]="AgreementFormEnum.totalTerm"></label>
+          <input pInputText [value]="agreement.totalTerm" [readOnly]="true"/>
         </div>
       }
     </div>

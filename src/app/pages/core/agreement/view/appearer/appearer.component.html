@@ -18,9 +18,7 @@
       <ng-template pTemplate="body" let-item>
         @for (detail of item.internalInstitutionDetails; track detail) {
           <tr>
-            <td>{{ item.name }}</td>
             <td>{{ detail.position?.name }}</td>
-            <td>{{ item.personType?.name }}</td>
           </tr>
         }
       </ng-template>
@@ -48,14 +46,25 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-item>
-          @for (detail of item.externalInstitutionDetails; track detail) {
-            <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ detail.position }}</td>
-              <td>{{ detail.unit }}</td>
-              <td>{{ item.personType?.name }}</td>
-            </tr>
-          }
+          <tr>
+            <td>{{ item.name }}</td>
+
+            <td>
+              @for (detail of item.externalInstitutionDetails; track detail) {
+                {{ detail.unit }}
+                <br>
+              }
+            </td>
+
+            <td>
+              @for (detail of item.externalInstitutionDetails; track detail) {
+                {{ detail.position }}
+                <br>
+              }
+            </td>
+
+            <td>{{ item.personType?.name }}</td>
+          </tr>
         </ng-template>
       </p-table>
     </ng-template>

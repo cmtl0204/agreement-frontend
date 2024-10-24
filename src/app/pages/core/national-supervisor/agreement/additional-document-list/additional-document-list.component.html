@@ -2,7 +2,7 @@
   <div class="p-toolbar-group-left">
     <p-button
       class="ml-2"
-      (click)="findPeriodsByAgreement()"
+      (click)="findAdditionalDocumentsByAgreement()"
       [icon]="IconButtonActionEnum.SYNC"
       [label]="LabelButtonActionEnum.SYNC"
       [loading]="coreService.isLoading"
@@ -13,6 +13,11 @@
   </div>
 </p-toolbar>
 
+<!-- <p-paginator
+  [rows]="paginator.limit"
+  [totalRecords]="paginator.totalItems"
+  (onPageChange)="paginate($event)"></p-paginator>
+ -->
 <p-table
   #dt
   dataKey="id"
@@ -25,9 +30,10 @@
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <div class="flex">
-      <h1>{{ BreadcrumbEnum.PERIODS }}</h1>
+      <h2>{{ BreadcrumbEnum.ADDITIONAL_DOCUMENTS }}</h2>
     </div>
   </ng-template>
+
   <ng-template pTemplate="header" let-columns>
     <tr>
       @for (col of columns; track col) {
@@ -36,11 +42,9 @@
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
       }
-      <th class="text-center">
-        {{ TableEnum.ACTIONS }}
-      </th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
       @for (col of columns; track col) {
@@ -48,8 +52,10 @@
           <!--Objects-->
           @if (rowData[col.field]?.id) {
             @switch (col.field) {
-              @case ('administrator') {
-                {{ rowData[col.field].unit.name }}
+              @case ('user') {
+                @if (rowData?.user) {
+                  {{ rowData.user.name }} {{ rowData.user.lastname }}
+                }
               }
             }
           }
@@ -60,10 +66,9 @@
               @default {
                 {{ rowData[col.field] }}
               }
-              @case ('files') {
-                @for (item of rowData?.trackingLogDocuments; track item) {
-                  <span>{{ item.type.name }}: </span>
-
+              @case ('additionalDocuments') {
+                @for (item of rowData?.additionalDocuments; track item) {
+                  <span>{{item.type.name}}: </span>
                   <p-button
                     class="ml-2"
                     [icon]="IconButtonActionEnum.DOWNLOAD"
@@ -75,48 +80,19 @@
                   <p-divider/>
                 }
               }
-              @case ('trafficLight') {
-                @if (rowData.trackingLog) {
-                  @if (rowData.trackingLog.state.code === 'REPORTED' || rowData.trackingLog.state.code === 'ACCEPTED') {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 1.5rem"></i>
-                  } @else {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
-                  }
-                } @else {
-                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
-                }
-              }
               @case ('name') {
-                {{ rowData.name }}
-                <br>
-                {{ rowData.startedAt | date:'d MMMM y' }}
-                -
-                <br>
-                {{ rowData.endedAt | date:'d MMMM y' }}
+                {{ rowData.name }}  {{ rowData.sequence }}
               }
               @case ('uploadedAt') {
                 {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
-              }
-              @case ('state') {
-                {{ rowData.trackingLog?.state?.name }}
-              }
-              @case ('user') {
-                @if (rowData.trackingLog?.user) {
-                  {{ rowData.trackingLog.user.name }} {{ rowData.trackingLog.user.lastname }}
-                }
               }
             }
           }
         </td>
       }
-
-      <td class="text-center">
-        <p-button
-          [icon]="PrimeIcons.ELLIPSIS_V"
-          (click)="selectItem(rowData)"></p-button>
-      </td>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="emptymessage" let-columns>
     <tr>
       <td [attr.colspan]="columns.length">
@@ -124,6 +100,7 @@
       </td>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="summary">
     <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
   </ng-template>
@@ -134,20 +111,18 @@
                    (isHide)="isButtonActions=!$event">
 </app-button-action>
 
-<app-additional-document-list [agreementId]="agreementId"/>
-
 <p-dialog
   [(visible)]="isVisibleFilesModal"
   [modal]="true"
   [style]="{width: '50rem'}"
-  header="Agregar">
+  header="Subir archivos">
   <ng-template pTemplate="content">
-    <div class="p-fluid grid">
+    <form [formGroup]="form" class="p-fluid grid">
       <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="report"
-          [label]="AddendumEnum.file"
+          [label]="AdditionalDocumentEnum.reportFile"
           [required]="reportFileField"></label>
 
         <p-fileUpload
@@ -157,7 +132,7 @@
           chooseLabel="Cargar"
           [chooseIcon]="PrimeIcons.UPLOAD"
           name="files[]"
-          accept=".pdf,.zip,.rar"
+          accept=".pdf"
           maxFileSize="1000000"
           [auto]="true"
           [customUpload]="true"
@@ -172,7 +147,7 @@
       </div>
 
       @if (reportFileField.value) {
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
           <p-messages severity="info">
             <ng-template pTemplate>
               <i [class]="PrimeIcons.FILE_PDF"></i>
@@ -186,7 +161,7 @@
         <label
           appLabel
           for="evidence"
-          [label]="AddendumEnum.file"
+          [label]="AdditionalDocumentEnum.evidenceFile"
           [required]="evidenceFileField"></label>
 
         <p-fileUpload
@@ -211,7 +186,7 @@
       </div>
 
       @if (evidenceFileField.value) {
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
           <p-messages severity="info">
             <ng-template pTemplate>
               <i [class]="PrimeIcons.FILE_PDF"></i>
@@ -220,7 +195,24 @@
           </p-messages>
         </div>
       }
-    </div>
+
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="detail"
+          [label]="AdditionalDocumentEnum.detail"
+          [required]="detailField"></label>
+
+        <textarea pInputTextarea id="detail" formControlName="detail"></textarea>
+
+        <small
+          appErrorMessage
+          [errors]="detailField.errors"
+          [touched]="detailField.touched"
+          [dirty]="detailField.dirty">
+        </small>
+      </div>
+    </form>
   </ng-template>
 
   <ng-template pTemplate="footer">
@@ -232,57 +224,11 @@
       (click)="isVisibleFilesModal=false"/>
 
     <p-button
-      [icon]="IconButtonActionEnum.ADD"
-      [label]="LabelButtonActionEnum.ADD"
-      [severity]="SeverityButtonActionEnum.ADD"
+      [icon]="IconButtonActionEnum.REPORT"
+      [label]="LabelButtonActionEnum.REPORT"
+      [severity]="SeverityButtonActionEnum.REPORT"
       (click)="onUpload()"/>
   </ng-template>
 </p-dialog>
 
-<p-dialog
-  [(visible)]="isVisibleTrackingLogModal"
-  [modal]="true"
-  [style]="{width: '100%'}"
-  header="Bitácora">
-  @if (isVisibleTrackingLogModal) {
-    <app-tracking-log-list [period]="selectedItem"/>
-  }
-</p-dialog>
-
-<p-dialog
-  header="Header"
-  [(visible)]="isVisibleRefusedModal"
-  [modal]="true"
-  [style]="{ width: '35rem' }">
-  <ng-template pTemplate="header">
-    <h3>¿Está seguro de rechazar, no podrá modificar su elección?</h3>
-  </ng-template>
-
-  <div class="grid p-fluid">
-    <div class=" field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-      <label
-        appLabel
-        for="observation"
-        label="Observación">
-      </label>
-
-      <textarea pInputTextarea id="observation" [(ngModel)]="observation"></textarea>
-    </div>
-  </div>
-
-  <ng-template pTemplate="footer">
-    <p-button
-      [label]="LabelButtonActionEnum.CANCEL"
-      [icon]="IconButtonActionEnum.CANCEL"
-      [text]="true"
-      [severity]="SeverityButtonActionEnum.CANCEL"
-      (click)="isVisibleRefusedModal = false"/>
-
-    <p-button
-      [label]="LabelButtonActionEnum.REFUSED"
-      [icon]="IconButtonActionEnum.REFUSED"
-      [severity]="SeverityButtonActionEnum.REFUSED"
-      (click)="refuseTrackingLogDocuments()"
-    />
-  </ng-template>
-</p-dialog>
+<p-confirmDialog key="confirmDialog"/>

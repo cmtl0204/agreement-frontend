@@ -29,7 +29,7 @@
               </th>
             }
 
-            <th>
+            <th colspan="2">
               {{ TableEnum.ACTIONS }}
             </th>
           </tr>
@@ -63,6 +63,14 @@
                 <br>
               }
             </td>
+            <td>
+              <p-button
+                [icon]="IconButtonActionEnum.ADD"
+                [severity]="SeverityButtonActionEnum.ADD"
+                [text]="true"
+                [pTooltip]="'2. Agregar obligaciones'"
+                (click)="showObligationDetailModal(rowIndex)"/>
+            </td>
           </tr>
         </ng-template>
       </p-table>
@@ -73,7 +81,6 @@
 <p-dialog
   [(visible)]="isVisibleObligationForm"
   [modal]="true"
-  [style]="{width: '50rem', height: '50rem'}"
   header="Agregar">
   <ng-template pTemplate="content">
     <form [formGroup]="obligationForm" class="p-fluid grid">
@@ -217,7 +224,7 @@
       [icon]="IconButtonActionEnum.ADD"
       [label]="LabelButtonActionEnum.ADD"
       [severity]="SeverityButtonActionEnum.ADD"
-      (click)="addObligation()"></p-button>
+      (click)="addObligation()"/>
   </ng-template>
 </p-dialog>
 

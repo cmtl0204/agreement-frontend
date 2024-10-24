@@ -33,13 +33,7 @@ export class AppearerComponent {
   buildInternalInstitutionsColumns() {
     this.internalInstitutionColumns = [
       {
-        field: 'name', header: InternalInstitutionsFormEnum.name
-      },
-      {
         field: 'position', header: InternalInstitutionsFormEnum.position
-      },
-      {
-        field: 'personType', header: InternalInstitutionsFormEnum.personType
       },
     ];
   }
@@ -50,10 +44,10 @@ export class AppearerComponent {
         field: 'name', header: ExternalInstitutionsFormEnum.name
       },
       {
-        field: 'position', header: ExternalInstitutionsFormEnum.position
+        field: 'unit', header: ExternalInstitutionsFormEnum.unit
       },
       {
-        field: 'unit', header: ExternalInstitutionsFormEnum.unit
+        field: 'position', header: ExternalInstitutionsFormEnum.position
       },
       {
         field: 'personType', header: ExternalInstitutionsFormEnum.personType

@@ -21,32 +21,36 @@ import {TrackingLogListComponent} from "./agreement/tracking-log-list/tracking-l
 import {FileUploadModule} from "primeng/fileupload";
 import {DividerModule} from "primeng/divider";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {AdditionalDocumentListComponent} from "./agreement/additional-document-list/additional-document-list.component";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
 
 @NgModule({
   declarations: [
     AgreementListComponent,
     PeriodListComponent,
-    TrackingLogListComponent
+    TrackingLogListComponent,
+    AdditionalDocumentListComponent
   ],
-    imports: [
-        CommonModule,
-        NationalSupervisorRoutingModule,
-        SharedModule,
-        ToolbarModule,
-        ButtonModule,
-        PaginatorModule,
-        TableModule,
-        InputGroupModule,
-        TagModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        DialogModule,
-        ViewModule,
-        IconFieldModule,
-        InputIconModule,
-        FileUploadModule,
-        DividerModule,
-        InputTextareaModule
-    ]
+  imports: [
+    CommonModule,
+    NationalSupervisorRoutingModule,
+    SharedModule,
+    ToolbarModule,
+    ButtonModule,
+    PaginatorModule,
+    TableModule,
+    InputGroupModule,
+    TagModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    DialogModule,
+    ViewModule,
+    IconFieldModule,
+    InputIconModule,
+    FileUploadModule,
+    DividerModule,
+    InputTextareaModule,
+    ConfirmDialogModule
+  ]
 })
 export class NationalSupervisorModule { }
