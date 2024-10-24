@@ -42,11 +42,13 @@
                   [pTooltip]="'Eliminar Unidad/Cargo'"
                   (click)="deleteInternalInstitutionDetail(rowIndex,index)">
                 </p-button>
+                <br>
               }
             </td>
             <td>
               @for (internalInstitutionDetail of internalInstitution.internalInstitutionDetails; track internalInstitutionDetail; let index = $index) {
                 {{ internalInstitutionDetail.position.name }}
+                <br>
               }
             </td>
           </tr>

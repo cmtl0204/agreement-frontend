@@ -140,7 +140,7 @@ export class AppearerComponent implements OnInit {
   buildExternalInstitutionForm() {
     this.externalInstitutionForm = this.formBuilder.group({
       personType: [null, [Validators.required]],
-      name: [null, [Validators.required, Validators.pattern(onlyLetters())]],
+      name: [null, [Validators.required]],
     });
   }
 
