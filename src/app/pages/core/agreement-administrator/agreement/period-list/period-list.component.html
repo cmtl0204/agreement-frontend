@@ -1,11 +1,14 @@
 <p-toolbar>
   <div class="p-toolbar-group-left">
-    <p-button
-      (click)="createPeriod()"
-      [icon]="IconButtonActionEnum.CREATE"
-      [label]="LabelButtonActionEnum.CREATE_PERIOD"
-      [loading]="coreService.isLoading"
-      [severity]="SeverityButtonActionEnum.CREATE"/>
+    @if (agreement && !agreement.isFinishDate) {
+      <p-button
+        (click)="createPeriod()"
+        [icon]="IconButtonActionEnum.CREATE"
+        [label]="LabelButtonActionEnum.CREATE_PERIOD"
+        [loading]="coreService.isLoading"
+        [severity]="SeverityButtonActionEnum.CREATE"/>
+    }
+
     <p-button
       class="ml-2"
       (click)="findPeriodsByAgreement()"
@@ -14,6 +17,7 @@
       [loading]="coreService.isLoading"
       [severity]="SeverityButtonActionEnum.SYNC"></p-button>
   </div>
+
   <div class="p-toolbar-group-right">
 
   </div>

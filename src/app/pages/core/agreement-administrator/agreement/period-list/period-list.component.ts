@@ -11,8 +11,8 @@ import {
 } from '@servicesApp/core';
 import {
   AgreementsHttpService,
-  CataloguesHttpService, FilesHttpService,
-  PeriodsHttpService,
+  CataloguesHttpService,
+  FilesHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
 import {
@@ -22,9 +22,7 @@ import {
   BreadcrumbEnum,
   IdButtonActionEnum,
   TableEnum,
-  AgreementFormEnum,
-  AgreementStateEnum,
-  AdministratorFormEnum, RoleEnum, AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum
+  AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -43,6 +41,7 @@ export class PeriodListComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
+  private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
   private readonly agreementsService = inject(AgreementsService);
   private readonly router = inject(Router);
@@ -67,6 +66,7 @@ export class PeriodListComponent implements OnInit {
 
   protected selectedItem!: PeriodModel;
   protected items: PeriodModel[] = [];
+  protected agreement!: AgreementModel;
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
@@ -77,7 +77,7 @@ export class PeriodListComponent implements OnInit {
 
   constructor() {
     this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink:['/core/agreement-administrator/agreement-list']},
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
       {label: BreadcrumbEnum.PERIODS},
     ]);
 
@@ -95,6 +95,7 @@ export class PeriodListComponent implements OnInit {
 
   ngOnInit() {
     this.findPeriodsByAgreement();
+    this.findAgreement(this.agreementId);
     this.loadTypes();
   }
 
@@ -103,6 +104,12 @@ export class PeriodListComponent implements OnInit {
       reportFile: [null, Validators.required],
       evidenceFile: [null],
     })
+  }
+
+  findAgreement(id: string) {
+    this.agreementsHttpService.findOne(id).subscribe(agreement => {
+      this.agreement = agreement;
+    });
   }
 
   findPeriodsByAgreement() {
