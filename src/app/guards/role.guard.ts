@@ -7,6 +7,8 @@ export const RoleGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
+  console.log(route.url);
+
   if (!authService.auth) {
     router.navigate(['/common/403']);
     return false;

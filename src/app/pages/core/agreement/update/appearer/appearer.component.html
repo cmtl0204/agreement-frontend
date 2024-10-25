@@ -110,7 +110,7 @@
               </th>
             }
 
-            <th>
+            <th colspan="2">
               {{ TableEnum.ACTIONS }}
             </th>
           </tr>
@@ -175,6 +175,14 @@
 
                 <br>
               }
+            </td>
+            <td>
+              <p-button
+                [text]="true"
+                [icon]="PrimeIcons.PLUS_CIRCLE"
+                [severity]="SeverityButtonActionEnum.ADD"
+                pTooltip="Agregar Unidad/Cargo"
+                (click)="showExternalInstitutionDetailModal(rowIndex)"/>
             </td>
           </tr>
         </ng-template>

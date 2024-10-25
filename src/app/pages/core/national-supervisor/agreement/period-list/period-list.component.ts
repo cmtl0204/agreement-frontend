@@ -100,6 +100,7 @@ export class PeriodListComponent implements OnInit {
     this.form = this.formBuilder.group({
       reportFile: [null, Validators.required],
       evidenceFile: [null],
+      observation: [null, Validators.required]
     })
   }
 
@@ -215,7 +216,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   refuseTrackingLogDocuments() {
-    this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observation).subscribe(() => {
+    this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observationFileField.value).subscribe(() => {
       this.findPeriodsByAgreement();
       this.isVisibleRefusedModal = false;
       this.observation = '';
@@ -235,5 +236,9 @@ export class PeriodListComponent implements OnInit {
 
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
+  }
+
+  get observationFileField(): AbstractControl {
+    return this.form.controls['observation'];
   }
 }

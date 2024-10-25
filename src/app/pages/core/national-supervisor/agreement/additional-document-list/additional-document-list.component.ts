@@ -70,10 +70,10 @@ export class AdditionalDocumentListComponent implements OnInit {
   protected readonly AddendumEnum = AddendumEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
-      {label: BreadcrumbEnum.PERIODS},
-    ]);
+    // this.breadcrumbService.setItems([
+    //   {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
+    //   {label: BreadcrumbEnum.PERIODS},
+    // ]);
 
     this.buildForm();
     this.buildButtonActions();

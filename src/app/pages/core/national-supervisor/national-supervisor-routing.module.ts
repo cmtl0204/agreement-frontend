@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AgreementListComponent } from './agreement/agreement-list/agreement-list.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AgreementListComponent} from './agreement/agreement-list/agreement-list.component';
 import {PeriodListComponent} from "./agreement/period-list/period-list.component";
 import {
   TrackingLogListComponent
@@ -25,4 +25,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class NationalSupervisorRoutingModule { }
+export class NationalSupervisorRoutingModule {
+}

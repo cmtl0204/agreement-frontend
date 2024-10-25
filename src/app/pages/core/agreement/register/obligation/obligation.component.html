@@ -152,7 +152,8 @@
               formControlName="institutionName"
               optionValue="name"
               [options]="formInput.externalInstitutions"
-              placeholder="Seleccione">
+              placeholder="Seleccione"
+              appendTo="body">
               <ng-template pTemplate="selectedItem" let-selectedItem>
                 <div class="flex align-items-center gap-2">
                   <div>{{ selectedItem.name }}</div>
@@ -176,7 +177,8 @@
             <p-multiSelect
               formControlName="institutionName"
               [options]="institutions"
-              placeholder="Seleccione">
+              placeholder="Seleccione"
+              appendTo="body">
             </p-multiSelect>
           }
 

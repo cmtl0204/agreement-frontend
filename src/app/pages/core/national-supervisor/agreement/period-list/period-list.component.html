@@ -258,17 +258,25 @@
     <h3>¿Está seguro de rechazar, no podrá modificar su elección?</h3>
   </ng-template>
 
-  <div class="grid p-fluid">
+  <form [formGroup]="form" class="grid p-fluid">
     <div class=" field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
       <label
         appLabel
         for="observation"
-        label="Observación">
+        label="Observación"
+        [required]="observationFileField">
       </label>
 
-      <textarea pInputTextarea id="observation" [(ngModel)]="observation"></textarea>
+      <textarea pInputTextarea id="observation" formControlName="observation"></textarea>
+
+      <small
+        appErrorMessage
+        [errors]="observationFileField.errors"
+        [touched]="observationFileField.touched"
+        [dirty]="observationFileField.dirty">
+      </small>
     </div>
-  </div>
+  </form>
 
   <ng-template pTemplate="footer">
     <p-button
