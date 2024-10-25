@@ -133,7 +133,7 @@
           [chooseIcon]="PrimeIcons.UPLOAD"
           name="files[]"
           accept=".pdf"
-          maxFileSize="1000000"
+          maxFileSize="5242880"
           [auto]="true"
           [customUpload]="true"
           (uploadHandler)="uploadReportFile($event,uploadFiles)"/>
@@ -172,7 +172,7 @@
           [chooseIcon]="PrimeIcons.UPLOAD"
           name="files[]"
           accept=".pdf,.zip,.rar"
-          maxFileSize="1000000"
+          maxFileSize="5242880"
           [auto]="true"
           [customUpload]="true"
           (uploadHandler)="uploadEvidenceFile($event,uploadFiles)"/>
