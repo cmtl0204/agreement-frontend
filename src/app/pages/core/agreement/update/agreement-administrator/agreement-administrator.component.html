@@ -91,7 +91,8 @@
           [options]="users"
           placeholder="Seleccione"
           [filter]="true"
-          filterBy="email,lastname,name">
+          filterBy="email,lastname,name"
+          appendTo="body">
 
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">

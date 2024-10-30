@@ -75,7 +75,7 @@ export class LogComponent implements OnInit {
 
   constructor() {
     this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS},
+      {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
       {label: BreadcrumbEnum.AGREEMENTS_LOG},
     ]);
 
