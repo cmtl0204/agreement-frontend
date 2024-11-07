@@ -30,6 +30,8 @@
       [label]="AgreementFormEnum.startedAt"
       [required]="startedAtField"></label>
 
+    <app-form-help-field content="Fecha que consta en convenio"/>
+
     <p-calendar
       id="startedAt"
       formControlName="startedAt"
@@ -99,7 +101,7 @@
         [required]="totalTermField">
       </label>
 
-      <app-form-help-field content="Plazo del convenio"/>
+      <app-form-help-field content="Fecha que consta en convenio"/>
 
       <input pInputText id="totalTerm" formControlName="totalTerm"/>
 

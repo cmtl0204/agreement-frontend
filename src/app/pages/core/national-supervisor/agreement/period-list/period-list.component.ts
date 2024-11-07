@@ -77,7 +77,7 @@ export class PeriodListComponent implements OnInit {
   constructor() {
     this.breadcrumbService.setItems([
       {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS}
+      {label: BreadcrumbEnum.PERIODS_SUPERVISOR}
     ]);
 
     this.buildForm();
@@ -105,7 +105,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   findPeriodsByAgreement() {
-    this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId)
+    this.trackingLogsHttpService.findExecutionPeriodsByAgreement(this.agreementId)
       .subscribe((response) => {
         this.items = response;
       });
@@ -163,7 +163,6 @@ export class PeriodListComponent implements OnInit {
     if (!item.trackingLog
       || item.trackingLog.state?.code === CatalogueTrackingLogsStateEnum.ACCEPTED
       || item.trackingLog.state?.code === CatalogueTrackingLogsStateEnum.REFUSED) {
-      console.log('asd');
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.ACCEPTED), 1);
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REFUSED), 1);
     }

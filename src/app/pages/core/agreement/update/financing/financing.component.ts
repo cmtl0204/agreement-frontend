@@ -72,6 +72,10 @@ export class FinancingComponent implements OnInit {
 
   patchValueForm() {
     this.form.patchValue(this.formInput);
+
+    if (this.formInput.financings.length > 0) {
+      this.isFinancingField.disable();
+    }
   }
 
   /** Form Builder & Validates **/

@@ -182,7 +182,7 @@ export class ObligationComponent implements OnInit {
       if (this.formInput.obligations.findIndex(item => {
         return item.institutionName === obligation.institutionName;
       }) > -1) {
-        this.messageDialogService.errorCustom('Duplicado', 'La Institución ya cuenta con obligaciones, para agregar haga click en el botón +');
+        this.messageDialogService.errorCustom('Duplicado', 'La institución seleccionada, ya cuenta con obligaciones registradas, por favor para agregar nuevas obligaciones, hacerlo a través del icono más (+)');
         return;
       }
 

@@ -111,12 +111,12 @@
               @case ('trafficLight') {
                 @if (rowData.trackingLog) {
                   @if (rowData.trackingLog.state.code === 'REPORTED' || rowData.trackingLog.state.code === 'ACCEPTED') {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 1.5rem"></i>
+                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 3rem"></i>
                   } @else {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
+                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
                   }
                 } @else {
-                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
+                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
                 }
               }
               @case ('name') {
@@ -264,7 +264,7 @@
       [icon]="IconButtonActionEnum.CANCEL"
       [text]="true"
       [severity]="SeverityButtonActionEnum.CANCEL"
-      (click)="isVisibleFilesModal=false"/>
+      (click)="closeModal()"/>
 
     <p-button
       [icon]="IconButtonActionEnum.UPLOAD"

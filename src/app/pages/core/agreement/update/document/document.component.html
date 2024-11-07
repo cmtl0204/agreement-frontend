@@ -76,6 +76,13 @@
             [pTooltip]="LabelButtonActionEnum.DELETE"
             [severity]="SeverityButtonActionEnum.DELETE"
             (click)="removeFile(rowIndex,item)"/>
+
+          <p-button
+            class="ml-2"
+            [icon]="IconButtonActionEnum.DOWNLOAD"
+            [pTooltip]="LabelButtonActionEnum.DOWNLOAD"
+            [severity]="SeverityButtonActionEnum.DOWNLOAD"
+            (click)="download(item)"/>
         </td>
       </tr>
     </ng-template>

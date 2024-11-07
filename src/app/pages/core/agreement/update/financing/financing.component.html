@@ -6,7 +6,7 @@
       [label]="AgreementFormEnum.isFinancing"
       [required]="isFinancingField"></label>
 
-    <app-input-switch id="isFinancing"  formControlName="isFinancing" class="ml-2"/>
+    <app-input-switch id="isFinancing"  formControlName="isFinancing" class="ml-2" [disabled]="isFinancingField.disabled"/>
   </div>
 </form>
 

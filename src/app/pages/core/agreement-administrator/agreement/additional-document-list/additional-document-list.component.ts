@@ -101,7 +101,7 @@ export class AdditionalDocumentListComponent implements OnInit {
   }
 
   findAdditionalDocumentsByAgreement() {
-    this.trackingLogsHttpService.findAdditionalDocumentsByAgreement(this.agreementId)
+    this.trackingLogsHttpService.findExecutionAdditionalDocumentsByAgreement(this.agreementId)
       .subscribe((response) => {
         this.items = response;
       });
@@ -179,11 +179,12 @@ export class AdditionalDocumentListComponent implements OnInit {
       formData.append('evidence', this.evidenceFileField.value);
       formData.append('detail', this.detailField.value);
 
-      this.trackingLogsHttpService.createAdditionalDocument(this.agreementId, formData).subscribe(response => {
+      this.trackingLogsHttpService.createExecutionAdditionalDocument(this.agreementId, formData).subscribe(response => {
         this.findAdditionalDocumentsByAgreement();
         this.isVisibleFilesModal = false;
       });
     } else {
+      this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
@@ -193,6 +194,7 @@ export class AdditionalDocumentListComponent implements OnInit {
 
     if (this.reportFileField.invalid) this.formErrors.push(PeriodEnum.reportFile);
     if (this.evidenceFileField.invalid) this.formErrors.push(PeriodEnum.evidenceFile);
+    if (this.detailField.invalid) this.formErrors.push(PeriodEnum.detail);
 
     return this.formErrors.length === 0
   }
@@ -207,6 +209,12 @@ export class AdditionalDocumentListComponent implements OnInit {
     this.evidenceFileField.patchValue(event.files[0]);
 
     uploadFiles.clear();
+  }
+
+  closeModal(){
+    this.isVisibleFilesModal=false;
+    this.reportFileField.setValue(null);
+    this.evidenceFileField.setValue(null);
   }
 
   get reportFileField(): AbstractControl {

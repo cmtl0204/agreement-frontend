@@ -53,7 +53,7 @@ export enum LabelButtonActionEnum {
   SUSPEND = 'Suspender',
   AGREEMENT_LOG = 'Bitácora del Convenio',
   AGREEMENT_PERIOD = 'Ejecución y Reporte del Convenio',
-  AGREEMENT_TRACKING_PERIOD = 'Seguimiento a la Ejecución del Convenio',
+  AGREEMENT_TRACKING_PERIOD = 'Seguimiento a la ejecución del convenio',
   TRACKING_LOG = 'Bitácora Seguimiento',
   ACCEPTED = 'Aceptado',
   REFUSED = 'Rechazado',

@@ -151,14 +151,14 @@
             </td>
             <td>
               @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
-                <input pInputText [(ngModel)]="externalInstitutionDetail.position"
+                <input pInputText [(ngModel)]="externalInstitutionDetail.unit"
                        (keyup)="formOutput.emit(this.formInput)">
               }
             </td>
 
             <td>
               @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
-                <input pInputText [(ngModel)]="externalInstitutionDetail.unit"
+                <input pInputText [(ngModel)]="externalInstitutionDetail.position"
                        (keyup)="formOutput.emit(this.formInput)">
               }
             </td>
@@ -207,7 +207,7 @@
         [required]="internalInstitutionDetailPositionField">
       </label>
 
-      <app-form-help-field content="Registrar conforme se detalla en el convenio"></app-form-help-field>
+      <app-form-help-field content="Registrar conforme se detalla en el convenio"/>
 
       <!--      <p-listbox-->
       <!--        id="internalPosition"-->
@@ -263,8 +263,16 @@
 <p-dialog
   [(visible)]="isVisibleExternalInstitutionForm"
   [modal]="true"
-  [style]="{width: '50rem'}"
-  header="Agregar">
+  [style]="{width: '50rem'}">
+
+  <ng-template pTemplate="header">
+    <h3>
+      Agregar
+
+      <app-form-help-field content="Registrar conforme se detalla en el convenio"/>
+    </h3>
+  </ng-template>
+
   <ng-template pTemplate="content">
     <form [formGroup]="externalInstitutionForm" class="p-fluid grid">
       <!-- name -->
@@ -273,8 +281,6 @@
                [label]="ExternalInstitutionsFormEnum.name"
                [required]="externalInstitutionNameField">
         </label>
-
-        <app-form-help-field content="Registro texto tipo oración."></app-form-help-field>
 
         <p-dropdown
           id="name"
@@ -425,28 +431,6 @@
   header="Contraparte">
   <ng-template pTemplate="content">
     <form [formGroup]="externalInstitutionDetailForm" class="p-fluid grid">
-      <!-- position -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-        <label
-          appLabel
-          for="externalPosition1"
-          [label]="ExternalInstitutionsFormEnum.position"
-          [required]="externalInstitutionDetailPositionField">
-        </label>
-
-        <input
-          pInputText
-          id="externalPosition1"
-          formControlName="position"/>
-
-        <small
-          appErrorMessage
-          [errors]="externalInstitutionDetailPositionField.errors"
-          [touched]="externalInstitutionDetailPositionField.touched"
-          [dirty]="externalInstitutionDetailPositionField.dirty">
-        </small>
-      </div>
-
       <!-- unit -->
       <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
@@ -466,6 +450,28 @@
           [errors]="externalInstitutionDetailUnitField.errors"
           [touched]="externalInstitutionDetailUnitField.touched"
           [dirty]="externalInstitutionDetailUnitField.dirty">
+        </small>
+      </div>
+
+      <!-- position -->
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="externalPosition1"
+          [label]="ExternalInstitutionsFormEnum.position"
+          [required]="externalInstitutionDetailPositionField">
+        </label>
+
+        <input
+          pInputText
+          id="externalPosition1"
+          formControlName="position"/>
+
+        <small
+          appErrorMessage
+          [errors]="externalInstitutionDetailPositionField.errors"
+          [touched]="externalInstitutionDetailPositionField.touched"
+          [dirty]="externalInstitutionDetailPositionField.dirty">
         </small>
       </div>
     </form>

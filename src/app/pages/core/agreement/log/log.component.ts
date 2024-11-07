@@ -92,7 +92,6 @@ export class LogComponent implements OnInit {
       this.items = response;
 
       if (this.items.length > 0) {
-        console.log()
         this.agreement = this.items[0].agreementLog?.agreement!;
       }
     });

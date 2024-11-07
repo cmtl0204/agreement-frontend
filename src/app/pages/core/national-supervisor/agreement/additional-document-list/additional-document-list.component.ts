@@ -100,7 +100,7 @@ export class AdditionalDocumentListComponent implements OnInit {
   }
 
   findAdditionalDocumentsByAgreement() {
-    this.trackingLogsHttpService.findAdditionalDocumentsByAgreement(this.agreementId)
+    this.trackingLogsHttpService.findExecutionAdditionalDocumentsByAgreement(this.agreementId)
       .subscribe((response) => {
         this.items = response;
       });
@@ -178,7 +178,7 @@ export class AdditionalDocumentListComponent implements OnInit {
       formData.append('evidence', this.evidenceFileField.value);
       formData.append('detail', this.detailField.value);
 
-      this.trackingLogsHttpService.createAdditionalDocument(this.agreementId, formData).subscribe(response => {
+      this.trackingLogsHttpService.createExecutionAdditionalDocument(this.agreementId, formData).subscribe(response => {
         this.findAdditionalDocumentsByAgreement();
         this.isVisibleFilesModal = false;
       });

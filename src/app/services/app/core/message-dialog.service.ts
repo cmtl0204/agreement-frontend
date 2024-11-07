@@ -94,7 +94,7 @@ export class MessageDialogService {
 
     this._modalVisible = true;
     this._modalAcceptSeverity = 'info';
-    this._modalTitle = 'Existen errores en los siguientes campos';
+    this._modalTitle = 'Falta completar o existen errores en los siguientes campos';
     this._modalMessage = message;
   }
 

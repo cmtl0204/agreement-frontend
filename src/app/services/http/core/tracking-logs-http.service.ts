@@ -33,8 +33,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  createPeriod(agreementId: string): Observable<PeriodModel> {
-    const url = `${this.API_URL}/${agreementId}/periods`;
+  createExecutionPeriod(agreementId: string): Observable<PeriodModel> {
+    const url = `${this.API_URL}/execution/${agreementId}/periods`;
 
     return this.httpClient.post<ServerResponse>(url, null).pipe(
       map(response => {
@@ -44,8 +44,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  findPeriodsByAgreement(agreementId: string): Observable<PeriodModel[]> {
-    const url = `${this.API_URL}/${agreementId}/periods`;
+  findExecutionPeriodsByAgreement(agreementId: string): Observable<PeriodModel[]> {
+    const url = `${this.API_URL}/execution/${agreementId}/periods`;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
@@ -65,8 +65,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  createAdditionalDocument(id: string, formData: FormData): Observable<AgreementModel> {
-    const url = `${this.API_URL}/${id}/additional-documents`;
+  createExecutionAdditionalDocument(id: string, formData: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/execution/${id}/additional-documents`;
 
     return this.httpClient.post<ServerResponse>(url, formData).pipe(
       map(response => {
@@ -91,8 +91,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  findAdditionalDocumentsByAgreement(agreementId: string): Observable<AdditionalDocumentModel[]> {
-    const url = `${this.API_URL}/${agreementId}/additional-documents`;
+  findExecutionAdditionalDocumentsByAgreement(agreementId: string): Observable<AdditionalDocumentModel[]> {
+    const url = `${this.API_URL}/execution/${agreementId}/additional-documents`;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {

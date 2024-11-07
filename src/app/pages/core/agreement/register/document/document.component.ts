@@ -157,11 +157,22 @@ export class DocumentComponent implements OnInit {
   }
 
   removeFile(index: number, item: FileModel) {
-    this.filesHttpService.remove(item.id!).subscribe(response => {
-      this.formInput.enablingDocuments.splice(index, 1);
-      this.types.push(item.type!);
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: '¿Está seguro de eliminar de manera definitiva el archivo?',
+      header: '',
+      icon: PrimeIcons.TRASH,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.filesHttpService.remove(item.id!).subscribe(response => {
+          this.formInput.enablingDocuments.splice(index, 1);
+          this.types.push(item.type!);
 
-      this.form.patchValue(this.formInput.enablingDocuments);
+          this.form.patchValue(this.formInput.enablingDocuments);
+        });
+      }
     });
   }
 

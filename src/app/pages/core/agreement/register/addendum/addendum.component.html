@@ -11,7 +11,8 @@
       [label]="AgreementFormEnum.isAddendum"
       [required]="isAddendumField"></label>
 
-    <app-input-switch id="isAddendum" formControlName="isAddendum" class="ml-2"/>
+<!--    {{isAddendumField.disabled}}-->
+    <app-input-switch id="isAddendum" formControlName="isAddendum" class="ml-2" [disabled]="isAddendumField.disabled"/>
 
     @if (formInput.addendums.length > 0) {
       <p>
@@ -103,7 +104,7 @@
         </small>
       </div>
 
-      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
           for="file"
@@ -122,6 +123,7 @@
           [auto]="true"
           [customUpload]="true"
           (uploadHandler)="uploadAddendumFile($event,uploadFiles)"/>
+
         <small
           appErrorMessage
           [errors]="fileField.errors"
@@ -131,7 +133,7 @@
       </div>
 
       @if (fileField.value) {
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
           <p-messages severity="info">
             <ng-template pTemplate>
               <i [class]="PrimeIcons.FILE_PDF"></i>
@@ -155,6 +157,6 @@
       [icon]="IconButtonActionEnum.ADD"
       [label]="LabelButtonActionEnum.ADD"
       [severity]="SeverityButtonActionEnum.ADD"
-      (click)="onUpload()"></p-button>
+      (click)="onUpload()"/>
   </ng-template>
 </p-dialog>

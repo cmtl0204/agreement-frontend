@@ -147,6 +147,7 @@ export class AddendumComponent implements OnInit {
     this.formErrors = [];
 
     if (this.descriptionField.invalid) this.formErrors.push(AddendumEnum.description);
+    if (this.fileField.invalid) this.formErrors.push(AddendumEnum.file);
 
     return this.formErrors.length === 0
   }

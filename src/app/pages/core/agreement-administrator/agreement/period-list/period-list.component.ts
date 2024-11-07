@@ -113,7 +113,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   findPeriodsByAgreement() {
-    this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId)
+    this.trackingLogsHttpService.findExecutionPeriodsByAgreement(this.agreementId)
       .subscribe((response) => {
         this.items = response;
       });
@@ -124,7 +124,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   createPeriod() {
-    this.trackingLogsHttpService.createPeriod(this.agreementId)
+    this.trackingLogsHttpService.createExecutionPeriod(this.agreementId)
       .subscribe((response) => {
         this.findPeriodsByAgreement();
       });
@@ -231,6 +231,11 @@ export class PeriodListComponent implements OnInit {
     uploadFiles.clear();
   }
 
+  closeModal(){
+    this.isVisibleFilesModal=false;
+    this.reportFileField.setValue(null);
+    this.evidenceFileField.setValue(null);
+  }
   get reportFileField(): AbstractControl {
     return this.form.controls['reportFile'];
   }
