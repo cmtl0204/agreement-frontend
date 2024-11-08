@@ -6,9 +6,13 @@ import {format} from "date-fns";
 })
 export class CustomFormatDatePipe implements PipeTransform {
 
-  transform(value: Date | null): string {
-    if (value ) {
-      return format(value,'dd/MM/yyyy');
+  transform(value: Date | null | string): string {
+    if (value?.toString().search('T') === -1) {
+      value = value + 'T05:00:00';
+    }
+
+    if (value) {
+      return format(value, 'dd/MM/yyyy');
     }
 
     return '';
