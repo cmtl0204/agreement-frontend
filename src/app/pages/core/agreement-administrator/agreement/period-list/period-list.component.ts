@@ -24,7 +24,7 @@ import {
   TableEnum,
   AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum
 } from '@shared/enums';
-import {PrimeIcons, MenuItem} from 'primeng/api';
+import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
 
@@ -38,6 +38,7 @@ export class PeriodListComponent implements OnInit {
   // Services
   protected readonly authService = inject(AuthService);
   protected readonly coreService = inject(CoreService);
+  private readonly confirmationService = inject(ConfirmationService);
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
@@ -194,17 +195,29 @@ export class PeriodListComponent implements OnInit {
 
   onUpload() {
     if (this.validateFilesForm()) {
-      const formData = new FormData();
+      this.confirmationService.confirm({
+        key: 'confirmDialog',
+        message: '¿Está seguro de subir los archivos?',
+        header: '',
+        icon: PrimeIcons.QUESTION_CIRCLE,
+        acceptLabel: "Si",
+        rejectLabel: "No",
+        rejectButtonStyleClass: "p-button-text",
+        accept: () => {
+          const formData = new FormData();
 
-      formData.append('report', this.reportFileField.value);
-      formData.append('evidence', this.evidenceFileField.value);
+          formData.append('report', this.reportFileField.value);
+          formData.append('evidence', this.evidenceFileField.value);
 
-      this.trackingLogsHttpService.createTrackingLog(this.selectedItem.id!, formData).subscribe(response => {
-        this.findPeriodsByAgreement();
-        this.isVisibleFilesModal = false;
-        this.reportFileField.setValue(null);
-        this.evidenceFileField.setValue(null);
+          this.trackingLogsHttpService.createExecutionTrackingLog(this.selectedItem.id!, formData).subscribe(response => {
+            this.findPeriodsByAgreement();
+            this.isVisibleFilesModal = false;
+            this.reportFileField.setValue(null);
+            this.evidenceFileField.setValue(null);
+          });
+        }
       });
+
     } else {
       this.messageDialogService.fieldErrors(this.formErrors);
     }

@@ -78,12 +78,12 @@
               @case ('trafficLight') {
                 @if (rowData.trackingLog) {
                   @if (rowData.trackingLog.state.code === 'REPORTED' || rowData.trackingLog.state.code === 'ACCEPTED') {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 1.5rem"></i>
+                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 3rem"></i>
                   } @else {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
+                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
                   }
                 } @else {
-                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 1.5rem"></i>
+                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
                 }
               }
               @case ('name') {
@@ -135,109 +135,6 @@
 </app-button-action>
 
 <app-additional-document-list [agreementId]="agreementId"/>
-
-<p-dialog
-  [(visible)]="isVisibleFilesModal"
-  [modal]="true"
-  [style]="{width: '50rem'}"
-  header="Agregar">
-  <ng-template pTemplate="content">
-    <div class="p-fluid grid">
-      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label
-          appLabel
-          for="report"
-          [label]="AddendumEnum.file"
-          [required]="reportFileField"></label>
-
-        <p-fileUpload
-          #uploadFiles
-          id="report"
-          mode="basic"
-          chooseLabel="Cargar"
-          [chooseIcon]="PrimeIcons.UPLOAD"
-          name="files[]"
-          accept=".pdf,.zip,.rar"
-          maxFileSize="5242880"
-          [auto]="true"
-          [customUpload]="true"
-          (uploadHandler)="uploadReportFile($event,uploadFiles)"/>
-
-        <small
-          appErrorMessage
-          [errors]="reportFileField.errors"
-          [touched]="reportFileField.touched"
-          [dirty]="reportFileField.dirty">
-        </small>
-      </div>
-
-      @if (reportFileField.value) {
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <p-messages severity="info">
-            <ng-template pTemplate>
-              <i [class]="PrimeIcons.FILE_PDF"></i>
-              <div class="ml-2">{{ reportFileField.value?.name }}</div>
-            </ng-template>
-          </p-messages>
-        </div>
-      }
-
-      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label
-          appLabel
-          for="evidence"
-          [label]="AddendumEnum.file"
-          [required]="evidenceFileField"></label>
-
-        <p-fileUpload
-          #uploadFiles
-          id="evidence"
-          mode="basic"
-          chooseLabel="Cargar"
-          [chooseIcon]="PrimeIcons.UPLOAD"
-          name="files[]"
-          accept=".pdf,.zip,.rar"
-          maxFileSize="5242880"
-          [auto]="true"
-          [customUpload]="true"
-          (uploadHandler)="uploadEvidenceFile($event,uploadFiles)"/>
-
-        <small
-          appErrorMessage
-          [errors]="evidenceFileField.errors"
-          [touched]="evidenceFileField.touched"
-          [dirty]="evidenceFileField.dirty">
-        </small>
-      </div>
-
-      @if (evidenceFileField.value) {
-        <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-          <p-messages severity="info">
-            <ng-template pTemplate>
-              <i [class]="PrimeIcons.FILE_PDF"></i>
-              <div class="ml-2">{{ evidenceFileField.value?.name }}</div>
-            </ng-template>
-          </p-messages>
-        </div>
-      }
-    </div>
-  </ng-template>
-
-  <ng-template pTemplate="footer">
-    <p-button
-      [label]="LabelButtonActionEnum.CANCEL"
-      [icon]="IconButtonActionEnum.CANCEL"
-      [text]="true"
-      [severity]="SeverityButtonActionEnum.CANCEL"
-      (click)="isVisibleFilesModal=false"/>
-
-    <p-button
-      [icon]="IconButtonActionEnum.ADD"
-      [label]="LabelButtonActionEnum.ADD"
-      [severity]="SeverityButtonActionEnum.ADD"
-      (click)="onUpload()"/>
-  </ng-template>
-</p-dialog>
 
 <p-dialog
   [(visible)]="isVisibleTrackingLogModal"

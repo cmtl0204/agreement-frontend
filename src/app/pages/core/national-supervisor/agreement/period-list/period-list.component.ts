@@ -178,21 +178,6 @@ export class PeriodListComponent implements OnInit {
     this.filesHttpService.downloadFile(file);
   }
 
-  onUpload() {
-    if (this.validateFilesForm()) {
-      const formData = new FormData();
-
-      formData.append('report', this.reportFileField.value);
-      formData.append('evidence', this.evidenceFileField.value);
-
-      this.trackingLogsHttpService.createTrackingLog(this.selectedItem.id!, formData).subscribe(response => {
-
-      });
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
   validateFilesForm() {
     this.formErrors = [];
 

@@ -54,8 +54,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  createTrackingLog(id: string, formData: FormData): Observable<AgreementModel> {
-    const url = `${this.API_URL}/${id}`;
+  createExecutionTrackingLog(periodId: string, formData: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/execution/${periodId}`;
 
     return this.httpClient.post<ServerResponse>(url, formData).pipe(
       map(response => {

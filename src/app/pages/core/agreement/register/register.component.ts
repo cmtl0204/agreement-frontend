@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
 
   constructor() {
     this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
       {label: BreadcrumbEnum.AGREEMENTS_REGISTER},
     ]);
 
@@ -222,6 +222,13 @@ export class RegisterComponent implements OnInit {
   }
 
   finish() {
+    console.log(this.form.value);
+    console.log(this.agreementsService.agreement);
+    if (this.form.value.isAddendum && this.form.value.addendums.length === 0) {
+      this.messageDialogService.errorCustom('Error Adendas', 'Su mensaje va aquí');
+      return;
+    }
+
     this.agreementsHttpService.finish(this.idField.value).subscribe(response => {
       this.agreementsService.clearAgreement();
 
