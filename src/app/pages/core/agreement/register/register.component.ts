@@ -223,7 +223,7 @@ export class RegisterComponent implements OnInit {
 
   finish() {
     if (this.form.value.isAddendum && this.form.value.addendums.length === 0) {
-      this.messageDialogService.errorCustom('Error Adendas', 'Su mensaje va aquí');
+      this.messageDialogService.errorCustom('Completar', 'Por favor, completar el registro del anexo de la adenda');
       return;
     }
 
