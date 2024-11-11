@@ -34,7 +34,9 @@
         [chooseIcon]="PrimeIcons.UPLOAD"
         name="files[]"
         accept=".pdf"
-        maxFileSize="5242880"
+        invalidFileSizeMessageDetail=""
+        [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+        [maxFileSize]="FileEnum.maxFileSize"
         [auto]="true"
         [customUpload]="true"
         (uploadHandler)="uploadFile($event,uploadFiles,type)"/>

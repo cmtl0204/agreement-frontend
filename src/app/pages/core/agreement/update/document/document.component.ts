@@ -2,7 +2,7 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from "@models/core";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {
-  CatalogueTypeEnum,
+  CatalogueTypeEnum, FileEnum,
   FileFormEnum,
   IconButtonActionEnum,
   LabelButtonActionEnum,
@@ -188,4 +188,6 @@ export class DocumentComponent implements OnInit {
   get fileField(): AbstractControl {
     return this.fileForm.controls['myFile'];
   }
+
+  protected readonly FileEnum = FileEnum;
 }

@@ -16,13 +16,13 @@ import {
   TrackingLogsHttpService
 } from '@servicesHttp/core';
 import {
-  IconButtonActionEnum,
-  SeverityButtonActionEnum,
-  LabelButtonActionEnum,
-  BreadcrumbEnum,
-  IdButtonActionEnum,
-  TableEnum,
-  AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum
+    IconButtonActionEnum,
+    SeverityButtonActionEnum,
+    LabelButtonActionEnum,
+    BreadcrumbEnum,
+    IdButtonActionEnum,
+    TableEnum,
+    AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum, FileEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -259,4 +259,5 @@ export class PeriodListComponent implements OnInit {
 
   protected readonly CatalogueTrackingLogsStateEnum = CatalogueTrackingLogsStateEnum;
   protected readonly PeriodEnum = PeriodEnum;
+    protected readonly FileEnum = FileEnum;
 }

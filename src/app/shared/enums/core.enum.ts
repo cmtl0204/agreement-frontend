@@ -8,3 +8,8 @@ export enum TableEnum {
   ACTIONS = 'Detalle',
   SEARCH = 'Buscar...',
 }
+
+export enum FileEnum {
+  maxFileSize = 5242880,
+  invalidFileSizeMessageSummary = 'El tamaño del archivo ha superado el máximo permitido (5MB)'
+}

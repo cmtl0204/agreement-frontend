@@ -6,7 +6,7 @@ import {AddendumsHttpService, AgreementsHttpService, CataloguesHttpService} from
 import {
   AddendumEnum,
   AgreementFormEnum,
-  CatalogueTypeEnum,
+  CatalogueTypeEnum, FileEnum,
   IconButtonActionEnum,
   LabelButtonActionEnum,
   SeverityButtonActionEnum,
@@ -226,4 +226,6 @@ export class AddendumComponent implements OnInit {
   get fileField(): AbstractControl {
     return this.addendumForm.controls['file'];
   }
+
+  protected readonly FileEnum = FileEnum;
 }

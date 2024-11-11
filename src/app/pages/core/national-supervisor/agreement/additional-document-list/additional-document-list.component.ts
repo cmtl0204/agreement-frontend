@@ -20,7 +20,7 @@ import {
   BreadcrumbEnum,
   IdButtonActionEnum,
   TableEnum,
-  AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum, AdditionalDocumentEnum
+  AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum, AdditionalDocumentEnum, FileEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -222,4 +222,5 @@ export class AdditionalDocumentListComponent implements OnInit {
 
   protected readonly CatalogueTrackingLogsStateEnum = CatalogueTrackingLogsStateEnum;
   protected readonly AdditionalDocumentEnum = AdditionalDocumentEnum;
+  protected readonly FileEnum = FileEnum;
 }
