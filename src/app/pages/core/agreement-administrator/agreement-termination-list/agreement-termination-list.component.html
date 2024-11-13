@@ -1,0 +1,100 @@
+<p-panel>
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <app-header-form
+        label="Registro"
+        [icon]="PrimeIcons.PENCIL"/>
+    </div>
+
+    <div class="p-toolbar-group-right">
+      @if (!closingNotification) {
+        <app-form-button-action
+          labelSubmitButton="Notificar"
+          (submit)="onSubmit()"
+          [iconSubmitButton]="PrimeIcons.SEND"
+          [isVisibleCancelButton]="false"
+        />
+      }
+    </div>
+  </p-toolbar>
+
+  <p-divider/>
+
+  <form [formGroup]="form" class="p-fluid grid">
+    <!-- closeType -->
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <label
+        appLabel
+        for="closeType"
+        [label]="ClosingNotificationEnum.closeType"
+        [required]="closeTypeField"></label>
+
+      <p-dropdown
+        id="closeType"
+        formControlName="closeType"
+        dataKey="id"
+        [options]="closeTypes"
+        placeholder="Selecione">
+        <ng-template pTemplate="selectedItem" let-selectedItem>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedItem.name }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ item.name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+      <small
+        appErrorMessage
+        [errors]="closeTypeField.errors"
+        [touched]="closeTypeField.touched"
+        [dirty]="closeTypeField.dirty">
+      </small>
+    </div>
+
+    <!-- closedAt -->
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <label
+        appLabel
+        for="closedAt"
+        [label]="ClosingNotificationEnum.closedAt"
+        [required]="closedAtField"></label>
+
+      <p-calendar
+        id="closedAt"
+        formControlName="closedAt"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        [inline]="true"
+        dateFormat="dd/mm/yy"/>
+
+      <small
+        appErrorMessage
+        [errors]="closedAtField.errors"
+        [touched]="closedAtField.touched"
+        [dirty]="closedAtField.dirty">
+      </small>
+    </div>
+
+    <!-- closeDetail -->
+    <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <label
+        appLabel
+        for="closeDetail"
+        [label]="ClosingNotificationEnum.closeDetail"
+        [required]="closeDetailField"></label>
+
+      <textarea pInputTextarea id="closeDetail" formControlName="closeDetail"></textarea>
+
+      <small
+        appErrorMessage
+        [errors]="closeDetailField.errors"
+        [touched]="closeDetailField.touched"
+        [dirty]="closeDetailField.dirty">
+      </small>
+    </div>
+  </form>
+</p-panel>

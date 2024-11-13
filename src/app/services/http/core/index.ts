@@ -7,3 +7,4 @@ export {AgreementLogsHttpService} from './agreement-logs-http.service';
 export {AdministratorsHttpService} from './administrators-http.service';
 export {PeriodsHttpService} from './periods-http.service';
 export {TrackingLogsHttpService} from './tracking-logs-http.service';
+export {ClosingNotificationsHttpService} from './closing-notifications-http.service';

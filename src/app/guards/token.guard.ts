@@ -11,7 +11,8 @@ export const TokenGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  routesService.unauthenticated();
+  authService.removeLogin();
+  routesService.login();
 
   return false;
 }

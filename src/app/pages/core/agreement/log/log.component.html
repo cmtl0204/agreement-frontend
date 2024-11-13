@@ -24,14 +24,18 @@
     </ng-template>
 
     <ng-template pTemplate="content">
-      <p><b>Número Interno Convenio:</b> {{ agreement?.internalNumber }}</p>
-      <p><b>Nombre del Convenio:</b> {{ agreement?.name }}</p>
-      <p>
-        <b>Unidad Administradora:</b>
-        {{ agreement?.administrator?.unit?.name }}
-      </p>
-      <p><b>Cargo Unidad Administradora:</b> {{ agreement?.administrator?.position?.name }}</p>
-
+      <p><b>Número Interno Convenio:</b> {{ agreement.internalNumber }}</p>
+      <p><b>Nombre del Convenio:</b> {{ agreement.name }}</p>
+      @if (agreement.administrator) {
+        <p>
+          <b>Unidad Administradora:</b>
+          {{ agreement.administrator.unit.name }}
+        </p>
+        <p>
+          <b>Cargo Unidad Administradora:</b>
+          {{ agreement.administrator.position.name }}
+        </p>
+      }
       <p-table
         [value]="items"
         sortField="property"

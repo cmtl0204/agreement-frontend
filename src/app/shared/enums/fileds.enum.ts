@@ -182,3 +182,10 @@ export enum AdditionalDocumentEnum {
   reportFile = 'Archivo',
   evidenceFile = 'Evidencias',
 }
+
+export enum ClosingNotificationEnum {
+  header = 'NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO',
+  closedAt = 'Fecha de terminación',
+  closeDetail = 'Detalle inicio del proceso cierre',
+  closeType = 'Tipo de terminación del convenio',
+}

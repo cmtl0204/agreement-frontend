@@ -6,7 +6,8 @@
       [label]="AgreementFormEnum.isFinancing"
       [required]="isFinancingField"></label>
 
-    <app-input-switch id="isFinancing"  formControlName="isFinancing" class="ml-2" [disabled]="isFinancingField.disabled"/>
+    <app-input-switch id="isFinancing" formControlName="isFinancing" class="ml-2"
+                      [disabled]="isFinancingField.disabled"/>
   </div>
 </form>
 
@@ -58,7 +59,7 @@
                   appendTo="body">
                   <ng-template pTemplate="selectedItem" let-selectedItem>
                     <div class="flex align-items-center gap-2">
-                      <div>{{ selectedItem}}</div>
+                      <div>{{ selectedItem }}</div>
                     </div>
                   </ng-template>
                   <ng-template let-item pTemplate="item">
@@ -99,12 +100,12 @@
 
 <p-dialog
   [(visible)]="isVisibleFinancingForm"
-  [modal]="true"
-  [style]="{width: '50rem', height: '50rem'}">
+  [modal]="true">
 
   <ng-template pTemplate="header">
-    <h3>Agregar</h3>
-    <app-form-help-field content="Llenar campos conforme señala convenio."></app-form-help-field>
+    <h3>Agregar
+      <app-form-help-field content="Llenar campos conforme señala convenio."/>
+    </h3>
   </ng-template>
 
   <ng-template pTemplate="content">
@@ -119,21 +120,22 @@
           [required]="institutionNameField">
         </label>
 
-<!--        <p-listbox-->
-<!--          id="combinedInstitution"-->
-<!--          [options]="combinedInstitutions"-->
-<!--          formControlName="institutionName"-->
-<!--          [filter]="true"-->
-<!--          [listStyle]="{'max-height': '150px'}"/>-->
+        <!--        <p-listbox-->
+        <!--          id="combinedInstitution"-->
+        <!--          [options]="combinedInstitutions"-->
+        <!--          formControlName="institutionName"-->
+        <!--          [filter]="true"-->
+        <!--          [listStyle]="{'max-height': '150px'}"/>-->
 
         <p-dropdown
           id="combinedInstitution"
           formControlName="institutionName"
           [options]="combinedInstitutions"
-          placeholder="Selecione">
+          placeholder="Selecione"
+          appendTo="body">
           <ng-template pTemplate="selectedItem" let-selectedItem>
             <div class="flex align-items-center gap-2">
-              <div>{{ selectedItem}}</div>
+              <div>{{ selectedItem }}</div>
             </div>
           </ng-template>
           <ng-template let-item pTemplate="item">
@@ -153,7 +155,7 @@
       </div>
 
       <!-- budget  -->
-      <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
           for="budget"
@@ -177,7 +179,7 @@
       </div>
 
       <!-- paymentMethod  -->
-      <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
           for="paymentMethod"
@@ -199,7 +201,7 @@
       </div>
 
       <!-- source  -->
-      <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
         <label
           appLabel
           for="source"

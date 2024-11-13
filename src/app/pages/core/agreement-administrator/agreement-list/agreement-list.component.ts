@@ -121,25 +121,19 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
         },
       },
+      {
+        id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT,
+        label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT,
+        icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT,
+        command: () => {
+          if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+        },
+      },
     ];
   }
 
   validateButtonActions(item: AgreementModel): void {
     this.buildButtonActions();
-  }
-
-  redirectCreateForm() {
-    this.agreementsService.clearAgreement();
-
-    this.router.navigate(['/core/agreements', 'register']);
-  }
-
-  redirectCompleteForm(item: AgreementModel) {
-    this.router.navigate(['/core/agreements', 'register']);
-  }
-
-  redirectEditForm(id: string) {
-    this.router.navigate(['/core/agreements/update', id]);
   }
 
   redirectViewAgreement() {
@@ -148,6 +142,10 @@ export class AgreementListComponent implements OnInit {
 
   redirectTrackingLogList(id: string) {
     this.router.navigate(['/core/agreement-administrator/period-list', id]);
+  }
+
+  redirectAgreementTerminationList(id: string) {
+    this.router.navigate(['/core/agreement-administrator/agreement-termination-list', id]);
   }
 
   remove(id: string) {

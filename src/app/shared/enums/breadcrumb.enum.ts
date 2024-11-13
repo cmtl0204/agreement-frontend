@@ -8,5 +8,6 @@ export enum BreadcrumbEnum {
   ADDITIONAL_DOCUMENTS = 'Registro de avance adicional de ejecución de convenio',
   AGREEMENTS_REGISTER = 'Registrar Convenio',
   AGREEMENTS_LOG = 'Bitácora del convenio',
-  TRACKING_LOGS = 'Bitácora del periodo'
+  TRACKING_LOGS = 'Bitácora del periodo',
+  CLOSING_NOTIFICATION = 'Notificación inicio del proceso de cierre del convenio'
   }
