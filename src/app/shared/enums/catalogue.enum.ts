@@ -78,3 +78,10 @@ export enum CatalogueAgreementStatesStateEnum {
   CLOSING_PROCESS = 'CLOSING_PROCESS',
   CLOSED = 'CLOSED',
 }
+
+export enum CatalogueClosingNotificationsCloseTypeEnum {
+  MUTUAL = 'MUTUAL',
+  UNILATERAL = 'UNILATERAL',
+  TERM = 'TERM',
+  OBJECT = 'OBJECT',
+}

@@ -12,11 +12,12 @@ import {
   RoleEnum,
   CatalogueAgreementsOriginEnum,
   CatalogueAgreementStatesStateEnum,
-  ClosingNotificationEnum, BreadcrumbEnum
+  ClosingNotificationEnum, BreadcrumbEnum, CatalogueClosingNotificationsCloseTypeEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
 import {verifyAgreementInternalNumber} from "@shared/validators";
-import {PrimeIcons} from "primeng/api";
+import {ConfirmationService, PrimeIcons} from "primeng/api";
+import {getFormattedDate} from "@shared/helpers";
 
 @Component({
   selector: 'app-agreement-termination-list',
@@ -28,6 +29,7 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly authService = inject(AuthService);
   protected readonly breadcrumbService = inject(BreadcrumbService);
   protected readonly agreementsHttpService = inject(AgreementsHttpService);
+  private readonly confirmationService = inject(ConfirmationService);
   protected readonly closingNotificationsHttpService = inject(ClosingNotificationsHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
@@ -70,6 +72,7 @@ export class AgreementTerminationListComponent implements OnInit {
   /* Form Builder & Validates */
   buildForm() {
     this.form = this.formBuilder.group({
+      id: [null],
       agreementId: [null, Validators.required],
       closedAt: [null, Validators.required],
       closeDetail: [null, Validators.required],
@@ -78,17 +81,36 @@ export class AgreementTerminationListComponent implements OnInit {
   }
 
   createClosingNotification() {
-    this.closingNotificationsHttpService.findClosingNotificationByAgreement(this.agreementId).subscribe(response => {
-      this.closingNotification = response;
+    this.agreementIdField.setValue(this.agreementId);
+
+    this.closingNotificationsHttpService.createClosingNotificationByAgreement(this.form.value).subscribe(response => {
+      this.findClosingNotificationByAgreement();
+    });
+  }
+
+  updateClosedAt() {
+    this.closingNotificationsHttpService.updateClosedAt(this.idField.value, this.closedAtField.value).subscribe(response => {
+      this.findClosingNotificationByAgreement();
     });
   }
 
   findClosingNotificationByAgreement() {
     this.closingNotificationsHttpService.findClosingNotificationByAgreement(this.agreementId).subscribe(response => {
-      if (response)
+      if (response) {
         this.closingNotification = response;
-      else
-        this.form.disable();
+        this.form.patchValue(response);
+
+        if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.MUTUAL
+          || this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.OBJECT
+          || this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.UNILATERAL) {
+          this.form.disable();
+        }
+
+        if (response.closedAt) {
+          this.closedAtField.setValue(getFormattedDate(response.closedAt));
+          this.form.disable();
+        }
+      }
     });
   }
 
@@ -104,7 +126,38 @@ export class AgreementTerminationListComponent implements OnInit {
 
   onSubmit(): void {
     if (this.validateForm()) {
-      this.createClosingNotification();
+      this.confirmationService.confirm({
+        key: 'confirmDialog',
+        message: '¿Está seguro de notificar la terminiación del convenio?',
+        header: '',
+        icon: PrimeIcons.QUESTION_CIRCLE,
+        acceptLabel: "Si",
+        rejectLabel: "No",
+        rejectButtonStyleClass: "p-button-text",
+        accept: () => {
+          this.createClosingNotification();
+        }
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  onUpdate(): void {
+    if (this.validateForm()) {
+      this.confirmationService.confirm({
+        key: 'confirmDialog',
+        message: '¿Está seguro de notificar la terminiación del convenio?',
+        header: '',
+        icon: PrimeIcons.QUESTION_CIRCLE,
+        acceptLabel: "Si",
+        rejectLabel: "No",
+        rejectButtonStyleClass: "p-button-text",
+        accept: () => {
+          this.createClosingNotification();
+        }
+      });
     } else {
       this.form.markAllAsTouched();
       this.messageDialogService.fieldErrors(this.formErrors);
@@ -117,6 +170,14 @@ export class AgreementTerminationListComponent implements OnInit {
   };
 
   /* Getters Form*/
+  get idField(): AbstractControl {
+    return this.form.controls['id'];
+  }
+
+  get agreementIdField(): AbstractControl {
+    return this.form.controls['agreementId'];
+  }
+
   get closedAtField(): AbstractControl {
     return this.form.controls['closedAt'];
   }
@@ -128,4 +189,7 @@ export class AgreementTerminationListComponent implements OnInit {
   get closeTypeField(): AbstractControl {
     return this.form.controls['closeType'];
   }
+
+  protected readonly CatalogueAgreementsTypeEnum = CatalogueAgreementsTypeEnum;
+  protected readonly CatalogueClosingNotificationsCloseTypeEnum = CatalogueClosingNotificationsCloseTypeEnum;
 }

@@ -27,6 +27,7 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {AgreementTerminationListComponent} from './agreement-termination-list/agreement-termination-list.component';
 import {CalendarModule} from "primeng/calendar";
 import {PanelModule} from "primeng/panel";
+import {PeriodClosingListComponent} from "./period-closing-list/period-closing-list.component";
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import {PanelModule} from "primeng/panel";
     PeriodListComponent,
     TrackingLogListComponent,
     AdditionalDocumentListComponent,
-    AgreementTerminationListComponent
+    AgreementTerminationListComponent,
+    PeriodClosingListComponent
   ],
   imports: [
     CommonModule,

@@ -4,7 +4,7 @@ import {debounceTime, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
 import {ServerResponse} from '@models/http-response';
-import {MessageDialogService, MessageService} from '@servicesApp/core';
+import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
 import {AgreementModel, CatalogueModel, ClosingNotificationModel, PeriodModel} from '@models/core';
 import {CatalogueTypeEnum} from "@shared/enums";
 
@@ -14,6 +14,7 @@ import {CatalogueTypeEnum} from "@shared/enums";
 export class ClosingNotificationsHttpService {
   private readonly API_URL = `${environment.API_URL}/closing-notifications`;
   private readonly httpClient = inject(HttpClient);
+  private readonly coreService = inject(CoreService);
   private readonly messageService = inject(MessageService);
   private readonly messageDialogService = inject(MessageDialogService);
 
@@ -32,4 +33,31 @@ export class ClosingNotificationsHttpService {
     );
   }
 
+  createClosingNotificationByAgreement(payload: ClosingNotificationModel): Observable<ClosingNotificationModel> {
+    const url = `${this.API_URL}`;
+
+    this.coreService.isProcessing = true;
+
+    return this.httpClient.post<ServerResponse>(url, payload).pipe(
+      map(response => {
+        this.coreService.isProcessing = false;
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
+
+  updateClosedAt(id: string, closedAt: Date): Observable<ClosingNotificationModel> {
+    const url = `${this.API_URL}/${id}/closed-at`;
+
+    this.coreService.isProcessing = true;
+
+    return this.httpClient.patch<ServerResponse>(url, {closedAt}).pipe(
+      map(response => {
+        this.coreService.isProcessing = false;
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
 }

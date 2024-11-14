@@ -1,6 +1,6 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ColumnModel, AgreementModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
 import {
   CoreService,
@@ -35,7 +35,9 @@ import {AuthService} from "@servicesApp/auth";
 })
 export class PeriodListComponent implements OnInit {
   @Input() agreementId!: string;
+
   // Services
+  protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly authService = inject(AuthService);
   protected readonly coreService = inject(CoreService);
   protected readonly formBuilder = inject(FormBuilder);
@@ -66,6 +68,7 @@ export class PeriodListComponent implements OnInit {
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
+  protected trackingLogType!: string;
 
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
@@ -94,6 +97,10 @@ export class PeriodListComponent implements OnInit {
   ngOnInit() {
     this.findPeriodsByAgreement();
     this.loadTypes();
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.trackingLogType = params['type'];
+    });
   }
 
   buildForm() {
@@ -105,7 +112,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   findPeriodsByAgreement() {
-    this.trackingLogsHttpService.findExecutionPeriodsByAgreement(this.agreementId)
+    this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId, this.trackingLogType)
       .subscribe((response) => {
         this.items = response;
       });

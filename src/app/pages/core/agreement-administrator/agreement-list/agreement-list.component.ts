@@ -141,11 +141,13 @@ export class AgreementListComponent implements OnInit {
   }
 
   redirectTrackingLogList(id: string) {
-    this.router.navigate(['/core/agreement-administrator/period-list', id]);
+    this.router.navigate(['/core/agreement-administrator/period-list', id]
+      , {queryParams: {type: 'execution'}});
   }
 
   redirectAgreementTerminationList(id: string) {
-    this.router.navigate(['/core/agreement-administrator/agreement-termination-list', id]);
+    this.router.navigate(['/core/agreement-administrator/agreement-termination-list', id]
+      , {queryParams: {type: 'closing'}});
   }
 
   remove(id: string) {

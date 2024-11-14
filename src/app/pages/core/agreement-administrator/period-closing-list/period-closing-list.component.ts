@@ -29,11 +29,11 @@ import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
 
 @Component({
-  selector: 'app-period-list',
-  templateUrl: './period-list.component.html',
-  styleUrl: './period-list.component.scss'
+  selector: 'app-period-closing-list',
+  templateUrl: './period-closing-list.component.html',
+  styleUrl: './period-closing-list.component.scss'
 })
-export class PeriodListComponent implements OnInit {
+export class PeriodClosingListComponent implements OnInit {
   @Input() agreementId!: string;
 
   // Services
@@ -73,7 +73,7 @@ export class PeriodListComponent implements OnInit {
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
-  protected trackingLogType!: string;
+  protected trackingLogType: string = 'closing';
 
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
@@ -104,10 +104,6 @@ export class PeriodListComponent implements OnInit {
     this.findPeriodsByAgreement();
     this.findAgreement(this.agreementId);
     this.loadTypes();
-
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.trackingLogType = params['type'];
-    });
   }
 
   buildForm() {

@@ -33,8 +33,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  createExecutionPeriod(agreementId: string): Observable<PeriodModel> {
-    const url = `${this.API_URL}/execution/${agreementId}/periods`;
+  createPeriod(agreementId: string,type: string): Observable<PeriodModel> {
+    const url = `${this.API_URL}/${type}/${agreementId}/periods`;
 
     return this.httpClient.post<ServerResponse>(url, null).pipe(
       map(response => {
@@ -44,8 +44,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  findExecutionPeriodsByAgreement(agreementId: string): Observable<PeriodModel[]> {
-    const url = `${this.API_URL}/execution/${agreementId}/periods`;
+  findPeriodsByAgreement(agreementId: string, type: string): Observable<PeriodModel[]> {
+    const url = `${this.API_URL}/${type}/${agreementId}/periods`;
 
     return this.httpClient.get<ServerResponse>(url).pipe(
       map(response => {
@@ -54,8 +54,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  createExecutionTrackingLog(periodId: string, formData: FormData): Observable<AgreementModel> {
-    const url = `${this.API_URL}/execution/${periodId}`;
+  createTrackingLog(periodId: string, formData: FormData, type: string): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${type}/${periodId}`;
 
     return this.httpClient.post<ServerResponse>(url, formData).pipe(
       map(response => {
@@ -79,11 +79,11 @@ export class TrackingLogsHttpService {
   changeState(id: string, state: boolean, observation = ''): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}/state`;
 
-    const params= new HttpParams()
+    const params = new HttpParams()
       .append('state', state)
       .append('observation', observation);
 
-    return this.httpClient.patch<ServerResponse>(url, null,{params}).pipe(
+    return this.httpClient.patch<ServerResponse>(url, null, {params}).pipe(
       map(response => {
         this.messageDialogService.successHttp(response);
         return response.data;
@@ -125,7 +125,7 @@ export class TrackingLogsHttpService {
 
         downloadLink.href = filePath;
 
-        const fileName=`bitacora_ejecucion_seguimiento_${format(new Date,'yyyy_MM_dd hh_mm_ss')}.pdf`;
+        const fileName = `bitacora_ejecucion_seguimiento_${format(new Date, 'yyyy_MM_dd hh_mm_ss')}.pdf`;
 
         downloadLink.setAttribute('download', fileName);
 
