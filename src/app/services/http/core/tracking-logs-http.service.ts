@@ -33,7 +33,7 @@ export class TrackingLogsHttpService {
     );
   }
 
-  createPeriod(agreementId: string,type: string): Observable<PeriodModel> {
+  createPeriod(agreementId: string, type: string): Observable<PeriodModel> {
     const url = `${this.API_URL}/${type}/${agreementId}/periods`;
 
     return this.httpClient.post<ServerResponse>(url, null).pipe(
@@ -112,8 +112,8 @@ export class TrackingLogsHttpService {
     );
   }
 
-  downloadLog(periodId: string) {
-    const url = `${this.API_URL}/${periodId}/download`;
+  downloadLog(periodId: string, type: string) {
+    const url = `${this.API_URL}/${type}/${periodId}/download`;
 
     this.coreService.isProcessing = true;
 
