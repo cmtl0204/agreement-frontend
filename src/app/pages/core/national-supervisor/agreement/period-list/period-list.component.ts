@@ -68,7 +68,7 @@ export class PeriodListComponent implements OnInit {
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
-  protected trackingLogType!: string;
+  protected trackingLogType: string='execution';
 
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
