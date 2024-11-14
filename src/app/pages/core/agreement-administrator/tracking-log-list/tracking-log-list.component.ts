@@ -27,6 +27,7 @@ import {TrackingLogsHttpService} from "@servicesHttp/core";
 })
 export class TrackingLogListComponent implements OnInit {
   @Input() period!: PeriodModel;
+  @Input() trackingLogType!: string;
 
   // Services
   protected readonly authService = inject(AuthService);
@@ -75,6 +76,6 @@ export class TrackingLogListComponent implements OnInit {
   }
 
   downloadLog() {
-    this.trackingLogsHttpService.downloadLog(this.period.id,'execution');
+    this.trackingLogsHttpService.downloadLog(this.period.id,this.trackingLogType);
   }
 }
