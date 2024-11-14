@@ -75,6 +75,6 @@ export class TrackingLogListComponent implements OnInit {
   }
 
   downloadLog() {
-    this.trackingLogsHttpService.downloadLog(this.period.id);
+    this.trackingLogsHttpService.downloadLog(this.period.id,'execution');
   }
 }
