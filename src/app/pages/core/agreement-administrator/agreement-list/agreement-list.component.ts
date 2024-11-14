@@ -122,9 +122,9 @@ export class AgreementListComponent implements OnInit {
         },
       },
       {
-        id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT,
-        label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT,
-        icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT,
+        id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+        label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+        icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
         command: () => {
           if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
         },

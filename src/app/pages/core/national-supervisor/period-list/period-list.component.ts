@@ -29,7 +29,7 @@ import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
 
 @Component({
-  selector: 'app-agreement-list',
+  selector: 'app-period-list',
   templateUrl: './period-list.component.html',
   styleUrl: './period-list.component.scss'
 })

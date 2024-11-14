@@ -147,6 +147,14 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
         },
       },
+      {
+        id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+        label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+        icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+        command: () => {
+          if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+        },
+      },
       // {
       //   id: IdButtonActionEnum.REACTIVATE,
       //   label: LabelButtonActionEnum.REACTIVATE,
@@ -225,5 +233,10 @@ export class AgreementListComponent implements OnInit {
       this.validateButtonActions(item);
       this.agreementsService.agreement = agreement;
     });
+  }
+
+  redirectAgreementTerminationList(id: string) {
+    this.router.navigate([`/core/${this.authService.role.code}/agreement-termination-list`, id]
+      , {queryParams: {type: 'closing'}});
   }
 }

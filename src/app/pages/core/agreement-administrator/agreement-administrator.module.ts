@@ -31,38 +31,41 @@ import {PeriodClosingListComponent} from "./period-closing-list/period-closing-l
 
 
 @NgModule({
-  declarations: [
-    AgreementListComponent,
-    PeriodListComponent,
-    TrackingLogListComponent,
-    AdditionalDocumentListComponent,
-    AgreementTerminationListComponent,
-    PeriodClosingListComponent
-  ],
-  imports: [
-    CommonModule,
-    AgreementAdministratorRoutingModule,
-    SharedModule,
-    ToolbarModule,
-    ButtonModule,
-    PaginatorModule,
-    TableModule,
-    InputGroupModule,
-    TagModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    DialogModule,
-    ViewModule,
-    IconFieldModule,
-    InputIconModule,
-    FileUploadModule,
-    MessagesModule,
-    DividerModule,
-    ConfirmDialogModule,
-    InputTextareaModule,
-    CalendarModule,
-    PanelModule,
-  ],
+    declarations: [
+        AgreementListComponent,
+        PeriodListComponent,
+        TrackingLogListComponent,
+        AdditionalDocumentListComponent,
+        AgreementTerminationListComponent,
+        PeriodClosingListComponent
+    ],
+    imports: [
+        CommonModule,
+        AgreementAdministratorRoutingModule,
+        SharedModule,
+        ToolbarModule,
+        ButtonModule,
+        PaginatorModule,
+        TableModule,
+        InputGroupModule,
+        TagModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        DialogModule,
+        ViewModule,
+        IconFieldModule,
+        InputIconModule,
+        FileUploadModule,
+        MessagesModule,
+        DividerModule,
+        ConfirmDialogModule,
+        InputTextareaModule,
+        CalendarModule,
+        PanelModule,
+    ],
+    exports: [
+        TrackingLogListComponent
+    ]
 })
 export class AgreementAdministratorModule {
 }

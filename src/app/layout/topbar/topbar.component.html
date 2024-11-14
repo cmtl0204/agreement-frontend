@@ -8,8 +8,9 @@
     <ng-template pTemplate="end">
       <p-button [label]="nickname" [text]="true"/>
 
-      <p-button [label]="authService.role.name" [text]="true" severity="info"/>
-
+      @if (authService.role) {
+        <p-button [label]="authService.role.name" [text]="true" severity="info"/>
+      }
       <p-button
         pTooltip="Cerrar Sesión"
         [icon]="PrimeIcons.POWER_OFF"

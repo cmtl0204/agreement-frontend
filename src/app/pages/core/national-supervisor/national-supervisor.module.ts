@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AgreementListComponent } from './agreement/agreement-list/agreement-list.component';
+import { AgreementListComponent } from './agreement-list/agreement-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
@@ -16,20 +16,26 @@ import {DialogModule} from "primeng/dialog";
 import {ViewModule} from "../agreement/view/view.module";
 import {IconFieldModule} from "primeng/iconfield";
 import {InputIconModule} from "primeng/inputicon";
-import {PeriodListComponent} from "./agreement/period-list/period-list.component";
-import {TrackingLogListComponent} from "./agreement/tracking-log-list/tracking-log-list.component";
+import {PeriodListComponent} from "./period-list/period-list.component";
+import {TrackingLogListComponent} from "./tracking-log-list/tracking-log-list.component";
 import {FileUploadModule} from "primeng/fileupload";
 import {DividerModule} from "primeng/divider";
 import {InputTextareaModule} from "primeng/inputtextarea";
-import {AdditionalDocumentListComponent} from "./agreement/additional-document-list/additional-document-list.component";
+import {AdditionalDocumentListComponent} from "./additional-document-list/additional-document-list.component";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {PeriodClosingListComponent} from "./period-closing-list/period-closing-list.component";
+import {AgreementTerminationListComponent} from "./agreement-termination-list/agreement-termination-list.component";
+import {PanelModule} from "primeng/panel";
+import {CalendarModule} from "primeng/calendar";
 
 @NgModule({
   declarations: [
     AgreementListComponent,
     PeriodListComponent,
     TrackingLogListComponent,
-    AdditionalDocumentListComponent
+    AdditionalDocumentListComponent,
+    AgreementTerminationListComponent,
+    PeriodClosingListComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +56,9 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
     FileUploadModule,
     DividerModule,
     InputTextareaModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    PanelModule,
+    CalendarModule
   ]
 })
 export class NationalSupervisorModule { }

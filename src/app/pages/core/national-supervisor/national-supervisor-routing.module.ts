@@ -1,10 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AgreementListComponent} from './agreement/agreement-list/agreement-list.component';
-import {PeriodListComponent} from "./agreement/period-list/period-list.component";
-import {
-  TrackingLogListComponent
-} from "./agreement/tracking-log-list/tracking-log-list.component";
+import {AgreementListComponent} from './agreement-list/agreement-list.component';
+import {PeriodListComponent} from "./period-list/period-list.component";
+import {TrackingLogListComponent} from "./tracking-log-list/tracking-log-list.component";
+import {AgreementTerminationListComponent} from "./agreement-termination-list/agreement-termination-list.component";
 
 const routes: Routes = [
   {
@@ -18,7 +17,11 @@ const routes: Routes = [
   {
     path: 'tracking-log-list',
     component: TrackingLogListComponent
-  }
+  },
+  {
+    path: 'agreement-termination-list/:agreementId',
+    component: AgreementTerminationListComponent
+  },
 ];
 
 @NgModule({

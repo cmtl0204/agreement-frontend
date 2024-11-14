@@ -1,0 +1,45 @@
+<p-panel>
+  @if (closingNotification) {
+    <form class="p-fluid grid">
+      <!-- closeType -->
+      @if (closingNotification.closeType?.code !== CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label
+            appLabel
+            for="closeType"
+            [label]="ClosingNotificationEnum.closeType"></label>
+
+          <input pInputText id="closeType" [value]="closingNotification.closeType?.name" readonly>
+        </div>
+      }
+
+      <!-- closedAt -->
+      @if (closingNotification.closedAt) {
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="closedAt"
+          [label]="ClosingNotificationEnum.closedAt"></label>
+
+        <input pInputText id="closedAt" [value]="closingNotification.closedAt" readonly>
+      </div>
+      }
+
+      <!-- closeDetail -->
+      @if (closingNotification.closeType?.code !== CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label
+            appLabel
+            for="closeDetail"
+            [label]="ClosingNotificationEnum.closeDetail"></label>
+
+          <input pInputText id="closeDetail" [value]="closingNotification.closeDetail" readonly>
+        </div>
+      }
+    </form>
+  }
+</p-panel>
+
+@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+  <app-period-closing-list [agreementId]="agreementId"/>
+}
