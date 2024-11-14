@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {LabelButtonActionEnum} from "@shared/enums";
 import {MenuItem} from "primeng/api";
+import {format} from "date-fns";
 
 @Component({
   selector: 'app-button-action',
@@ -12,4 +13,10 @@ export class ButtonActionComponent {
   @Input() buttonActions: MenuItem[] = [];
   @Output() isHide: EventEmitter<boolean> = new EventEmitter<boolean>(false);
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
+  protected currentYear: string;
+
+  constructor() {
+    this.currentYear = format(new Date(), 'yyyy');
+  }
+
 }

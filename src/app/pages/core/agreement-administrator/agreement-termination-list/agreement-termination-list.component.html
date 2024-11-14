@@ -2,7 +2,7 @@
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.MUTUAL
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.OBJECT
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.UNILATERAL) {
-  <p-panel>
+  <p-panel header="Acta de Terminación y Cierre del Convenio">
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <app-header-form
@@ -23,6 +23,8 @@
     </p-toolbar>
 
     <p-divider/>
+
+    <h3>Notificar fecha de Acta de Terminación y Cierre del Convenio</h3>
 
     <form [formGroup]="form" class="p-fluid grid">
       <!-- closeType -->
@@ -109,7 +111,7 @@
 }
 
 @if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
-  <p-panel>
+  <p-panel header="Acta de Terminación y Cierre del Convenio">
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <app-header-form
@@ -131,6 +133,8 @@
 
     <p-divider/>
 
+    <h3>Notificar fecha de Acta de Terminación y Cierre del Convenio</h3>
+
     <form [formGroup]="form" class="p-fluid grid">
       <!-- closedAt -->
       <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
@@ -143,13 +147,17 @@
         @if (closedAtField.value) {
           <input pInputText formControlName="closedAt">
         } @else {
-          <p-calendar
-            id="closedAt2"
-            formControlName="closedAt"
-            [iconDisplay]="'input'"
-            [showIcon]="true"
-            [inline]="true"
-            dateFormat="dd/mm/yy"/>
+          {{ closingNotification.agreement.endedAt }}
+          @if (closingNotification.agreement.endedAt) {
+            <p-calendar
+              id="closedAt2"
+              formControlName="closedAt"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [inline]="true"
+              [minDate]="endedAt"
+              dateFormat="dd/mm/yy"/>
+          }
         }
 
         <small

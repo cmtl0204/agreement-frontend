@@ -35,6 +35,8 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly coreService = inject(CoreService);
   protected readonly messageDialogService = inject(MessageDialogService);
   protected readonly formBuilder = inject(FormBuilder);
+  protected endedAt!: Date;
+
 
   /** Input Output **/
   protected readonly Validators = Validators;
@@ -73,7 +75,7 @@ export class AgreementTerminationListComponent implements OnInit {
   buildForm() {
     this.form = this.formBuilder.group({
       id: [null],
-      agreementId: [null, Validators.required],
+      agreement: [null, Validators.required],
       closedAt: [null, Validators.required],
       closeDetail: [null, Validators.required],
       closeType: [null, Validators.required],
@@ -81,8 +83,6 @@ export class AgreementTerminationListComponent implements OnInit {
   }
 
   createClosingNotification() {
-    this.agreementIdField.setValue(this.agreementId);
-
     this.closingNotificationsHttpService.createClosingNotificationByAgreement(this.form.value).subscribe(response => {
       this.findClosingNotificationByAgreement();
     });
@@ -110,6 +110,8 @@ export class AgreementTerminationListComponent implements OnInit {
           this.closedAtField.setValue(getFormattedDate(response.closedAt));
           this.form.disable();
         }
+
+        this.endedAt = new Date(this.closingNotification.agreement.endedAt + 'T05:00:00');
       }
     });
   }
@@ -174,8 +176,8 @@ export class AgreementTerminationListComponent implements OnInit {
     return this.form.controls['id'];
   }
 
-  get agreementIdField(): AbstractControl {
-    return this.form.controls['agreementId'];
+  get agreementField(): AbstractControl {
+    return this.form.controls['agreement'];
   }
 
   get closedAtField(): AbstractControl {

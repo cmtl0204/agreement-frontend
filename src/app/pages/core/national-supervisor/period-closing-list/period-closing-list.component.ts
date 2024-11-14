@@ -80,7 +80,7 @@ export class PeriodClosingListComponent implements OnInit {
   constructor() {
     this.breadcrumbService.setItems([
       {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS_SUPERVISOR}
+      {label: BreadcrumbEnum.PERIODS_CLOSING_SUPERVISOR}
     ]);
 
     this.buildForm();

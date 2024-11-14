@@ -39,9 +39,9 @@
   paginatorPosition="both"
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
-    <h2>{{ BreadcrumbEnum.PERIODS }}</h2>
+    <h2>{{ BreadcrumbEnum.PERIODS_CLOSING_ADMINISTRATOR }}</h2>
 
-    <h3>Descargue aquí el Formato de Informe de avance semestral del convenio:</h3>
+    <h3>Descargue aquí el Formato de Informe de avance de avance semestral de cierre del convenio:</h3>
 
     <a
       pButton
@@ -180,7 +180,7 @@
         <label
           appLabel
           for="report"
-          [label]="PeriodEnum.reportFile"
+          [label]="PeriodEnum.reportClosingFile"
           [required]="reportFileField"></label>
 
         <p-fileUpload
@@ -221,7 +221,7 @@
         <label
           appLabel
           for="evidence"
-          [label]="PeriodEnum.evidenceFile"
+          [label]="PeriodEnum.evidenceClosingFile"
           [required]="evidenceFileField"></label>
 
         <p-fileUpload
