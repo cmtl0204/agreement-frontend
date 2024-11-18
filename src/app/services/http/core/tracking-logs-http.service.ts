@@ -54,6 +54,18 @@ export class TrackingLogsHttpService {
     );
   }
 
+  validationPeriods(agreementId: string, type: string): Observable<boolean> {
+    const url = `${this.API_URL}/${type}/validation-periods`;
+
+    const params = new HttpParams().append('agreementId', agreementId);
+
+    return this.httpClient.get<ServerResponse>(url, {params}).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
   createTrackingLog(periodId: string, formData: FormData, type: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${type}/${periodId}`;
 

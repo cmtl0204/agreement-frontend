@@ -98,7 +98,9 @@ export class AgreementAdministratorComponent implements OnInit {
   loadPositions() {
     this.positionField.setValue(null);
 
-    this.positions = this.cataloguesHttpService.findByParent(this.unitField.value.id);
+    if (this.unitField.value) {
+      this.positions = this.cataloguesHttpService.findByParent(this.unitField.value.id);
+    }
   }
 
   loadUnits() {

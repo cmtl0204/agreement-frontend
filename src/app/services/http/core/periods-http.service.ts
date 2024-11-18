@@ -20,4 +20,13 @@ export class PeriodsHttpService {
   constructor() {
   }
 
+  delete(id: string): Observable<PeriodModel> {
+    const url = `${this.API_URL}/${id}`;
+
+    return this.httpClient.delete<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
 }

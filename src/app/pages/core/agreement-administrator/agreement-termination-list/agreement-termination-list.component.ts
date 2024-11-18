@@ -2,7 +2,12 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AgreementModel, CatalogueModel, ClosingNotificationModel} from '@models/core';
 import {BreadcrumbService, CoreService, MessageDialogService} from '@servicesApp/core';
-import {AgreementsHttpService, CataloguesHttpService, ClosingNotificationsHttpService} from '@servicesHttp/core';
+import {
+  AgreementsHttpService,
+  CataloguesHttpService,
+  ClosingNotificationsHttpService,
+  TrackingLogsHttpService
+} from '@servicesHttp/core';
 import {
   AgreementFormEnum,
   SkeletonEnum,
@@ -31,12 +36,14 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly confirmationService = inject(ConfirmationService);
   protected readonly closingNotificationsHttpService = inject(ClosingNotificationsHttpService);
+  protected readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   protected readonly messageDialogService = inject(MessageDialogService);
   protected readonly formBuilder = inject(FormBuilder);
   protected endedAt!: Date;
-
+  protected validPeriodsExecution: boolean = false;
+  protected validPeriodsClosing: boolean = false;
 
   /** Input Output **/
   protected readonly Validators = Validators;
@@ -69,6 +76,8 @@ export class AgreementTerminationListComponent implements OnInit {
   ngOnInit() {
     this.loadCloseTypes();
     this.findClosingNotificationByAgreement();
+    this.validationPeriodsExecution();
+    this.validationPeriodsClosing();
   }
 
   /* Form Builder & Validates */
@@ -91,6 +100,18 @@ export class AgreementTerminationListComponent implements OnInit {
   updateClosedAt() {
     this.closingNotificationsHttpService.updateClosedAt(this.idField.value, this.closedAtField.value).subscribe(response => {
       this.findClosingNotificationByAgreement();
+    });
+  }
+
+  validationPeriodsExecution() {
+    this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution').subscribe(response => {
+      this.validPeriodsExecution = response;
+    });
+  }
+
+  validationPeriodsClosing() {
+    this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
+      this.validPeriodsClosing = response;
     });
   }
 

@@ -172,6 +172,19 @@
 }
 
 @if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+
+  @if (!validPeriodsExecution) {
+    <p-messages severity="error">
+      <ng-template pTemplate>
+        <div class="ml-2">
+          Previo a reportar la documentación en las secciones REPORTE AVANCE PROCESO DE CIERRE DEL
+          CONVENIO y GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de ejecución) deberá contar con todos los reportes de
+          ejecución en estado ACEPTADO.
+        </div>
+      </ng-template>
+    </p-messages>
+  }
+
   <app-period-closing-list [agreementId]="agreementId"/>
 }
 

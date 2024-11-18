@@ -82,7 +82,7 @@
         styleClass="p-datatable-striped">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th>{{ TableEnum.ACTIONS }}</th>
+            <th></th>
 
             @for (col of columns; track col.field) {
               <th [pSortableColumn]="col.field">
@@ -90,8 +90,7 @@
               </th>
             }
 
-            <th>
-              {{ TableEnum.ACTIONS }}
+            <th  class="text-center">
               <app-form-help-field content="Agregar más contrapartes dentro de institución creada"/>
             </th>
           </tr>
@@ -110,22 +109,22 @@
             <td>{{ item.name }}</td>
             <td>
               @for (externalInstitutionDetail of item.externalInstitutionDetails; track externalInstitutionDetail; let index = $index) {
+
+                <span>
+                  {{ externalInstitutionDetail.unit }} / {{ externalInstitutionDetail.position }}
+                </span>
                 <p-button
                   [text]="true"
+                  size="small"
                   [icon]="IconButtonActionEnum.REMOVE"
                   [severity]="SeverityButtonActionEnum.DELETE"
                   [pTooltip]="'Eliminar Unidad/Cargo'"
                   (click)="deleteExternalInstitutionDetail(rowIndex,index)">
                 </p-button>
-
-                <span>
-                  {{ externalInstitutionDetail.unit }} /
-                  {{ externalInstitutionDetail.position }}
-                </span>
-
-                <br>
+                <p-divider/>
               }
             </td>
+
             <td>
               <p-button
                 [text]="true"
@@ -303,28 +302,6 @@
     </form>
 
     <form [formGroup]="externalInstitutionDetailForm" class="p-fluid grid">
-      <!-- position -->
-      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label
-          appLabel
-          for="externalPosition2"
-          [label]="ExternalInstitutionsFormEnum.position"
-          [required]="externalInstitutionDetailPositionField">
-        </label>
-
-        <input
-          pInputText
-          id="externalPosition2"
-          formControlName="position"/>
-
-        <small
-          appErrorMessage
-          [errors]="externalInstitutionDetailPositionField.errors"
-          [touched]="externalInstitutionDetailPositionField.touched"
-          [dirty]="externalInstitutionDetailPositionField.dirty">
-        </small>
-      </div>
-
       <!-- unit -->
       <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
@@ -344,6 +321,28 @@
           [errors]="externalInstitutionDetailUnitField.errors"
           [touched]="externalInstitutionDetailUnitField.touched"
           [dirty]="externalInstitutionDetailUnitField.dirty">
+        </small>
+      </div>
+
+      <!-- position -->
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="externalPosition2"
+          [label]="ExternalInstitutionsFormEnum.position"
+          [required]="externalInstitutionDetailPositionField">
+        </label>
+
+        <input
+          pInputText
+          id="externalPosition2"
+          formControlName="position"/>
+
+        <small
+          appErrorMessage
+          [errors]="externalInstitutionDetailPositionField.errors"
+          [touched]="externalInstitutionDetailPositionField.touched"
+          [dirty]="externalInstitutionDetailPositionField.dirty">
         </small>
       </div>
     </form>

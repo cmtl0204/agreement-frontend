@@ -1,6 +1,10 @@
 import {format} from "date-fns";
 
 export function getFormattedDate(value: string | Date) {
+  return new Date(value)
+}
+
+export function getCustomFormattedDate(value: string | Date) {
   // return new Date(value)
   if (value.toString().includes('T')) {
     console.log('1')

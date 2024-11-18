@@ -6,13 +6,7 @@
       [label]="LabelButtonActionEnum.CREATE"
       [loading]="coreService.isLoading"
       [severity]="SeverityButtonActionEnum.CREATE"></p-button>
-    <p-button
-      class="ml-2"
-      (click)="findUsers()"
-      [icon]="IconButtonActionEnum.SYNC"
-      [label]="LabelButtonActionEnum.SYNC"
-      [loading]="coreService.isLoading"
-      [severity]="SeverityButtonActionEnum.SYNC"></p-button>
+
     @if (selectedItems.length > 0) {
       <p-button
         class="ml-2"
