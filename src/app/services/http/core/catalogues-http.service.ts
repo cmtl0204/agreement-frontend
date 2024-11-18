@@ -80,7 +80,7 @@ export class CataloguesHttpService {
   loadCache(): void {
     const url = `${this.API_URL}`;
 
-    this.httpClient.get<ServerResponse>(url).subscribe(response=>{
+    this.httpClient.get<ServerResponse>(url).subscribe(response => {
       sessionStorage.setItem('catalogues', JSON.stringify(response.data));
     });
   }
@@ -99,7 +99,9 @@ export class CataloguesHttpService {
     const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
 
     if (catalogues) {
-      return catalogues.filter(catalogue => catalogue.parent?.id === parentId);
+      if (parentId) {
+        return catalogues.filter(catalogue => catalogue.parent?.id === parentId);
+      }
     }
 
     return [];

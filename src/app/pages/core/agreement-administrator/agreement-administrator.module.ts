@@ -28,44 +28,46 @@ import {AgreementTerminationListComponent} from './agreement-termination-list/ag
 import {CalendarModule} from "primeng/calendar";
 import {PanelModule} from "primeng/panel";
 import {PeriodClosingListComponent} from "./period-closing-list/period-closing-list.component";
+import {ClosingLogListComponent} from "./closing-log-list/closing-log-list.component";
 
 
 @NgModule({
-    declarations: [
-        AgreementListComponent,
-        PeriodListComponent,
-        TrackingLogListComponent,
-        AdditionalDocumentListComponent,
-        AgreementTerminationListComponent,
-        PeriodClosingListComponent
-    ],
-    imports: [
-        CommonModule,
-        AgreementAdministratorRoutingModule,
-        SharedModule,
-        ToolbarModule,
-        ButtonModule,
-        PaginatorModule,
-        TableModule,
-        InputGroupModule,
-        TagModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        DialogModule,
-        ViewModule,
-        IconFieldModule,
-        InputIconModule,
-        FileUploadModule,
-        MessagesModule,
-        DividerModule,
-        ConfirmDialogModule,
-        InputTextareaModule,
-        CalendarModule,
-        PanelModule,
-    ],
-    exports: [
-        TrackingLogListComponent
-    ]
+  declarations: [
+    AgreementListComponent,
+    PeriodListComponent,
+    TrackingLogListComponent,
+    AdditionalDocumentListComponent,
+    AgreementTerminationListComponent,
+    PeriodClosingListComponent,
+    ClosingLogListComponent
+  ],
+  imports: [
+    CommonModule,
+    AgreementAdministratorRoutingModule,
+    SharedModule,
+    ToolbarModule,
+    ButtonModule,
+    PaginatorModule,
+    TableModule,
+    InputGroupModule,
+    TagModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    DialogModule,
+    ViewModule,
+    IconFieldModule,
+    InputIconModule,
+    FileUploadModule,
+    MessagesModule,
+    DividerModule,
+    ConfirmDialogModule,
+    InputTextareaModule,
+    CalendarModule,
+    PanelModule,
+  ],
+  exports: [
+    TrackingLogListComponent
+  ]
 })
 export class AgreementAdministratorModule {
 }

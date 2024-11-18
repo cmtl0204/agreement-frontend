@@ -42,7 +42,6 @@ export class PeriodListComponent implements OnInit {
   protected readonly coreService = inject(CoreService);
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  private readonly periodsHttpService = inject(PeriodsHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
   private readonly breadcrumbService = inject(BreadcrumbService);
@@ -147,14 +146,6 @@ export class PeriodListComponent implements OnInit {
         },
       },
       {
-        id: IdButtonActionEnum.DELETE,
-        label: LabelButtonActionEnum.DELETE,
-        icon: IconButtonActionEnum.DELETE,
-        command: () => {
-          this.deletePeriod();
-        },
-      },
-      {
         id: IdButtonActionEnum.ACCEPTED,
         label: LabelButtonActionEnum.ACCEPTED,
         icon: IconButtonActionEnum.ACCEPTED,
@@ -182,10 +173,6 @@ export class PeriodListComponent implements OnInit {
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.ACCEPTED), 1);
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REFUSED), 1);
     }
-
-    if (item.agreement?.isFinishDate || item.trackingLog) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.DELETE), 1);
-    }
   }
 
   selectItem(item: PeriodModel) {
@@ -210,12 +197,6 @@ export class PeriodListComponent implements OnInit {
     this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, true).subscribe(() => {
       this.findPeriodsByAgreement();
       this.isVisibleAcceptedModal = false;
-    });
-  }
-
-  deletePeriod() {
-    this.periodsHttpService.delete(this.selectedItem.id).subscribe(() => {
-      this.findPeriodsByAgreement();
     });
   }
 

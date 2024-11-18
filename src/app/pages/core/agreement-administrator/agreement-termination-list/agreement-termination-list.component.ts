@@ -22,7 +22,7 @@ import {
 import {AuthService} from "@servicesApp/auth";
 import {verifyAgreementInternalNumber} from "@shared/validators";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
-import {getFormattedDate} from "@shared/helpers";
+import {getCustomFormattedDate, getFormattedDate} from "@shared/helpers";
 
 @Component({
   selector: 'app-agreement-termination-list',
@@ -92,6 +92,8 @@ export class AgreementTerminationListComponent implements OnInit {
   }
 
   createClosingNotification() {
+    this.agreementField.patchValue({id: this.agreementId});
+
     this.closingNotificationsHttpService.createClosingNotificationByAgreement(this.form.value).subscribe(response => {
       this.findClosingNotificationByAgreement();
     });
@@ -128,7 +130,7 @@ export class AgreementTerminationListComponent implements OnInit {
         }
 
         if (response.closedAt) {
-          this.closedAtField.setValue(getFormattedDate(response.closedAt));
+          this.closedAtField.setValue(getCustomFormattedDate(response.closedAt));
           this.form.disable();
         }
 

@@ -147,7 +147,6 @@
         @if (closedAtField.value) {
           <input pInputText formControlName="closedAt">
         } @else {
-          {{ closingNotification.agreement.endedAt }}
           @if (closingNotification.agreement.endedAt) {
             <p-calendar
               id="closedAt2"
@@ -186,6 +185,21 @@
   }
 
   <app-period-closing-list [agreementId]="agreementId"/>
+}
+
+@if (!validPeriodsClosing) {
+  <p-messages severity="error">
+    <ng-template pTemplate>
+      <div class="ml-2">
+        Previo a reportar la documentación en la secciones GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de avence de
+        cierre) deberá contar con todos los reportes en estado ACEPTADO.
+      </div>
+    </ng-template>
+  </p-messages>
+}
+
+@if (closingNotification) {
+  <app-closing-log-list [agreementId]="agreementId" [closingNotification]="closingNotification"/>
 }
 
 <p-confirmDialog key="confirmDialog"/>

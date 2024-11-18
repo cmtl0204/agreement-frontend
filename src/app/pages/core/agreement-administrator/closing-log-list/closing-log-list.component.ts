@@ -1,7 +1,15 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, inject, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ColumnModel, AgreementModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
+import {
+  ColumnModel,
+  AgreementModel,
+  CatalogueModel,
+  FileModel,
+  PeriodModel,
+  ClosingLogModel,
+  ClosingNotificationModel
+} from '@models/core';
 import {
   CoreService,
   BreadcrumbService,
@@ -11,7 +19,7 @@ import {
 } from '@servicesApp/core';
 import {
   AgreementsHttpService,
-  CataloguesHttpService,
+  CataloguesHttpService, ClosingLogsHttpService,
   FilesHttpService, PeriodsHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
@@ -25,16 +33,17 @@ import {
   AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum, FileEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
-import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
 
+
 @Component({
-  selector: 'app-period-list',
-  templateUrl: './period-list.component.html',
-  styleUrl: './period-list.component.scss'
+  selector: 'app-closing-log-list',
+  templateUrl: './closing-log-list.component.html',
+  styleUrl: './closing-log-list.component.scss'
 })
-export class PeriodListComponent implements OnInit {
+export class ClosingLogListComponent implements OnInit {
   @Input() agreementId!: string;
+  @Input() closingNotification!: ClosingNotificationModel;
 
   // Services
   protected readonly activatedRoute = inject(ActivatedRoute);
@@ -45,6 +54,7 @@ export class PeriodListComponent implements OnInit {
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly periodsHttpService = inject(PeriodsHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
+  private readonly closingLogsHttpService = inject(ClosingLogsHttpService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
   private readonly agreementsService = inject(AgreementsService);
@@ -69,11 +79,12 @@ export class PeriodListComponent implements OnInit {
   protected search: FormControl = new FormControl('');
 
   protected selectedItem!: PeriodModel;
-  protected items: PeriodModel[] = [];
+  protected items: ClosingLogModel[]=[];
   protected agreement!: AgreementModel;
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
+  protected closeTypes: CatalogueModel[] = [];
   protected trackingLogType: string = 'execution';
 
   protected isVisibleFilesModal: boolean = false;
@@ -92,19 +103,13 @@ export class PeriodListComponent implements OnInit {
     this.buildForm();
     this.buildButtonActions();
     this.buildColumns();
-    // this.paginator = this.coreService.paginator;
-
-    this.search.valueChanges.pipe(
-      debounceTime(500)
-    ).subscribe(value => {
-      this.findPeriodsByAgreement();
-    });
   }
 
   ngOnInit() {
-    this.findPeriodsByAgreement();
+    this.findClosingLogCurrentByAgreement();
     this.findAgreement(this.agreementId);
     this.loadTypes();
+    this.loadTypesByCloseType();
 
     this.activatedRoute.queryParams.subscribe(params => {
       this.trackingLogType = params['type'];
@@ -124,10 +129,10 @@ export class PeriodListComponent implements OnInit {
     });
   }
 
-  findPeriodsByAgreement() {
-    this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId, this.trackingLogType)
+  findClosingLogCurrentByAgreement() {
+    this.closingLogsHttpService.findClosingLogCurrentByAgreement(this.agreementId)
       .subscribe((response) => {
-        this.items = response;
+        this.items = [response];
       });
   }
 
@@ -135,17 +140,19 @@ export class PeriodListComponent implements OnInit {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.PERIODS_TRACKING_LOG);
   }
 
+  loadTypesByCloseType() {
+    this.closeTypes = this.cataloguesHttpService.findByParent(this.closingNotification?.closeType?.id!);
+  }
+
   createPeriod() {
     this.trackingLogsHttpService.createPeriod(this.agreementId, this.trackingLogType)
       .subscribe((response) => {
-        this.findPeriodsByAgreement();
+        this.findClosingLogCurrentByAgreement();
       });
   }
 
   buildColumns() {
     this.columns = [
-      {field: 'name', header: PeriodEnum.reportPeriod},
-      {field: 'documentName', header: PeriodEnum.name},
       {field: 'files', header: PeriodEnum.documentName},
       {field: 'trafficLight', header: PeriodEnum.trafficLight},
       {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
@@ -232,7 +239,7 @@ export class PeriodListComponent implements OnInit {
           formData.append('evidence', this.evidenceFileField.value);
 
           this.trackingLogsHttpService.createTrackingLog(this.selectedItem.id!, formData, this.trackingLogType).subscribe(response => {
-            this.findPeriodsByAgreement();
+            this.findClosingLogCurrentByAgreement();
             this.isVisibleFilesModal = false;
             this.reportFileField.setValue(null);
             this.evidenceFileField.setValue(null);
@@ -279,7 +286,7 @@ export class PeriodListComponent implements OnInit {
     }
 
     this.periodsHttpService.delete(this.selectedItem.id).subscribe(() => {
-      this.findPeriodsByAgreement();
+      this.findClosingLogCurrentByAgreement();
     });
   }
 
