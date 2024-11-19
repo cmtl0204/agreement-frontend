@@ -30,7 +30,12 @@ import {
   BreadcrumbEnum,
   IdButtonActionEnum,
   TableEnum,
-  AddendumEnum, CatalogueTypeEnum, PeriodEnum, CatalogueTrackingLogsStateEnum, FileEnum
+  AddendumEnum,
+  CatalogueTypeEnum,
+  PeriodEnum,
+  CatalogueTrackingLogsStateEnum,
+  FileEnum,
+  CatalogueClosingNotificationsCloseTypesDocumentEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
@@ -79,10 +84,11 @@ export class ClosingLogListComponent implements OnInit {
   protected search: FormControl = new FormControl('');
 
   protected selectedItem!: PeriodModel;
-  protected items: ClosingLogModel[]=[];
+  protected items: ClosingLogModel[] = [];
   protected agreement!: AgreementModel;
   protected form!: FormGroup;
   protected formErrors: string[] = [];
+  protected files: FileModel[] = [];
   protected types: CatalogueModel[] = [];
   protected closeTypes: CatalogueModel[] = [];
   protected trackingLogType: string = 'execution';
@@ -132,7 +138,9 @@ export class ClosingLogListComponent implements OnInit {
   findClosingLogCurrentByAgreement() {
     this.closingLogsHttpService.findClosingLogCurrentByAgreement(this.agreementId)
       .subscribe((response) => {
-        this.items = [response];
+        if (response) {
+          this.items = [response];
+        }
       });
   }
 
@@ -144,16 +152,55 @@ export class ClosingLogListComponent implements OnInit {
     this.closeTypes = this.cataloguesHttpService.findByParent(this.closingNotification?.closeType?.id!);
   }
 
-  createPeriod() {
-    this.trackingLogsHttpService.createPeriod(this.agreementId, this.trackingLogType)
+  createClosingLog() {
+    const payload = new FormData();
+
+    for (const myFile of this.files) {
+      payload.append('typeIds', myFile.type!.id!);
+      payload.append('files', myFile.file);
+    }
+
+    this.closingLogsHttpService.createClosingLog(this.agreementId, payload)
       .subscribe((response) => {
         this.findClosingLogCurrentByAgreement();
+        this.isVisibleFilesModal = false;
       });
+  }
+
+  onUpload(event: any, uploadFiles: any, type: CatalogueModel) {
+    const index = this.files.findIndex(item => item.type?.id === type.id);
+
+    if (index === -1) {
+      this.files.push({
+        type,
+        file: event.files[0]
+      });
+    } else {
+      this.files[index] = {
+        type,
+        file: event.files[0]
+      };
+    }
+
+    uploadFiles.clear();
+  }
+
+  openFilesModal() {
+    this.isVisibleFilesModal = true;
+  }
+
+  onSubmit() {
+    if (this.validateFilesForm()) {
+      this.createClosingLog();
+    } else {
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
   }
 
   buildColumns() {
     this.columns = [
-      {field: 'files', header: PeriodEnum.documentName},
+      {field: 'closingLogDocumentsUpload', header: PeriodEnum.documentName},
+      {field: 'closingLogDocuments', header: PeriodEnum.fileName},
       {field: 'trafficLight', header: PeriodEnum.trafficLight},
       {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
       {field: 'user', header: PeriodEnum.user},
@@ -203,10 +250,6 @@ export class ClosingLogListComponent implements OnInit {
     //   });
   }
 
-  paginate(event: any) {
-    // this.findAgreements(event.page);
-  }
-
   selectItem(item: PeriodModel) {
     this.isButtonActions = true;
     this.selectedItem = item;
@@ -222,55 +265,19 @@ export class ClosingLogListComponent implements OnInit {
     this.filesHttpService.downloadFile(file);
   }
 
-  onUpload() {
-    if (this.validateFilesForm()) {
-      this.confirmationService.confirm({
-        key: 'confirmDialog',
-        message: '¿Está seguro de subir los archivos?',
-        header: '',
-        icon: PrimeIcons.QUESTION_CIRCLE,
-        acceptLabel: "Si",
-        rejectLabel: "No",
-        rejectButtonStyleClass: "p-button-text",
-        accept: () => {
-          const formData = new FormData();
-
-          formData.append('report', this.reportFileField.value);
-          formData.append('evidence', this.evidenceFileField.value);
-
-          this.trackingLogsHttpService.createTrackingLog(this.selectedItem.id!, formData, this.trackingLogType).subscribe(response => {
-            this.findClosingLogCurrentByAgreement();
-            this.isVisibleFilesModal = false;
-            this.reportFileField.setValue(null);
-            this.evidenceFileField.setValue(null);
-          });
-        }
-      });
-
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-    }
-  }
-
   validateFilesForm() {
     this.formErrors = [];
 
-    if (this.reportFileField.invalid) this.formErrors.push(PeriodEnum.reportFile);
-    if (this.evidenceFileField.invalid) this.formErrors.push(PeriodEnum.evidenceFile);
+    this.closeTypes.forEach(item => {
+      const document = this.files.find(file => file.type?.id === item?.id);
+
+      if (!document) {
+        this.formErrors.push(item.name!);
+      }
+    });
+
 
     return this.formErrors.length === 0
-  }
-
-  uploadReportFile(event: any, uploadFiles: any) {
-    this.reportFileField.patchValue(event.files[0]);
-
-    uploadFiles.clear();
-  }
-
-  uploadEvidenceFile(event: any, uploadFiles: any) {
-    this.evidenceFileField.patchValue(event.files[0]);
-
-    uploadFiles.clear();
   }
 
   closeModal() {
@@ -297,4 +304,6 @@ export class ClosingLogListComponent implements OnInit {
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
   }
+
+  protected readonly onsubmit = onsubmit;
 }

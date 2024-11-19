@@ -150,7 +150,8 @@ export enum AddendumEnum {
 
 export enum PeriodEnum {
   header = 'Periodos',
-  documentName = 'Documento',
+  documentName = 'Documento Habilitante',
+  fileName = 'Archivo',
   endedAt = 'Fecha de finalización',
   name = 'Informe',
   startedAt = 'Documento de adenda o modificatorio',

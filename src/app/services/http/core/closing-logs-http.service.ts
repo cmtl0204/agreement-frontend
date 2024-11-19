@@ -44,4 +44,16 @@ export class ClosingLogsHttpService {
       })
     );
   }
+
+  createClosingLog(agreementId: string, payload:FormData): Observable<ClosingLogModel> {
+    const url = `${this.API_URL}`;
+
+    const params = new HttpParams().append('agreementId', agreementId);
+
+    return this.httpClient.post<ServerResponse>(url,payload, {params: params}).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
 }

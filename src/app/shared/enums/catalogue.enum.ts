@@ -85,3 +85,10 @@ export enum CatalogueClosingNotificationsCloseTypeEnum {
   TERM = 'TERM',
   OBJECT = 'OBJECT',
 }
+
+export enum CatalogueClosingNotificationsCloseTypesDocumentEnum {
+  MUTUAL = 'MUTUAL',
+  UNILATERAL = 'UNILATERAL',
+  TERM = 'TERM',
+  OBJECT = 'OBJECT',
+}

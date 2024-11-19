@@ -39,6 +39,7 @@ export enum LabelButtonActionEnum {
   CREATE = 'Crear',
   CREATE_AGREEMENT = 'Crear Convenio',
   CREATE_PERIOD = 'Crear Periodo',
+  CREATE_CLOSING_LOG = 'Cargar documentos de cierre del Convenio',
   CREATE_ADDITIONAL_DOCUMENT = 'Reportar Documento Adicional',
   CANCEL = 'Cancelar',
   RETURN = 'Regresar',

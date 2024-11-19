@@ -1,20 +1,3 @@
-<p-toolbar>
-  <div class="p-toolbar-group-left">
-    @if (agreement && !agreement.isFinishDate) {
-      <p-button
-        (click)="createPeriod()"
-        [icon]="IconButtonActionEnum.CREATE"
-        [label]="LabelButtonActionEnum.CREATE_PERIOD"
-        [loading]="coreService.isLoading"
-        [severity]="SeverityButtonActionEnum.CREATE"/>
-    }
-  </div>
-
-  <div class="p-toolbar-group-right">
-
-  </div>
-</p-toolbar>
-
 <!-- <p-paginator
   [rows]="paginator.limit"
   [totalRecords]="paginator.totalItems"
@@ -32,6 +15,24 @@
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
     <h2>{{ BreadcrumbEnum.CLOSING_LOG_ADMINISTRATOR }}</h2>
+
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        @if (items.length === 0) {
+          <p-button
+            (click)="openFilesModal()"
+            [icon]="IconButtonActionEnum.UPLOAD"
+            [label]="LabelButtonActionEnum.CREATE_CLOSING_LOG"
+            [loading]="coreService.isLoading"
+            [severity]="SeverityButtonActionEnum.UPLOAD"/>
+        }
+      </div>
+
+      <div class="p-toolbar-group-right">
+
+      </div>
+    </p-toolbar>
+
   </ng-template>
 
   <ng-template pTemplate="header" let-columns>
@@ -58,6 +59,14 @@
               @case ('administrator') {
                 {{ rowData[col.field].unit.name }}
               }
+              @case ('user') {
+                @if (rowData?.user) {
+                  {{ rowData.user.name }} {{ rowData.user.lastname }}
+                }
+              }
+              @case ('state') {
+                {{ rowData?.state?.name }}
+              }
             }
           }
 
@@ -67,8 +76,8 @@
               @default {
                 {{ rowData[col.field] }}
               }
-              @case ('files') {
-                @if (!rowData?.trackingLog || rowData.trackingLog.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
+              @case ('closingLogDocumentsUpload') {
+                @if (!rowData?.closingLogDocuments || rowData.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
                   <p-button
                     class="ml-2"
                     [icon]="IconButtonActionEnum.ADD"
@@ -76,9 +85,16 @@
                     [severity]="SeverityButtonActionEnum.ADD"
                     (click)="showFilesModal(rowData)"/>
                 } @else {
-                  @for (item of rowData?.trackingLogDocuments; track item) {
+                  @for (item of rowData?.closingLogDocuments; track item) {
                     <span>{{ item.type.name }}: </span>
 
+                    <p-divider/>
+                  }
+                }
+              }
+              @case ('closingLogDocuments') {
+                @if (rowData?.closingLogDocuments) {
+                  @for (item of rowData?.closingLogDocuments; track item) {
                     <p-button
                       class="ml-2"
                       [icon]="IconButtonActionEnum.DOWNLOAD"
@@ -92,8 +108,8 @@
                 }
               }
               @case ('trafficLight') {
-                @if (rowData.trackingLog) {
-                  @if (rowData.trackingLog.state.code === 'REPORTED' || rowData.trackingLog.state.code === 'ACCEPTED') {
+                @if (rowData.closingLogDocuments) {
+                  @if (rowData.state.code === 'REPORTED' || rowData.state.code === 'ACCEPTED') {
                     <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 3rem"></i>
                   } @else {
                     <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
@@ -113,14 +129,7 @@
               @case ('uploadedAt') {
                 {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
               }
-              @case ('state') {
-                {{ rowData.trackingLog?.state?.name }}
-              }
-              @case ('user') {
-                @if (rowData.trackingLog?.user) {
-                  {{ rowData.trackingLog.user.name }} {{ rowData.trackingLog.user.lastname }}
-                }
-              }
+
             }
           }
         </td>
@@ -159,86 +168,45 @@
   header="Subir Archivos">
   <ng-template pTemplate="content">
     <div class="p-fluid grid">
-      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label
-          appLabel
-          for="report"
-          [label]="PeriodEnum.reportFile"
-          [required]="reportFileField"></label>
-
-        <p-fileUpload
-          #uploadFiles
-          id="report"
-          mode="basic"
-          chooseLabel="Cargar"
-          [chooseIcon]="PrimeIcons.UPLOAD"
-          invalidFileSizeMessageDetail=""
-          [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
-          [maxFileSize]="FileEnum.maxFileSize"
-          name="files[]"
-          accept=".pdf"
-          [auto]="true"
-          [customUpload]="true"
-          (uploadHandler)="uploadReportFile($event,uploadFiles)"/>
-
-        <small
-          appErrorMessage
-          [errors]="reportFileField.errors"
-          [touched]="reportFileField.touched"
-          [dirty]="reportFileField.dirty">
-        </small>
-      </div>
-
-      @if (reportFileField.value) {
+      @for (type of closeTypes; track type.id; let index = $index) {
         <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-          <p-messages severity="info">
-            <ng-template pTemplate>
-              <i [class]="PrimeIcons.FILE_PDF"></i>
-              <div class="ml-2">{{ reportFileField.value?.name }}</div>
-            </ng-template>
-          </p-messages>
+          <label [for]="type.id">
+            {{ type.name }} <b class="p-error">*</b>
+          </label>
+
+          <p-fileUpload
+            #uploadFiles
+            id="report"
+            mode="basic"
+            chooseLabel="Cargar"
+            [chooseIcon]="PrimeIcons.UPLOAD"
+            invalidFileSizeMessageDetail=""
+            [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+            [maxFileSize]="FileEnum.maxFileSize"
+            name="files[]"
+            accept=".pdf,.rar,.zip"
+            [auto]="true"
+            [customUpload]="true"
+            (uploadHandler)="onUpload($event,uploadFiles, type)"/>
+
+          <small
+            appErrorMessage
+            [errors]="reportFileField.errors"
+            [touched]="reportFileField.touched"
+            [dirty]="reportFileField.dirty">
+          </small>
         </div>
-      }
 
-      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
-        <label
-          appLabel
-          for="evidence"
-          [label]="PeriodEnum.evidenceFile"
-          [required]="evidenceFileField"></label>
-
-        <p-fileUpload
-          #uploadFiles
-          id="evidence"
-          mode="basic"
-          chooseLabel="Cargar"
-          [chooseIcon]="PrimeIcons.UPLOAD"
-          name="files[]"
-          accept=".pdf,.zip,.rar"
-          invalidFileSizeMessageDetail=""
-          [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
-          [maxFileSize]="FileEnum.maxFileSize"
-          [auto]="true"
-          [customUpload]="true"
-          (uploadHandler)="uploadEvidenceFile($event,uploadFiles)"/>
-
-        <small
-          appErrorMessage
-          [errors]="evidenceFileField.errors"
-          [touched]="evidenceFileField.touched"
-          [dirty]="evidenceFileField.dirty">
-        </small>
-      </div>
-
-      @if (evidenceFileField.value) {
-        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-          <p-messages severity="info">
-            <ng-template pTemplate>
-              <i [class]="PrimeIcons.FILE_PDF"></i>
-              <div class="ml-2">{{ evidenceFileField.value?.name }}</div>
-            </ng-template>
-          </p-messages>
-        </div>
+        @if (files.length > index) {
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <p-messages severity="info">
+              <ng-template pTemplate>
+                <i [class]="PrimeIcons.FILE_PDF"></i>
+                <div class="ml-2">{{ files[index]?.file.name }}</div>
+              </ng-template>
+            </p-messages>
+          </div>
+        }
       }
     </div>
   </ng-template>
@@ -255,7 +223,7 @@
       [icon]="IconButtonActionEnum.UPLOAD"
       [label]="LabelButtonActionEnum.UPLOAD"
       [severity]="SeverityButtonActionEnum.UPLOAD"
-      (click)="onUpload()"/>
+      (click)="onSubmit()"/>
   </ng-template>
 </p-dialog>
 
