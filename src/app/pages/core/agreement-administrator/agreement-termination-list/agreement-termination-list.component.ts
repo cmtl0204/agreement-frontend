@@ -43,7 +43,6 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected endedAt!: Date;
   protected validPeriodsExecution: boolean = false;
-  protected validPeriodsClosing: boolean = false;
 
   /** Input Output **/
   protected readonly Validators = Validators;
@@ -76,8 +75,7 @@ export class AgreementTerminationListComponent implements OnInit {
   ngOnInit() {
     this.loadCloseTypes();
     this.findClosingNotificationByAgreement();
-    this.validationPeriodsExecution();
-    this.validationPeriodsClosing();
+    this.validatePeriodsExecution();
   }
 
   /* Form Builder & Validates */
@@ -105,15 +103,9 @@ export class AgreementTerminationListComponent implements OnInit {
     });
   }
 
-  validationPeriodsExecution() {
+  validatePeriodsExecution() {
     this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution').subscribe(response => {
       this.validPeriodsExecution = response;
-    });
-  }
-
-  validationPeriodsClosing() {
-    this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
-      this.validPeriodsClosing = response;
     });
   }
 

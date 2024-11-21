@@ -39,6 +39,7 @@ import {
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
+import * as console from "node:console";
 
 
 @Component({
@@ -46,7 +47,7 @@ import {AuthService} from "@servicesApp/auth";
   templateUrl: './closing-log-list.component.html',
   styleUrl: './closing-log-list.component.scss'
 })
-export class ClosingLogListComponent implements OnInit {
+export class ClosingLogListComponent implements OnInit, AfterViewInit {
   @Input() agreementId!: string;
   @Input() closingNotification!: ClosingNotificationModel;
 
@@ -99,6 +100,7 @@ export class ClosingLogListComponent implements OnInit {
   protected readonly CatalogueTrackingLogsStateEnum = CatalogueTrackingLogsStateEnum;
   protected readonly PeriodEnum = PeriodEnum;
   protected readonly FileEnum = FileEnum;
+  protected validPeriodsClosing: boolean = false;
 
   constructor() {
     this.breadcrumbService.setItems([
@@ -116,6 +118,7 @@ export class ClosingLogListComponent implements OnInit {
     this.findAgreement(this.agreementId);
     this.loadTypes();
     this.loadTypesByCloseType();
+    this.validateClosingNotification();
 
     this.activatedRoute.queryParams.subscribe(params => {
       this.trackingLogType = params['type'];
@@ -186,6 +189,11 @@ export class ClosingLogListComponent implements OnInit {
   }
 
   openFilesModal() {
+    if (!this.validPeriodsClosing) {
+      this.messageDialogService.errorCustom('Su mensaje va aqui', 'Su mensaje va aqui');
+      return;
+    }
+
     this.isVisibleFilesModal = true;
   }
 
@@ -297,6 +305,22 @@ export class ClosingLogListComponent implements OnInit {
     });
   }
 
+  validateClosingNotification() {
+    if (this.closingNotification) {
+      if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
+        this.validatePeriodsClosing();
+      }
+
+      this.validPeriodsClosing = false;
+    }
+  }
+
+  validatePeriodsClosing() {
+    this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
+      this.validPeriodsClosing = response;
+    });
+  }
+
   get reportFileField(): AbstractControl {
     return this.form.controls['reportFile'];
   }
@@ -305,5 +329,7 @@ export class ClosingLogListComponent implements OnInit {
     return this.form.controls['evidenceFile'];
   }
 
-  protected readonly onsubmit = onsubmit;
+  ngAfterViewInit(): void {
+    console.log(this.closingNotification);
+  }
 }

@@ -16,6 +16,17 @@
   <ng-template pTemplate="caption">
     <h2>{{ BreadcrumbEnum.CLOSING_LOG_ADMINISTRATOR }}</h2>
 
+    @if (!validPeriodsClosing) {
+      <p-messages severity="error">
+        <ng-template pTemplate>
+          <div class="ml-2">
+            Previo a reportar la documentación en la secciones GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de avence de
+            cierre) deberá contar con todos los reportes en estado ACEPTADO.
+          </div>
+        </ng-template>
+      </p-messages>
+    }
+
     <p-toolbar>
       <div class="p-toolbar-group-left">
         @if (items.length === 0) {
