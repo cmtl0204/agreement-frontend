@@ -7,6 +7,7 @@ import {ServerResponse} from '@models/http-response';
 import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
 import {AgreementModel, CatalogueModel, ClosingNotificationModel, PeriodModel} from '@models/core';
 import {CatalogueTypeEnum} from "@shared/enums";
+import {formatDate} from "date-fns";
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,9 @@ export class ClosingNotificationsHttpService {
 
     this.coreService.isProcessing = true;
 
-    return this.httpClient.patch<ServerResponse>(url, {closedAt}).pipe(
+    const params = new HttpParams().append('closedAt', formatDate(closedAt, 'yyyy-MM-dd'));
+
+    return this.httpClient.patch<ServerResponse>(url, null, {params}).pipe(
       map(response => {
         this.coreService.isProcessing = false;
         this.messageDialogService.successHttp(response);

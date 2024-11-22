@@ -17,7 +17,10 @@ import {
   RoleEnum,
   CatalogueAgreementsOriginEnum,
   CatalogueAgreementStatesStateEnum,
-  ClosingNotificationEnum, BreadcrumbEnum, CatalogueClosingNotificationsCloseTypeEnum
+  ClosingNotificationEnum,
+  BreadcrumbEnum,
+  CatalogueClosingNotificationsCloseTypeEnum,
+  CatalogueClosingNotificationsCloseTypesDocumentEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
 import {verifyAgreementInternalNumber} from "@shared/validators";
@@ -121,6 +124,10 @@ export class AgreementTerminationListComponent implements OnInit {
           this.form.disable();
         }
 
+        if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+          this.closeDetailField.clearValidators();
+        }
+
         if (response.closedAt) {
           this.closedAtField.setValue(getCustomFormattedDate(response.closedAt));
           this.form.disable();
@@ -152,7 +159,11 @@ export class AgreementTerminationListComponent implements OnInit {
         rejectLabel: "No",
         rejectButtonStyleClass: "p-button-text",
         accept: () => {
-          this.createClosingNotification();
+          if (this.closingNotification && this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
+            this.updateClosedAt();
+          } else {
+            this.createClosingNotification();
+          }
         }
       });
     } else {

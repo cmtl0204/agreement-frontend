@@ -120,7 +120,7 @@
       </div>
 
       <div class="p-toolbar-group-right">
-        @if (!closedAtField.value) {
+        @if (!closingNotification.closedAt) {
           <app-form-button-action
             labelSubmitButton="Notificar"
             (submit)="onSubmit()"
@@ -144,7 +144,7 @@
           [label]="ClosingNotificationEnum.closedAt"
           [required]="closedAtField"></label>
 
-        @if (closedAtField.value) {
+        @if (closingNotification.closedAt) {
           <input pInputText formControlName="closedAt">
         } @else {
           @if (closingNotification.agreement.endedAt) {

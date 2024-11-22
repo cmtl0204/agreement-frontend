@@ -114,7 +114,10 @@ export class ClosingLogCurrentComponent implements OnInit {
     this.findAgreement(this.agreementId);
     this.loadTypes();
     this.loadTypesByCloseType();
-    this.validatePeriodsClosing();
+
+    setTimeout(() => {
+      this.validatePeriodsClosing();
+    }, 500);
 
     this.activatedRoute.queryParams.subscribe(params => {
       this.trackingLogType = params['type'];
@@ -188,7 +191,9 @@ export class ClosingLogCurrentComponent implements OnInit {
     if (this.closingNotification) {
       this.loadTypesByCloseType();
 
+      console.log(this.closingNotification.closeType);
       if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
+        console.log('entroo')
         this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
           this.validPeriodsClosing = response;
 
@@ -321,9 +326,11 @@ export class ClosingLogCurrentComponent implements OnInit {
   validatePeriodsClosing() {
     this.validPeriodsClosing = false;
 
+    console.log(this.closingNotification);
     if (this.closingNotification) {
       if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
         this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
+          console.log(response);
           this.validPeriodsClosing = response;
         });
       }
