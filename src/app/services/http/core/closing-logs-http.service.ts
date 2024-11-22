@@ -7,6 +7,7 @@ import {ServerResponse} from '@models/http-response';
 import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
 import {AgreementModel, CatalogueModel, ClosingLogModel, ClosingNotificationModel, PeriodModel} from '@models/core';
 import {CatalogueTypeEnum} from "@shared/enums";
+import {format} from "date-fns";
 
 @Injectable({
   providedIn: 'root'
@@ -55,5 +56,32 @@ export class ClosingLogsHttpService {
         return response.data;
       })
     );
+  }
+
+  downloadLog(agreementId: string) {
+    const url = `${this.API_URL}/download`;
+
+    const params = new HttpParams().append('agreementId', agreementId);
+
+    this.coreService.isProcessing = true;
+
+    this.httpClient.get<BlobPart>(url, {responseType: 'blob' as 'json', params})
+      .subscribe(response => {
+        const filePath = URL.createObjectURL(new Blob([response]));
+
+        const downloadLink = document.createElement('a');
+
+        downloadLink.href = filePath;
+
+        const fileName = `bitacora_cierre_seguimiento_${format(new Date, 'yyyy_MM_dd hh_mm_ss')}.pdf`;
+
+        downloadLink.setAttribute('download', fileName);
+
+        document.body.appendChild(downloadLink);
+
+        downloadLink.click();
+
+        this.coreService.isProcessing = false;
+      });
   }
 }

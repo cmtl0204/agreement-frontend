@@ -29,6 +29,7 @@ import {CalendarModule} from "primeng/calendar";
 import {PanelModule} from "primeng/panel";
 import {PeriodClosingListComponent} from "./period-closing-list/period-closing-list.component";
 import {ClosingLogListComponent} from "./closing-log-list/closing-log-list.component";
+import {ClosingLogCurrentComponent} from "./closing-log-current/closing-log-current.component";
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import {ClosingLogListComponent} from "./closing-log-list/closing-log-list.compo
     AdditionalDocumentListComponent,
     AgreementTerminationListComponent,
     PeriodClosingListComponent,
+    ClosingLogCurrentComponent,
     ClosingLogListComponent
   ],
   imports: [
