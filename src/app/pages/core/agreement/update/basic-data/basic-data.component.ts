@@ -11,7 +11,7 @@ import {
   AgreementStateEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
-import {verifyAgreementInternalNumber, verifyAgreementInternalNumberUpdate} from "@shared/validators";
+import {verifyAgreementInternalNumberUpdate} from "@shared/validators";
 
 @Component({
   selector: 'app-basic-data',

@@ -13,7 +13,7 @@ export interface AgreementModel {
   number?: string;
   administrator?: AdministratorModel;
   agreementState?: AgreementStateModel;
-  internalNumber?: number;
+  internalNumber?: string;
   name?: string;
   originId?: string;
   typeId?: string;
