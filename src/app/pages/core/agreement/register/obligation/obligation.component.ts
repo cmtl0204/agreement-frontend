@@ -173,7 +173,7 @@ export class ObligationComponent implements OnInit {
 
       obligation.institutionName = obligation.institutionName.toString();
 
-      obligation.institutionName = obligation.institutionName.replace(',', ', ');
+      obligation.institutionName = obligation.institutionName.replaceAll(',', ', ');
 
       obligation.obligationDetails = [this.obligationDetailForm.value];
 

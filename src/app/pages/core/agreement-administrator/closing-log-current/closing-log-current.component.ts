@@ -39,6 +39,7 @@ import {
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
+import {forkJoin} from "rxjs";
 
 @Component({
   selector: 'app-closing-log-current',
@@ -97,6 +98,7 @@ export class ClosingLogCurrentComponent implements OnInit {
   protected readonly CatalogueClosingNotificationsCloseTypesDocumentEnum = CatalogueClosingNotificationsCloseTypesDocumentEnum;
   protected readonly FileEnum = FileEnum;
   protected validPeriodsClosing: boolean = false;
+  protected validPeriodsExecution: boolean = false;
 
   constructor() {
     this.breadcrumbService.setItems([
@@ -116,7 +118,8 @@ export class ClosingLogCurrentComponent implements OnInit {
     this.loadTypesByCloseType();
 
     setTimeout(() => {
-      this.validatePeriodsClosing();
+      // this.validatePeriodsClosing();
+      this.validatePeriods();
     }, 500);
 
     this.activatedRoute.queryParams.subscribe(params => {
@@ -191,24 +194,30 @@ export class ClosingLogCurrentComponent implements OnInit {
     if (this.closingNotification) {
       this.loadTypesByCloseType();
 
-      console.log(this.closingNotification.closeType);
-      if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
-        console.log('entroo')
-        this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
-          this.validPeriodsClosing = response;
 
-          if (!this.validPeriodsClosing) {
-            this.messageDialogService.errorCustom('Su mensaje va aqui', 'Su mensaje va aqui');
-          } else {
+      forkJoin(this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution'), this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing'))
+        .subscribe(response => {
+          if (response.length > 0) {
+            this.validPeriodsExecution = response[0];
+            this.validPeriodsClosing = response[1];
+
+            if (!this.validPeriodsExecution) {
+              this.messageDialogService.errorCustom('Error de reportes ejecucion', 'Su mensaje va aqui');
+              return;
+            }
+
+            if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
+              if (!this.validPeriodsClosing) {
+                this.messageDialogService.errorCustom('Error de reportes cierre', 'Su mensaje va aqui');
+                return;
+              }
+            }
+
             this.isVisibleFilesModal = true;
           }
         });
-        return;
-      }
-
-      this.isVisibleFilesModal = true;
     } else {
-      this.messageDialogService.errorCustom('Su mensaje va aqui', 'Su mensaje va aqui');
+      this.messageDialogService.errorCustom('No existe closing notification', 'Su mensaje va aqui');
     }
   }
 
@@ -319,8 +328,21 @@ export class ClosingLogCurrentComponent implements OnInit {
     });
   }
 
-  validateClosingNotification() {
+  validatePeriods() {
+    this.validPeriodsClosing = false;
+    this.validPeriodsExecution = false;
 
+    if (this.closingNotification) {
+      if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
+        forkJoin(this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution'), this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing'))
+          .subscribe(response => {
+            if (response.length > 0) {
+              this.validPeriodsExecution = response[0];
+              this.validPeriodsClosing = response[1];
+            }
+          });
+      }
+    }
   }
 
   validatePeriodsClosing() {
