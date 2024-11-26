@@ -69,7 +69,6 @@ export class BasicDataComponent implements OnInit {
       name: [null, [Validators.required]],
       internalNumber: [null, {
         validators: Validators.required,
-        asyncValidators: verifyAgreementInternalNumberUpdate(this.agreementsHttpService, this.formInput?.id),
         updateOn: 'blur'
       }],
       number: [null, [Validators.required]],
@@ -84,6 +83,8 @@ export class BasicDataComponent implements OnInit {
 
   patchValueForm() {
     this.form.patchValue(this.formInput);
+
+    this.internalNumberField.setAsyncValidators([verifyAgreementInternalNumberUpdate(this.agreementsHttpService, this.formInput?.id)]);
   }
 
   get agreementStateForm() {

@@ -55,7 +55,6 @@ export class TrackingLogsHttpService {
   }
 
   validationPeriods(agreementId: string, type: string): Observable<boolean> {
-    console.log(type);
     const url = `${this.API_URL}/${type}/validation-periods`;
 
     const params = new HttpParams().append('agreementId', agreementId);

@@ -42,7 +42,7 @@ export class UpdateComponent implements OnInit {
   constructor() {
     this.breadcrumbService.setItems([
       {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.AGREEMENTS_REGISTER},
+      {label: BreadcrumbEnum.AGREEMENTS_UPDATE},
     ]);
 
     this.buildForm();

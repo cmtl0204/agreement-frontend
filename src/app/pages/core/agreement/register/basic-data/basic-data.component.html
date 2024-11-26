@@ -6,8 +6,10 @@
       for="internalNumber"
       [label]="AgreementFormEnum.internalNumber"
       [required]="internalNumberField"></label>
+
     <app-form-help-field content="Colocar número asignado por la unidad de seguimiento"></app-form-help-field>
-    <p-inputNumber inputId="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
+
+    <p-inputNumber id="internalNumber" [useGrouping]="false" formControlName="internalNumber"/>
 
     <small
       appErrorMessage

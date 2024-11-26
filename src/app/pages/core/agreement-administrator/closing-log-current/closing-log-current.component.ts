@@ -348,11 +348,9 @@ export class ClosingLogCurrentComponent implements OnInit {
   validatePeriodsClosing() {
     this.validPeriodsClosing = false;
 
-    console.log(this.closingNotification);
     if (this.closingNotification) {
       if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
         this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
-          console.log(response);
           this.validPeriodsClosing = response;
         });
       }
