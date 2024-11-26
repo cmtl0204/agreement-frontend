@@ -130,8 +130,6 @@ export class BasicDataComponent implements OnInit {
   /* Load Foreign Keys  */
   loadStates() {
     this.states = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
-
-    this.states = this.states.filter(item => item.code === CatalogueAgreementStatesStateEnum.CURRENT); //review Quitar cuando esten todos los estados, ahora solo por pruebas de registro
   };
 
   loadOrigins() {
