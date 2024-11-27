@@ -138,7 +138,7 @@
       <td class="text-center">
         <p-button
           [icon]="PrimeIcons.ELLIPSIS_V"
-          (click)="selectItem(rowData)"></p-button>
+          (click)="selectItem(rowData)"/>
       </td>
     </tr>
   </ng-template>
@@ -160,7 +160,7 @@
 
 <app-button-action [buttonActions]="buttonActions"
                    [enabled]="isButtonActions"
-                   (isHide)="isButtonActions=!$event">
+                   (isHide)="isButtonActions=false">
 </app-button-action>
 
 <p-dialog

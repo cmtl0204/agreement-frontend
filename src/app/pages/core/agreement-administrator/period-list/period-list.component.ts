@@ -274,7 +274,7 @@ export class PeriodListComponent implements OnInit {
 
   deletePeriod() {
     if (this.selectedItem.trackingLog) {
-      this.messageDialogService.errorCustom('Su mensaje va aqui', 'Su mensaje va aqui');
+      this.messageDialogService.errorCustom('No es posible eliminar el período del reporte', 'Se encuentra en fase de revisión por la Unidad de Seguimiento');
       return;
     }
 

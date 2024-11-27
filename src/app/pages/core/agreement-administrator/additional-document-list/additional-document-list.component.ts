@@ -181,6 +181,8 @@ export class AdditionalDocumentListComponent implements OnInit {
 
       this.trackingLogsHttpService.createExecutionAdditionalDocument(this.agreementId, formData).subscribe(response => {
         this.findAdditionalDocumentsByAgreement();
+        this.form.reset();
+
         this.isVisibleFilesModal = false;
       });
     } else {

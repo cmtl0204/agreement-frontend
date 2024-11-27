@@ -4,13 +4,13 @@
       <!-- subscriptionAt -->
       <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label appLabel [label]="AgreementFormEnum.subscribedAt"></label>
-        <input pInputText [value]="agreement.subscribedAt | date" [readOnly]="true"/>
+        <input pInputText [value]="agreement.subscribedAt?.toString()! | customFormatDate" [readOnly]="true"/>
       </div>
 
       <!-- startedAt -->
       <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label appLabel for="startedAt" [label]="AgreementFormEnum.startedAt"></label>
-        <input pInputText id="startedAt" [value]="agreement.startedAt | date" [readOnly]="true"/>
+        <input pInputText id="startedAt" [value]="agreement.startedAt?.toString()! | customFormatDate" [readOnly]="true"/>
       </div>
 
       <!-- isFinishDate -->
@@ -44,7 +44,7 @@
       @if (agreement.isFinishDate) {
         <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
           <label appLabel [label]="AgreementFormEnum.endedAt"></label>
-          <input pInputText [value]="agreement.endedAt | date" [readOnly]="true"/>
+          <input pInputText [value]="agreement.endedAt?.toString()! | customFormatDate" [readOnly]="true"/>
         </div>
       }
 

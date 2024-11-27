@@ -97,10 +97,6 @@ export class PeriodListComponent implements OnInit {
   ngOnInit() {
     this.findPeriodsByAgreement();
     this.loadTypes();
-
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.trackingLogType = params['type'];
-    });
   }
 
   buildForm() {
@@ -112,6 +108,7 @@ export class PeriodListComponent implements OnInit {
   }
 
   findPeriodsByAgreement() {
+    console.log(this.trackingLogType);
     this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId, this.trackingLogType)
       .subscribe((response) => {
         this.items = response;
