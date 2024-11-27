@@ -134,9 +134,9 @@
   [(visible)]="isVisibleTrackingLogModal"
   [modal]="true"
   [style]="{width: '100%'}"
-  header="Bitácora">
+  header="Bitácoras">
   @if (isVisibleTrackingLogModal) {
-    <app-tracking-log-list [period]="selectedItem"/>
+    <app-tracking-log-list [period]="selectedItem" trackingLogType="execution"/>
   }
 </p-dialog>
 
