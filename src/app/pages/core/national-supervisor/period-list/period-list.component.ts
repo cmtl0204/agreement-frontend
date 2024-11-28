@@ -22,7 +22,7 @@ import {
   AddendumEnum,
   CatalogueTypeEnum,
   PeriodEnum,
-  CatalogueTrackingLogsStateEnum
+  CatalogueTrackingLogsStateEnum, TrackingLogEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -183,11 +183,17 @@ export class PeriodListComponent implements OnInit {
   }
 
   refuseTrackingLogDocuments() {
-    this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observationFileField.value).subscribe(() => {
-      this.findPeriodsByAgreement();
-      this.isVisibleRefusedModal = false;
-      this.observation = '';
-    });
+    if (this.observationFileField.valid) {
+      this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observationFileField.value).subscribe(() => {
+        this.findPeriodsByAgreement();
+        this.isVisibleRefusedModal = false;
+        this.observation = '';
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.formErrors = [TrackingLogEnum.observation];
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
   }
 
   acceptTrackingLogDocuments() {

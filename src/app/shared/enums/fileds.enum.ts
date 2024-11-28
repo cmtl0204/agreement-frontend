@@ -173,6 +173,7 @@ export enum TrackingLogEnum {
   state = 'Estado',
   user = 'Modificado por ',
   registeredAt = 'Fecha y hora de estado',
+  observation = 'Observación',
 }
 
 export enum AdditionalDocumentEnum {

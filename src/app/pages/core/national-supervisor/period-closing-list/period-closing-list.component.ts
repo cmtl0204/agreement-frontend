@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ColumnModel, AgreementModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
+import {ActivatedRoute} from '@angular/router';
+import {ColumnModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
 import {
   CoreService,
   BreadcrumbService,
@@ -185,33 +185,18 @@ export class PeriodClosingListComponent implements OnInit {
     this.filesHttpService.downloadFile(file);
   }
 
-  validateFilesForm() {
-    this.formErrors = [];
-
-    if (this.reportFileField.invalid) this.formErrors.push(PeriodEnum.reportFile);
-    if (this.evidenceFileField.invalid) this.formErrors.push(PeriodEnum.evidenceFile);
-
-    return this.formErrors.length === 0
-  }
-
-  uploadReportFile(event: any, uploadFiles: any) {
-    this.reportFileField.patchValue(event.files[0]);
-
-    uploadFiles.clear();
-  }
-
-  uploadEvidenceFile(event: any, uploadFiles: any) {
-    this.evidenceFileField.patchValue(event.files[0]);
-
-    uploadFiles.clear();
-  }
-
   refuseTrackingLogDocuments() {
-    this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observationFileField.value).subscribe(() => {
-      this.findPeriodsByAgreement();
-      this.isVisibleRefusedModal = false;
-      this.observation = '';
-    });
+    if (this.observationFileField.valid) {
+      this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observationFileField.value).subscribe(() => {
+        this.findPeriodsByAgreement();
+        this.isVisibleRefusedModal = false;
+        this.observation = '';
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.formErrors = ['Observación'];
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
   }
 
   acceptTrackingLogDocuments() {

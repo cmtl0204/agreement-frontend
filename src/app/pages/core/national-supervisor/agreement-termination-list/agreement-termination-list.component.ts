@@ -1,6 +1,6 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AgreementModel, CatalogueModel, ClosingNotificationModel} from '@models/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {CatalogueModel, ClosingNotificationModel} from '@models/core';
 import {BreadcrumbService, CoreService, MessageDialogService} from '@servicesApp/core';
 import {AgreementsHttpService, CataloguesHttpService, ClosingNotificationsHttpService} from '@servicesHttp/core';
 import {
@@ -9,9 +9,6 @@ import {
   CatalogueTypeEnum,
   CatalogueAgreementsTypeEnum,
   AgreementStateEnum,
-  RoleEnum,
-  CatalogueAgreementsOriginEnum,
-  CatalogueAgreementStatesStateEnum,
   ClosingNotificationEnum, BreadcrumbEnum, CatalogueClosingNotificationsCloseTypeEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
