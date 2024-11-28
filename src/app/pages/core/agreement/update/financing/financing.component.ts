@@ -1,5 +1,5 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormArray, AbstractControl} from '@angular/forms';
+import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/forms';
 import {AgreementModel, ColumnModel, createAgreementModel} from '@models/core';
 import {AuthService} from '@servicesApp/auth';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
@@ -14,21 +14,20 @@ import {
   TableEnum
 } from '@shared/enums';
 import {onlyLetters} from '@shared/helpers';
-import {MessageService, PrimeIcons} from 'primeng/api';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-financing',
   templateUrl: './financing.component.html',
   styleUrl: './financing.component.scss'
 })
-export class FinancingComponent implements OnInit {
+export class FinancingComponent implements OnInit, OnChanges {
   /** Services **/
   protected readonly authService = inject(AuthService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
   private readonly formBuilder = inject(FormBuilder);
   protected readonly messageDialogService = inject(MessageDialogService);
-  private readonly messageService = inject(MessageService);
 
   /** variables **/
   protected form!: FormGroup;
@@ -68,6 +67,10 @@ export class FinancingComponent implements OnInit {
 
     this.patchValueForm();
     this.validateForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.loadCombineInstitutions();
   }
 
   patchValueForm() {
@@ -112,7 +115,6 @@ export class FinancingComponent implements OnInit {
     ];
   }
 
-  /** add array **/
   addFinancing() {
     if (this.validateFinancingForm()) {
       if (this.formInput.financings.findIndex(item => {
@@ -135,7 +137,6 @@ export class FinancingComponent implements OnInit {
     }
   }
 
-  /** delete array**/
   deleteFinancing(index: number) {
     this.formInput.financings.splice(index, 1);
 

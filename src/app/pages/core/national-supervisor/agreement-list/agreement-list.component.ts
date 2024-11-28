@@ -155,14 +155,6 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
         },
       },
-      // {
-      //   id: IdButtonActionEnum.REACTIVATE,
-      //   label: LabelButtonActionEnum.REACTIVATE,
-      //   icon: IconButtonActionEnum.REACTIVATE,
-      //   command: () => {
-      //     if (this.selectedItem?.id) this.reactivate(this.selectedItem.id);
-      //   },
-      // },
     ];
   }
 
@@ -174,14 +166,11 @@ export class AgreementListComponent implements OnInit {
     }
 
     if (!item.enabled) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.VIEW), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.EDIT), 1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT), 1);
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_LOG),1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD), 1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION), 1);
     }
-
-    //   if (!item.suspendedAt) {
-    //     this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REACTIVATE), 1);
-    //   }
   }
 
   redirectCreateForm() {

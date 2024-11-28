@@ -59,6 +59,7 @@ import {InputGroupModule} from "primeng/inputgroup";
     AuthModule,
     AuthenticationModule,
     SharedModule,
+
     //PrimeNg
     BadgeModule,
     ButtonModule,

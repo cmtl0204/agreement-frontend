@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
@@ -20,7 +20,7 @@ import {PrimeIcons} from 'primeng/api';
   templateUrl: './obligation.component.html',
   styleUrls: ['./obligation.component.scss']
 })
-export class ObligationComponent implements OnInit {
+export class ObligationComponent implements OnInit, OnChanges {
   private readonly formBuilder = inject(FormBuilder);
   public readonly messageDialogService = inject(MessageDialogService);
 
@@ -66,6 +66,10 @@ export class ObligationComponent implements OnInit {
 
     this.patchValueForm();
     this.validateForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.loadInstitutions();
   }
 
   buildColumns() {
