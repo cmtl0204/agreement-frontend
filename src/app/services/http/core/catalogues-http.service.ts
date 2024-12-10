@@ -95,6 +95,12 @@ export class CataloguesHttpService {
     return [];
   }
 
+  findByCode(code: string, type: CatalogueTypeEnum): CatalogueModel | undefined {
+    const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
+
+    return catalogues.find(catalogue => catalogue.type === type && catalogue.code === code);
+  }
+
   findByParent(parentId: string): CatalogueModel[] {
     const catalogues: CatalogueModel[] = JSON.parse(String(sessionStorage.getItem('catalogues')));
 

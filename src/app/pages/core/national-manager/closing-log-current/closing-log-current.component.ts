@@ -35,7 +35,7 @@ import {
   PeriodEnum,
   CatalogueTrackingLogsStateEnum,
   FileEnum,
-  CatalogueClosingNotificationsCloseTypesDocumentEnum
+  CatalogueClosingNotificationsCloseTypesDocumentEnum, TrackingLogEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
@@ -54,10 +54,8 @@ export class ClosingLogCurrentComponent implements OnInit {
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly authService = inject(AuthService);
   protected readonly coreService = inject(CoreService);
-  private readonly confirmationService = inject(ConfirmationService);
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
-  private readonly periodsHttpService = inject(PeriodsHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
   private readonly closingLogsHttpService = inject(ClosingLogsHttpService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
@@ -81,7 +79,7 @@ export class ClosingLogCurrentComponent implements OnInit {
 
   protected search: FormControl = new FormControl('');
 
-  protected selectedItem!: PeriodModel;
+  protected selectedItem!: ClosingLogModel;
   protected items: ClosingLogModel[] = [];
   protected agreement!: AgreementModel;
   protected form!: FormGroup;
@@ -90,6 +88,8 @@ export class ClosingLogCurrentComponent implements OnInit {
   protected types: CatalogueModel[] = [];
   protected closeTypes: CatalogueModel[] = [];
   protected trackingLogType: string = 'execution';
+  protected isVisibleRefusedModal: boolean = false;
+  protected isVisibleAcceptedModal: boolean = false;
 
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
@@ -102,7 +102,7 @@ export class ClosingLogCurrentComponent implements OnInit {
 
   constructor() {
     this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
       {label: BreadcrumbEnum.PERIODS},
     ]);
 
@@ -131,6 +131,7 @@ export class ClosingLogCurrentComponent implements OnInit {
     this.form = this.formBuilder.group({
       reportFile: [null, Validators.required],
       evidenceFile: [null],
+      observation: [null, Validators.required]
     })
   }
 
@@ -194,6 +195,7 @@ export class ClosingLogCurrentComponent implements OnInit {
     if (this.closingNotification) {
       this.loadTypesByCloseType();
 
+
       forkJoin(this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution'), this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing'))
         .subscribe(response => {
           if (response.length > 0) {
@@ -201,13 +203,13 @@ export class ClosingLogCurrentComponent implements OnInit {
             this.validPeriodsClosing = response[1];
 
             if (!this.validPeriodsExecution) {
-              this.messageDialogService.errorCustom('Importante!', 'Verificar que todos los periodos de ejecución y seguimiento a la ejecución estén reportados y aceptados');
+              this.messageDialogService.errorCustom('Error de reportes ejecucion', 'Su mensaje va aqui');
               return;
             }
 
             if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
               if (!this.validPeriodsClosing) {
-                this.messageDialogService.errorCustom('Importante!', 'Verificar que todos los periodos de avance de cierre estén reportados y aceptados');
+                this.messageDialogService.errorCustom('Error de reportes cierre', 'Su mensaje va aqui');
                 return;
               }
             }
@@ -216,7 +218,7 @@ export class ClosingLogCurrentComponent implements OnInit {
           }
         });
     } else {
-      this.messageDialogService.errorCustom('Importante!', 'Por favor debe notificar la fecha de Acta de Terminación y Cierre del Convenio');
+      this.messageDialogService.errorCustom('No existe closing notification', 'Su mensaje va aqui');
     }
   }
 
@@ -250,14 +252,33 @@ export class ClosingLogCurrentComponent implements OnInit {
           this.isVisibleTrackingLogModal = true;
         },
       },
+      {
+        id: IdButtonActionEnum.ACCEPTED,
+        label: LabelButtonActionEnum.ACCEPTED,
+        icon: IconButtonActionEnum.ACCEPTED,
+        command: () => {
+          this.isVisibleAcceptedModal = true;
+        },
+      },
+      {
+        id: IdButtonActionEnum.REFUSED,
+        label: LabelButtonActionEnum.REFUSED,
+        icon: IconButtonActionEnum.REFUSED,
+        command: () => {
+          this.isVisibleRefusedModal = true;
+        },
+      },
     ];
   }
 
-  validateButtonActions(item: PeriodModel) {
+  validateButtonActions(item: ClosingLogModel) {
     this.buildButtonActions();
 
-    if (item.agreement?.isFinishDate) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.DELETE), 1);
+    if (!item
+      || item.state?.code === CatalogueTrackingLogsStateEnum.ACCEPTED
+      || item.state?.code === CatalogueTrackingLogsStateEnum.REFUSED) {
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.ACCEPTED), 1);
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REFUSED), 1);
     }
   }
 
@@ -273,14 +294,40 @@ export class ClosingLogCurrentComponent implements OnInit {
     //   });
   }
 
-  selectItem(item: PeriodModel) {
+  selectItem(item: ClosingLogModel) {
     this.isButtonActions = true;
     this.selectedItem = item;
     this.validateButtonActions(item);
   }
 
+  showFilesModal(item: ClosingLogModel) {
+    this.selectedItem = item;
+    this.isVisibleFilesModal = true;
+  }
+
   downloadFile(file: FileModel) {
     this.filesHttpService.downloadFile(file);
+  }
+
+  refuseTrackingLogDocuments() {
+    if (this.observationFileField.valid) {
+      this.closingLogsHttpService.changeState(this.selectedItem.id, false, this.observationFileField.value).subscribe(() => {
+        this.findClosingLogCurrentByAgreement();
+        this.isVisibleRefusedModal = false;
+        this.observationFileField.reset();
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.formErrors = [TrackingLogEnum.observation];
+      this.messageDialogService.fieldErrors(this.formErrors);
+    }
+  }
+
+  acceptTrackingLogDocuments() {
+    this.closingLogsHttpService.changeState(this.selectedItem.id, true).subscribe(() => {
+      this.findClosingLogCurrentByAgreement();
+      this.isVisibleAcceptedModal = false;
+    });
   }
 
   validateFilesForm() {
@@ -301,17 +348,6 @@ export class ClosingLogCurrentComponent implements OnInit {
     this.isVisibleFilesModal = false;
     this.reportFileField.setValue(null);
     this.evidenceFileField.setValue(null);
-  }
-
-  deletePeriod() {
-    if (this.selectedItem.trackingLog) {
-      this.messageDialogService.errorCustom('Su mensaje va aqui', 'Su mensaje va aqui');
-      return;
-    }
-
-    this.periodsHttpService.delete(this.selectedItem.id).subscribe(() => {
-      this.findClosingLogCurrentByAgreement();
-    });
   }
 
   validatePeriods() {
@@ -349,5 +385,9 @@ export class ClosingLogCurrentComponent implements OnInit {
 
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
+  }
+
+  get observationFileField(): AbstractControl {
+    return this.form.controls['observation'];
   }
 }

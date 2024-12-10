@@ -1,0 +1,90 @@
+<p-toolbar>
+  <div class="p-toolbar-group-left">
+    <p-button
+      class="ml-2"
+      (click)="downloadLog()"
+      [icon]="IconButtonActionEnum.DOWNLOAD"
+      [label]="LabelButtonActionEnum.DOWNLOAD"
+      [loading]="coreService.isLoading"
+      [severity]="SeverityButtonActionEnum.SYNC"/>
+  </div>
+  <div class="p-toolbar-group-right">
+
+  </div>
+</p-toolbar>
+
+<p-table
+  #dt
+  dataKey="id"
+  styleClass="p-datatable-striped"
+  [value]="items"
+  [columns]="columns"
+  [paginator]="true"
+  [rows]="10"
+  paginatorPosition="both"
+  [loading]="coreService.isLoading">
+  <ng-template pTemplate="caption">
+    <div class="flex">
+
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      @for (col of columns; track col) {
+        <th [pSortableColumn]="col.field">
+          {{ col.header }}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+      @for (col of columns; track col) {
+        <td>
+          <!--Objects-->
+          @if (rowData[col.field]?.id) {
+            @switch (col.field) {
+              @case ('user') {
+                {{ rowData.user.name }} {{ rowData.user.lastname }}
+                @if (rowData.observation) {
+                  <br>
+                  <b>Comentario: </b>{{ rowData.observation }}
+                }
+              }
+              @case ('state') {
+                {{ rowData.state.name }}
+              }
+            }
+          }
+
+          <!--Fields-->
+          @if (!rowData[col.field]?.id) {
+            @switch (col.field) {
+              @default {
+                {{ rowData[col.field] }}
+              }
+              @case ('registeredAt') {
+                @if (rowData.registeredAt) {
+                  {{ rowData.registeredAt | date:'dd/MM/yy - HH:mm' }}
+                }
+              }
+            }
+          }
+        </td>
+      }
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        {{ messageService.paginatorNoRecordsFound }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
+  </ng-template>
+</p-table>

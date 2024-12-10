@@ -33,3 +33,4 @@ export * from './period.model';
 export * from './tracking-log.model';
 export * from './agreement-log.model';
 export * from './agreement-log-detail.model';
+export * from './closed-agreement.model';

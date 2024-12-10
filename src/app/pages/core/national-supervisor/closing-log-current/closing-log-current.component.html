@@ -3,171 +3,181 @@
   [totalRecords]="paginator.totalItems"
   (onPageChange)="paginate($event)"></p-paginator>
  -->
-<p-table
-  #dt
-  dataKey="id"
-  styleClass="p-datatable-striped"
-  [value]="items"
-  [columns]="columns"
-  [paginator]="true"
-  [rows]="10"
-  paginatorPosition="both"
-  [loading]="coreService.isLoading">
-  <ng-template pTemplate="caption">
-    <h2>{{ BreadcrumbEnum.CLOSING_LOG_ADMINISTRATOR }}</h2>
+<p-panel>
+  <p-table
+    #dt
+    dataKey="id"
+    styleClass="p-datatable-striped"
+    [value]="items"
+    [columns]="columns"
+    [loading]="coreService.isLoading">
+    <ng-template pTemplate="caption">
+      <h2>{{ BreadcrumbEnum.CLOSING_LOG_ADMINISTRATOR }}</h2>
 
-    @if (!validPeriodsClosing && closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
-      <p-messages severity="error">
-        <ng-template pTemplate>
-          <div class="ml-2">
-            Previo a reportar la documentación en la secciones GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de avence
-            de
-            cierre) deberá contar con todos los reportes en estado ACEPTADO.
-          </div>
-        </ng-template>
-      </p-messages>
-    }
-
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        @if (items.length === 0) {
-          <p-button
-            (click)="openFilesModal()"
-            [icon]="IconButtonActionEnum.UPLOAD"
-            [label]="LabelButtonActionEnum.CREATE_CLOSING_LOG"
-            [loading]="coreService.isLoading"
-            [severity]="SeverityButtonActionEnum.UPLOAD"/>
-        }
-      </div>
-
-      <div class="p-toolbar-group-right">
-
-      </div>
-    </p-toolbar>
-
-  </ng-template>
-
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      @for (col of columns; track col) {
-        <th [pSortableColumn]="col.field">
-          {{ col.header }}
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-        </th>
+      @if (!validPeriodsClosing && closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
+        <p-messages severity="error">
+          <ng-template pTemplate>
+            <div class="ml-2">
+              Previo a reportar la documentación en la secciones GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de avence
+              de
+              cierre) deberá contar con todos los reportes en estado ACEPTADO.
+            </div>
+          </ng-template>
+        </p-messages>
       }
-      <th class="text-center">
-        {{ TableEnum.ACTIONS }}
-      </th>
-    </tr>
-  </ng-template>
 
-  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
-      @for (col of columns; track col) {
-        <td>
-          <!--Objects-->
-          @if (rowData[col.field]?.id) {
-            @switch (col.field) {
-              @case ('administrator') {
-                {{ rowData[col.field].unit.name }}
-              }
-              @case ('user') {
-                @if (rowData?.user) {
-                  {{ rowData.user.name }} {{ rowData.user.lastname }}
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+
+        </div>
+
+        <div class="p-toolbar-group-right">
+
+        </div>
+      </p-toolbar>
+
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        @for (col of columns; track col) {
+          <th [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+        }
+        <th class="text-center">
+          {{ TableEnum.ACTIONS }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+      <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+        @for (col of columns; track col) {
+          <td>
+            <!--Objects-->
+            @if (rowData[col.field]?.id) {
+              @switch (col.field) {
+                @case ('administrator') {
+                  {{ rowData[col.field].unit.name }}
+                }
+                @case ('user') {
+                  @if (rowData?.user) {
+                    {{ rowData.user.name }} {{ rowData.user.lastname }}
+                  }
+                }
+                @case ('state') {
+                  {{ rowData?.state?.name }}
                 }
               }
-              @case ('state') {
-                {{ rowData?.state?.name }}
-              }
             }
-          }
 
-          <!--Fields-->
-          @if (!rowData[col.field]?.id) {
-            @switch (col.field) {
-              @default {
-                {{ rowData[col.field] }}
-              }
-              @case ('closingLogDocumentsUpload') {
-                @if (!rowData?.closingLogDocuments || rowData.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
-                  <p-button
-                    class="ml-2"
-                    [icon]="IconButtonActionEnum.ADD"
-                    [pTooltip]="LabelButtonActionEnum.ADD"
-                    [severity]="SeverityButtonActionEnum.ADD"
-                    (click)="showFilesModal(rowData)"/>
-                } @else {
+            <!--Fields-->
+            @if (!rowData[col.field]?.id) {
+              @switch (col.field) {
+                @default {
+                  {{ rowData[col.field] }}
+                }
+                @case ('closingLogDocumentsUpload') {
                   @for (item of rowData?.closingLogDocuments; track item) {
                     <span>{{ item.type.name }}: </span>
 
                     <p-divider/>
                   }
                 }
-              }
-              @case ('closingLogDocuments') {
-                @if (rowData?.closingLogDocuments) {
-                  @for (item of rowData?.closingLogDocuments; track item) {
-                    <p-button
-                      class="ml-2"
-                      [icon]="IconButtonActionEnum.DOWNLOAD"
-                      [label]="item.name"
-                      [text]="true"
-                      [severity]="SeverityButtonActionEnum.DOWNLOAD"
-                      (click)="downloadFile(item)"/>
+                @case ('closingLogDocuments') {
+                  @if (rowData?.closingLogDocuments) {
+                    @for (item of rowData?.closingLogDocuments; track item) {
+                      <p-button
+                        class="ml-2"
+                        [icon]="IconButtonActionEnum.DOWNLOAD"
+                        [label]="item.name"
+                        [text]="true"
+                        [severity]="SeverityButtonActionEnum.DOWNLOAD"
+                        (click)="downloadFile(item)"/>
 
-                    <p-divider/>
+                      <p-divider/>
+                    }
                   }
                 }
-              }
-              @case ('trafficLight') {
-                @if (rowData.closingLogDocuments) {
-                  @if (rowData.state.code === 'REPORTED' || rowData.state.code === 'ACCEPTED') {
-                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 3rem"></i>
+                @case ('trafficLight') {
+                  @if (rowData.closingLogDocuments) {
+                    @if (rowData.state.code === 'REPORTED' || rowData.state.code === 'ACCEPTED') {
+                      <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 3rem"></i>
+                    } @else {
+                      <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
+                    }
                   } @else {
                     <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
                   }
-                } @else {
-                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
                 }
-              }
-              @case ('name') {
-                {{ rowData.name }}
-                <br>
-                {{ rowData.startedAt | date:'d MMMM y' }}
-                -
-                <br>
-                {{ rowData.endedAt | date:'d MMMM y' }}
-              }
-              @case ('uploadedAt') {
-                {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
-              }
+                @case ('name') {
+                  {{ rowData.name }}
+                  <br>
+                  {{ rowData.startedAt | date:'d MMMM y' }}
+                  -
+                  <br>
+                  {{ rowData.endedAt | date:'d MMMM y' }}
+                }
+                @case ('uploadedAt') {
+                  {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
+                }
 
+              }
             }
-          }
+          </td>
+        }
+
+        <td class="text-center">
+          <p-button
+            [icon]="PrimeIcons.ELLIPSIS_V"
+            (click)="selectItem(rowData)"></p-button>
         </td>
-      }
+      </tr>
+    </ng-template>
 
-      <td class="text-center">
-        <p-button
-          [icon]="PrimeIcons.ELLIPSIS_V"
-          (click)="selectItem(rowData)"></p-button>
-      </td>
-    </tr>
-  </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [attr.colspan]="columns.length">
+          {{ messageService.paginatorNoRecordsFound }}
+        </td>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="emptymessage" let-columns>
-    <tr>
-      <td [attr.colspan]="columns.length">
-        {{ messageService.paginatorNoRecordsFound }}
-      </td>
-    </tr>
-  </ng-template>
+    <ng-template pTemplate="summary">
+      <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
+    </ng-template>
+  </p-table>
+</p-panel>
 
-  <ng-template pTemplate="summary">
-    <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
-  </ng-template>
-</p-table>
+<p-divider/>
 
+@if (closingLogCurrent && closingLogCurrent.state && closingLogCurrent.state.code==='ACCEPTED') {
+  <p-panel>
+    <ng-template pTemplate="header">
+      <h2>
+        Registro de Cierre del Convenio
+      </h2>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+      <div class="card flex">
+
+        <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="!!closedAgreement"/>
+
+        <p-divider layout="vertical"/>
+
+        Enviar documentación habilitante validada, para registro del cierre del convenio en el sistema informático.
+
+        @if (!closedAgreement) {
+          <p-divider layout="vertical"/>
+          <p-button label="Enviar" severity="success" (click)="closeAgreement()" [disabled]="!checked"/>
+        }
+      </div>
+    </ng-template>
+  </p-panel>
+}
 <app-button-action [buttonActions]="buttonActions"
                    [enabled]="isButtonActions"
                    (isHide)="isButtonActions=!$event">
@@ -247,4 +257,76 @@
   @if (isVisibleTrackingLogModal) {
     <app-closing-log-list [agreementId]="agreementId"/>
   }
+</p-dialog>
+
+<p-dialog
+  header="Header"
+  [(visible)]="isVisibleRefusedModal"
+  [modal]="true"
+  [style]="{ width: '35rem' }">
+  <ng-template pTemplate="header">
+    <h3>¿Está seguro de rechazar, no podrá modificar su elección?</h3>
+  </ng-template>
+
+  <form [formGroup]="form" class="grid p-fluid">
+    <div class=" field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <label
+        appLabel
+        for="observation"
+        label="Observación"
+        [required]="observationFileField">
+      </label>
+
+      <textarea pInputTextarea id="observation" formControlName="observation"></textarea>
+
+      <small
+        appErrorMessage
+        [errors]="observationFileField.errors"
+        [touched]="observationFileField.touched"
+        [dirty]="observationFileField.dirty">
+      </small>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="isVisibleRefusedModal = false"/>
+
+    <p-button
+      [label]="LabelButtonActionEnum.REFUSED"
+      [icon]="IconButtonActionEnum.REFUSED"
+      [severity]="SeverityButtonActionEnum.REFUSED"
+      (click)="refuseTrackingLogDocuments()"
+    />
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Header"
+  [(visible)]="isVisibleAcceptedModal"
+  [modal]="true"
+  [style]="{ width: '35rem' }">
+  <ng-template pTemplate="header">
+    <h3>¿Está seguro de aceptar, no podrá modificar su elección?</h3>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="isVisibleAcceptedModal = false"/>
+
+    <p-button
+      [label]="LabelButtonActionEnum.ACCEPTED"
+      [icon]="IconButtonActionEnum.ACCEPTED"
+      [severity]="SeverityButtonActionEnum.REFUSED"
+      (click)="acceptTrackingLogDocuments()"
+    />
+  </ng-template>
 </p-dialog>

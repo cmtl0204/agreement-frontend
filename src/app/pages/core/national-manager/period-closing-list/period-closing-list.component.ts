@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ColumnModel, AgreementModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
+import {ActivatedRoute} from '@angular/router';
+import {ColumnModel, CatalogueModel, FileModel, PeriodModel} from '@models/core';
 import {
   CoreService,
   BreadcrumbService,
@@ -9,7 +9,7 @@ import {
   MessageDialogService
 } from '@servicesApp/core';
 import {
-  CataloguesHttpService, FilesHttpService, PeriodsHttpService,
+  CataloguesHttpService, FilesHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
 import {
@@ -22,18 +22,18 @@ import {
   AddendumEnum,
   CatalogueTypeEnum,
   PeriodEnum,
-  CatalogueTrackingLogsStateEnum, TrackingLogEnum
+  CatalogueTrackingLogsStateEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
 
 @Component({
-  selector: 'app-period-list',
-  templateUrl: './period-list.component.html',
-  styleUrl: './period-list.component.scss'
+  selector: 'app-period-closing-list',
+  templateUrl: './period-closing-list.component.html',
+  styleUrl: './period-closing-list.component.scss'
 })
-export class PeriodListComponent implements OnInit {
+export class PeriodClosingListComponent implements OnInit {
   @Input() agreementId!: string;
 
   // Services
@@ -68,18 +68,19 @@ export class PeriodListComponent implements OnInit {
   protected form!: FormGroup;
   protected formErrors: string[] = [];
   protected types: CatalogueModel[] = [];
-  protected trackingLogType: string = 'execution';
+  protected trackingLogType: string = 'closing';
 
   protected isVisibleFilesModal: boolean = false;
   protected isVisibleTrackingLogModal: boolean = false;
   protected isVisibleRefusedModal: boolean = false;
   protected isVisibleAcceptedModal: boolean = false;
   protected readonly AddendumEnum = AddendumEnum;
+  protected observation!: string;
 
   constructor() {
     this.breadcrumbService.setItems([
       {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS_SUPERVISOR}
+      {label: BreadcrumbEnum.PERIODS_CLOSING_SUPERVISOR}
     ]);
 
     this.buildForm();
@@ -96,6 +97,10 @@ export class PeriodListComponent implements OnInit {
   ngOnInit() {
     this.findPeriodsByAgreement();
     this.loadTypes();
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.trackingLogType = params['type'];
+    });
   }
 
   buildForm() {
@@ -107,7 +112,6 @@ export class PeriodListComponent implements OnInit {
   }
 
   findPeriodsByAgreement() {
-    console.log(this.trackingLogType);
     this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId, this.trackingLogType)
       .subscribe((response) => {
         this.items = response;
@@ -186,10 +190,11 @@ export class PeriodListComponent implements OnInit {
       this.trackingLogsHttpService.changeState(this.selectedItem.trackingLog.id, false, this.observationFileField.value).subscribe(() => {
         this.findPeriodsByAgreement();
         this.isVisibleRefusedModal = false;
+        this.observation = '';
       });
     } else {
       this.form.markAllAsTouched();
-      this.formErrors = [TrackingLogEnum.observation];
+      this.formErrors = ['Observación'];
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }

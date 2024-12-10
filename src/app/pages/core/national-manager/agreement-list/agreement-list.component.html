@@ -1,0 +1,128 @@
+<p-toolbar>
+  <div class="p-toolbar-group-left">
+    <p-button
+      (click)="redirectCreateForm()"
+      [icon]="IconButtonActionEnum.CREATE"
+      [label]="LabelButtonActionEnum.CREATE_AGREEMENT"
+      [loading]="coreService.isLoading"
+      [severity]="SeverityButtonActionEnum.CREATE"></p-button>
+  </div>
+  <div class="p-toolbar-group-right">
+
+  </div>
+</p-toolbar>
+
+<!-- <p-paginator
+  [rows]="paginator.limit"
+  [totalRecords]="paginator.totalItems"
+  (onPageChange)="paginate($event)"></p-paginator>
+ -->
+<p-table
+  #dt
+  dataKey="id"
+  styleClass="p-datatable-striped"
+  [value]="items"
+  [columns]="columns"
+  [paginator]="true"
+  [rows]="10"
+  paginatorPosition="both"
+  [loading]="coreService.isLoading">
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <h1>{{ BreadcrumbEnum.AGREEMENTS }}</h1>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      @for (col of columns; track col) {
+        <th [pSortableColumn]="col.field">
+          {{ col.header }}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      }
+      <th class="text-center">
+        {{ TableEnum.ACTIONS }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [ngClass]="{'enabled':!rowData.enabled}">
+      @for (col of columns; track col) {
+        <td>
+          <!--Objects-->
+          @if (rowData[col.field]?.id) {
+            @switch (col.field) {
+              @case ('administrator') {
+                {{ rowData[col.field].unit.name }}
+              }
+              @case ('agreementState') {
+                {{ rowData[col.field].state.name }}
+              }
+            }
+          }
+
+          <!--Fields-->
+          @if (!rowData[col.field]?.id) {
+            @switch (col.field) {
+              @default {
+                {{ rowData[col.field] }}
+              }
+              @case ('subscribedAt') {
+                @if (rowData.subscribedAt) {
+                  {{ rowData.subscribedAt | customFormatDate }}
+                }
+              }
+              @case ('endedAt') {
+                @if (rowData.endedAt) {
+                  {{ rowData.endedAt | customFormatDate }}
+                } @else {
+                  Indefinido
+                }
+              }
+              @case ('isFinancing') {
+                {{ rowData.isFinancing | yesNo }}
+              }
+              @case ('enabled') {
+                @if (rowData.enabled) {
+                  <p-tag severity="info" value="Registrado"/>
+                } @else {
+                  <p-tag severity="danger" value="En Proceso"/>
+                }
+              }
+            }
+          }
+        </td>
+      }
+
+      <td class="text-center">
+        <p-button
+          [icon]="PrimeIcons.ELLIPSIS_V"
+          (click)="selectItem(rowData)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        {{ messageService.paginatorNoRecordsFound }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
+  </ng-template>
+</p-table>
+
+<app-button-action [buttonActions]="buttonActions"
+                   [enabled]="isButtonActions"
+                   (isHide)="isButtonActions=!$event">
+</app-button-action>
+
+<p-dialog
+  header="Convenio"
+  [(visible)]="isVisibleAgreementView"
+  [modal]="true">
+  @if (selectedItem && isVisibleAgreementView) {
+    <app-view [id]="selectedItem.id!"/>
+  }
+</p-dialog>

@@ -84,4 +84,19 @@ export class ClosingLogsHttpService {
         this.coreService.isProcessing = false;
       });
   }
+
+  changeState(id: string, state: boolean, observation = ''): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}/state`;
+
+    const params = new HttpParams()
+      .append('state', state)
+      .append('observation', observation);
+
+    return this.httpClient.patch<ServerResponse>(url, null, {params}).pipe(
+      map(response => {
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
 }

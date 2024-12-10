@@ -109,6 +109,26 @@ export class AgreementsHttpService {
     );
   }
 
+  findNationalManagerAgreementsByOrigin(): Observable<AgreementModel[]> {
+    const url = `${this.API_URL}/national-manager-agreements`;
+
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
+  findInternationalManagerAgreementsByOrigin(): Observable<AgreementModel[]> {
+    const url = `${this.API_URL}/international-manager-agreements`;
+
+    return this.httpClient.get<ServerResponse>(url).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
   findOne(id: string): Observable<AgreementModel> {
     const url = `${this.API_URL}/${id}`;
 

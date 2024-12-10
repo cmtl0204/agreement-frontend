@@ -114,8 +114,16 @@ export class AuthService {
         this.routesService.dashboardInternationalSupervisor();
         break;
       }
+      case RoleEnum.NATIONAL_MANAGER: {
+        this.routesService.dashboardNationalManager();
+        break;
+      }
+      case RoleEnum.INTERNATIONAL_MANAGER: {
+        this.routesService.dashboardInternationalManager();
+        break;
+      }
       default: {
-        this.routesService.dashboardNationalSupervisor();
+        this.routesService.login();
       }
     }
   }

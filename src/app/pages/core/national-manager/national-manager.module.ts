@@ -11,7 +11,7 @@ import { SharedModule } from "@shared/shared.module";
 import { TagModule } from 'primeng/tag';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { NationalSupervisorRoutingModule } from './national-supervisor-routing.module';
+import { NationalManagerRoutingModule } from './national-manager-routing.module';
 import {DialogModule} from "primeng/dialog";
 import {ViewModule} from "../agreement/view/view.module";
 import {IconFieldModule} from "primeng/iconfield";
@@ -29,6 +29,7 @@ import {PanelModule} from "primeng/panel";
 import {CalendarModule} from "primeng/calendar";
 import {ClosingLogCurrentComponent} from "./closing-log-current/closing-log-current.component";
 import {ClosingLogListComponent} from "./closing-log-list/closing-log-list.component";
+import {ClosedAgreementComponent} from "./closed-agreement/closed-agreement.component";
 import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
@@ -41,30 +42,31 @@ import {CheckboxModule} from "primeng/checkbox";
     PeriodClosingListComponent,
     ClosingLogCurrentComponent,
     ClosingLogListComponent,
+    ClosedAgreementComponent
   ],
-    imports: [
-        CommonModule,
-        NationalSupervisorRoutingModule,
-        SharedModule,
-        ToolbarModule,
-        ButtonModule,
-        PaginatorModule,
-        TableModule,
-        InputGroupModule,
-        TagModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        DialogModule,
-        ViewModule,
-        IconFieldModule,
-        InputIconModule,
-        FileUploadModule,
-        DividerModule,
-        InputTextareaModule,
-        ConfirmDialogModule,
-        PanelModule,
-        CalendarModule,
-        CheckboxModule
-    ]
+  imports: [
+    CommonModule,
+    NationalManagerRoutingModule,
+    SharedModule,
+    ToolbarModule,
+    ButtonModule,
+    PaginatorModule,
+    TableModule,
+    InputGroupModule,
+    TagModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    DialogModule,
+    ViewModule,
+    IconFieldModule,
+    InputIconModule,
+    FileUploadModule,
+    DividerModule,
+    InputTextareaModule,
+    ConfirmDialogModule,
+    PanelModule,
+    CalendarModule,
+    CheckboxModule
+  ]
 })
-export class NationalSupervisorModule { }
+export class NationalManagerModule { }

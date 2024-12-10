@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, inject, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PrimeIcons} from "primeng/api";
 import {AuthHttpService, AuthService} from '@servicesApp/auth';
@@ -29,6 +29,7 @@ export class LoginComponent {
   //Enums
   protected readonly PrimeIcons = PrimeIcons;
   protected readonly LoginFormEnum = LoginFormEnum;
+  protected readonly environment = environment;
 
   constructor() {
     this.authService.removeLogin();
@@ -85,6 +86,4 @@ export class LoginComponent {
   get passwordField(): AbstractControl {
     return this.form.controls['password'];
   }
-
-  protected readonly environment = environment;
 }

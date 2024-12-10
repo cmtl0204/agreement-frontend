@@ -295,6 +295,13 @@ export class RoutesService {
     this.router.navigateByUrl(`/core/international-supervisor/agreement-list`);
   }
 
+  dashboardNationalManager() {
+    this.router.navigateByUrl(`/core/national-manager/agreement-list`);
+  }
+
+  dashboardInternationalManager() {
+    this.router.navigateByUrl(`/core/international-manager/agreement-list`);
+  }
 
   passwordReset() {
     this.router.navigateByUrl(`/password-reset`);

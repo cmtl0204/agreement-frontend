@@ -1,0 +1,81 @@
+<p-panel>
+  <ng-template pTemplate="header">
+    <h2>
+      Registro de Cierre del Convenio
+    </h2>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="card flex">
+
+      @if (closedAgreement) {
+        <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="!!closedAgreement.closingDate"/>
+      }
+
+      <p-divider layout="vertical"/>
+
+      Enviar documentación habilitante validada, para registro del cierre del convenio en el sistema informático.
+
+      @if (!closedAgreement) {
+        <p-divider layout="vertical"/>
+        <p-button label="Enviar" severity="success" (click)="closeAgreement()" [disabled]="!checked"/>
+      }
+    </div>
+  </ng-template>
+</p-panel>
+
+<p-divider/>
+
+<p-panel>
+  <ng-template pTemplate="header">
+    <h2>
+      Comunicado registro del cierre del Convenio
+    </h2>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="p-fluid grid">
+      @if (closedAgreement) {
+        @if (closedAgreement.files.length === 0) {
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            <label
+              appLabel
+              [label]="fileType?.name!"
+              for="file"></label>
+
+            <p-fileUpload
+              #uploadFiles
+              id="file"
+              mode="basic"
+              chooseLabel="Cargar"
+              [chooseIcon]="PrimeIcons.UPLOAD"
+              name="files[]"
+              accept=".pdf,.zip,.rar"
+              invalidFileSizeMessageDetail=""
+              [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+              [maxFileSize]="FileEnum.maxFileSize"
+              [auto]="true"
+              [customUpload]="true"
+              (uploadHandler)="uploadFile($event)"/>
+          </div>
+        }
+
+        @if (closedAgreement.files) {
+          <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+            @for (item of closedAgreement.files; track item.id) {
+              {{ item?.type?.name }}
+              <p-divider/>
+              {{ item.name }}
+
+              <p-button
+                [icon]="IconButtonActionEnum.DOWNLOAD"
+                [pTooltip]="LabelButtonActionEnum.DOWNLOAD"
+                [severity]="SeverityButtonActionEnum.DOWNLOAD"
+                (click)="download(item)"/>
+            }
+          </div>
+        }
+      }
+    </div>
+  </ng-template>
+</p-panel>

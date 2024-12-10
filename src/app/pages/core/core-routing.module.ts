@@ -28,6 +28,18 @@ const routes: Routes = [
     canActivate: [RoleGuard],
     data: {roles: [RoleEnum.INTERNATIONAL_SUPERVISOR]}
   },
+  {
+    path: 'national-manager',
+    loadChildren: () => import('./national-manager/national-manager.module').then(m => m.NationalManagerModule),
+    canActivate: [RoleGuard],
+    data: {roles: [RoleEnum.NATIONAL_MANAGER]}
+  },
+  {
+    path: 'international-manager',
+    loadChildren: () => import('./national-manager/national-manager.module').then(m => m.NationalManagerModule),
+    canActivate: [RoleGuard],
+    data: {roles: [RoleEnum.INTERNATIONAL_MANAGER]}
+  },
 ];
 
 @NgModule({

@@ -3,27 +3,6 @@
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.OBJECT
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.UNILATERAL) {
   <p-panel header="Acta de Terminación y Cierre del Convenio">
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form
-          label="Registro"
-          [icon]="PrimeIcons.PENCIL"/>
-      </div>
-
-      <div class="p-toolbar-group-right">
-        @if (!idField.value) {
-          <app-form-button-action
-            labelSubmitButton="Notificar"
-            (submit)="onSubmit()"
-            [iconSubmitButton]="PrimeIcons.SEND"
-            [isVisibleCancelButton]="false"
-          />
-        }
-      </div>
-    </p-toolbar>
-
-    <p-divider/>
-
     <h3>Notificar fecha de Acta de Terminación y Cierre del Convenio</h3>
 
     <form [formGroup]="form" class="p-fluid grid">
@@ -107,11 +86,9 @@
         </small>
       </div>
     </form>
-  </p-panel>
-}
 
-@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
-  <p-panel header="Acta de Terminación y Cierre del Convenio">
+    <p-divider/>
+
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <app-header-form
@@ -120,7 +97,7 @@
       </div>
 
       <div class="p-toolbar-group-right">
-        @if (!closingNotification.closedAt) {
+        @if (!idField.value) {
           <app-form-button-action
             labelSubmitButton="Notificar"
             (submit)="onSubmit()"
@@ -131,8 +108,11 @@
       </div>
     </p-toolbar>
 
-    <p-divider/>
+  </p-panel>
+}
 
+@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+  <p-panel header="Acta de Terminación y Cierre del Convenio">
     <h3>Notificar fecha de Acta de Terminación y Cierre del Convenio</h3>
 
     <form [formGroup]="form" class="p-fluid grid">
@@ -167,6 +147,27 @@
         </small>
       </div>
     </form>
+
+    <p-divider/>
+
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <app-header-form
+          label="Registro"
+          [icon]="PrimeIcons.PENCIL"/>
+      </div>
+
+      <div class="p-toolbar-group-right">
+        @if (!closingNotification.closedAt) {
+          <app-form-button-action
+            labelSubmitButton="Notificar"
+            (submit)="onSubmit()"
+            [iconSubmitButton]="PrimeIcons.SEND"
+            [isVisibleCancelButton]="false"
+          />
+        }
+      </div>
+    </p-toolbar>
   </p-panel>
 }
 
@@ -187,6 +188,8 @@
   <app-period-closing-list [agreementId]="agreementId"/>
 }
 
-<app-closing-log-current [agreementId]="agreementId" [closingNotification]="closingNotification"/>
+<p-panel>
+  <app-closing-log-current [agreementId]="agreementId" [closingNotification]="closingNotification"/>
+</p-panel>
 
 <p-confirmDialog key="confirmDialog"/>
