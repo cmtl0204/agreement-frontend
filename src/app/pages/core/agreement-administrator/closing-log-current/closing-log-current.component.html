@@ -197,13 +197,6 @@
             [auto]="true"
             [customUpload]="true"
             (uploadHandler)="onUpload($event,uploadFiles, type)"/>
-
-          <small
-            appErrorMessage
-            [errors]="reportFileField.errors"
-            [touched]="reportFileField.touched"
-            [dirty]="reportFileField.dirty">
-          </small>
         </div>
 
         @if (files.length > index) {

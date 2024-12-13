@@ -1,12 +1,13 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, AbstractControl, FormArray} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/forms';
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from '@models/core';
 import {MessageDialogService} from '@servicesApp/core';
 import {AddendumsHttpService, AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
 import {
   AddendumEnum,
   AgreementFormEnum,
-  CatalogueTypeEnum, FileEnum,
+  CatalogueTypeEnum,
+  FileEnum,
   IconButtonActionEnum,
   LabelButtonActionEnum,
   SeverityButtonActionEnum,
@@ -169,7 +170,7 @@ export class AddendumComponent implements OnInit {
       formData.append('typeId', this.fileField.value.type.id);
       formData.append('description', this.descriptionField.value);
 
-      this.agreementsHttpService.uploadAddendum(this.formInput.id!, formData,true).subscribe(response => {
+      this.agreementsHttpService.uploadAddendum(this.formInput.id!, formData, true).subscribe(response => {
         this.formInput.addendums.push({
           id: response.id,
           description: this.descriptionField.value,
@@ -196,12 +197,18 @@ export class AddendumComponent implements OnInit {
     }
   }
 
+  cancelUpload() {
+    this.isVisibleAddendumForm = false;
+    this.descriptionField.reset();
+    this.fileField.reset();
+  }
+
   showAddendumModal() {
     this.isVisibleAddendumForm = true;
   }
 
   deleteAddendum(id: string) {
-    this.addendumsHttpService.remove(id,true,this.formInput.id!).subscribe(response => {
+    this.addendumsHttpService.remove(id, true, this.formInput.id!).subscribe(response => {
       const index = this.formInput.addendums.findIndex(item => item.id === id);
 
       this.formInput.addendums.splice(index, 1);

@@ -299,19 +299,7 @@ export class ClosingLogCurrentComponent implements OnInit {
 
   closeModal() {
     this.isVisibleFilesModal = false;
-    this.reportFileField.setValue(null);
-    this.evidenceFileField.setValue(null);
-  }
-
-  deletePeriod() {
-    if (this.selectedItem.trackingLog) {
-      this.messageDialogService.errorCustom('Su mensaje va aqui', 'Su mensaje va aqui');
-      return;
-    }
-
-    this.periodsHttpService.delete(this.selectedItem.id).subscribe(() => {
-      this.findClosingLogCurrentByAgreement();
-    });
+    this.files = [];
   }
 
   validatePeriods() {
@@ -329,25 +317,5 @@ export class ClosingLogCurrentComponent implements OnInit {
           });
       }
     }
-  }
-
-  validatePeriodsClosing() {
-    this.validPeriodsClosing = false;
-
-    if (this.closingNotification) {
-      if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
-        this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing').subscribe(response => {
-          this.validPeriodsClosing = response;
-        });
-      }
-    }
-  }
-
-  get reportFileField(): AbstractControl {
-    return this.form.controls['reportFile'];
-  }
-
-  get evidenceFileField(): AbstractControl {
-    return this.form.controls['evidenceFile'];
   }
 }

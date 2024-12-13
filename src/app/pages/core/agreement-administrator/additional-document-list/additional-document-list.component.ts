@@ -1,12 +1,10 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {ColumnModel, CatalogueModel, FileModel, PeriodModel, AdditionalDocumentModel} from '@models/core';
+import {ColumnModel, CatalogueModel, FileModel, AdditionalDocumentModel} from '@models/core';
 import {
   CoreService,
   BreadcrumbService,
   MessageService,
-  AgreementsService,
   MessageDialogService
 } from '@servicesApp/core';
 import {
@@ -213,10 +211,11 @@ export class AdditionalDocumentListComponent implements OnInit {
     uploadFiles.clear();
   }
 
-  closeModal(){
-    this.isVisibleFilesModal=false;
-    this.reportFileField.setValue(null);
-    this.evidenceFileField.setValue(null);
+  closeModal() {
+    this.isVisibleFilesModal = false;
+    this.reportFileField.reset();
+    this.evidenceFileField.reset();
+    this.detailField.reset();
   }
 
   get reportFileField(): AbstractControl {

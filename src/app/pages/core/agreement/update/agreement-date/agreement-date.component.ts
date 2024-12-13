@@ -4,7 +4,7 @@ import {AgreementModel} from '@models/core';
 import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {CataloguesHttpService} from '@servicesHttp/core';
 import {SkeletonEnum, AgreementFormEnum} from '@shared/enums';
-import {getFormattedDate} from '@shared/helpers';
+import {getCustomFormattedDate, getFormattedDate} from '@shared/helpers';
 
 @Component({
   selector: 'app-agreement-date',
@@ -65,16 +65,16 @@ export class AgreementDateComponent implements OnInit {
 
     this.form.patchValue(agreement);
 
-    if (startedAt) {
-      this.startedAtField.setValue(getFormattedDate(startedAt))
+    if (subscribedAt) {
+      this.subscribedAtField.setValue(getCustomFormattedDate(subscribedAt))
     }
 
-    if (subscribedAt) {
-      this.subscribedAtField.setValue(getFormattedDate(subscribedAt))
+    if (startedAt) {
+      this.startedAtField.setValue(getCustomFormattedDate(startedAt))
     }
 
     if (endedAt) {
-      this.endedAtField.setValue(getFormattedDate(endedAt))
+      this.endedAtField.setValue(getCustomFormattedDate(endedAt))
     }
   }
 
