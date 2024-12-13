@@ -1,4 +1,8 @@
-<p-panel>
+@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+  <app-period-closing-list [agreementId]="agreementId"/>
+}
+
+<p-panel header="NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO">
   @if (closingNotification) {
     <form class="p-fluid grid">
       <!-- closeType -->
@@ -39,10 +43,6 @@
     </form>
   }
 </p-panel>
-
-@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
-  <app-period-closing-list [agreementId]="agreementId"/>
-}
 
 <p-panel>
   <app-closing-log-current [agreementId]="agreementId" [closingNotification]="closingNotification"/>

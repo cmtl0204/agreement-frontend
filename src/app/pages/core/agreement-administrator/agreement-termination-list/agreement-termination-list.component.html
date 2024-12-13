@@ -1,8 +1,25 @@
+@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+
+  @if (!validPeriodsExecution) {
+    <p-messages severity="error">
+      <ng-template pTemplate>
+        <div class="ml-2">
+          Previo a reportar la documentación en las secciones REPORTE AVANCE PROCESO DE CIERRE DEL
+          CONVENIO y GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de ejecución) deberá contar con todos los reportes de
+          ejecución en estado ACEPTADO.
+        </div>
+      </ng-template>
+    </p-messages>
+  }
+
+  <app-period-closing-list [agreementId]="agreementId"/>
+}
+
 @if (!closingNotification
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.MUTUAL
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.OBJECT
 || closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.UNILATERAL) {
-  <p-panel header="Acta de Terminación y Cierre del Convenio">
+  <p-panel header="NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO">
     <h3>Notificar fecha de Acta de Terminación y Cierre del Convenio</h3>
 
     <form [formGroup]="form" class="p-fluid grid">
@@ -41,12 +58,14 @@
       </div>
 
       <!-- closedAt -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="closedAt"
           [label]="ClosingNotificationEnum.closedAt"
           [required]="closedAtField"></label>
+
+        <p>Nota: A continuación, registre la fecha que consta en el documento suscrito entre las partes</p>
 
         @if (idField.value) {
           <input pInputText formControlName="closedAt">
@@ -56,7 +75,6 @@
             formControlName="closedAt"
             [iconDisplay]="'input'"
             [showIcon]="true"
-            [inline]="true"
             dateFormat="dd/mm/yy"/>
         }
 
@@ -89,40 +107,43 @@
 
     <p-divider/>
 
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form
-          label="Registro"
-          [icon]="PrimeIcons.PENCIL"/>
-      </div>
+    @if (!idField.value) {
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
 
-      <div class="p-toolbar-group-right">
-        @if (!idField.value) {
+        <div class="p-toolbar-group-right">
+
           <app-form-button-action
             labelSubmitButton="Notificar"
             (submit)="onSubmit()"
             [iconSubmitButton]="PrimeIcons.SEND"
             [isVisibleCancelButton]="false"
           />
-        }
-      </div>
-    </p-toolbar>
+        </div>
+      </p-toolbar>
+    }
 
   </p-panel>
 }
 
 @if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
-  <p-panel header="Acta de Terminación y Cierre del Convenio">
+  <p-panel header="NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO">
     <h3>Notificar fecha de Acta de Terminación y Cierre del Convenio</h3>
 
     <form [formGroup]="form" class="p-fluid grid">
       <!-- closedAt -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="closedAt2"
           [label]="ClosingNotificationEnum.closedAt"
           [required]="closedAtField"></label>
+
+        <p>Nota: A continuación, registre la fecha que consta en el documento suscrito entre las partes</p>
 
         @if (closingNotification.closedAt) {
           <input pInputText formControlName="closedAt">
@@ -133,7 +154,6 @@
               formControlName="closedAt"
               [iconDisplay]="'input'"
               [showIcon]="true"
-              [inline]="true"
               [minDate]="endedAt"
               dateFormat="dd/mm/yy"/>
           }
@@ -150,42 +170,26 @@
 
     <p-divider/>
 
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <app-header-form
-          label="Registro"
-          [icon]="PrimeIcons.PENCIL"/>
-      </div>
+    @if (!closingNotification.closedAt) {
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <app-header-form
+            label="Registro"
+            [icon]="PrimeIcons.PENCIL"/>
+        </div>
 
-      <div class="p-toolbar-group-right">
-        @if (!closingNotification.closedAt) {
+        <div class="p-toolbar-group-right">
+
           <app-form-button-action
             labelSubmitButton="Notificar"
             (submit)="onSubmit()"
             [iconSubmitButton]="PrimeIcons.SEND"
             [isVisibleCancelButton]="false"
           />
-        }
-      </div>
-    </p-toolbar>
-  </p-panel>
-}
-
-@if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
-
-  @if (!validPeriodsExecution) {
-    <p-messages severity="error">
-      <ng-template pTemplate>
-        <div class="ml-2">
-          Previo a reportar la documentación en las secciones REPORTE AVANCE PROCESO DE CIERRE DEL
-          CONVENIO y GESTIÓN DE CIERRE DE CONVENIO éstos (reportes de ejecución) deberá contar con todos los reportes de
-          ejecución en estado ACEPTADO.
         </div>
-      </ng-template>
-    </p-messages>
-  }
-
-  <app-period-closing-list [agreementId]="agreementId"/>
+      </p-toolbar>
+    }
+  </p-panel>
 }
 
 <p-panel>

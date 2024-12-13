@@ -12,7 +12,7 @@
     [columns]="columns"
     [loading]="coreService.isLoading">
     <ng-template pTemplate="caption">
-      <h2>{{ BreadcrumbEnum.CLOSING_LOG_ADMINISTRATOR }}</h2>
+      <h2>{{ BreadcrumbEnum.CLOSING_LOG_SUPERVISOR }}</h2>
 
       @if (!validPeriodsClosing && closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
         <p-messages severity="error">
@@ -294,7 +294,7 @@
       [icon]="IconButtonActionEnum.CANCEL"
       [text]="true"
       [severity]="SeverityButtonActionEnum.CANCEL"
-      (click)="isVisibleRefusedModal = false"/>
+      (click)="cancelRefusedModal()"/>
 
     <p-button
       [label]="LabelButtonActionEnum.REFUSED"

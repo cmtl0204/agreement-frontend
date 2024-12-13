@@ -340,6 +340,11 @@ export class ClosingLogCurrentComponent implements OnInit {
     });
   }
 
+  cancelRefusedModal(){
+    this.isVisibleRefusedModal = false;
+    this.observationFileField.reset();
+  }
+
   get reportFileField(): AbstractControl {
     return this.form.controls['reportFile'];
   }
