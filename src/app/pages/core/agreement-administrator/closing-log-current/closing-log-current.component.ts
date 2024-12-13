@@ -255,10 +255,6 @@ export class ClosingLogCurrentComponent implements OnInit {
 
   validateButtonActions(item: PeriodModel) {
     this.buildButtonActions();
-
-    if (item.agreement?.isFinishDate) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.DELETE), 1);
-    }
   }
 
   remove(id: string) {
