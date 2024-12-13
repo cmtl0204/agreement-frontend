@@ -165,7 +165,10 @@
   </ng-template>
 </p-table>
 
-
+<app-button-action [buttonActions]="buttonActions"
+                   [enabled]="isButtonActions"
+                   (isHide)="isButtonActions=!$event">
+</app-button-action>
 
 <p-dialog
   [(visible)]="isVisibleFilesModal"
