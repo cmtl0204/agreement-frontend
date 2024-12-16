@@ -58,6 +58,23 @@ export class DocumentComponent implements OnInit {
   }
 
   patchValueForm() {
+    this.formInput.enablingDocuments.sort(
+      (a, b) => {
+        const nameA = a.type?.sort; // ignore upper and lowercase
+        const nameB = b.type?.sort; // ignore upper and lowercase
+
+        if (nameA! < nameB!) {
+          return -1;
+        }
+        if (nameA! > nameB!) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      }
+    );
+
     this.form.patchValue(this.formInput);
   }
 
@@ -167,7 +184,7 @@ export class DocumentComponent implements OnInit {
       rejectLabel: "No",
       rejectButtonStyleClass: "p-button-text",
       accept: () => {
-        this.filesHttpService.remove(item.id!, true,this.formInput.id!).subscribe(response => {
+        this.filesHttpService.remove(item.id!, true, this.formInput.id!).subscribe(response => {
           this.formInput.enablingDocuments.splice(index, 1);
           this.types.push(item.type!);
 

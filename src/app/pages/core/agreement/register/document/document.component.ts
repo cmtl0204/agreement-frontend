@@ -2,7 +2,8 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {AgreementModel, CatalogueModel, ColumnModel, createAgreementModel, FileModel} from "@models/core";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {
-  CatalogueTypeEnum, FileEnum,
+  CatalogueTypeEnum,
+  FileEnum,
   FileFormEnum,
   IconButtonActionEnum,
   LabelButtonActionEnum,
@@ -100,6 +101,7 @@ export class DocumentComponent implements OnInit {
   loadTypes() {
     this.types = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ENABLING_DOCUMENT);
     this.typesClone = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENTS_ENABLING_DOCUMENT);
+
     for (let i = 0; i < this.formInput.enablingDocuments.length; i++) {
       const index = this.types.findIndex(item => item.id === this.formInput.enablingDocuments[i].type?.id);
       this.types.splice(index, 1);
