@@ -57,7 +57,7 @@ export enum LabelButtonActionEnum {
   SUSPEND = 'Suspender',
   AGREEMENT_LOG = 'Bitácora del Convenio',
   AGREEMENT_PERIOD = 'Ejecución y Reporte del Convenio',
-  AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR = 'GESTIÓN DE CIERRE DEL CONVENIO',
+  AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR = 'Gestión de Cierre del Convenio',
   AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION = 'Seguimiento al cierre del Convenio',
   MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION = 'Gestión del cierre del Convenio',
   MANAGER_AGREEMENT_CLOSED = 'Registro del cierre del Convenio',

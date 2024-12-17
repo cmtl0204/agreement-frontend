@@ -2,12 +2,6 @@
   <!-- type -->
   @for (type of types; track type.id) {
     <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-      <label
-        appLabel
-        [label]="FileFormEnum.type"
-        [required]="typeField">
-      </label>
-
       <p-messages severity="info">
         <ng-template pTemplate>
           <i [class]="PrimeIcons.FILE_PDF"></i>
@@ -19,13 +13,7 @@
     </div>
 
     <!-- file -->
-    <div class="field col-12 xl:col-2 lg:col-2 md:col-2 sm:col-12">
-      <label
-        appLabel for="file"
-        [label]="FileFormEnum.myFile"
-        [required]="fileField">
-      </label>
-      <p-divider/>
+    <div class="field col-12 xl:col-8 lg:col-8 md:col-8 sm:col-12 mt-3">
       <p-fileUpload
         #uploadFiles
         id="file"
