@@ -35,12 +35,12 @@
 
     <h3>Descargue aquí el Formato de Informe de avance de avance semestral de cierre del convenio:</h3>
 
-    <a
-      pButton
-      [label]="LabelButtonActionEnum.DOWNLOAD"
+    <p-button
+      class="ml-2"
       [icon]="IconButtonActionEnum.DOWNLOAD"
-      target="_blank"
-      href="assets/files/informe_periodo.pdf"></a>
+      [label]="LabelButtonActionEnum.DOWNLOAD"
+      [severity]="SeverityButtonActionEnum.DOWNLOAD"
+      (click)="downloadFormat(FormatsEnum.format_002)"/>
   </ng-template>
 
   <ng-template pTemplate="header" let-columns>

@@ -1,0 +1,1 @@
+import{oa as r}from"./chunk-YDHQYZIO.js";function e(){return"[A-Za-z\xC1\xC9\xCD\xD3\xDA\xE1\xE9\xED\xF3\xFA\xD1\xF1s ]+"}function p(t){return new Date(t)}function f(t){return t.toString().includes("T")?r(t,"dd/MM/yyyy"):r(t+"T05:00:00","dd/MM/yyyy")}export{e as a,p as b,f as c};

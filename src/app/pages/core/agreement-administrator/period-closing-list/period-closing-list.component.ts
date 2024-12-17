@@ -12,7 +12,7 @@ import {
 import {
   AgreementsHttpService,
   CataloguesHttpService,
-  FilesHttpService,
+  FilesHttpService, ParametersHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
 import {
@@ -27,6 +27,7 @@ import {
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
+import {FormatsEnum} from "@shared/enums/formats.enum";
 
 @Component({
   selector: 'app-period-closing-list',
@@ -44,6 +45,7 @@ export class PeriodClosingListComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
+  private readonly parametersHttpService = inject(ParametersHttpService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
   private readonly agreementsService = inject(AgreementsService);
@@ -256,6 +258,10 @@ export class PeriodClosingListComponent implements OnInit {
     this.evidenceFileField.setValue(null);
   }
 
+  downloadFormat(code:string) {
+    this.parametersHttpService.downloadFile(code);
+  }
+
   get reportFileField(): AbstractControl {
     return this.form.controls['reportFile'];
   }
@@ -263,4 +269,6 @@ export class PeriodClosingListComponent implements OnInit {
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
   }
+
+    protected readonly FormatsEnum = FormatsEnum;
 }

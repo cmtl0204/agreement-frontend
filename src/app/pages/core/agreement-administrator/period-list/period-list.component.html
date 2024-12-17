@@ -1,20 +1,3 @@
-<p-toolbar>
-  <div class="p-toolbar-group-left">
-    @if (agreement && !agreement.isFinishDate) {
-      <p-button
-        (click)="createPeriod()"
-        [icon]="IconButtonActionEnum.CREATE"
-        [label]="LabelButtonActionEnum.CREATE_PERIOD"
-        [loading]="coreService.isLoading"
-        [severity]="SeverityButtonActionEnum.CREATE"/>
-    }
-  </div>
-
-  <div class="p-toolbar-group-right">
-
-  </div>
-</p-toolbar>
-
 <!-- <p-paginator
   [rows]="paginator.limit"
   [totalRecords]="paginator.totalItems"
@@ -27,7 +10,7 @@
   [value]="items"
   [columns]="columns"
   [paginator]="true"
-  [rows]="10"
+  [rows]="4"
   paginatorPosition="both"
   [loading]="coreService.isLoading">
   <ng-template pTemplate="caption">
@@ -35,12 +18,22 @@
 
     <h3>Descargue aquí el Formato de Informe de avance semestral del convenio:</h3>
 
-    <a
-      pButton
-      [label]="LabelButtonActionEnum.DOWNLOAD"
+    <p-button
+      class="ml-2"
       [icon]="IconButtonActionEnum.DOWNLOAD"
-      target="_blank"
-      href="assets/files/informe_periodo.pdf"></a>
+      [label]="LabelButtonActionEnum.DOWNLOAD"
+      [severity]="SeverityButtonActionEnum.DOWNLOAD"
+      (click)="downloadFormat(FormatsEnum.format_001)"/>
+
+    @if (agreement && !agreement.isFinishDate) {
+      <p-divider/>
+      <p-button
+        (click)="createPeriod()"
+        [icon]="IconButtonActionEnum.CREATE"
+        [label]="LabelButtonActionEnum.CREATE_PERIOD"
+        [loading]="coreService.isLoading"
+        [severity]="SeverityButtonActionEnum.CREATE"/>
+    }
   </ng-template>
 
   <ng-template pTemplate="header" let-columns>
@@ -264,7 +257,7 @@
 
     <p-button
       [icon]="IconButtonActionEnum.UPLOAD"
-      [label]="LabelButtonActionEnum.UPLOAD"
+      [label]="LabelButtonActionEnum.SEND_REPORT"
       [severity]="SeverityButtonActionEnum.UPLOAD"
       (click)="onUpload()"/>
   </ng-template>

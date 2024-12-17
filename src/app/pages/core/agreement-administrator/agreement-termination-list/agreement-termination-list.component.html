@@ -24,7 +24,7 @@
 
     <form [formGroup]="form" class="p-fluid grid">
       <!-- closeType -->
-      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
         <label
           appLabel
           for="closeType"
@@ -65,8 +65,6 @@
           [label]="ClosingNotificationEnum.closedAt"
           [required]="closedAtField"></label>
 
-        <p>Nota: A continuación, registre la fecha que consta en el documento suscrito entre las partes</p>
-
         @if (idField.value) {
           <input pInputText formControlName="closedAt">
         } @else {
@@ -84,6 +82,12 @@
           [touched]="closedAtField.touched"
           [dirty]="closedAtField.dirty">
         </small>
+
+        <p>
+          <em>
+            Nota: Registre la fecha que consta en el documento suscrito entre las partes
+          </em>
+        </p>
       </div>
 
       <!-- closeDetail -->

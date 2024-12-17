@@ -12,7 +12,7 @@ import {
 import {
   AgreementsHttpService,
   CataloguesHttpService,
-  FilesHttpService, PeriodsHttpService,
+  FilesHttpService, ParametersHttpService, PeriodsHttpService,
   TrackingLogsHttpService
 } from '@servicesHttp/core';
 import {
@@ -27,6 +27,7 @@ import {
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {debounceTime} from 'rxjs';
 import {AuthService} from "@servicesApp/auth";
+import {FormatsEnum} from "@shared/enums/formats.enum";
 
 @Component({
   selector: 'app-period-list',
@@ -47,6 +48,7 @@ export class PeriodListComponent implements OnInit {
   private readonly trackingLogsHttpService = inject(TrackingLogsHttpService);
   private readonly agreementsHttpService = inject(AgreementsHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
+  private readonly parametersHttpService = inject(ParametersHttpService);
   private readonly agreementsService = inject(AgreementsService);
   private readonly router = inject(Router);
   private readonly breadcrumbService = inject(BreadcrumbService);
@@ -215,6 +217,10 @@ export class PeriodListComponent implements OnInit {
     this.filesHttpService.downloadFile(file);
   }
 
+  downloadFormat(code:string) {
+    this.parametersHttpService.downloadFile(code);
+  }
+
   onUpload() {
     if (this.validateFilesForm()) {
       this.confirmationService.confirm({
@@ -274,7 +280,7 @@ export class PeriodListComponent implements OnInit {
 
   deletePeriod() {
     if (this.selectedItem.trackingLog) {
-      this.messageDialogService.errorCustom('No es posible eliminar el período del reporte', 'Se encuentra en fase de revisión por la Unidad de Seguimiento');
+      this.messageDialogService.errorCustom('No es posible eliminar el período del reporte', 'Una vez iniciado el proceso de reporte de avance, no se puede eliminar el periodo creado.');
       return;
     }
 
@@ -290,4 +296,6 @@ export class PeriodListComponent implements OnInit {
   get evidenceFileField(): AbstractControl {
     return this.form.controls['evidenceFile'];
   }
+
+  protected readonly FormatsEnum = FormatsEnum;
 }

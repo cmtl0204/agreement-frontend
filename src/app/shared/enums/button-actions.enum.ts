@@ -47,6 +47,7 @@ export enum LabelButtonActionEnum {
   SAVE = 'Guardar',
   UPDATE = 'Editar',
   UPLOAD = 'Subir acrhivo(s)',
+  SEND_REPORT = 'Enviar Reporte',
   EDIT = 'Editar',
   COMPLETE = 'Completar Registro',
   VIEW = 'Visualizar',

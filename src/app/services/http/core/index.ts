@@ -10,3 +10,4 @@ export {TrackingLogsHttpService} from './tracking-logs-http.service';
 export {ClosingNotificationsHttpService} from './closing-notifications-http.service';
 export {ClosingLogsHttpService} from './closing-logs-http.service';
 export {ClosedAgreementsHttpService} from './closed-agreements-http.service';
+export {ParametersHttpService} from './parameters-http.service';
