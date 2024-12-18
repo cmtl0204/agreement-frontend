@@ -167,14 +167,15 @@ export class PeriodListComponent implements OnInit {
           this.isVisibleTrackingLogModal = true;
         },
       },
-      {
-        id: IdButtonActionEnum.DELETE,
-        label: LabelButtonActionEnum.DELETE,
-        icon: IconButtonActionEnum.DELETE,
-        command: () => {
-          this.deletePeriod();
-        },
-      },
+      //review se definio que los periodos sean creados automaticamente pero se deja por si acaso
+      // {
+      //   id: IdButtonActionEnum.DELETE,
+      //   label: LabelButtonActionEnum.DELETE,
+      //   icon: IconButtonActionEnum.DELETE,
+      //   command: () => {
+      //     this.deletePeriod();
+      //   },
+      // },
     ];
   }
 
