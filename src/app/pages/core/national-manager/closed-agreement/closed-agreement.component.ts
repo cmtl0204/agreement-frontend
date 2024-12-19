@@ -89,11 +89,11 @@ export class ClosedAgreementComponent implements OnInit {
   findClosedAgreementByAgreement() {
     this.closedAgreementsHttpService.findClosedAgreementByAgreement(this.agreementId).subscribe(response => {
       if (response) {
-        if (!response.closingDate) {
+        console.log(response);
+        if (response.closingDate) {
           this.checked = true;
+          this.closedAgreement = response;
         }
-
-        this.closedAgreement = response;
       }
     });
   }
