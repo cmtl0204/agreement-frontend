@@ -9,12 +9,13 @@
     <div class="card flex">
 
       @if (closedAgreement) {
-        <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="!!closedAgreement.closingDate"/>
+        <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="!closedAgreement.closingDate"/>
       }
 
       <p-divider layout="vertical"/>
 
-      Memorando de notificación de registro de información y cierre del convenio Informe técnico de validación del registro del cierre de los convenios naciones o internacionales (según corresponda)
+      Memorando de notificación de registro de información y cierre del convenio Informe técnico de validación del
+      registro del cierre de los convenios naciones o internacionales (según corresponda)
 
       @if (!closedAgreement) {
         <p-divider layout="vertical"/>
