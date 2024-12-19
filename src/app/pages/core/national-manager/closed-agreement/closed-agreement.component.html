@@ -7,18 +7,13 @@
 
   <ng-template pTemplate="content">
     <div class="card flex">
-
-      aa{{ !!closedAgreement.closingDate }}aa
-      bb{{ !!closedAgreement.closingUser }}bb
-
       @if (closedAgreement) {
-        <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="!!closedAgreement.closingUser"/>
+        <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="checkedClosingDate"/>
       }
 
       <p-divider layout="vertical"/>
 
-      Memorando de notificación de registro de información y cierre del convenio Informe técnico de validación del
-      registro del cierre de los convenios naciones o internacionales (según corresponda)
+      Registrar de cierre del convenio
 
       @if (!closedAgreement) {
         <p-divider layout="vertical"/>
