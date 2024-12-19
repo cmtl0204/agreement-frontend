@@ -49,7 +49,7 @@ export class ClosedAgreementComponent implements OnInit {
   @Input() agreementId!: string;
 
   protected checked: boolean = false;
-  protected checkedClosingDate: boolean = false;
+  protected checkedClosingDate: boolean = true;
   protected closedAgreement!: ClosedAgreementModel;
   protected fileType!: CatalogueModel | undefined;
 
@@ -88,14 +88,17 @@ export class ClosedAgreementComponent implements OnInit {
   }
 
   findClosedAgreementByAgreement() {
-    this.checkedClosingDate = false;
+    this.checkedClosingDate = true;
 
     this.closedAgreementsHttpService.findClosedAgreementByAgreement(this.agreementId).subscribe(response => {
       if (response) {
         if (response?.closingDate) {
           this.checked = true;
-          this.checkedClosingDate = true;
           this.closedAgreement = response;
+        }
+
+        if (!response?.closingDate) {
+          this.checkedClosingDate = false;
         }
       }
     });

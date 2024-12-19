@@ -15,7 +15,7 @@
 
       Registrar de cierre del convenio
 
-      @if (!closedAgreement) {
+      @if (!checkedClosingDate) {
         <p-divider layout="vertical"/>
         <p-button label="Registrar" severity="success" (click)="closeAgreement()" [disabled]="!checked"/>
       }
