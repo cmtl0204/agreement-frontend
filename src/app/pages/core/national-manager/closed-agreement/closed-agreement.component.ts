@@ -57,6 +57,7 @@ export class ClosedAgreementComponent implements OnInit {
   protected readonly authService = inject(AuthService);
   private readonly breadcrumbService = inject(BreadcrumbService);
   private readonly closedAgreementsHttpService = inject(ClosedAgreementsHttpService);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly cataloguesHttpService = inject(CataloguesHttpService);
   private readonly filesHttpService = inject(FilesHttpService);
 
@@ -81,9 +82,20 @@ export class ClosedAgreementComponent implements OnInit {
   }
 
   closeAgreement() {
-    this.closedAgreementsHttpService.updateClose(this.agreementId).subscribe(() => {
-      this.checked = true;
-      this.findClosedAgreementByAgreement();
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'Después de registrar, no podrá realizar cambios',
+      header: '¿Está seguro de registrar?',
+      icon: PrimeIcons.QUESTION_CIRCLE,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.closedAgreementsHttpService.updateClose(this.agreementId).subscribe(() => {
+          this.checked = true;
+          this.findClosedAgreementByAgreement();
+        });
+      }
     });
   }
 
