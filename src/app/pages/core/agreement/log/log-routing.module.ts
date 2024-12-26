@@ -9,7 +9,13 @@ const routes: Routes = [
     path: '',
     component: LogComponent,
     canActivate: [RoleGuard],
-    data: {roles: [RoleEnum.NATIONAL_SUPERVISOR, RoleEnum.INTERNATIONAL_SUPERVISOR]}
+    data: {
+      roles: [RoleEnum.AGREEMENT_ADMINISTRATOR,
+        RoleEnum.NATIONAL_SUPERVISOR,
+        RoleEnum.INTERNATIONAL_SUPERVISOR,
+        RoleEnum.NATIONAL_MANAGER,
+        RoleEnum.INTERNATIONAL_MANAGER,]
+    }
   },
 ];
 

@@ -82,8 +82,8 @@ export class ClosedAgreementComponent implements OnInit {
   }
 
   closeAgreement() {
+    console.log('entro');
     this.confirmationService.confirm({
-      key: 'confirmDialog',
       message: 'Después de registrar, no podrá realizar cambios',
       header: '¿Está seguro de registrar?',
       icon: PrimeIcons.QUESTION_CIRCLE,

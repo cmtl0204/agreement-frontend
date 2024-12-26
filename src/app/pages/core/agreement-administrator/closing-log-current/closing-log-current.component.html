@@ -46,12 +46,16 @@
 
   <ng-template pTemplate="header" let-columns>
     <tr>
+      <th class="text-center">
+      </th>
+
       @for (col of columns; track col) {
         <th [pSortableColumn]="col.field">
           {{ col.header }}
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
       }
+
       <th class="text-center">
         {{ TableEnum.ACTIONS }}
       </th>
@@ -60,6 +64,16 @@
 
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+      <td>
+        @if (!rowData?.closingLogDocuments || rowData.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
+          <p-button
+            class="ml-2"
+            [icon]="IconButtonActionEnum.ADD"
+            [pTooltip]="LabelButtonActionEnum.ADD"
+            [severity]="SeverityButtonActionEnum.ADD"
+            (click)="openFilesModal()"/>
+        }
+      </td>
       @for (col of columns; track col) {
         <td>
           <!--Objects-->
@@ -86,14 +100,7 @@
                 {{ rowData[col.field] }}
               }
               @case ('closingLogDocumentsUpload') {
-                @if (!rowData?.closingLogDocuments || rowData.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
-                  <p-button
-                    class="ml-2"
-                    [icon]="IconButtonActionEnum.ADD"
-                    [pTooltip]="LabelButtonActionEnum.ADD"
-                    [severity]="SeverityButtonActionEnum.ADD"
-                    (click)="openFilesModal()"/>
-                } @else {
+                @if (rowData?.closingLogDocuments) {
                   @for (item of rowData?.closingLogDocuments; track item) {
                     <span>{{ item.type.name }}: </span>
 

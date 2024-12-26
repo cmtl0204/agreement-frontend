@@ -8,7 +8,15 @@ const routes: Routes = [
     path: 'agreements',
     loadChildren: () => import('./agreement/agreement.module').then(m => m.AgreementModule),
     canActivate: [RoleGuard],
-    data: {roles: [RoleEnum.NATIONAL_SUPERVISOR, RoleEnum.INTERNATIONAL_SUPERVISOR]}
+    data: {
+      roles: [
+        RoleEnum.AGREEMENT_ADMINISTRATOR,
+        RoleEnum.NATIONAL_SUPERVISOR,
+        RoleEnum.INTERNATIONAL_SUPERVISOR,
+        RoleEnum.NATIONAL_MANAGER,
+        RoleEnum.INTERNATIONAL_MANAGER,
+      ]
+    }
   },
   {
     path: 'agreement-administrator',

@@ -2,11 +2,11 @@
   <app-period-closing-list [agreementId]="agreementId"/>
 }
 
-<p-panel header="NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO">
-  @if (closingNotification) {
-    <form class="p-fluid grid">
-      <!-- closeType -->
-      @if (closingNotification.closeType?.code !== CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+@if (closingNotification) {
+  @if (closingNotification.closeType?.code !== CatalogueClosingNotificationsCloseTypeEnum.TERM) {
+    <p-panel header="NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO">
+
+      <form class="p-fluid grid">
         <p-table
           dataKey="id"
           styleClass="p-datatable-striped"
@@ -32,10 +32,10 @@
             </tr>
           </ng-template>
         </p-table>
-      }
-    </form>
+      </form>
+    </p-panel>
   }
-</p-panel>
+}
 
 <p-divider/>
 
