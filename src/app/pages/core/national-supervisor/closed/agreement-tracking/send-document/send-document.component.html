@@ -1,0 +1,23 @@
+<p-panel>
+  <ng-template pTemplate="header">
+    <h2>
+      Enviar documentación
+    </h2>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="card flex">
+
+      <p-checkbox [(ngModel)]="checked" [binary]="true" [disabled]="!!closedAgreement"/>
+
+      <p-divider layout="vertical"/>
+
+      Enviar documentación habilitante validada, para registro del cierre del convenio en el sistema informático.
+
+      @if (!closedAgreement) {
+        <p-divider layout="vertical"/>
+        <p-button label="Enviar" severity="success" (click)="closeAgreement()" [disabled]="!checked"/>
+      }
+    </div>
+  </ng-template>
+</p-panel>

@@ -23,6 +23,8 @@ import {CalendarModule} from "primeng/calendar";
 import {ToolbarModule} from "primeng/toolbar";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {NationalSupervisorModule} from "../../national-supervisor.module";
+import { SendDocumentComponent } from './send-document/send-document.component';
+import {CheckboxModule} from "primeng/checkbox";
 
 
 @NgModule({
@@ -30,7 +32,8 @@ import {NationalSupervisorModule} from "../../national-supervisor.module";
     ClosingExecutionDocumentComponent,
     ClosingNotificationComponent,
     ClosingDocumentsComponent,
-    AgreementTrackingComponent
+    AgreementTrackingComponent,
+    SendDocumentComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +55,8 @@ import {NationalSupervisorModule} from "../../national-supervisor.module";
     CalendarModule,
     ToolbarModule,
     ConfirmDialogModule,
-    NationalSupervisorModule
+    NationalSupervisorModule,
+    CheckboxModule
   ]
 })
 export class AgreementTrackingModule { }
