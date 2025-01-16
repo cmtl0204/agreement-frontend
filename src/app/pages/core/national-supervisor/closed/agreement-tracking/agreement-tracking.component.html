@@ -1,0 +1,7 @@
+<app-closing-execution-document [agreementId]="agreementId"/>
+<p-divider/>
+
+<app-closing-notification [agreementId]="agreementId" (closingNotificationOut)="closingNotification=$event"/>
+<p-divider/>
+
+<app-closing-documents [agreementId]="agreementId" [closingNotification]="closingNotification"/>

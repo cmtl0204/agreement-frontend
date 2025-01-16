@@ -65,6 +65,7 @@ import {FormHelpFieldComponent} from './components/form-help-field/form-help-fie
 import {InputSwitchComponent} from './components/input-switch/input-switch.component';
 import {InputSwitchModule} from "primeng/inputswitch";
 import {BadgeModule} from "primeng/badge";
+import {CustomFormatDateTimePipe} from "@shared/pipes/core/custom-format-date-time.pipe";
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import {BadgeModule} from "primeng/badge";
     FormHelpFieldComponent,
     CustomFormatDatePipe,
     InputSwitchComponent,
+    CustomFormatDateTimePipe
   ],
   exports: [
     SkeletonComponent,
@@ -140,7 +142,8 @@ import {BadgeModule} from "primeng/badge";
     FormButtonActionComponent,
     FormHelpFieldComponent,
     CustomFormatDatePipe,
-    InputSwitchComponent
+    InputSwitchComponent,
+    CustomFormatDateTimePipe
   ],
     imports: [
         CommonModule,

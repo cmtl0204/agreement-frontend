@@ -170,4 +170,29 @@ export class AgreementsHttpService {
       })
     );
   }
+
+  findReportExecutions(id: string): Observable<AgreementModel[]> {
+    const url = `${this.API_URL}/report-execution`;
+
+    const params = new HttpParams().append('id', id);
+
+    return this.httpClient.get<ServerResponse>(url, {params}).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
+  createReportExecution(id: string, payload: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/report-execution`;
+
+    const params = new HttpParams().append('id', id);
+
+    return this.httpClient.post<ServerResponse>(url, payload, {params}).pipe(
+      map(response => {
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
 }

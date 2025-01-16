@@ -5,10 +5,11 @@ import {CoreService, MessageDialogService} from '@servicesApp/core';
 import {AgreementsHttpService, CataloguesHttpService} from '@servicesHttp/core';
 import {
   AgreementFormEnum,
-  SkeletonEnum,
-  CatalogueTypeEnum,
+  AgreementStateEnum,
+  CatalogueAgreementStatesStateEnum,
   CatalogueAgreementsTypeEnum,
-  AgreementStateEnum, RoleEnum, CatalogueAgreementsOriginEnum, CatalogueAgreementStatesStateEnum
+  CatalogueTypeEnum,
+  SkeletonEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
 import {verifyAgreementInternalNumber} from "@shared/validators";
@@ -129,8 +130,6 @@ export class BasicDataComponent implements OnInit {
   /* Load Foreign Keys  */
   loadStates() {
     this.states = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
-
-    this.states = this.states.filter(item => item.code === CatalogueAgreementStatesStateEnum.CURRENT); //review Quitar cuando esten todos los estados, ahora solo por pruebas de registro
   };
 
   loadOrigins() {

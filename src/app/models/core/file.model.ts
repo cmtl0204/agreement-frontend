@@ -1,4 +1,5 @@
 import {CatalogueModel} from "@models/core/catalogue.model";
+import {UserModel} from "@models/auth";
 
 export interface FileModel {
   id?: string;
@@ -11,4 +12,5 @@ export interface FileModel {
   enabled?: boolean;
   type?: CatalogueModel;
   file?:any;
+  user?:UserModel;
 }

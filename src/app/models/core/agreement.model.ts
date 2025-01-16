@@ -20,6 +20,7 @@ export interface AgreementModel {
   subscribedAt?: Date;
   startedAt?: Date;
   isFinishDate?: boolean;
+  initialState?: CatalogueModel;
   enabled?: boolean;
   endedAt?: Date | null;
   endedReason?: string;

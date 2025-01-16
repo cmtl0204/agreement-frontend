@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'agreement-termination-list/:agreementId',
     component: AgreementTerminationListComponent
   },
+  {
+    path: 'closed',
+    loadChildren: () => import('./closed/closed.module').then(m => m.ClosedModule),
+  },
 ];
 
 @NgModule({

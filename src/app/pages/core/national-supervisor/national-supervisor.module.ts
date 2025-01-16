@@ -32,16 +32,19 @@ import {ClosingLogListComponent} from "./closing-log-list/closing-log-list.compo
 import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
-  declarations: [
-    AgreementListComponent,
-    PeriodListComponent,
-    TrackingLogListComponent,
-    AdditionalDocumentListComponent,
-    AgreementTerminationListComponent,
-    PeriodClosingListComponent,
-    ClosingLogCurrentComponent,
-    ClosingLogListComponent,
-  ],
+    declarations: [
+        AgreementListComponent,
+        PeriodListComponent,
+        TrackingLogListComponent,
+        AdditionalDocumentListComponent,
+        AgreementTerminationListComponent,
+        PeriodClosingListComponent,
+        ClosingLogCurrentComponent,
+        ClosingLogListComponent,
+    ],
+    exports: [
+        ClosingLogListComponent
+    ],
     imports: [
         CommonModule,
         NationalSupervisorRoutingModule,

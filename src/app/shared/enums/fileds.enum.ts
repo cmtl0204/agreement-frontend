@@ -196,3 +196,12 @@ export enum ClosingNotificationEnum {
   closeType2 = 'Tipo de terminación del convenio',
   user = 'Modificado por',
 }
+
+export enum ReportExecutionEnum {
+  header = 'NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO',
+  type = 'Documento',
+  description = 'Detalle del Documento',
+  file = 'Archivo',
+  registeredAt = 'Fecha de Carga',
+  user = 'Modificado por',
+}

@@ -12,9 +12,7 @@ import {
   ClosingNotificationEnum, BreadcrumbEnum, CatalogueClosingNotificationsCloseTypeEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
-import {verifyAgreementInternalNumber} from "@shared/validators";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
-import {getFormattedDate} from "@shared/helpers";
 
 @Component({
   selector: 'app-agreement-termination-list',

@@ -11,5 +11,5 @@ export enum TableEnum {
 
 export enum FileEnum {
   maxFileSize = 5242880,
-  invalidFileSizeMessageSummary = 'El tamaño del archivo ha superado el máximo permitido (5MB)'
+  invalidFileSizeMessageSummary = 'El tamaño del archivo ha superado el máximo permitido (5MB)',
 }

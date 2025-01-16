@@ -19,7 +19,7 @@ import {
   TableEnum,
   AgreementFormEnum,
   AgreementStateEnum,
-  AdministratorFormEnum, RoleEnum
+  AdministratorFormEnum, RoleEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -134,6 +134,10 @@ export class AgreementListComponent implements OnInit {
 
   validateButtonActions(item: AgreementModel): void {
     this.buildButtonActions();
+
+    if(item.initialState?.code===CatalogueAgreementStatesStateEnum.CLOSING_PROCESS || item.initialState?.code===CatalogueAgreementStatesStateEnum.CLOSED){
+      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_PERIOD), 1);
+    }
   }
 
   redirectViewAgreement() {

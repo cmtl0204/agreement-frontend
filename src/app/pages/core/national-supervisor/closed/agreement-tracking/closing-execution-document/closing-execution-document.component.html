@@ -1,0 +1,130 @@
+<p-panel>
+  <p-table
+    styleClass="p-datatable-striped"
+    [value]="reportExecutions"
+    [columns]="columns">
+
+    <ng-template pTemplate="caption">
+      <h2>Ejecución del Convenio</h2>
+      <p-divider/>
+      <p-button
+        (click)="openFilesModal()"
+        [icon]="IconButtonActionEnum.UPLOAD"
+        [label]="LabelButtonActionEnum.CREATE_CLOSING_LOG"
+        [loading]="coreService.isLoading"
+        [severity]="SeverityButtonActionEnum.UPLOAD"
+      />
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        @for (col of columns; track col.field) {
+          <th [pSortableColumn]="col.field">
+            {{ col.header }}
+          </th>
+        }
+
+        <th colspan="2">
+          {{ TableEnum.ACTIONS }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+      <tr>
+        <td>{{ item.type?.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.registeredAt | customFormatDateTime }}</td>
+        <td>{{ item.user?.name }} {{ item.user?.lastname }}</td>
+        <td>
+          <p-button [pTooltip]="LabelButtonActionEnum.DELETE"
+                    [severity]="SeverityButtonActionEnum.DELETE"
+                    [icon]="IconButtonActionEnum.DELETE"
+                    (click)="deleteFile(item.id,rowIndex)"/>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-panel>
+
+<p-dialog
+  [(visible)]="isVisibleFilesModal"
+  [modal]="true"
+  [style]="{width: '50rem'}"
+  header="Subir Archivos">
+  <ng-template pTemplate="content">
+    <form [formGroup]="form" class="p-fluid grid">
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="report"
+          [label]="ReportExecutionEnum.type"
+          [required]="reportFileField"></label>
+
+        <p-fileUpload
+          #uploadFiles
+          id="report"
+          mode="basic"
+          chooseLabel="Cargar"
+          [chooseIcon]="PrimeIcons.UPLOAD"
+          name="files[]"
+          accept=".pdf,.zip,.rar"
+          invalidFileSizeMessageDetail=""
+          [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+          [maxFileSize]="FileEnum.maxFileSize"
+          [auto]="true"
+          [customUpload]="true"
+          (uploadHandler)="uploadReportFile($event,uploadFiles)"/>
+
+        <small
+          appErrorMessage
+          [errors]="reportFileField.errors"
+          [touched]="reportFileField.touched"
+          [dirty]="reportFileField.dirty">
+        </small>
+      </div>
+
+      <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <label
+          appLabel
+          for="description"
+          [label]="ReportExecutionEnum.description"
+          [required]="descriptionField"></label>
+
+        <textarea id="description" pInputTextarea formControlName="description"></textarea>
+
+        <small
+          appErrorMessage
+          [errors]="descriptionField.errors"
+          [touched]="descriptionField.touched"
+          [dirty]="descriptionField.dirty">
+        </small>
+      </div>
+
+      @if (reportFileField.value) {
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <p-messages severity="info">
+            <ng-template pTemplate>
+              <i [class]="PrimeIcons.FILE_PDF"></i>
+              <div class="ml-2">{{ reportFileField.value?.name }}</div>
+            </ng-template>
+          </p-messages>
+        </div>
+      }
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="closeModal()"/>
+
+    <p-button
+      [icon]="IconButtonActionEnum.UPLOAD"
+      [label]="LabelButtonActionEnum.UPLOAD"
+      [severity]="SeverityButtonActionEnum.UPLOAD"
+      (click)="onSubmit()"/>
+  </ng-template>
+</p-dialog>
