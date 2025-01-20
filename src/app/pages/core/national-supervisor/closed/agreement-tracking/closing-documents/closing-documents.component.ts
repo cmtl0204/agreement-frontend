@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -49,6 +49,7 @@ import {forkJoin} from "rxjs";
 export class ClosingDocumentsComponent implements OnInit {
   @Input() agreementId!: string;
   @Input() closingNotification!: ClosingNotificationModel;
+  @Output() closingLogOut: EventEmitter<ClosingLogModel> = new EventEmitter();
 
   // Services
   protected readonly activatedRoute = inject(ActivatedRoute);
@@ -132,6 +133,7 @@ export class ClosingDocumentsComponent implements OnInit {
   findClosingLogCurrentByAgreement() {
     this.closingLogsHttpService.findClosingLogCurrentByAgreement(this.agreementId)
       .subscribe((response) => {
+        this.closingLogOut.emit(response);
         if (response) {
           this.items = [response];
         }
@@ -162,15 +164,17 @@ export class ClosingDocumentsComponent implements OnInit {
       });
   }
 
-  onUpload(event: any, uploadFiles: any, type: CatalogueModel) {
-    const index = this.files.findIndex(item => item.type?.id === type.id);
+  onUpload(event: any, uploadFiles: any, type: CatalogueModel, index: number) {
+    const fileExist = this.files.find(item => item?.type?.id === type.id);
 
-    if (index === -1) {
-      this.files.push({
+    // console.log(type.description);
+    // console.log(index);
+    if (fileExist) {
+      this.files[index] = {
         type,
         file: event.files[0],
         description: type.description
-      });
+      };
     } else {
       this.files[index] = {
         type,
@@ -179,8 +183,7 @@ export class ClosingDocumentsComponent implements OnInit {
       };
     }
 
-    console.log(type.description);
-    console.log(this.files);
+    // console.log(this.files);
 
     uploadFiles.clear();
   }
@@ -190,7 +193,7 @@ export class ClosingDocumentsComponent implements OnInit {
       this.loadTypesByCloseType();
       this.isVisibleFilesModal = true;
     } else {
-      this.messageDialogService.errorCustom('Importante!', 'Por favor debe notificar la fecha de Acta de Terminación y Cierre del Convenio');
+      this.messageDialogService.errorCustom('Importante!', 'Es necesario notificar la terminación del convenio antes de subir los documentos habilitantes para el cierre del convenio.\n');
     }
   }
 
@@ -228,24 +231,6 @@ export class ClosingDocumentsComponent implements OnInit {
 
   validateButtonActions(item: PeriodModel) {
     this.buildButtonActions();
-  }
-
-  remove(id: string) {
-    // this.messageService.questionDelete()
-    //   .then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.agreementsHttpService.remove(id).subscribe((user) => {
-    //         this.items = this.items.filter(item => item.id !== user.id);
-    //         this.paginator.totalItems--;
-    //       });
-    //     }
-    //   });
-  }
-
-  selectItem(item: PeriodModel) {
-    this.isButtonActions = true;
-    this.selectedItem = item;
-    this.validateButtonActions(item);
   }
 
   downloadFile(file: FileModel) {

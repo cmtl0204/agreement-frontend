@@ -148,6 +148,14 @@
       @for (type of closeTypes; track type.id; let index = $index) {
         <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
           <label [for]="type.id">
+            Descripción <b class="p-error">*</b>
+          </label>
+
+          <input pInputText [(ngModel)]="type.description">
+        </div>
+
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <label [for]="type.id">
             {{ type.name }} <b class="p-error">*</b>
           </label>
 
@@ -164,18 +172,11 @@
             accept=".pdf,.rar,.zip"
             [auto]="true"
             [customUpload]="true"
-            (uploadHandler)="onUpload($event,uploadFiles, type)"/>
+            [disabled]="!type.description"
+            (uploadHandler)="onUpload($event,uploadFiles, type,index)"/>
         </div>
 
-        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
-          <label [for]="type.id">
-            Descripción <b class="p-error">*</b>
-          </label>
-
-          <input pInputText [(ngModel)]="type.description">
-        </div>
-
-        @if (files.length > index) {
+        @if (files.length > index && files[index]) {
           <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
             <p-messages severity="info">
               <ng-template pTemplate>
@@ -185,6 +186,10 @@
             </p-messages>
           </div>
         }
+
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <p-divider/>
+        </div>
       }
     </div>
   </ng-template>

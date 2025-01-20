@@ -44,9 +44,12 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
   protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
 
+  protected readonly FileEnum = FileEnum;
+  protected readonly ReportExecutionEnum = ReportExecutionEnum;
+
   buildForm() {
     this.form = this.formBuilder.group({
-      reportFile: [null],
+      reportFile: [null, Validators.required],
       description: [null, Validators.required],
     })
   }
@@ -79,7 +82,7 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.reportFileField.valid) {
+    if (this.form.valid) {
       const formData = new FormData();
 
       formData.append('report', this.reportFileField.value);
@@ -90,6 +93,12 @@ export class ClosingExecutionDocumentComponent implements OnInit {
         this.isVisibleFilesModal = false;
       });
     } else {
+      this.form.markAllAsTouched();
+
+      this.formErrors = [];
+      if (this.reportFileField.invalid) this.formErrors.push(ReportExecutionEnum.type);
+      if (this.reportFileField.invalid) this.formErrors.push(ReportExecutionEnum.description);
+
       this.messageDialogService.fieldErrors(this.formErrors);
     }
   }
@@ -101,11 +110,10 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   }
 
   deleteFile(id: string, index: number) {
-    this.filesHttpService.remove(id).subscribe(()=>{
+    this.filesHttpService.remove(id).subscribe(() => {
       this.reportExecutions.splice(index, 1);
     });
   }
-
 
   get reportFileField(): AbstractControl {
     return this.form.controls['reportFile'];
@@ -114,7 +122,4 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   get descriptionField(): AbstractControl {
     return this.form.controls['description'];
   }
-
-  protected readonly FileEnum = FileEnum;
-  protected readonly ReportExecutionEnum = ReportExecutionEnum;
 }

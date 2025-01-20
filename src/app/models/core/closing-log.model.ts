@@ -1,4 +1,4 @@
-import { CatalogueModel } from "@models/core";
+import {CatalogueModel, FileModel} from "@models/core";
 
 export interface ClosingLogModel {
   id: string;
@@ -8,4 +8,5 @@ export interface ClosingLogModel {
   stateId: string;
   state?: CatalogueModel;
   userId: string;
+  closingLogDocuments?: FileModel[];
 }

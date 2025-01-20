@@ -2,7 +2,7 @@ import {Component, inject, Input} from '@angular/core';
 import {BreadcrumbService} from "@servicesApp/core";
 import {BreadcrumbEnum} from "@shared/enums";
 import {AuthService} from "@servicesApp/auth";
-import {ClosingNotificationModel} from "@models/core";
+import {ClosingLogModel, ClosingNotificationModel} from "@models/core";
 
 @Component({
   selector: 'app-agreement-tracking',
@@ -15,6 +15,7 @@ export class AgreementTrackingComponent {
   private readonly breadcrumbService = inject(BreadcrumbService);
 
   protected closingNotification!: ClosingNotificationModel;
+  protected closingLog!: ClosingLogModel;
 
   constructor() {
     this.breadcrumbService.setItems([
