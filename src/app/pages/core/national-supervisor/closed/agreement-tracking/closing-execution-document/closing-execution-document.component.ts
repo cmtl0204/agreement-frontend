@@ -7,7 +7,7 @@ import {
   SeverityButtonActionEnum,
   TableEnum
 } from "@shared/enums";
-import {PrimeIcons} from "primeng/api";
+import {ConfirmationService, PrimeIcons} from "primeng/api";
 import {ColumnModel, FileModel} from "@models/core";
 import {AgreementsHttpService, FilesHttpService} from "@servicesHttp/core";
 import {CoreService, MessageDialogService} from "@servicesApp/core";
@@ -25,6 +25,7 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly messageDialogService = inject(MessageDialogService);
   private readonly agreementsHttpService: AgreementsHttpService = inject(AgreementsHttpService);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly filesHttpService: FilesHttpService = inject(FilesHttpService);
   protected reportExecutions: FileModel[] = [];
   protected columns: ColumnModel[] = [];
@@ -77,8 +78,7 @@ export class ClosingExecutionDocumentComponent implements OnInit {
 
   closeModal() {
     this.isVisibleFilesModal = false;
-    // this.reportFileField.setValue(null);
-    // this.evidenceFileField.setValue(null);
+    this.form.reset();
   }
 
   onSubmit() {
@@ -91,6 +91,7 @@ export class ClosingExecutionDocumentComponent implements OnInit {
       this.agreementsHttpService.createReportExecution(this.agreementId, formData).subscribe(response => {
         this.findReportExecutions();
         this.isVisibleFilesModal = false;
+        this.form.reset();
       });
     } else {
       this.form.markAllAsTouched();
@@ -110,8 +111,19 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   }
 
   deleteFile(id: string, index: number) {
-    this.filesHttpService.remove(id).subscribe(() => {
-      this.reportExecutions.splice(index, 1);
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      message: 'No podrá recuperar la información registrada',
+      header: '¿Está seguro de eliminar?',
+      icon: PrimeIcons.QUESTION_CIRCLE,
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.filesHttpService.remove(id).subscribe(() => {
+          this.reportExecutions.splice(index, 1);
+        });
+      }
     });
   }
 
