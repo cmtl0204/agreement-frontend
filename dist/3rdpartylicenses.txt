@@ -1,11 +1,11 @@
 
 --------------------------------------------------------------------------------
-Package: primeng
+Package: @angular/compiler
 License: "MIT"
 
 
 --------------------------------------------------------------------------------
-Package: @angular/compiler
+Package: primeng
 License: "MIT"
 
 
