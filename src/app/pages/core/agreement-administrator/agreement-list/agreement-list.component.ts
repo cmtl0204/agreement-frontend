@@ -113,30 +113,32 @@ export class AgreementListComponent implements OnInit {
           this.redirectViewAgreement();
         },
       },
-      {
-        id: IdButtonActionEnum.AGREEMENT_PERIOD,
-        label: LabelButtonActionEnum.AGREEMENT_PERIOD,
-        icon: IconButtonActionEnum.AGREEMENT_PERIOD,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
-        },
-      },
-      {
-        id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
-        label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
-        icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
-        },
-      },
     ];
   }
 
   validateButtonActions(item: AgreementModel): void {
     this.buildButtonActions();
 
-    if(item.initialState?.code===CatalogueAgreementStatesStateEnum.CLOSING_PROCESS || item.initialState?.code===CatalogueAgreementStatesStateEnum.CLOSED){
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_PERIOD), 1);
+    console.log(item)
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_PERIOD,
+          label: LabelButtonActionEnum.AGREEMENT_PERIOD,
+          icon: IconButtonActionEnum.AGREEMENT_PERIOD,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
+          },
+        },
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+          label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+          icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+          },
+        },
+      );
     }
   }
 
@@ -173,8 +175,8 @@ export class AgreementListComponent implements OnInit {
   selectItem(item: AgreementModel) {
     this.agreementsHttpService.findOne(item.id!).subscribe(agreement => {
       this.isButtonActions = true;
-      this.selectedItem = item;
-      this.validateButtonActions(item);
+      this.selectedItem = agreement;
+      this.validateButtonActions(agreement);
       this.agreementsService.agreement = agreement;
     });
   }

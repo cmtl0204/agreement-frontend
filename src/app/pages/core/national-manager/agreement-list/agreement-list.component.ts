@@ -19,7 +19,7 @@ import {
   TableEnum,
   AgreementFormEnum,
   AgreementStateEnum,
-  AdministratorFormEnum, RoleEnum
+  AdministratorFormEnum, RoleEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem} from 'primeng/api';
 import {debounceTime} from 'rxjs';
@@ -131,35 +131,60 @@ export class AgreementListComponent implements OnInit {
           if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
         },
       },
-      {
-        id: IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
-        label: LabelButtonActionEnum.MANAGER_AGREEMENT_TRACKING_PERIOD,
-        icon: IconButtonActionEnum.MANAGER_AGREEMENT_TRACKING_PERIOD,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
-        },
-      },
-      {
-        id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-        label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-        icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
-        },
-      },
-      {
-        id: IdButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
-        label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
-        icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectClosedAgreement(this.selectedItem.id);
-        },
-      },
     ];
   }
 
   validateButtonActions(item: AgreementModel) {
     this.buildButtonActions();
+
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_TRACKING_PERIOD,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_TRACKING_PERIOD,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
+          },
+        },
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+          },
+        },
+        {
+          id: IdButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectClosedAgreement(this.selectedItem.id);
+          },
+        });
+    }
+
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+          },
+        },
+        {
+          id: IdButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectClosedAgreement(this.selectedItem.id);
+          },
+        }
+        );
+    }
   }
 
   redirectCreateForm() {
@@ -199,8 +224,8 @@ export class AgreementListComponent implements OnInit {
   selectItem(item: AgreementModel) {
     this.agreementsHttpService.findOne(item.id!).subscribe(agreement => {
       this.isButtonActions = true;
-      this.selectedItem = item;
-      this.validateButtonActions(item);
+      this.selectedItem = agreement;
+      this.validateButtonActions(agreement);
       this.agreementsService.agreement = agreement;
     });
   }

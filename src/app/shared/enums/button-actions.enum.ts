@@ -30,7 +30,8 @@ export enum IdButtonActionEnum {
   TRACKING_LOG = 'tracking_log',
   REACTIVATE = 'reactivate',
   VIEW = 'view',
-  AGREEMENT = 'agreement'
+  AGREEMENT = 'agreement',
+  AGREEMENT_TRACKING_CLOSED = 'agreement_tracking_closed',
 }
 
 export enum LabelButtonActionEnum {
@@ -63,6 +64,7 @@ export enum LabelButtonActionEnum {
   MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION = 'Gestión del cierre del Convenio',
   MANAGER_AGREEMENT_CLOSED = 'Registro del cierre del Convenio',
   AGREEMENT_TRACKING_PERIOD = 'Seguimiento a la ejecución del Convenio',
+  AGREEMENT_TRACKING_CLOSED = 'Registro de ejecución y Gestión de Cierre del Convenio',
   MANAGER_AGREEMENT_TRACKING_PERIOD = 'Ejecución del Convenio',
   TRACKING_LOG = 'Bitácora Seguimiento',
   ACCEPTED = 'Aceptado',
@@ -108,6 +110,7 @@ export enum IconButtonActionEnum {
   MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION = 'pi pi-sitemap',
   MANAGER_AGREEMENT_CLOSED = 'pi pi-verified',
   AGREEMENT_TRACKING_PERIOD = 'pi pi-chart-line',
+  AGREEMENT_TRACKING_CLOSED = 'pi pi-sitemap',
   MANAGER_AGREEMENT_TRACKING_PERIOD = 'pi pi-chart-line',
   TRACKING_LOG = 'pi pi-book',
   ACCEPTED = 'pi pi-check',
