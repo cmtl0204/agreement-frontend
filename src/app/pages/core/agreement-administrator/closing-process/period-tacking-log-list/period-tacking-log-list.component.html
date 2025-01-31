@@ -1,0 +1,279 @@
+<p-toolbar>
+  <div class="p-toolbar-group-left">
+    @if (agreement && !agreement.isFinishDate) {
+      <p-button
+        (click)="createPeriod()"
+        [icon]="IconButtonActionEnum.CREATE"
+        [label]="LabelButtonActionEnum.CREATE_PERIOD"
+        [loading]="coreService.isLoading"
+        [severity]="SeverityButtonActionEnum.CREATE"/>
+    }
+  </div>
+
+  <div class="p-toolbar-group-right">
+
+  </div>
+</p-toolbar>
+
+<!-- <p-paginator
+  [rows]="paginator.limit"
+  [totalRecords]="paginator.totalItems"
+  (onPageChange)="paginate($event)"></p-paginator>
+ -->
+<p-table
+  #dt
+  dataKey="id"
+  styleClass="p-datatable-striped"
+  [value]="items"
+  [columns]="columns"
+  [paginator]="true"
+  [rows]="10"
+  paginatorPosition="both"
+  [loading]="coreService.isLoading">
+  <ng-template pTemplate="caption">
+    <h2>{{ BreadcrumbEnum.PERIODS_CLOSING_ADMINISTRATOR }}</h2>
+
+    <h3>Descargue aquí el Formato de Informe de avance de avance semestral de cierre del convenio:</h3>
+
+    <p-button
+      class="ml-2"
+      [icon]="IconButtonActionEnum.DOWNLOAD"
+      [label]="LabelButtonActionEnum.DOWNLOAD"
+      [severity]="SeverityButtonActionEnum.DOWNLOAD"
+      (click)="downloadFormat(FormatsEnum.format_002)"/>
+  </ng-template>
+
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      @for (col of columns; track col) {
+        <th [pSortableColumn]="col.field">
+          {{ col.header }}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      }
+      <th class="text-center">
+        {{ TableEnum.ACTIONS }}
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+      @for (col of columns; track col) {
+        <td>
+          <!--Objects-->
+          @if (rowData[col.field]?.id) {
+            @switch (col.field) {
+              @case ('administrator') {
+                {{ rowData[col.field].unit.name }}
+              }
+            }
+          }
+
+          <!--Fields-->
+          @if (!rowData[col.field]?.id) {
+            @switch (col.field) {
+              @default {
+                {{ rowData[col.field] }}
+              }
+              @case ('files') {
+                @if (!rowData?.trackingLog || rowData.trackingLog.state.code === CatalogueTrackingLogsStateEnum.REFUSED) {
+                  <p-button
+                    class="ml-2"
+                    [icon]="IconButtonActionEnum.ADD"
+                    [pTooltip]="LabelButtonActionEnum.ADD"
+                    [severity]="SeverityButtonActionEnum.ADD"
+                    (click)="showFilesModal(rowData)"/>
+                } @else {
+                  @for (item of rowData?.trackingLogDocuments; track item) {
+                    <span>{{ item.type.name }}: </span>
+
+                    <p-button
+                      class="ml-2"
+                      [icon]="IconButtonActionEnum.DOWNLOAD"
+                      [label]="item.name"
+                      [text]="true"
+                      [severity]="SeverityButtonActionEnum.DOWNLOAD"
+                      (click)="downloadFile(item)"/>
+
+                    <p-divider/>
+                  }
+                }
+              }
+              @case ('trafficLight') {
+                @if (rowData.trackingLog) {
+                  @if (rowData.trackingLog.state.code === 'REPORTED' || rowData.trackingLog.state.code === 'ACCEPTED') {
+                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--green-400); font-size: 3rem"></i>
+                  } @else {
+                    <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
+                  }
+                } @else {
+                  <i [class]="PrimeIcons.CIRCLE_FILL" style="color: var(--red-400); font-size: 3rem"></i>
+                }
+              }
+              @case ('name') {
+                {{ rowData.name }}
+                <br>
+                {{ rowData.startedAt | date:'d MMMM y' }}
+                -
+                <br>
+                {{ rowData.endedAt | date:'d MMMM y' }}
+              }
+              @case ('uploadedAt') {
+                {{ rowData.uploadedAt | date:'dd/MM/y - HH:mm' }}
+              }
+              @case ('state') {
+                {{ rowData.trackingLog?.state?.name }}
+              }
+              @case ('user') {
+                @if (rowData.trackingLog?.user) {
+                  {{ rowData.trackingLog.user.name }} {{ rowData.trackingLog.user.lastname }}
+                }
+              }
+            }
+          }
+        </td>
+      }
+
+      <td class="text-center">
+        <p-button
+          [icon]="PrimeIcons.ELLIPSIS_V"
+          (click)="selectItem(rowData)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        {{ messageService.paginatorNoRecordsFound }}
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="summary">
+    <!-- {{ messageService.paginatorTotalRegisters(paginator.totalItems) }} -->
+  </ng-template>
+</p-table>
+
+<app-button-action [buttonActions]="buttonActions"
+                   [enabled]="isButtonActions"
+                   (isHide)="isButtonActions=!$event">
+</app-button-action>
+
+<p-dialog
+  [(visible)]="isVisibleFilesModal"
+  [modal]="true"
+  [style]="{width: '50rem'}"
+  header="Subir Archivos">
+  <ng-template pTemplate="content">
+    <div class="p-fluid grid">
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="report"
+          [label]="PeriodEnum.reportClosingFile"
+          [required]="reportFileField"></label>
+
+        <p-fileUpload
+          #uploadFiles
+          id="report"
+          mode="basic"
+          chooseLabel="Cargar"
+          [chooseIcon]="PrimeIcons.UPLOAD"
+          invalidFileSizeMessageDetail=""
+          [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+          [maxFileSize]="FileEnum.maxFileSize"
+          name="files[]"
+          accept=".pdf"
+          [auto]="true"
+          [customUpload]="true"
+          (uploadHandler)="uploadReportFile($event,uploadFiles)"/>
+
+        <small
+          appErrorMessage
+          [errors]="reportFileField.errors"
+          [touched]="reportFileField.touched"
+          [dirty]="reportFileField.dirty">
+        </small>
+      </div>
+
+      @if (reportFileField.value) {
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <p-messages severity="info">
+            <ng-template pTemplate>
+              <i [class]="PrimeIcons.FILE_PDF"></i>
+              <div class="ml-2">{{ reportFileField.value?.name }}</div>
+            </ng-template>
+          </p-messages>
+        </div>
+      }
+
+      <div class="field col-12 xl:col-6 lg:col-6 md:col-6 sm:col-12">
+        <label
+          appLabel
+          for="evidence"
+          [label]="PeriodEnum.evidenceClosingFile"
+          [required]="evidenceFileField"></label>
+
+        <p-fileUpload
+          #uploadFiles
+          id="evidence"
+          mode="basic"
+          chooseLabel="Cargar"
+          [chooseIcon]="PrimeIcons.UPLOAD"
+          name="files[]"
+          accept=".pdf,.zip,.rar"
+          invalidFileSizeMessageDetail=""
+          [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+          [maxFileSize]="FileEnum.maxFileSize"
+          [auto]="true"
+          [customUpload]="true"
+          (uploadHandler)="uploadEvidenceFile($event,uploadFiles)"/>
+
+        <small
+          appErrorMessage
+          [errors]="evidenceFileField.errors"
+          [touched]="evidenceFileField.touched"
+          [dirty]="evidenceFileField.dirty">
+        </small>
+      </div>
+
+      @if (evidenceFileField.value) {
+        <div class="field col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+          <p-messages severity="info">
+            <ng-template pTemplate>
+              <i [class]="PrimeIcons.FILE_PDF"></i>
+              <div class="ml-2">{{ evidenceFileField.value?.name }}</div>
+            </ng-template>
+          </p-messages>
+        </div>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [label]="LabelButtonActionEnum.CANCEL"
+      [icon]="IconButtonActionEnum.CANCEL"
+      [text]="true"
+      [severity]="SeverityButtonActionEnum.CANCEL"
+      (click)="closeModal()"/>
+
+    <p-button
+      [icon]="IconButtonActionEnum.UPLOAD"
+      [label]="LabelButtonActionEnum.UPLOAD"
+      [severity]="SeverityButtonActionEnum.UPLOAD"
+      (click)="onUpload()"/>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="isVisibleTrackingLogModal"
+  [modal]="true"
+  [style]="{width: '100%'}"
+  header="Bitácora">
+  @if (isVisibleTrackingLogModal) {
+    <app-tracking-log-list [period]="selectedItem" trackingLogType="closing"/>
+  }
+</p-dialog>

@@ -67,9 +67,10 @@ import {ClosingLogCurrentComponent} from "./closing-log-current/closing-log-curr
     CalendarModule,
     PanelModule,
   ],
-  exports: [
-    TrackingLogListComponent
-  ]
+    exports: [
+        TrackingLogListComponent,
+        ClosingLogCurrentComponent
+    ]
 })
 export class AgreementAdministratorModule {
 }

@@ -28,35 +28,38 @@ import {CheckboxModule} from "primeng/checkbox";
 
 
 @NgModule({
-  declarations: [
-    ClosingExecutionDocumentComponent,
-    ClosingNotificationComponent,
-    ClosingDocumentsComponent,
-    AgreementTrackingComponent,
-    SendDocumentComponent
-  ],
-  imports: [
-    CommonModule,
-    AgreementTrackingRoutingModule,
-    Button,
-    FormsModule,
-    InputTextModule,
-    PrimeTemplate,
-    TableModule,
-    DividerModule,
-    DialogModule,
-    FileUploadModule,
-    MessagesModule,
-    SharedModule,
-    InputTextareaModule,
-    ReactiveFormsModule,
-    PanelModule,
-    DropdownModule,
-    CalendarModule,
-    ToolbarModule,
-    ConfirmDialogModule,
-    NationalSupervisorModule,
-    CheckboxModule
-  ]
+    declarations: [
+        ClosingExecutionDocumentComponent,
+        ClosingNotificationComponent,
+        ClosingDocumentsComponent,
+        AgreementTrackingComponent,
+        SendDocumentComponent
+    ],
+    exports: [
+        ClosingNotificationComponent
+    ],
+    imports: [
+        CommonModule,
+        AgreementTrackingRoutingModule,
+        Button,
+        FormsModule,
+        InputTextModule,
+        PrimeTemplate,
+        TableModule,
+        DividerModule,
+        DialogModule,
+        FileUploadModule,
+        MessagesModule,
+        SharedModule,
+        InputTextareaModule,
+        ReactiveFormsModule,
+        PanelModule,
+        DropdownModule,
+        CalendarModule,
+        ToolbarModule,
+        ConfirmDialogModule,
+        NationalSupervisorModule,
+        CheckboxModule
+    ]
 })
 export class AgreementTrackingModule { }

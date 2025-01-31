@@ -119,7 +119,6 @@ export class AgreementListComponent implements OnInit {
   validateButtonActions(item: AgreementModel): void {
     this.buildButtonActions();
 
-    console.log(item)
     if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT) {
       this.buttonActions.push(
         {
@@ -140,6 +139,19 @@ export class AgreementListComponent implements OnInit {
         },
       );
     }
+
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+          label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+          icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_ADMINISTRATOR,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectClosingProcess(this.selectedItem.id);
+          },
+        },
+      );
+    }
   }
 
   redirectViewAgreement() {
@@ -153,6 +165,11 @@ export class AgreementListComponent implements OnInit {
 
   redirectAgreementTerminationList(id: string) {
     this.router.navigate(['/core/agreement-administrator/agreement-termination-list', id]
+      , {queryParams: {type: 'closing'}});
+  }
+
+  redirectClosingProcess(id: string) {
+    this.router.navigate(['/core/agreement-administrator/closing-process/a', id]
       , {queryParams: {type: 'closing'}});
   }
 

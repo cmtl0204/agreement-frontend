@@ -1,0 +1,4 @@
+<app-closing-notification [agreementId]="agreementId" (closingNotificationOut)="closingNotification=$event"/>
+<app-period-tacking-log-list [agreementId]="agreementId"/>
+<app-closing-log-current [agreementId]="agreementId" [closingNotification]="closingNotification"/>
+<p-confirmDialog key="confirmDialog"/>
