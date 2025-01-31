@@ -9,7 +9,7 @@ import {
   CatalogueTypeEnum,
   CatalogueAgreementsTypeEnum,
   AgreementStateEnum,
-  ClosingNotificationEnum, BreadcrumbEnum, CatalogueClosingNotificationsCloseTypeEnum
+  ClosingNotificationEnum, BreadcrumbEnum, CatalogueClosingNotificationsCloseTypeEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
 import {AuthService} from "@servicesApp/auth";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
@@ -70,4 +70,6 @@ export class AgreementTerminationListComponent implements OnInit {
   loadCloseTypes() {
     this.closeTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.CLOSING_NOTIFICATIONS_CLOSE_TYPE);
   };
+
+  protected readonly CatalogueAgreementStatesStateEnum = CatalogueAgreementStatesStateEnum;
 }

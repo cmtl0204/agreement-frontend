@@ -40,6 +40,10 @@
 }
 <p-divider/>
 
+@if (closingNotification && closingNotification.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+  <app-period-closing-list [agreementId]="agreementId"/>
+}
+
 <p-panel>
   <app-closing-log-current [agreementId]="agreementId" [closingNotification]="closingNotification"/>
 </p-panel>

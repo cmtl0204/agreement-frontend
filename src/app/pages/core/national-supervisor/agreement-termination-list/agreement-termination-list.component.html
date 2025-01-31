@@ -37,6 +37,10 @@
   }
 }
 
+@if (closingNotification && closingNotification.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+  <app-period-closing-list [agreementId]="agreementId"/>
+}
+
 <p-divider/>
 
 <p-panel>

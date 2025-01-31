@@ -165,6 +165,26 @@ export class AgreementListComponent implements OnInit {
         });
     }
 
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+          },
+        },
+        {
+          id: IdButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          label: LabelButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          icon: IconButtonActionEnum.MANAGER_AGREEMENT_CLOSED,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectClosedAgreement(this.selectedItem.id);
+          },
+        });
+    }
+
     if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
       this.buttonActions.push(
         {
