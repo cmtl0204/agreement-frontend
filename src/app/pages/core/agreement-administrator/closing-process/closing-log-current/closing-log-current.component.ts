@@ -47,7 +47,7 @@ import {forkJoin} from "rxjs";
   styleUrl: './closing-log-current.component.scss'
 })
 export class ClosingLogCurrentComponent implements OnInit {
-  @Input({required:true}) agreementId!: string;
+  @Input({required: true}) agreementId!: string;
   @Input() closingNotification!: ClosingNotificationModel;
 
   // Services
@@ -199,8 +199,37 @@ export class ClosingLogCurrentComponent implements OnInit {
           if (response.length > 0) {
             this.validPeriodsExecution = response[0];
             this.validPeriodsClosing = response[1];
-            
-            this.isVisibleFilesModal = true;
+
+            if (this.validPeriodsClosing) {
+              this.confirmationService.confirm({
+                key: 'confirmDialog',
+                message: '',
+                header: '¿Está seguro de actualizar?',
+                // icon: PrimeIcons.QUESTION_CIRCLE,
+                acceptLabel: "Si",
+                rejectLabel: "No",
+                rejectButtonStyleClass: "p-button-text",
+                accept: () => {
+                  this.closingLogsHttpService.createPeriodClosing(this.agreementId).subscribe(response => {
+                    forkJoin(this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution'), this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing'))
+                      .subscribe(response => {
+                        if (response.length > 0) {
+                          this.validPeriodsExecution = response[0];
+                          this.validPeriodsClosing = response[1];
+
+                          if (this.validPeriodsClosing) {
+                            this.isVisibleFilesModal = true;
+                          } else {
+                            this.messageDialogService.errorCustom('No se puede cargar porque faltan', '2');
+                          }
+                        }
+                      });
+                  });
+                }
+              });
+            } else {
+              this.messageDialogService.errorCustom('No se puede cargar porque faltan', '');
+            }
           }
         });
     } else {
@@ -291,15 +320,13 @@ export class ClosingLogCurrentComponent implements OnInit {
     this.validPeriodsExecution = false;
 
     if (this.closingNotification) {
-      if (this.closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypesDocumentEnum.TERM) {
-        forkJoin(this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution'), this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing'))
-          .subscribe(response => {
-            if (response.length > 0) {
-              this.validPeriodsExecution = response[0];
-              this.validPeriodsClosing = response[1];
-            }
-          });
-      }
+      forkJoin(this.trackingLogsHttpService.validationPeriods(this.agreementId, 'execution'), this.trackingLogsHttpService.validationPeriods(this.agreementId, 'closing'))
+        .subscribe(response => {
+          if (response.length > 0) {
+            this.validPeriodsExecution = response[0];
+            this.validPeriodsClosing = response[1];
+          }
+        });
     }
   }
 }

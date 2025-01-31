@@ -111,4 +111,16 @@ export class ClosingLogsHttpService {
       })
     );
   }
+
+  createPeriodClosing(agreementId: string): Observable<AgreementModel> {
+    const url = `${this.API_URL}/closing/periods`;
+
+    const params = new HttpParams().append('agreementId', agreementId);
+
+    return this.httpClient.post<ServerResponse>(url, null, {params}).pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
 }
