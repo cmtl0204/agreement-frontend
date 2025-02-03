@@ -70,7 +70,7 @@ export class ClosingNotificationComponent {
   createClosingNotification() {
     this.agreementField.patchValue({id: this.agreementId});
 
-    this.closingNotificationsHttpService.createClosingNotificationByAgreement(this.form.value).subscribe(response => {
+    this.closingNotificationsHttpService.createClosingNotificationClosingProcessByAgreement(this.form.value).subscribe(response => {
       this.findClosingNotificationByAgreement();
     });
   }
