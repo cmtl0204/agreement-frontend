@@ -90,7 +90,7 @@ export class ClosingNotificationComponent implements OnInit {
   createClosingNotification() {
     this.agreementField.patchValue({id: this.agreementId});
 
-    this.closingNotificationsHttpService.createClosingNotificationByAgreement(this.form.value).subscribe(response => {
+    this.closingNotificationsHttpService.createClosingNotificationClosedByAgreement(this.form.value).subscribe(response => {
       this.findClosingNotificationByAgreement();
     });
   }

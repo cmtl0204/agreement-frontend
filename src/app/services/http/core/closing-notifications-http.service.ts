@@ -48,6 +48,20 @@ export class ClosingNotificationsHttpService {
     );
   }
 
+  createClosingNotificationClosedByAgreement(payload: ClosingNotificationModel): Observable<ClosingNotificationModel> {
+    const url = `${this.API_URL}/closed`;
+
+    this.coreService.isProcessing = true;
+
+    return this.httpClient.post<ServerResponse>(url, payload).pipe(
+      map(response => {
+        this.coreService.isProcessing = false;
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
+
   createClosingNotificationClosingProcessByAgreement(payload: ClosingNotificationModel): Observable<ClosingNotificationModel> {
     const url = `${this.API_URL}/closing-process`;
 

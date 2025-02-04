@@ -100,7 +100,6 @@
         </div>
 
         <div class="p-toolbar-group-right">
-
           <app-form-button-action
             labelSubmitButton="Notificar"
             (submit)="onSubmit()"
@@ -125,7 +124,23 @@
           [label]="ClosingNotificationEnum.closeType"
           [required]="closeTypeField"></label>
 
-        <input pInputText id="closeType2" formControlName="closedAt">
+        <p-dropdown
+          id="closeType2"
+          formControlName="closeType"
+          dataKey="id"
+          [options]="closeTypes"
+          placeholder="Selecione">
+          <ng-template pTemplate="selectedItem" let-selectedItem>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedItem.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ item.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
       </div>
 
       <!-- closedAt -->
