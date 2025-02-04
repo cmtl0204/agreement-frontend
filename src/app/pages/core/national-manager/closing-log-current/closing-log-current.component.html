@@ -52,9 +52,12 @@
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
       }
-      <th class="text-center">
-        {{ TableEnum.ACTIONS }}
-      </th>
+
+      @if (agreement.initialState?.code != CatalogueAgreementStatesStateEnum.CLOSED) {
+        <th class="text-center">
+          {{ TableEnum.ACTIONS }}
+        </th>
+      }
     </tr>
   </ng-template>
 
@@ -135,11 +138,13 @@
         </td>
       }
 
+      @if (agreement.initialState?.code != CatalogueAgreementStatesStateEnum.CLOSED) {
       <td class="text-center">
         <p-button
           [icon]="PrimeIcons.ELLIPSIS_V"
           (click)="selectItem(rowData)"></p-button>
       </td>
+      }
     </tr>
   </ng-template>
 

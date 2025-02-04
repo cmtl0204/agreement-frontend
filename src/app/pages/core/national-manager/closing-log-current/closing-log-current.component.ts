@@ -388,4 +388,6 @@ export class ClosingLogCurrentComponent implements OnInit {
   get observationFileField(): AbstractControl {
     return this.form.controls['observation'];
   }
+
+  protected readonly CatalogueAgreementStatesStateEnum = CatalogueAgreementStatesStateEnum;
 }
