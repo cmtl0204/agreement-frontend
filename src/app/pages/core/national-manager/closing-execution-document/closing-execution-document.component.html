@@ -6,14 +6,6 @@
 
     <ng-template pTemplate="caption">
       <h2>Ejecución del Convenio</h2>
-      <p-divider/>
-      <p-button
-        (click)="openFilesModal()"
-        [icon]="IconButtonActionEnum.UPLOAD"
-        [label]="LabelButtonActionEnum.CREATE_CLOSING_LOG"
-        [loading]="coreService.isLoading"
-        [severity]="SeverityButtonActionEnum.UPLOAD"
-      />
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>

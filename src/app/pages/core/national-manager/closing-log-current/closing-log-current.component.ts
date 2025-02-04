@@ -35,7 +35,7 @@ import {
   PeriodEnum,
   CatalogueTrackingLogsStateEnum,
   FileEnum,
-  CatalogueClosingNotificationsCloseTypesDocumentEnum, TrackingLogEnum
+  CatalogueClosingNotificationsCloseTypesDocumentEnum, TrackingLogEnum, CatalogueAgreementStatesStateEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
@@ -108,7 +108,6 @@ export class ClosingLogCurrentComponent implements OnInit {
 
     this.buildForm();
     this.buildButtonActions();
-    this.buildColumns();
   }
 
   ngOnInit() {
@@ -138,6 +137,7 @@ export class ClosingLogCurrentComponent implements OnInit {
   findAgreement(id: string) {
     this.agreementsHttpService.findOne(id).subscribe(agreement => {
       this.agreement = agreement;
+      this.buildColumns();
     });
   }
 
@@ -231,14 +231,26 @@ export class ClosingLogCurrentComponent implements OnInit {
   }
 
   buildColumns() {
-    this.columns = [
-      {field: 'closingLogDocumentsUpload', header: PeriodEnum.documentName},
-      {field: 'closingLogDocuments', header: PeriodEnum.fileName},
-      {field: 'trafficLight', header: PeriodEnum.trafficLight},
-      {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
-      {field: 'user', header: PeriodEnum.user},
-      {field: 'state', header: PeriodEnum.state},
-    ];
+    if (this.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT
+      || this.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+      this.columns = [
+        {field: 'closingLogDocumentsUpload', header: PeriodEnum.documentName},
+        {field: 'closingLogDocuments', header: PeriodEnum.fileName},
+        {field: 'trafficLight', header: PeriodEnum.trafficLight},
+        {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
+        {field: 'user', header: PeriodEnum.user},
+        {field: 'state', header: PeriodEnum.state},
+      ];
+    }
+
+    if (this.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
+      this.columns = [
+        {field: 'closingLogDocumentsUpload', header: PeriodEnum.documentName},
+        {field: 'closingLogDocuments', header: PeriodEnum.fileName},
+        {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
+        {field: 'user', header: PeriodEnum.user},
+      ];
+    }
   }
 
   /** Button Actions**/
