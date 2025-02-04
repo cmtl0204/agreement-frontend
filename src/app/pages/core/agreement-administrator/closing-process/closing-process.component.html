@@ -1,6 +1,15 @@
 <app-closing-notification [agreementId]="agreementId" (closingNotificationOut)="closingNotification=$event"/>
+
 @if (closingNotification) {
-  <app-period-tacking-log-list [agreementId]="agreementId"/>
-  <app-closing-log-current [agreementId]="agreementId" [closingNotification]="closingNotification"/>
+  @if (periodChange) {
+    <app-period-tacking-log-list [agreementId]="agreementId"/>
+  }
+
+  <app-closing-log-current
+    [agreementId]="agreementId"
+    [closingNotification]="closingNotification"
+    (periodsOut)="refreshPeriodTrackingLog()"
+  />
 }
+
 <p-confirmDialog key="confirmDialog"/>

@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, inject, Input, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -49,6 +49,7 @@ import {forkJoin} from "rxjs";
 export class ClosingLogCurrentComponent implements OnInit {
   @Input({required: true}) agreementId!: string;
   @Input() closingNotification!: ClosingNotificationModel;
+  @Output() periodsOut: EventEmitter<any>= new EventEmitter();
 
   // Services
   protected readonly activatedRoute = inject(ActivatedRoute);
@@ -217,6 +218,7 @@ export class ClosingLogCurrentComponent implements OnInit {
                           this.validPeriodsExecution = response[0];
                           this.validPeriodsClosing = response[1];
 
+                          this.periodsOut.emit();
                           if (this.validPeriodsClosing) {
                             this.isVisibleFilesModal = true;
                           } else {
