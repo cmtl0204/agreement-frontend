@@ -150,6 +150,26 @@ export enum AddendumEnum {
 
 export enum PeriodEnum {
   header = 'Periodos',
+  documentName = 'Documento',
+  fileName = 'Archivo',
+  endedAt = 'Fecha de finalización',
+  name = 'Informe',
+  startedAt = 'Documento de adenda o modificatorio',
+  uploadedAt = 'Fecha de carga',
+  type = 'Documento de adenda o modificatorio',
+  reportPeriod = 'Periodo reporte',
+  reportFile = 'Informes de ejecución',
+  reportClosingFile = 'Informe de avance de cierre del convenio',
+  evidenceFile = 'Evidencias',
+  evidenceClosingFile = 'Evidencias',
+  detail = 'Motivo',
+  trafficLight = 'Semáforo',
+  user = 'Modificado por',
+  state = 'Estado',
+}
+
+export enum ClosingLogEnum {
+  header = 'Periodos',
   documentName = 'Documento Habilitante',
   fileName = 'Archivo',
   endedAt = 'Fecha de finalización',

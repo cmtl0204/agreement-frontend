@@ -35,7 +35,7 @@ import {
   PeriodEnum,
   CatalogueTrackingLogsStateEnum,
   FileEnum,
-  CatalogueClosingNotificationsCloseTypesDocumentEnum
+  CatalogueClosingNotificationsCloseTypesDocumentEnum, ClosingLogEnum
 } from '@shared/enums';
 import {PrimeIcons, MenuItem, ConfirmationService} from 'primeng/api';
 import {AuthService} from "@servicesApp/auth";
@@ -204,7 +204,7 @@ export class ClosingLogCurrentComponent implements OnInit {
               this.confirmationService.confirm({
                 key: 'confirmDialog',
                 message: '',
-                header: '¿Está seguro de actualizar?',
+                header: '¿Está seguro de contar con los documentos habilitantes para el cierre del convenio?',
                 // icon: PrimeIcons.QUESTION_CIRCLE,
                 acceptLabel: "Si",
                 rejectLabel: "No",
@@ -220,7 +220,9 @@ export class ClosingLogCurrentComponent implements OnInit {
                           if (this.validPeriodsClosing) {
                             this.isVisibleFilesModal = true;
                           } else {
-                            this.messageDialogService.errorCustom('No se puede cargar porque faltan', '2');
+                            this.messageDialogService.errorCustom(
+                              'Alerta!',
+                              'No se puede subir la documentación habilitante para el cierre del convenio porque falta reportar o tener aceptados todos los reportes de avance del cierre del convenio');
                           }
                         }
                       });
@@ -228,7 +230,9 @@ export class ClosingLogCurrentComponent implements OnInit {
                 }
               });
             } else {
-              this.messageDialogService.errorCustom('No se puede cargar porque faltan', '');
+              this.messageDialogService.errorCustom(
+                'Alerta!',
+                'No se puede subir la documentación habilitante para el cierre del convenio porque falta reportar o tener aceptados todos los reportes de avance del cierre del convenio');
             }
           }
         });
@@ -247,12 +251,12 @@ export class ClosingLogCurrentComponent implements OnInit {
 
   buildColumns() {
     this.columns = [
-      {field: 'closingLogDocumentsUpload', header: PeriodEnum.documentName},
-      {field: 'closingLogDocuments', header: PeriodEnum.fileName},
-      {field: 'trafficLight', header: PeriodEnum.trafficLight},
-      {field: 'uploadedAt', header: PeriodEnum.uploadedAt},
-      {field: 'user', header: PeriodEnum.user},
-      {field: 'state', header: PeriodEnum.state},
+      {field: 'closingLogDocumentsUpload', header: ClosingLogEnum.documentName},
+      {field: 'closingLogDocuments', header: ClosingLogEnum.fileName},
+      {field: 'trafficLight', header: ClosingLogEnum.trafficLight},
+      {field: 'uploadedAt', header: ClosingLogEnum.uploadedAt},
+      {field: 'user', header: ClosingLogEnum.user},
+      {field: 'state', header: ClosingLogEnum.state},
     ];
   }
 
