@@ -256,41 +256,27 @@ export class ClosingLogCurrentComponent implements OnInit {
   /** Button Actions**/
   buildButtonActions() {
     this.buttonActions = [
-      {
-        id: IdButtonActionEnum.TRACKING_LOG,
-        label: LabelButtonActionEnum.TRACKING_LOG,
-        icon: IconButtonActionEnum.TRACKING_LOG,
-        command: () => {
-          this.isVisibleTrackingLogModal = true;
-        },
-      },
-      {
-        id: IdButtonActionEnum.ACCEPTED,
-        label: LabelButtonActionEnum.ACCEPTED,
-        icon: IconButtonActionEnum.ACCEPTED,
-        command: () => {
-          this.isVisibleAcceptedModal = true;
-        },
-      },
-      {
-        id: IdButtonActionEnum.REFUSED,
-        label: LabelButtonActionEnum.REFUSED,
-        icon: IconButtonActionEnum.REFUSED,
-        command: () => {
-          this.isVisibleRefusedModal = true;
-        },
-      },
+
     ];
   }
 
   validateButtonActions(item: ClosingLogModel) {
     this.buildButtonActions();
 
-    if (!item
-      || item.state?.code === CatalogueTrackingLogsStateEnum.ACCEPTED
-      || item.state?.code === CatalogueTrackingLogsStateEnum.REFUSED) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.ACCEPTED), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.REFUSED), 1);
+    if(
+      this.agreement.initialState?.code===CatalogueAgreementStatesStateEnum.CURRENT ||
+      this.agreement.initialState?.code===CatalogueAgreementStatesStateEnum.CLOSING_PROCESS
+    ){
+      this.buttonActions = [
+        {
+          id: IdButtonActionEnum.TRACKING_LOG,
+          label: LabelButtonActionEnum.TRACKING_LOG,
+          icon: IconButtonActionEnum.TRACKING_LOG,
+          command: () => {
+            this.isVisibleTrackingLogModal = true;
+          },
+        },
+      ];
     }
   }
 
