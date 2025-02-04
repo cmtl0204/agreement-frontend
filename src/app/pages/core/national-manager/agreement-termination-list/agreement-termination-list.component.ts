@@ -1,8 +1,13 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {CatalogueModel, ClosingNotificationModel} from '@models/core';
+import {CatalogueModel, ClosingNotificationModel, FileModel} from '@models/core';
 import {BreadcrumbService, CoreService, MessageDialogService} from '@servicesApp/core';
-import {AgreementsHttpService, CataloguesHttpService, ClosingNotificationsHttpService} from '@servicesHttp/core';
+import {
+  AgreementsHttpService,
+  CataloguesHttpService,
+  ClosingNotificationsHttpService,
+  FilesHttpService
+} from '@servicesHttp/core';
 import {
   AgreementFormEnum,
   SkeletonEnum,
@@ -30,6 +35,7 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly closingNotificationsHttpService = inject(ClosingNotificationsHttpService);
   protected readonly cataloguesHttpService = inject(CataloguesHttpService);
   protected readonly coreService = inject(CoreService);
+  protected readonly filesHttpService = inject(FilesHttpService);
   protected readonly messageDialogService = inject(MessageDialogService);
   protected readonly formBuilder = inject(FormBuilder);
 
@@ -72,6 +78,5 @@ export class AgreementTerminationListComponent implements OnInit {
   loadCloseTypes() {
     this.closeTypes = this.cataloguesHttpService.findByType(CatalogueTypeEnum.CLOSING_NOTIFICATIONS_CLOSE_TYPE);
   };
-
   protected readonly CatalogueAgreementStatesStateEnum = CatalogueAgreementStatesStateEnum;
 }

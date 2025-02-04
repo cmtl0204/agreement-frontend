@@ -35,9 +35,10 @@ import {CheckboxModule} from "primeng/checkbox";
         AgreementTrackingComponent,
         SendDocumentComponent
     ],
-    exports: [
-        ClosingNotificationComponent
-    ],
+  exports: [
+    ClosingNotificationComponent,
+    ClosingExecutionDocumentComponent
+  ],
     imports: [
         CommonModule,
         AgreementTrackingRoutingModule,

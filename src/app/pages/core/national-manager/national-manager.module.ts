@@ -31,6 +31,7 @@ import {ClosingLogCurrentComponent} from "./closing-log-current/closing-log-curr
 import {ClosingLogListComponent} from "./closing-log-list/closing-log-list.component";
 import {ClosedAgreementComponent} from "./closed-agreement/closed-agreement.component";
 import {CheckboxModule} from "primeng/checkbox";
+import {ClosingExecutionDocumentComponent} from "./closing-execution-document/closing-execution-document.component";
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {CheckboxModule} from "primeng/checkbox";
     PeriodClosingListComponent,
     ClosingLogCurrentComponent,
     ClosingLogListComponent,
-    ClosedAgreementComponent
+    ClosedAgreementComponent,
+    ClosingExecutionDocumentComponent
   ],
   imports: [
     CommonModule,

@@ -1,3 +1,7 @@
+@if (closingNotification && closingNotification.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
+  <app-closing-execution-document [agreementId]="agreementId"/>
+}
+
 @if (closingNotification && closingNotification.closeType?.code === CatalogueClosingNotificationsCloseTypeEnum.TERM) {
   <app-period-closing-list [agreementId]="agreementId"/>
 }
@@ -38,6 +42,7 @@
     </p-panel>
   }
 }
+
 <p-divider/>
 
 @if (closingNotification && closingNotification.agreement.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
