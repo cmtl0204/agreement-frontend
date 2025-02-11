@@ -115,88 +115,120 @@ export class AgreementListComponent implements OnInit {
   /** Button Actions**/
   buildButtonActions() {
     this.buttonActions = [
-      {
-        id: IdButtonActionEnum.COMPLETE,
-        label: LabelButtonActionEnum.COMPLETE,
-        icon: IconButtonActionEnum.COMPLETE,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectCompleteForm(this.selectedItem);
-        },
-      },
-      {
-        id: IdButtonActionEnum.AGREEMENT,
-        label: LabelButtonActionEnum.AGREEMENT,
-        icon: IconButtonActionEnum.AGREEMENT,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
-        },
-      },
-      {
-        id: IdButtonActionEnum.AGREEMENT_LOG,
-        label: LabelButtonActionEnum.AGREEMENT_LOG,
-        icon: IconButtonActionEnum.AGREEMENT_LOG,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
-        },
-      },
-
     ];
   }
 
   validateButtonActions(item: AgreementModel) {
     this.buildButtonActions();
 
+    console.log(item);
     if (item.enabled) {
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
+
+      if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT) {
+        this.buttonActions.push(
+          {
+            id: IdButtonActionEnum.AGREEMENT,
+            label: LabelButtonActionEnum.AGREEMENT,
+            icon: IconButtonActionEnum.AGREEMENT,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
+            },
+          },
+          {
+            id: IdButtonActionEnum.AGREEMENT_LOG,
+            label: LabelButtonActionEnum.AGREEMENT_LOG,
+            icon: IconButtonActionEnum.AGREEMENT_LOG,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
+            },
+          },
+          {
+            id: IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+            label: LabelButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+            icon: IconButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
+            },
+          },
+          {
+            id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+            label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+            icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+            },
+          },);
+      }
+
+      if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+        this.buttonActions.push(
+          {
+            id: IdButtonActionEnum.AGREEMENT,
+            label: LabelButtonActionEnum.AGREEMENT,
+            icon: IconButtonActionEnum.AGREEMENT,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
+            },
+          },
+          {
+            id: IdButtonActionEnum.AGREEMENT_LOG,
+            label: LabelButtonActionEnum.AGREEMENT_LOG,
+            icon: IconButtonActionEnum.AGREEMENT_LOG,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
+            },
+          },
+          {
+            id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+            label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+            icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+            },
+          },);
+      }
+
+      if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
+        this.buttonActions.push(
+          {
+            id: IdButtonActionEnum.AGREEMENT,
+            label: LabelButtonActionEnum.AGREEMENT,
+            icon: IconButtonActionEnum.AGREEMENT,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectEditForm(this.selectedItem.id);
+            },
+          },
+          {
+            id: IdButtonActionEnum.AGREEMENT_LOG,
+            label: LabelButtonActionEnum.AGREEMENT_LOG,
+            icon: IconButtonActionEnum.AGREEMENT_LOG,
+            command: () => {
+              if (this.selectedItem?.id) this.redirectAgreementLogForm(this.selectedItem.id);
+            },
+          },
+          {
+          id: IdButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
+          label: LabelButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
+          icon: IconButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
+          command: () => {
+            if (this.selectedItem?.id) this.redirectTrackingClosed(this.selectedItem.id);
+          },
+        });
+      }
     }
 
     if (!item.enabled) {
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_LOG), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD), 1);
-      this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION), 1);
-    }
-
-    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT) {
-      this.buttonActions.push({
-          id: IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
-          label: LabelButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
-          icon: IconButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
-          command: () => {
-            if (this.selectedItem?.id) this.redirectTrackingLogList(this.selectedItem.id);
-          },
-        },
-        {
-          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-          label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-          icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-          command: () => {
-            if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
-          },
-        },);
-    }
-
-    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
       this.buttonActions.push(
         {
-          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-          label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
-          icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          id: IdButtonActionEnum.COMPLETE,
+          label: LabelButtonActionEnum.COMPLETE,
+          icon: IconButtonActionEnum.COMPLETE,
           command: () => {
-            if (this.selectedItem?.id) this.redirectAgreementTerminationList(this.selectedItem.id);
+            if (this.selectedItem?.id) this.redirectCompleteForm(this.selectedItem);
           },
-        },);
-    }
-
-    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
-      this.buttonActions.push({
-        id: IdButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
-        label: LabelButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
-        icon: IconButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
-        command: () => {
-          if (this.selectedItem?.id) this.redirectTrackingClosed(this.selectedItem.id);
-        },
-      });
+        }
+      );
     }
   }
 
