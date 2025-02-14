@@ -201,7 +201,7 @@ export class ClosingLogCurrentComponent implements OnInit {
             this.validPeriodsExecution = response[0];
             this.validPeriodsClosing = response[1];
 
-            if (this.validPeriodsClosing) {
+            // if (this.validPeriodsClosing) {
               this.confirmationService.confirm({
                 key: 'confirmDialog',
                 message: '',
@@ -231,11 +231,11 @@ export class ClosingLogCurrentComponent implements OnInit {
                   });
                 }
               });
-            } else {
-              this.messageDialogService.errorCustom(
-                'Alerta!',
-                'No se puede subir la documentación habilitante para el cierre del convenio porque falta reportar o tener aceptados todos los reportes de avance del cierre del convenio');
-            }
+            // } else {
+            //   this.messageDialogService.errorCustom(
+            //     'Alerta!',
+            //     'No se puede subir la documentación habilitante para el cierre del convenio porque falta reportar o tener aceptados todos los reportes de avance del cierre del convenio');
+            // }
           }
         });
     } else {
