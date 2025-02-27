@@ -193,7 +193,7 @@ export class ClosingDocumentsComponent implements OnInit {
       this.loadTypesByCloseType();
       this.isVisibleFilesModal = true;
     } else {
-      this.messageDialogService.errorCustom('Importante!', 'Es necesario notificar la terminación del convenio antes de subir los documentos habilitantes para el cierre del convenio.\n');
+      this.messageDialogService.errorCustom('Importante!', 'Es necesario ingresar el tipo de terminación del convenio antes de subir los documentos habilitantes para el cierre del convenio');
     }
   }
 

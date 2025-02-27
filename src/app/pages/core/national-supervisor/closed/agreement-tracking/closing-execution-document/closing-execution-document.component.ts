@@ -8,8 +8,8 @@ import {
   TableEnum
 } from "@shared/enums";
 import {ConfirmationService, PrimeIcons} from "primeng/api";
-import {ColumnModel, FileModel} from "@models/core";
-import {AgreementsHttpService, FilesHttpService} from "@servicesHttp/core";
+import {ClosedAgreementModel, ColumnModel, FileModel} from "@models/core";
+import {AgreementsHttpService, ClosedAgreementsHttpService, FilesHttpService} from "@servicesHttp/core";
 import {CoreService, MessageDialogService} from "@servicesApp/core";
 import {forkJoin} from "rxjs";
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -21,6 +21,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 })
 export class ClosingExecutionDocumentComponent implements OnInit {
   @Input() agreementId!: string;
+  @Input() closedAgreement!: ClosedAgreementModel;
   protected readonly coreService = inject(CoreService);
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly messageDialogService = inject(MessageDialogService);

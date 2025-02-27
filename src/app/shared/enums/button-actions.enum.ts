@@ -65,7 +65,7 @@ export enum LabelButtonActionEnum {
   MANAGER_AGREEMENT_CLOSED = 'Registro del cierre del Convenio',
   AGREEMENT_TRACKING_PERIOD = 'Seguimiento a la ejecución del Convenio',
   AGREEMENT_TRACKING_CLOSED = 'Registro de ejecución y Gestión de Cierre del Convenio',
-  MANAGER_AGREEMENT_TRACKING_PERIOD = 'Ejecución del Convenio',
+  MANAGER_AGREEMENT_TRACKING_PERIOD = 'EJECUCIÓN DEL CONVENIO',
   TRACKING_LOG = 'Bitácora Seguimiento',
   ACCEPTED = 'Aceptado',
   REFUSED = 'Rechazado',

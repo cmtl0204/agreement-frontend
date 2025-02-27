@@ -149,7 +149,7 @@ export class ClosingNotificationComponent implements OnInit {
     if (this.validateForm()) {
       this.confirmationService.confirm({
         key: 'confirmDialog',
-        message: '¿Está seguro de notificar la terminiación del convenio?',
+        message: '¿Está seguro de guardar el tipo de terminación del convenio, una vez aceptado no podrá modificar la información ingresada?',
         header: '',
         icon: PrimeIcons.QUESTION_CIRCLE,
         acceptLabel: "Si",
@@ -173,7 +173,7 @@ export class ClosingNotificationComponent implements OnInit {
     if (this.validateForm()) {
       this.confirmationService.confirm({
         key: 'confirmDialog',
-        message: '¿Está seguro de notificar la terminiación del convenio?',
+        message: '¿Está seguro de guardar el tipo de terminación del convenio, una vez aceptado no podrá modificar la información ingresada?',
         header: '',
         icon: PrimeIcons.QUESTION_CIRCLE,
         acceptLabel: "Si",

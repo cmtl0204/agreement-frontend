@@ -10,7 +10,7 @@ export enum BreadcrumbEnum {
   PERIODS_CLOSING_SUPERVISOR = 'SEGUIMIENTO AL AVANCE DE CIERRE DEL CONVENIO',
   PERIODS_CLOSING_MANAGER = 'REPORTE AVANCE SEMESTRAL DE CIERRE DEL CONVENIO',
   PERIODS_SUPERVISOR = 'Seguimiento a la ejecución del convenio',
-  PERIODS_MANAGER = 'Ejecución del convenio',
+  PERIODS_MANAGER = 'EJECUCIÓN DEL CONVENIO',
   ADDITIONAL_DOCUMENTS = 'Registro de avance adicional de ejecución de convenio',
   ADDITIONAL_DOCUMENTS_MANAGER = 'Reporte adicional al convenio',
   AGREEMENTS_REGISTER = 'Registrar Convenio',

@@ -5,7 +5,7 @@
     [columns]="columns">
 
     <ng-template pTemplate="caption">
-      <h2>Ejecución del Convenio</h2>
+      <h2>EJECUCIÓN DEL CONVENIO</h2>
       <p-divider/>
       <p-button
         (click)="openFilesModal()"
@@ -37,10 +37,12 @@
         <td>{{ item.registeredAt | customFormatDateTime }}</td>
         <td>{{ item.user?.name }} {{ item.user?.lastname }}</td>
         <td>
-          <p-button [pTooltip]="LabelButtonActionEnum.DELETE"
-                    [severity]="SeverityButtonActionEnum.DELETE"
-                    [icon]="IconButtonActionEnum.DELETE"
-                    (click)="deleteFile(item.id,rowIndex)"/>
+          @if (closedAgreement && !closedAgreement?.sendingUser) {
+            <p-button [pTooltip]="LabelButtonActionEnum.DELETE"
+                      [severity]="SeverityButtonActionEnum.DELETE"
+                      [icon]="IconButtonActionEnum.DELETE"
+                      (click)="deleteFile(item.id,rowIndex)"/>
+          }
         </td>
       </tr>
     </ng-template>

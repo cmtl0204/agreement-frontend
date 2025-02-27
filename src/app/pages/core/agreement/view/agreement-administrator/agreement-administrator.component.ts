@@ -24,6 +24,6 @@ export class AgreementAdministratorComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
 
   ngOnInit() {
-    this.userName = `${this.agreement.administrator?.user?.name} ${this.agreement.administrator?.user?.lastname}`
+    this.userName = `${this.agreement.administrator?.user?.name} ${this.agreement.administrator?.user?.lastname} / ${this.agreement.administrator?.user?.email}`
   }
 }

@@ -1,4 +1,4 @@
-<app-closing-execution-document [agreementId]="agreementId"/>
+<app-closing-execution-document [agreementId]="agreementId" [closedAgreement]="closedAgreement"/>
 <p-divider/>
 
 <app-closing-notification [agreementId]="agreementId" (closingNotificationOut)="closingNotification=$event"/>
@@ -6,6 +6,6 @@
 
 <app-closing-documents [agreementId]="agreementId" [closingNotification]="closingNotification" (closingLogOut)="closingLog=$event"/>
 
-<app-send-document [agreementId]="agreementId" [closingLog]="closingLog"/>
+<app-send-document [agreementId]="agreementId" [closingLog]="closingLog" (closedAgreementOut)="closedAgreement=$event"/>
 
 <p-confirmDialog key="confirmDialog"/>
