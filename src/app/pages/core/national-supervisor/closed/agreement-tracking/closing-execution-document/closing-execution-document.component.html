@@ -37,7 +37,7 @@
         <td>{{ item.registeredAt | customFormatDateTime }}</td>
         <td>{{ item.user?.name }} {{ item.user?.lastname }}</td>
         <td>
-          @if (!closedAgreement?.sendingUser) {
+          @if (!closedAgreement || !closedAgreement?.sendingUser) {
             <p-button [pTooltip]="LabelButtonActionEnum.DELETE"
                       [severity]="SeverityButtonActionEnum.DELETE"
                       [icon]="IconButtonActionEnum.DELETE"
