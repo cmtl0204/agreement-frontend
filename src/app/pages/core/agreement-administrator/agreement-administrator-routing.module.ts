@@ -4,6 +4,7 @@ import {AgreementListComponent} from './agreement-list/agreement-list.component'
 import {TrackingLogListComponent} from "./tracking-log-list/tracking-log-list.component";
 import {PeriodListComponent} from "./period-list/period-list.component";
 import {AgreementTerminationListComponent} from "./agreement-termination-list/agreement-termination-list.component";
+import {ReportComponent} from "../agreement/report/report.component";
 
 const routes: Routes = [
   {
@@ -25,7 +26,11 @@ const routes: Routes = [
   {
     path: 'closing-process',
     loadChildren: () => import('./closing-process/closing-process.module').then(m => m.ClosingProcessModule),
-  }
+  },
+  {
+    path: 'report',
+    component: ReportComponent
+  },
 ];
 
 @NgModule({

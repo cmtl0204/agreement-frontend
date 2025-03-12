@@ -4,6 +4,7 @@ import {AgreementListComponent} from './agreement-list/agreement-list.component'
 import {PeriodListComponent} from "./period-list/period-list.component";
 import {TrackingLogListComponent} from "./tracking-log-list/tracking-log-list.component";
 import {AgreementTerminationListComponent} from "./agreement-termination-list/agreement-termination-list.component";
+import {ReportComponent} from "../agreement/report/report.component";
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'closed',
     loadChildren: () => import('./closed/closed.module').then(m => m.ClosedModule),
+  },
+  {
+    path: 'report',
+    component: ReportComponent
   },
 ];
 

@@ -107,7 +107,6 @@ export class PeriodListComponent implements OnInit {
   }
 
   findPeriodsByAgreement() {
-    console.log(this.trackingLogType);
     this.trackingLogsHttpService.findPeriodsByAgreement(this.agreementId, this.trackingLogType)
       .subscribe((response) => {
         this.items = response;

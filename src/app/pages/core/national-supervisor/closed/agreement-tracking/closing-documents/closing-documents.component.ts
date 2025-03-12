@@ -167,8 +167,6 @@ export class ClosingDocumentsComponent implements OnInit {
   onUpload(event: any, uploadFiles: any, type: CatalogueModel, index: number) {
     const fileExist = this.files.find(item => item?.type?.id === type.id);
 
-    // console.log(type.description);
-    // console.log(index);
     if (fileExist) {
       this.files[index] = {
         type,
@@ -182,8 +180,6 @@ export class ClosingDocumentsComponent implements OnInit {
         description: type.description
       };
     }
-
-    // console.log(this.files);
 
     uploadFiles.clear();
   }

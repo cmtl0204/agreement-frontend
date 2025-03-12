@@ -4,9 +4,10 @@ import {debounceTime, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@env/environment';
 import {ServerResponse} from '@models/http-response';
-import {MessageDialogService, MessageService} from '@servicesApp/core';
+import {CoreService, MessageDialogService, MessageService} from '@servicesApp/core';
 import {AgreementModel, CatalogueModel} from '@models/core';
 import {CatalogueTypeEnum} from "@shared/enums";
+import {format} from "date-fns";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class AgreementsHttpService {
   private readonly httpClient = inject(HttpClient);
   private readonly messageService = inject(MessageService);
   private readonly messageDialogService = inject(MessageDialogService);
+  private readonly coreService = inject(CoreService);
 
   constructor() {
   }
@@ -194,5 +196,31 @@ export class AgreementsHttpService {
         return response.data;
       })
     );
+  }
+
+  downloadReport(role: string, stateCode: string) {
+    const url = `${this.API_URL}/${role}/download-report`;
+
+    const params = new HttpParams().append('stateCode', stateCode);
+    this.coreService.isProcessing = true;
+
+    this.httpClient.get<BlobPart>(url, {responseType: 'blob' as 'json', params})
+      .subscribe(response => {
+        const filePath = URL.createObjectURL(new Blob([response]));
+
+        const downloadLink = document.createElement('a');
+
+        downloadLink.href = filePath;
+
+        const fileName = `reporte_convenio_${format(new Date, 'yyyy_MM_dd hh_mm_ss')}.xls`;
+
+        downloadLink.setAttribute('download', fileName);
+
+        document.body.appendChild(downloadLink);
+
+        downloadLink.click();
+
+        this.coreService.isProcessing = false;
+      });
   }
 }

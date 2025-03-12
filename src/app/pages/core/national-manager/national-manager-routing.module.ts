@@ -5,6 +5,7 @@ import {PeriodListComponent} from "./period-list/period-list.component";
 import {TrackingLogListComponent} from "./tracking-log-list/tracking-log-list.component";
 import {AgreementTerminationListComponent} from "./agreement-termination-list/agreement-termination-list.component";
 import {ClosedAgreementComponent} from "./closed-agreement/closed-agreement.component";
+import {ReportComponent} from "../agreement/report/report.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'closed-agreement/:agreementId',
     component: ClosedAgreementComponent
+  },
+  {
+    path: 'report',
+    component: ReportComponent
   },
 ];
 

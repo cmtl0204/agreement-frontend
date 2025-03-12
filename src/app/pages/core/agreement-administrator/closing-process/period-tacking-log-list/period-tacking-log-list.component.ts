@@ -202,9 +202,7 @@ export class PeriodTackingLogListComponent implements OnInit {
   }
 
   onUpload() {
-    console.log('1');
     if (this.validateFilesForm()) {
-      console.log('2');
       this.confirmationService.confirm({
         key: 'confirmDialog',
         message: '¿Está seguro de subir los archivos?',

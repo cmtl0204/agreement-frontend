@@ -121,7 +121,6 @@ export class AgreementListComponent implements OnInit {
   validateButtonActions(item: AgreementModel) {
     this.buildButtonActions();
 
-    console.log(item);
     if (item.enabled) {
       this.buttonActions.splice(this.buttonActions.findIndex(actionButton => actionButton.id === IdButtonActionEnum.COMPLETE), 1);
 

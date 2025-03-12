@@ -78,11 +78,9 @@ export class ClosedAgreementComponent implements OnInit {
 
   loadFileType() {
     this.fileType = this.cataloguesHttpService.findByCode('CLOSED_AGREEMENT', CatalogueTypeEnum.CLOSED_AGREEMENTS_DOCUMENT);
-    console.log(this.fileType);
   }
 
   closeAgreement() {
-    console.log('entro');
     this.confirmationService.confirm({
       message: 'Después de registrar, no podrá realizar cambios',
       header: '¿Está seguro de registrar?',
