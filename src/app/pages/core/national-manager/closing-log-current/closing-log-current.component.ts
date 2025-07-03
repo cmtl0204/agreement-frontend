@@ -101,10 +101,10 @@ export class ClosingLogCurrentComponent implements OnInit {
   protected validPeriodsExecution: boolean = false;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS},
-    ]);
+    // this.breadcrumbService.setItems([
+    //   {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
+    //   {label: BreadcrumbEnum.PERIODS},
+    // ]);
 
     this.buildForm();
     this.buildButtonActions();

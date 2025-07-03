@@ -58,9 +58,10 @@ import {CustomFormatDatePipe} from "@shared/pipes";
     DocumentComponent,
     AddendumComponent,
   ],
-  exports: [
-    ObligationComponent
-  ],
+    exports: [
+        ObligationComponent,
+        AgreementDateComponent
+    ],
     imports: [
         CommonModule,
         RegisterRoutingModule,

@@ -25,6 +25,16 @@
   <ng-template pTemplate="caption">
     <div class="flex">
       <h1>{{ BreadcrumbEnum.AGREEMENTS }}</h1>
+      <p-iconField iconPosition="left" class="ml-auto">
+        <p-inputIcon>
+          <i class="pi pi-search"></i>
+        </p-inputIcon>
+        <input
+          pInputText
+          type="text"
+          [formControl]="search"
+          placeholder="Busqueda de convenios" />
+      </p-iconField>
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
@@ -116,7 +126,7 @@
 <p-dialog
   header="Convenio"
   [(visible)]="isVisibleAgreementView"
-  [modal]="true">
+  [modal]="false">
   @if (selectedItem && isVisibleAgreementView) {
     <app-view [id]="selectedItem.id!"/>
   }

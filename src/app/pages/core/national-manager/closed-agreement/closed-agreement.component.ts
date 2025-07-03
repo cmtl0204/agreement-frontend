@@ -65,13 +65,17 @@ export class ClosedAgreementComponent implements OnInit {
   protected readonly FileEnum = FileEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS},
-    ]);
+
   }
 
   ngOnInit() {
+
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/view/${this.agreementId}`]},
+      {label: BreadcrumbEnum.CLOSED},
+    ]);
+
     this.findClosedAgreementByAgreement();
     this.loadFileType();
   }

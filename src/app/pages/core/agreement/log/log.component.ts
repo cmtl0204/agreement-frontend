@@ -74,16 +74,32 @@ export class LogComponent implements OnInit {
   protected isVisibleAgreementView: boolean = false;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.AGREEMENTS_LOG},
-    ]);
 
     this.buildButtonActions();
     this.buildColumns();
   }
 
   ngOnInit() {
+
+    switch (this.authService.role.code){
+      case RoleEnum.NATIONAL_SUPERVISOR:
+      case RoleEnum.INTERNATIONAL_SUPERVISOR:
+        this.breadcrumbService.setItems([
+          {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
+          {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/update/${this.id}`]},
+          {label: BreadcrumbEnum.AGREEMENTS_LOG},
+        ]);
+        break;
+
+      default:
+        this.breadcrumbService.setItems([
+          {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
+          {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/view/${this.id}`]},
+          {label: BreadcrumbEnum.AGREEMENTS_LOG},
+        ]);
+    }
+
+
     this.findAgreementLogsByAgreement();
   }
 

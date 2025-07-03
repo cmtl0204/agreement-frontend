@@ -45,6 +45,7 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly messageDialogService = inject(MessageDialogService);
   protected readonly formBuilder = inject(FormBuilder);
   protected endedAt!: Date;
+  protected currentDate = new Date;
   protected validPeriodsExecution: boolean = false;
 
   /** Input Output **/
@@ -67,15 +68,17 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.CLOSING_NOTIFICATION},
-    ]);
-
     this.buildForm();
   }
 
   ngOnInit() {
+
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/view/${this.agreementId}`]},
+      {label: BreadcrumbEnum.CLOSING_NOTIFICATION},
+    ]);
+
     this.loadCloseTypes();
     this.findClosingNotificationByAgreement();
     this.validatePeriodsExecution();

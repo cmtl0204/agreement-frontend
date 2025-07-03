@@ -86,10 +86,6 @@ export class PeriodListComponent implements OnInit {
   protected readonly FileEnum = FileEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
-      {label: BreadcrumbEnum.PERIODS},
-    ]);
 
     this.buildForm();
     this.buildButtonActions();
@@ -104,6 +100,13 @@ export class PeriodListComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
+      {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/view/${this.agreementId}`]},
+      {label: BreadcrumbEnum.PERIODS},
+    ]);
+
     this.findPeriodsByAgreement();
     this.findAgreement(this.agreementId);
     this.loadTypes();

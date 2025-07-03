@@ -92,6 +92,17 @@ export class AgreementsHttpService {
     );
   }
 
+  uploadEnablingDocumentUpdate(id: string, formData: FormData): Observable<AgreementModel> {
+    const url = `${this.API_URL}/${id}/update-enabling-documents`;
+
+    return this.httpClient.post<ServerResponse>(url, formData).pipe(
+      map(response => {
+        this.messageDialogService.successHttp(response);
+        return response.data;
+      })
+    );
+  }
+
   findNationalAgreementsByOrigin(): Observable<AgreementModel[]> {
     const url = `${this.API_URL}/national-agreements`;
 

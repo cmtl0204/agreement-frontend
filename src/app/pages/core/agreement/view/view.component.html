@@ -3,6 +3,23 @@
 }
 
 @if (agreement) {
+  <p-panel>
+    <ng-template pTemplate="content">
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <p-button
+            [icon]="PrimeIcons.ELLIPSIS_V"
+            (click)="selectItem()"></p-button>
+        </div>
+      </p-toolbar>
+
+    </ng-template>
+  </p-panel>
+
   <app-basic-data [agreement]="agreement"></app-basic-data>
   <p-divider/>
   <app-agreement-date [agreement]="agreement"></app-agreement-date>
@@ -19,3 +36,8 @@
   <p-divider/>
   <app-addendum [agreement]="agreement"></app-addendum>
 }
+
+<app-button-action [buttonActions]="buttonActions"
+                   [enabled]="isButtonActions"
+                   (isHide)="isButtonActions=!$event">
+</app-button-action>

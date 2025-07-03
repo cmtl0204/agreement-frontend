@@ -144,31 +144,28 @@ export class DocumentComponent implements OnInit {
     return this.formErrors.length === 0
   }
 
-  uploadFile(event: any, uploadFiles: any, type: CatalogueModel) {
+  uploadFile(event: any, uploadFiles: any, fileEdit: FileModel, index: number) {
     const file = event.files[0];
 
-    if (this.validateFileForm(file, type)) {
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append('file', file);
-      formData.append('typeId', type.id!);
+    formData.append('file', file);
+    formData.append('id', fileEdit.id!);
+    formData.append('typeId', fileEdit.type?.id!);
 
-      this.agreementsHttpService.uploadEnablingDocument(this.formInput.id!, formData, true).subscribe(response => {
-        this.formInput.enablingDocuments.push({
-          id: response.id,
-          name: file.name,
-          type,
-        });
-
-        const index = this.types.findIndex(item => item.id === type.id);
-        this.types.splice(index, 1);
-
-        this.form.patchValue(this.formInput);
+    this.agreementsHttpService.uploadEnablingDocumentUpdate(fileEdit.id!, formData).subscribe(response => {
+      this.formInput.enablingDocuments.push({
+        id: response.id,
+        name: file.name,
+        type: fileEdit?.type,
       });
-    } else {
-      this.messageDialogService.fieldErrors(this.formErrors);
-      this.form.markAllAsTouched();
-    }
+
+      this.formInput.enablingDocuments.splice(index, 1);
+
+      // this.form.patchValue(this.formInput.enablingDocuments);
+       this.form.patchValue(this.formInput);
+    });
+
 
     uploadFiles.clear();
   }

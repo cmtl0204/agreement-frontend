@@ -85,11 +85,6 @@ export class PeriodTackingLogListComponent implements OnInit {
   protected readonly FileEnum = FileEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
-      {label: BreadcrumbEnum.PERIODS_CLOSING_ADMINISTRATOR},
-    ]);
-
     this.buildForm();
     this.buildButtonActions();
     this.buildColumns();
@@ -103,6 +98,12 @@ export class PeriodTackingLogListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: ['/core/agreement-administrator/agreement-list']},
+      {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/view/${this.agreementId}`]},
+      {label: BreadcrumbEnum.CLOSING},
+    ]);
+
     this.findPeriodsByAgreement();
     this.findAgreement(this.agreementId);
     this.loadTypes();

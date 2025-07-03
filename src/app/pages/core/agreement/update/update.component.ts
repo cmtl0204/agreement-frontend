@@ -5,8 +5,14 @@ import {AgreementModel, FileModel} from '@models/core';
 import {AuthService} from '@servicesApp/auth';
 import {AgreementsService, BreadcrumbService, MessageDialogService} from '@servicesApp/core';
 import {AgreementsHttpService} from "@servicesHttp/core";
-import {BreadcrumbEnum, RoleEnum, SeverityButtonActionEnum} from '@shared/enums';
-import {ConfirmationService, PrimeIcons} from 'primeng/api';
+import {
+  BreadcrumbEnum,
+  CatalogueAgreementStatesStateEnum, IconButtonActionEnum,
+  IdButtonActionEnum, LabelButtonActionEnum,
+  RoleEnum,
+  SeverityButtonActionEnum
+} from '@shared/enums';
+import {ConfirmationService, MenuItem, PrimeIcons} from 'primeng/api';
 import {update} from "@angular-devkit/build-angular/src/tools/esbuild/angular/compilation/parallel-worker";
 
 @Component({
@@ -38,6 +44,10 @@ export class UpdateComponent implements OnInit {
   protected financingErrors: string[] = [];
   protected documentErrors: string[] = [];
   protected activeStep: number = 0;
+
+  protected buttonActions: MenuItem[] = [];
+  protected isButtonActions: boolean = false;
+  protected selectedItem!: AgreementModel;
 
   constructor() {
     this.breadcrumbService.setItems([
@@ -145,6 +155,102 @@ export class UpdateComponent implements OnInit {
 
     if (this.authService.role.code === RoleEnum.INTERNATIONAL_SUPERVISOR)
       this.router.navigate(['/core/international-supervisor/agreement-list']);
+  }
+
+  redirectAgreementLogForm() {
+    this.router.navigate(['/core/agreements/log', this.id]);
+  }
+
+  redirectTrackingLogList() {
+    this.router.navigate([`/core/${this.authService.role.code}/period-list`, this.id]);
+  }
+
+  redirectAgreementTerminationList() {
+    this.router.navigate([`/core/${this.authService.role.code}/agreement-termination-list`, this.id]
+      , {queryParams: {type: 'closing'}});
+  }
+
+  redirectTrackingClosed() {
+    this.router.navigate([`/core/${this.authService.role.code}/closed/agreement-tracking`, this.id]);
+  }
+
+  selectItem() {
+    this.agreementsHttpService.findOne(this.id!).subscribe(agreement => {
+      this.isButtonActions = true;
+      this.validateButtonActions(agreement);
+    });
+  }
+
+  validateButtonActions(item: AgreementModel) {
+    this.buttonActions = [];
+
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CURRENT) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_LOG,
+          label: LabelButtonActionEnum.AGREEMENT_LOG,
+          icon: IconButtonActionEnum.AGREEMENT_LOG,
+          command: () => {
+            this.redirectAgreementLogForm();
+          },
+        },
+        {
+          id: IdButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+          label: LabelButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+          icon: IconButtonActionEnum.AGREEMENT_TRACKING_PERIOD,
+          command: () => {
+            this.redirectTrackingLogList();
+          },
+        },
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          command: () => {
+            this.redirectAgreementTerminationList();
+          },
+        },);
+    }
+
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSING_PROCESS) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_LOG,
+          label: LabelButtonActionEnum.AGREEMENT_LOG,
+          icon: IconButtonActionEnum.AGREEMENT_LOG,
+          command: () => {
+            this.redirectAgreementLogForm();
+          },
+        },
+        {
+          id: IdButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          label: LabelButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          icon: IconButtonActionEnum.AGREEMENT_CLOSING_MANAGEMENT_SUPERVISION,
+          command: () => {
+            this.redirectAgreementTerminationList();
+          },
+        },);
+    }
+
+    if (item.initialState?.code === CatalogueAgreementStatesStateEnum.CLOSED) {
+      this.buttonActions.push(
+        {
+          id: IdButtonActionEnum.AGREEMENT_LOG,
+          label: LabelButtonActionEnum.AGREEMENT_LOG,
+          icon: IconButtonActionEnum.AGREEMENT_LOG,
+          command: () => {
+            this.redirectAgreementLogForm();
+          },
+        },
+        {
+          id: IdButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
+          label: LabelButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
+          icon: IconButtonActionEnum.AGREEMENT_TRACKING_CLOSED,
+          command: () => {
+            this.redirectTrackingClosed();
+          },
+        });
+    }
   }
 
   get idField(): AbstractControl {

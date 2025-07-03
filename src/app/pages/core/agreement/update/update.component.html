@@ -1,143 +1,144 @@
 @if (form.valid) {
   <p-panel>
     <ng-template pTemplate="content">
-      <div class="p-fluid grid">
-        <p-toolbar>
-          <div class="p-toolbar-group-left">
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
 
-          </div>
+        </div>
 
-          <div class="p-toolbar-group-right">
-            <app-form-button-action
-              (cancel)="redirectAgreementList()"
-              [isVisibleCancelButton]="true"
-              [isVisibleSubmitButton]="false"
-            />
-          </div>
-        </p-toolbar>
+        <div class="p-toolbar-group-right">
+          <p-button
+            [icon]="PrimeIcons.ELLIPSIS_V"
+            (click)="selectItem()"></p-button>
+        </div>
+      </p-toolbar>
 
-        <p-accordion>
-          <p-accordionTab>
-            <p-toolbar>
-              <div class="p-toolbar-group-left">
-                <app-header-form
-                  label="Registro"
-                  [icon]="PrimeIcons.PENCIL"/>
-              </div>
+      <p-accordion>
+        <p-accordionTab>
+          <p-toolbar>
+            <div class="p-toolbar-group-left">
+              <app-header-form
+                label="Registro"
+                [icon]="PrimeIcons.PENCIL"/>
+            </div>
 
-              <div class="p-toolbar-group-right">
-                <app-form-button-action
-                  labelSubmitButton="Guardar Cambios"
-                  (submit)="validateFormAgreement()"
-                  (cancel)="redirectAgreementList()"
-                  [iconSubmitButton]="PrimeIcons.SAVE"
-                  [isVisibleCancelButton]="false"
-                />
-              </div>
-            </p-toolbar>
+            <div class="p-toolbar-group-right">
+              <app-form-button-action
+                labelSubmitButton="Guardar Cambios"
+                (submit)="validateFormAgreement()"
+                (cancel)="redirectAgreementList()"
+                [iconSubmitButton]="PrimeIcons.SAVE"
+                [isVisibleCancelButton]="false"
+              />
+            </div>
+          </p-toolbar>
 
+          <ng-template pTemplate="header">
+            <h3>Ficha de Convenio</h3>
+          </ng-template>
+
+          <p-panel header="Datos Básicos" class="col-12">
+            <app-basic-data
+              [formInput]="form.value"
+              (formErrorsOutput)="basicDataErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
+
+          <p-panel header="Fechas del Convenio" class="col-12">
+            <app-agreement-date
+              [formInput]="form.value"
+              (formErrorsOutput)="agreementDateErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
+
+          <p-panel class="col-12">
             <ng-template pTemplate="header">
-              <h3>Ficha de Convenio</h3>
+              <h3>Administrador del Convenio</h3>
+              <app-form-help-field content="Registrar conforme señala convenio o designación"></app-form-help-field>
             </ng-template>
 
-            <p-panel header="Datos Básicos" class="col-12">
-              <app-basic-data
+            <ng-template pTemplate="content">
+              <app-agreement-administrator
+                class="col-12"
                 [formInput]="form.value"
-                (formErrorsOutput)="basicDataErrors=$event"
+                (formErrorsOutput)="agreementAdministratorErrors=$event"
                 (formOutput)="save($event)"/>
-            </p-panel>
-
-            <p-panel header="Fechas del Convenio" class="col-12">
-              <app-agreement-date
-                [formInput]="form.value"
-                (formErrorsOutput)="agreementDateErrors=$event"
-                (formOutput)="save($event)"/>
-            </p-panel>
-
-            <p-panel class="col-12">
-              <ng-template pTemplate="header">
-                <h3>Administrador del Convenio</h3>
-                <app-form-help-field content="Registrar conforme señala convenio o designación"></app-form-help-field>
-              </ng-template>
-
-              <ng-template pTemplate="content">
-                <app-agreement-administrator
-                  class="col-12"
-                  [formInput]="form.value"
-                  (formErrorsOutput)="agreementAdministratorErrors=$event"
-                  (formOutput)="save($event)"/>
-              </ng-template>
-            </p-panel>
-
-            <p-panel header="Comparecientes" class="col-12">
-              <app-appearer
-                [formInput]="form.value"
-                (formErrorsOutput)="appearerErrors=$event"
-                (formOutput)="save($event)"/>
-            </p-panel>
-
-            <p-panel header="Obligaciones" class="col-12">
-              <app-obligation
-                [formInput]="form.value"
-                (formErrorsOutput)="obligationErrors=$event"
-                (formOutput)="save($event)"/>
-            </p-panel>
-
-            <p-panel header="Financiamiento" class="col-12">
-              <app-financing
-                [formInput]="form.value"
-                (formOutput)="save($event)"
-                (formErrorsOutput)="financingErrors=$event"/>
-            </p-panel>
-
-            <p-toolbar>
-              <div class="p-toolbar-group-left">
-                <app-header-form
-                  label="Registro"
-                  [icon]="PrimeIcons.PENCIL"/>
-              </div>
-
-              <div class="p-toolbar-group-right">
-                <app-form-button-action
-                  labelSubmitButton="Guardar Cambios"
-                  (submit)="validateFormAgreement()"
-                  (cancel)="redirectAgreementList()"
-                  [iconSubmitButton]="PrimeIcons.SAVE"
-                  [isVisibleCancelButton]="false"
-                />
-              </div>
-            </p-toolbar>
-          </p-accordionTab>
-
-          <p-accordionTab>
-            <ng-template pTemplate="header">
-              <h3>Documentación</h3>
             </ng-template>
+          </p-panel>
 
-            <p-panel class="col-12">
-              <app-document
-                [formInput]="form.value"
-                (formOutput)="save($event)"
-                (formErrorsOutput)="documentErrors=$event"/>
-            </p-panel>
-          </p-accordionTab>
+          <p-panel header="Comparecientes" class="col-12">
+            <app-appearer
+              [formInput]="form.value"
+              (formErrorsOutput)="appearerErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
 
-          <p-accordionTab>
-            <ng-template pTemplate="header">
-              <h3>Registro de adendas o modificatorios</h3>
-            </ng-template>
+          <p-panel header="Obligaciones" class="col-12">
+            <app-obligation
+              [formInput]="form.value"
+              (formErrorsOutput)="obligationErrors=$event"
+              (formOutput)="save($event)"/>
+          </p-panel>
 
-            <p-panel class="col-12">
-              <app-addendum
-                [formInput]="form.value"
-                (formOutput)="save($event)"
-                (formErrorsOutput)="documentErrors=$event"/>
-            </p-panel>
-          </p-accordionTab>
-        </p-accordion>
-      </div>
+          <p-panel header="Financiamiento" class="col-12">
+            <app-financing
+              [formInput]="form.value"
+              (formOutput)="save($event)"
+              (formErrorsOutput)="financingErrors=$event"/>
+          </p-panel>
+
+          <p-toolbar>
+            <div class="p-toolbar-group-left">
+              <app-header-form
+                label="Registro"
+                [icon]="PrimeIcons.PENCIL"/>
+            </div>
+
+            <div class="p-toolbar-group-right">
+              <app-form-button-action
+                labelSubmitButton="Guardar Cambios"
+                (submit)="validateFormAgreement()"
+                (cancel)="redirectAgreementList()"
+                [iconSubmitButton]="PrimeIcons.SAVE"
+                [isVisibleCancelButton]="false"
+              />
+            </div>
+          </p-toolbar>
+        </p-accordionTab>
+
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <h3>Documentación</h3>
+          </ng-template>
+
+          <p-panel class="col-12">
+            <app-document
+              [formInput]="form.value"
+              (formOutput)="save($event)"
+              (formErrorsOutput)="documentErrors=$event"/>
+          </p-panel>
+        </p-accordionTab>
+
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <h3>Registro de adendas o modificatorios</h3>
+          </ng-template>
+
+          <p-panel class="col-12">
+            <app-addendum
+              [formInput]="form.value"
+              (formOutput)="save($event)"
+              (formErrorsOutput)="documentErrors=$event"/>
+          </p-panel>
+        </p-accordionTab>
+      </p-accordion>
     </ng-template>
   </p-panel>
 }
+
+<app-button-action [buttonActions]="buttonActions"
+                   [enabled]="isButtonActions"
+                   (isHide)="isButtonActions=!$event">
+</app-button-action>
 
 <p-confirmDialog key="confirmDialog"/>

@@ -59,6 +59,7 @@ export class AgreementListComponent implements OnInit {
 
   protected selectedItem!: AgreementModel;
   protected items: AgreementModel[] = [];
+  protected itemsClone: AgreementModel[] = [];
   protected isVisibleAgreementView: boolean = false;
 
   constructor() {
@@ -71,7 +72,16 @@ export class AgreementListComponent implements OnInit {
     this.search.valueChanges.pipe(
       debounceTime(500)
     ).subscribe(value => {
-      this.findAgreements();
+      console.log(value);
+      console.log(this.itemsClone);
+      if (value) {
+        this.items = this.itemsClone.filter(item => {
+          return item.internalNumber?.toLowerCase()?.includes(value.toLowerCase())
+            || item.name?.toLowerCase()?.includes(value.toLowerCase());
+        })
+      }else{
+        this.items = this.itemsClone;
+      }
     });
   }
 
@@ -85,6 +95,8 @@ export class AgreementListComponent implements OnInit {
         .subscribe((response) => {
           // this.paginator = response.pagination!;
           this.items = response;
+          console.log(response);
+          this.itemsClone = response;
         });
     }
 
@@ -93,6 +105,7 @@ export class AgreementListComponent implements OnInit {
         .subscribe((response) => {
           // this.paginator = response.pagination!;
           this.items = response;
+          this.itemsClone = response;
         });
     }
 
@@ -120,7 +133,7 @@ export class AgreementListComponent implements OnInit {
         label: LabelButtonActionEnum.AGREEMENT,
         icon: IconButtonActionEnum.AGREEMENT,
         command: () => {
-          if (this.selectedItem?.id) this.redirectViewAgreement();
+          if (this.selectedItem?.id) this.redirectViewAgreement(this.selectedItem.id);
         },
       },
       {
@@ -213,8 +226,9 @@ export class AgreementListComponent implements OnInit {
     this.router.navigate(['/core/agreements', 'register']);
   }
 
-  redirectViewAgreement() {
-    this.isVisibleAgreementView = true;
+  redirectViewAgreement(id:string) {
+    // this.isVisibleAgreementView = true;
+    this.router.navigate(['/core/agreements/view', id]);
   }
 
   redirectAgreementLogForm(id: string) {

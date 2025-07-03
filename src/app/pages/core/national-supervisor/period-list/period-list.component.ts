@@ -77,10 +77,6 @@ export class PeriodListComponent implements OnInit {
   protected readonly AddendumEnum = AddendumEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.PERIODS_SUPERVISOR}
-    ]);
 
     this.buildForm();
     this.buildButtonActions();
@@ -94,6 +90,13 @@ export class PeriodListComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS,routerLink:[`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/update/${this.agreementId}`]},
+    {label: BreadcrumbEnum.PERIODS_SUPERVISOR}
+    ]);
+
     this.findPeriodsByAgreement();
     this.loadTypes();
   }

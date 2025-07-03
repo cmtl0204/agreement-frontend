@@ -1,43 +1,43 @@
-<form [formGroup]="fileForm" class="p-fluid grid">
-  <!-- type -->
-  @for (type of types; track type.id) {
-    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">
-      <p-messages severity="info">
-        <ng-template pTemplate>
-          <i [class]="PrimeIcons.FILE_PDF"></i>
-          <div class="ml-2">
-            {{ type.name }}
-          </div>
-        </ng-template>
-      </p-messages>
-    </div>
+<!--<form [formGroup]="fileForm" class="p-fluid grid">-->
+<!--  &lt;!&ndash; type &ndash;&gt;-->
+<!--  @for (type of types; track type.id) {-->
+<!--    <div class="field col-12 xl:col-4 lg:col-4 md:col-4 sm:col-12">-->
+<!--      <p-messages severity="info">-->
+<!--        <ng-template pTemplate>-->
+<!--          <i [class]="PrimeIcons.FILE_PDF"></i>-->
+<!--          <div class="ml-2">-->
+<!--            {{ type.name }}-->
+<!--          </div>-->
+<!--        </ng-template>-->
+<!--      </p-messages>-->
+<!--    </div>-->
 
-    <!-- file -->
-    <div class="field col-12 xl:col-8 lg:col-8 md:col-8 sm:col-12 mt-3">
-      <p-fileUpload
-        #uploadFiles
-        id="file"
-        mode="basic"
-        chooseLabel="Cargar"
-        [chooseIcon]="PrimeIcons.UPLOAD"
-        name="files[]"
-        accept=".pdf"
-        invalidFileSizeMessageDetail=""
-        [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
-        [maxFileSize]="FileEnum.maxFileSize"
-        [auto]="true"
-        [customUpload]="true"
-        (uploadHandler)="uploadFile($event,uploadFiles,type)"/>
+<!--    &lt;!&ndash; file &ndash;&gt;-->
+<!--    <div class="field col-12 xl:col-8 lg:col-8 md:col-8 sm:col-12 mt-3">-->
+<!--      <p-fileUpload-->
+<!--        #uploadFiles-->
+<!--        id="file"-->
+<!--        mode="basic"-->
+<!--        chooseLabel="Cargar"-->
+<!--        [chooseIcon]="PrimeIcons.UPLOAD"-->
+<!--        name="files[]"-->
+<!--        accept=".pdf"-->
+<!--        invalidFileSizeMessageDetail=""-->
+<!--        [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"-->
+<!--        [maxFileSize]="FileEnum.maxFileSize"-->
+<!--        [auto]="true"-->
+<!--        [customUpload]="true"-->
+<!--        (uploadHandler)="uploadFile($event,uploadFiles,type)"/>-->
 
-      <small
-        appErrorMessage
-        [errors]="fileField.errors"
-        [touched]="fileField.touched"
-        [dirty]="fileField.dirty">
-      </small>
-    </div>
-  }
-</form>
+<!--      <small-->
+<!--        appErrorMessage-->
+<!--        [errors]="fileField.errors"-->
+<!--        [touched]="fileField.touched"-->
+<!--        [dirty]="fileField.dirty">-->
+<!--      </small>-->
+<!--    </div>-->
+<!--  }-->
+<!--</form>-->
 
 @if (formInput.enablingDocuments.length > 0) {
   <p-table
@@ -52,7 +52,7 @@
           </th>
         }
 
-        <th>{{ TableEnum.ACTIONS }}</th>
+        <th colspan="2">{{ TableEnum.ACTIONS }}</th>
       </tr>
     </ng-template>
 
@@ -61,11 +61,13 @@
         <td>{{ item.type.name }}</td>
         <td>{{ item.name }}</td>
         <td>
-          <p-button
-            [icon]="IconButtonActionEnum.DELETE"
-            [pTooltip]="LabelButtonActionEnum.DELETE"
-            [severity]="SeverityButtonActionEnum.DELETE"
-            (click)="removeFile(rowIndex,item)"/>
+<!--          <p-button-->
+<!--            [icon]="IconButtonActionEnum.DELETE"-->
+<!--            [pTooltip]="LabelButtonActionEnum.DELETE"-->
+<!--            [severity]="SeverityButtonActionEnum.DELETE"-->
+<!--            (click)="removeFile(rowIndex,item)"/>-->
+
+
 
           <p-button
             class="ml-2"
@@ -73,6 +75,22 @@
             [pTooltip]="LabelButtonActionEnum.DOWNLOAD"
             [severity]="SeverityButtonActionEnum.DOWNLOAD"
             (click)="download(item)"/>
+        </td>
+        <td>
+          <p-fileUpload
+            #uploadFiles
+            id="fileEdit"
+            mode="basic"
+            pTooltip="Subir"
+            [chooseIcon]="PrimeIcons.UPLOAD"
+            name="files[]"
+            accept=".pdf"
+            invalidFileSizeMessageDetail=""
+            [invalidFileSizeMessageSummary]="FileEnum.invalidFileSizeMessageSummary"
+            [maxFileSize]="FileEnum.maxFileSize"
+            [auto]="true"
+            [customUpload]="true"
+            (uploadHandler)="uploadFile($event,uploadFiles,item, rowIndex)"/>
         </td>
       </tr>
     </ng-template>

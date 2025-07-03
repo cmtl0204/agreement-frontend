@@ -59,6 +59,7 @@ export class AgreementListComponent implements OnInit {
 
   protected selectedItem!: AgreementModel;
   protected items: AgreementModel[] = [];
+  protected itemsClone: AgreementModel[] = [];
   protected isVisibleAgreementView: boolean = false;
 
   constructor() {
@@ -71,7 +72,14 @@ export class AgreementListComponent implements OnInit {
     this.search.valueChanges.pipe(
       debounceTime(500)
     ).subscribe(value => {
-      this.findAgreements();
+      if (value) {
+        this.items = this.itemsClone.filter(item => {
+          return item.internalNumber?.toLowerCase()?.includes(value.toLowerCase())
+            || item.name?.toLowerCase()?.includes(value.toLowerCase());
+        })
+      }else{
+        this.items = this.itemsClone;
+      }
     });
   }
 
@@ -85,6 +93,7 @@ export class AgreementListComponent implements OnInit {
         .subscribe((response) => {
           // this.paginator = response.pagination!;
           this.items = response;
+          this.itemsClone = response;
         });
     }
 
@@ -93,6 +102,7 @@ export class AgreementListComponent implements OnInit {
         .subscribe((response) => {
           // this.paginator = response.pagination!;
           this.items = response;
+          this.itemsClone = response;
         });
     }
 

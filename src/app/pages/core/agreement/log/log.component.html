@@ -72,10 +72,32 @@
               {{ customer.description }}
             </td>
             <td>
-              <span class="ml-1 vertical-align-middle">{{ customer.oldValue }}</span>
+              <span class="ml-1 vertical-align-middle">
+                  @switch (customer.oldValue) {
+                    @case ('true') {
+                      SI
+                    }
+                    @case ('false') {
+                      NO
+                    }
+                    @default {
+                      {{ customer.oldValue }}
+                    }
+                  }
+              </span>
             </td>
             <td>
-              {{ customer.newValue }}
+              @switch (customer.newValue) {
+                @case ('true') {
+                  SI
+                }
+                @case ('false') {
+                  NO
+                }
+                @default {
+                  {{ customer.newValue }}
+                }
+              }
             </td>
             <td>
               {{ customer.agreementLog.user.name }} {{ customer.agreementLog.user.lastname }}

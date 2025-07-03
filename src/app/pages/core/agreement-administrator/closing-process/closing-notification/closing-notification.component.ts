@@ -45,6 +45,7 @@ export class ClosingNotificationComponent {
   protected closingNotification!: ClosingNotificationModel;
   protected closeTypes: CatalogueModel[] = [];
   protected endedAt!: Date;
+  protected currentDate = new Date();
 
   constructor() {
     this.buildForm();

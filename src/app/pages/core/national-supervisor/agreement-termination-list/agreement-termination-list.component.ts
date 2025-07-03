@@ -49,13 +49,17 @@ export class AgreementTerminationListComponent implements OnInit {
   protected readonly CatalogueClosingNotificationsCloseTypeEnum = CatalogueClosingNotificationsCloseTypeEnum;
 
   constructor() {
-    this.breadcrumbService.setItems([
-      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
-      {label: BreadcrumbEnum.CLOSING_NOTIFICATION},
-    ]);
+
   }
 
   ngOnInit() {
+
+    this.breadcrumbService.setItems([
+      {label: BreadcrumbEnum.AGREEMENTS, routerLink: [`/core/${this.authService.role.code}/agreement-list`]},
+      {label: BreadcrumbEnum.AGREEMENT,routerLink:[`/core/agreements/update/${this.agreementId}`]},
+      {label: BreadcrumbEnum.PERIODS_CLOSING},
+    ]);
+
     this.loadCloseTypes();
     this.findClosingNotificationByAgreement();
   }
