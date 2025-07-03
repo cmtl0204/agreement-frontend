@@ -68,6 +68,7 @@ export class ClosingExecutionDocumentComponent implements OnInit {
   findReportExecutions() {
     this.agreementsHttpService.findReportExecutions(this.agreementId).subscribe(
       response => {
+        console.log(response);
         this.reportExecutions = response;
       }
     );

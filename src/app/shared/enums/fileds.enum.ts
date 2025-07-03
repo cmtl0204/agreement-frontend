@@ -211,6 +211,7 @@ export enum ClosingNotificationEnum {
   header = 'NOTIFICACIÓN INICIO DEL PROCESO DE CIERRE DEL CONVENIO',
   closedAt = 'Fecha de terminación del convenio',
   registeredAt = 'Fecha y hora de notificación',
+  registeredAtClosed = 'Fecha y hora envío al registro',
   closeDetail = 'Detalle inicio del proceso cierre',
   closeType = 'Seleccione el tipo de terminación del convenio',
   closeType2 = 'Tipo de terminación del convenio',
