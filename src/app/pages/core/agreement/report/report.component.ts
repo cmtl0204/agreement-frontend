@@ -29,7 +29,13 @@ export class ReportComponent {
   }
 
   loadTypes() {
+    const allState = {
+      id: '1',
+      code: 'ALL',
+      name: 'Todos'
+    }
     this.states = this.cataloguesHttpService.findByType(CatalogueTypeEnum.AGREEMENT_STATES_STATE);
+    this.states.unshift(allState);
   };
 
   protected readonly CatalogueAgreementStatesStateEnum = CatalogueAgreementStatesStateEnum;
